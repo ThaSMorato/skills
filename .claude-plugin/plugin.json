@@ -1,0 +1,28 @@
+{
+  "name": "thasmorato-skills",
+  "version": "0.1.0",
+  "description": "AI Doc-Dev flow — interview → complete documentation (PRD→HLD→FDD→ADR→C4→Guidelines) → development, as skills/commands/agents importable per project.",
+  "author": {
+    "name": "Thales Morato",
+    "url": "https://github.com/ThaSMorato"
+  },
+  "repository": "https://github.com/ThaSMorato/skills",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "skills",
+    "documentation",
+    "design-docs",
+    "prd",
+    "adr",
+    "c4",
+    "tdd",
+    "interview"
+  ],
+  "skills": [
+    "./skills/interview",
+    "./skills/domain-model",
+    "./skills/design",
+    "./skills/tdd"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "thasmorato",
+  "owner": {
+    "name": "Thales Morato",
+    "url": "https://github.com/ThaSMorato"
+  },
+  "description": "Thales Morato's skills, commands and agents for an AI Doc-Dev flow: interview → complete documentation → development.",
+  "plugins": [
+    {
+      "name": "thasmorato-skills",
+      "source": "./",
+      "description": "Interview → documentation (PRD→HLD→FDD→ADR→C4→Guidelines) → development flow, with AI.",
+      "category": "engineering",
+      "keywords": ["engineering", "documentation", "design-docs", "adr", "c4", "tdd", "interview"]
+    }
+  ]
+}
