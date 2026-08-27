@@ -64,7 +64,33 @@ makeUser({ role: "MANAGER" })    // role test
 makeUser()                        // creation test — defaults are fine
 ```
 
-Use a plain function for flat entities; a fluent **builder** for entities with many optional fields; an **Object Mother + builder** for named starting states (`UserMother.expired().withEmail("x").build()`); and a plain object literal implementing the interface for service fakes.
+### Variations
+
+- **Plain function** — flat entities (above).
+- **Test Data Builder** — a fluent `aUser().withRole(ADMIN).build()` when there are many optional fields; defaults live in the builder.
+- **Object literal** — a plain literal implementing the interface, for service fakes.
+- **Object Mother + Builder** — the strongest form: the Mother is a **facade over construction** that exposes **named domain states**, each returning a builder you can still tweak. Named presets keep tests readable; the builder keeps them flexible. Reach for it when an entity has a few well-known kinds (roles, tiers, lifecycle states).
+
+```
+class UserObjectMother {
+  static createUser() { return new UserBuilder() }        // sensible defaults
+}
+class UserBuilder {
+  admin()      { this.role = "ADMIN";  return this }      // named states = the facade
+  pro()        { this.role = "PRO";    return this }
+  common()     { this.role = "COMMON"; return this }
+  withEmail(e) { this.email = e;       return this }      // fluent overrides
+  build()      { return User.create({
+    name: "Default", email: this.email ?? "default@email.com", role: this.role ?? "COMMON"
+  }) }
+}
+
+// reads like domain language:
+UserObjectMother.createUser().admin().build()
+UserObjectMother.createUser().pro().withEmail("pro@acme.com").build()
+```
+
+The named states (`.admin()`, `.pro()`, `.common()`) hide construction detail behind domain vocabulary — a test says *what kind* of user it needs, not *how* to assemble one.
 
 ## Either / Result testing — both branches
 
