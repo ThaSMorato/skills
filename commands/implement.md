@@ -1,15 +1,10 @@
 ---
-description: Implement one frontier ticket test-first, then review and commit.
-argument-hint: <ticket file/number, or the work to implement>
+description: Execute a validated plan one SI at a time — test-first (red → green → refactor), run the SI's tests, then STOP before the next SI.
+argument-hint: <plan slug> [continuous]
 ---
 
-Implement the work in the ticket: $ARGUMENTS (a frontier ticket from `/tickets`, or the spec the user points to).
+Use the `implement` skill to build the plan: $ARGUMENTS
 
-1. Read the ticket, the FDD (`docs/fdd/`), the ADRs (`docs/adr/`), the guidelines (`docs/guidelines.md`), and `CONTEXT.md`.
-2. If there's no node map for this work yet, run the `design` skill first (`/design`-style).
-3. Use the `tdd` skill at the **pre-agreed seams**. Run typechecking and single test files regularly; the full suite once at the end.
-4. **Follow the guidelines** — they are the standard for this repo.
-5. When a real architectural decision surfaces mid-implementation, flag it as an **ADR candidate** (back-edge to `/adr-identify`) rather than deciding silently.
-6. Review with `/review`, then commit to the current branch.
+Resolve the plan under `.scratch/<feature-slug>/plans/`, run preflight (validation must be `clean`, branch must be set up), and execute SI by SI: red → green → refactor (production **and** tests), run the SI's tests, record progress, then STOP and wait for the user — unless they asked for continuous mode.
 
-Work one ticket per fresh context; clear context between tickets.
+Default is to pause after every SI so the user can `/compact` and resume by re-running this command. When done, hand off to `/review` before any commit.

@@ -34,4 +34,4 @@ Per-ticket format (avoid file paths/code snippets — they go stale; exception: 
 - [ ] Acceptance criterion 2
 ```
 
-Work the **frontier** — any ticket whose blockers are all done — one ticket per fresh context with `/implement`.
+Work the **frontier** — any ticket whose blockers are all done — one ticket per fresh context: `/design` → `/plan` → `/plan-validate` → `/implement`.
