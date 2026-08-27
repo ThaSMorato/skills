@@ -21,7 +21,7 @@ Run `/analyze` (and `/audit-deps`) so the docs are grounded in the real system.
 
 ## Phase 2 — Development (per frontier ticket)
 8. `/tickets <feature>` → vertical slices with blocking edges. The **frontier** = tickets whose blockers are all done.
-9. For each frontier ticket: `/design` (node map) → **GATE** (confirm uncertain decisions) → `/implement` (TDD at pre-agreed seams) → `/review <fixed-point>` → **GATE** (the user decides what to fix).
+9. For each frontier ticket: `/design` (node map) → **GATE** (confirm uncertain decisions) → `/plan` (slice into SIs) → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI-by-SI, test-first, STOP between SIs) → `/review <fixed-point>` → **GATE** (the user decides what to fix).
    - **Fan-out:** run frontier tickets in parallel ONLY when they touch **disjoint files**; cap ~4 concurrent; anything sharing files or with unmet blockers stays serial. When unsure, go serial.
    - **Back-edge:** if implementation surfaces a real architectural decision, run `/adr-identify` (or add the ADR) and update the FDD before continuing — keep the docs live.
 

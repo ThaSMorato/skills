@@ -1,7 +1,7 @@
 {
   "name": "thasmorato-skills",
-  "version": "0.1.0",
-  "description": "AI Doc-Dev flow — interview → complete documentation (PRD→HLD→FDD→ADR→C4→Guidelines) → development, as skills/commands/agents importable per project.",
+  "version": "0.2.0",
+  "description": "AI Doc-Dev flow — interview → complete documentation (PRD→HLD→FDD→ADR→C4→Guidelines) → a validated, test-first development loop (plan → validate → implement SI-by-SI → review), with vendored testing and code-quality references. Skills/commands/agents importable per project.",
   "author": {
     "name": "Thales Morato",
     "url": "https://github.com/ThaSMorato"
@@ -17,12 +17,22 @@
     "adr",
     "c4",
     "tdd",
+    "testing",
+    "code-smells",
+    "code-review",
     "interview"
   ],
   "skills": [
     "./skills/interview",
     "./skills/domain-model",
     "./skills/design",
-    "./skills/tdd"
+    "./skills/plan",
+    "./skills/plan-validate",
+    "./skills/tdd",
+    "./skills/testing",
+    "./skills/implement",
+    "./skills/code-smells",
+    "./skills/clean-code",
+    "./skills/generate-test-guide"
   ]
 }
