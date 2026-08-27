@@ -90,7 +90,7 @@ UserObjectMother.createUser().admin().build()
 UserObjectMother.createUser().pro().withEmail("pro@acme.com").build()
 ```
 
-The named states (`.admin()`, `.pro()`, `.common()`) hide construction detail behind domain vocabulary — a test says *what kind* of user it needs, not *how* to assemble one.
+The named states (`.admin()`, `.pro()`, `.common()`) hide construction detail behind domain vocabulary — a test says *what kind* of user it needs, not *how* to assemble one. This is the domain-language building block of the **test DSL** (`fundamentals.md`).
 
 ## Either / Result testing — both branches
 

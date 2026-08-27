@@ -42,7 +42,7 @@ Run SIs in Dependency-Map order. Never skip ahead; never run two SIs in one pass
 3. **Green** — write the minimum code to pass. No speculative features.
 4. **Refactor — production _and_ tests.** With tests green, clean both:
    - *Production:* run the `code-smells` checklist; leave it cleaner than you found it.
-   - *Tests:* they are first-class code and the low-level documentation of this behavior — refactor them too. Enforce F.I.R.S.T., the single-act rule (one Act per test), and factor repetition into a small test DSL / mother objects so each test reads like a spec. Never weaken a test to make it pass.
+   - *Tests:* they are first-class code and the low-level documentation of this behavior — refactor them too. Enforce F.I.R.S.T. and the single-act rule (one Act per test), and grow the **test DSL** (builders / mother objects, custom matchers, composed results) so each test reads like a spec. Never weaken a test to make it pass.
 5. **Run this SI's tests only** (not the full suite). On failure, enter the fix loop: read the error, fix the root cause, re-run — at most **3 times**. Do not retry blindly, do not swallow errors, do not add skips. If the failure is in a *previous* SI's code, stop and escalate rather than editing completed work. After 3 failed attempts, stop and report (which SI, the failure, your hypothesis, what you tried).
 6. **Record + STOP.** Mark the task and `progress.md` entry `done` (with test result and any out-of-scope notes). Then:
    - **Default mode:** emit a one-line SI report and end with exactly: **"SI-N done. Run `/implement <slug>` to continue with SI-N+1 (or /compact first if context is large)."** Then STOP — no further tool calls. Resuming re-reads `progress.md` and picks up at the next pending SI.

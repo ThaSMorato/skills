@@ -52,7 +52,7 @@ The SUT is the specific unit being exercised; everything else is a dependency. N
 
 Each test verifies **one behavior**, so its name alone tells you what broke.
 
-- **Single logical assertion, not single line.** One test asserts one logical fact. If verifying that fact needs six assertions (e.g. six indicator lights that together represent one state), that is fine — they affirm one thing. When the result is that complex, compose it into a readable form (see the test-DSL section in `acceptance-bdd.md`).
+- **Single logical assertion, not single line.** One test asserts one logical fact. If verifying that fact needs six assertions (e.g. six indicator lights that together represent one state), that is fine — they affirm one thing. When the result is that complex, compose it into a readable form (see **Test DSL** below).
 - **Single Act is the rule that actually matters.** Test one action at a time. Avoid `arrange → act → assert → act → assert`. Each action is tested individually so a downstream assertion is never corrupted by an upstream action, and each test stands alone (this is the "Isolated" of F.I.R.S.T. in practice).
 - **The "and" smell.** A test name with "and" (saves **and** sends **and** returns) hides multiple Acts → split into multiple tests. A multi-Act test fails without telling you which action broke; one Act per test gives a precise diagnosis — the red test's name points at the exact behavior that regressed.
 
@@ -85,3 +85,27 @@ Test code is **not** a second-class citizen. It demands the same thought, design
 - **Test data reveals intent.** Use values that explain *why* the test exists (`movie("Regular", REGULAR)`), not copied production data.
 - **Test behavior, not internal detail.** Assert the output of a small behavioral concept, so the test survives refactors that don't change behavior.
 - **Don't make things public just to test them.** If an extracted helper only serves its origin, keep it private and cover it via integration through the public class. Promote to public (with its own unit test) only a sub-behavioral unit useful in other contexts.
+
+## Test DSL — the refactor target after green
+
+The refactor step of red → green → refactor cleans **test** code as much as production code, and its main move is growing a **test DSL**: a layer of intention-revealing helpers that wrap the system's API so each test reads like a specification of the domain. A DSL is never designed up front — it **emerges** from refactoring tests whose setup and assertion noise was hiding intent, exactly as you refactor production code.
+
+Each technique is the same idea — push the mechanics into a named helper, leave the intent in the test:
+
+- **Builders / mother objects** — construct objects with meaningful defaults so a test states only what it's about. Object Mother + Builder (`UserObjectMother.createUser().admin().build()`) is the domain-language form — see `backend-patterns.md`.
+- **Composed assertions / custom matchers** — helpers that express the goal, not the mechanics: `assertResponseContains(...)`, `expect(user).toBeAdmin()`.
+- **Composed results** — compress a result too large to read into a smaller comparable form and assert against that (six scattered assertions become one).
+
+```
+// noisy — speaks the raw API
+const path     = PagePath.parse("/root/page")
+const response = new Responder(page).respond(request)
+expect(cast(response).body).toContain("welcome")
+
+// with a test DSL — speaks the domain
+givenPage("/root/page")
+whenRequested()
+assertResponseContains("welcome")
+```
+
+It applies at **every level**: unit (builders + custom matchers), integration (setup helpers), and acceptance — where Given/When/Then is itself a business-readable DSL (see `acceptance-bdd.md`). Invest in it: the DSL is what lets the suite double as living documentation.

@@ -38,6 +38,15 @@ Mock HTTP where the app meets the network (MSW-style request interception), not 
 
 Test a component in isolation with its real rendering. Prefer rendering in a **real browser** (via a browser-based component runner) over a simulated DOM when CSS, layout, focus, or real events matter — a fake DOM won't reproduce them. The trade-off is speed; use the simulated DOM for pure-logic components and the real browser for interaction- and visual-heavy ones. Combine with network-boundary mocking for components that fetch. (For the browser-based approach, see `playwright.md`.)
 
+## Test DSL for components
+
+The same test-DSL refactoring (see `fundamentals.md`) applies to UI tests — after green, push rendering and interaction noise into domain helpers:
+
+- **Render helpers** — `renderWithProviders(<Checkout/>)` wraps the router/store/query-client setup so each test renders in one line.
+- **Custom matchers** — `expect(el).toBeVisible()` / `toHaveAccessibleName(...)` (jest-dom-style) state the goal, not DOM mechanics.
+- **User-flow helpers** — wrap a multi-step interaction behind one intention-revealing call (`await checkoutAs(user)`).
+- **Prop mothers** — build component props with sensible defaults; the frontend form of the Mother Object.
+
 ## Async assertions — never sleep
 
 UI updates arrive asynchronously. Assert with auto-retrying / polling matchers (`await expect(...).toBeVisible()`, `findBy*`, `waitFor`) that retry until the condition holds or a timeout fires. Never wait a fixed number of milliseconds — an arbitrary sleep is either too short (flaky) or too long (slow), and reads state only once instead of waiting for the real condition.

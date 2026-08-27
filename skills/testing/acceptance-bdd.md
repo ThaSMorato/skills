@@ -32,29 +32,9 @@ Scenario: Withdraw within balance
 
 Keep each scenario to one behavior — the "and" in `Then` describes one outcome, not a second `When`. Multiple `When` steps are the single-act smell in Gherkin form; split the scenario.
 
-## Test DSLs (Domain-Specific test Languages)
+## Test DSLs at the acceptance level
 
-A test DSL is a set of helpers that wrap the system's API so tests are convenient to **write** and, above all, easy to **read**. It is not designed up front — it **emerges** from continuously refactoring test code that got polluted by detail obscuring intent, exactly as you refactor production code.
-
-**The problem it solves.** Setup detail (converting a string into a domain type, assembling a request, collecting and casting a response) is noise that hides what the test actually verifies. Move that noise into helpers so the test body speaks the language of the domain, not the raw API.
-
-**The techniques:**
-- **Builders / intention-revealing helpers** — factory helpers that construct objects with meaningful defaults so the test states only what it's about (see the Mother Object pattern in `backend-patterns.md`).
-- **Composed assertions** — assertion helpers that express the *goal*, not the mechanics: `assertResponseContains(...)`, `assertResponseIsXML()`. The test says *what* it checks; the *how* lives in the helper.
-- **Composed test results** — when a result is too large to read assertion-by-assertion, compress it into a smaller, readable representation and assert against that (e.g. six status indicators collapsed into one comparable form instead of six separate assertions).
-
-```
-// noisy
-const path = PagePath.parse("/root/page")
-const responder = new Responder(page)
-const response = responder.respond(request)
-expect(cast(response).body).toContain("welcome")
-
-// with a test DSL — reads like a spec
-givenPage("/root/page")
-whenRequested()
-assertResponseContains("welcome")
-```
+A **test DSL** — intention-revealing helpers that make a test read like a spec — is a fundamental of clean tests, treated in full in `fundamentals.md` (it is the main refactor move after green, at every level, and it is where Object Mother + Builder, composed assertions, and composed results are defined). At the acceptance level the DSL becomes *business-readable*: the Given/When/Then above is itself a DSL a stakeholder can read, and the same emergent refactoring applies — push request-building, wiring, and response-casting noise into helpers named in the domain's language so the scenario states behavior, not mechanics.
 
 ## Readability is the goal
 

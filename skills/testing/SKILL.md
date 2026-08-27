@@ -25,6 +25,8 @@ Tests are a design tool, not a tax. If something is hard to test, it is usually 
 
 **Tests are first-class code — the system's low-level documentation.** Test code is refactored, named, and designed with the same care as production code, because it grows alongside production and rots faster when neglected. A clean suite is a living, executable specification: it shows how the APIs are used, runs, and cannot silently go stale (if it drifts, it breaks). Dirty tests are worse than no tests — they become a liability the team eventually abandons, and then the production code owns the team.
 
+**Refactor tests into a domain language (test DSL).** After green, the refactor step grows a **test DSL** — builders / mother objects, custom matchers, composed results — so each test reads like a spec. This is the main refactor move on *test* code, and it applies at every level (unit through acceptance). Detail in `fundamentals.md`.
+
 ## Navigation
 
 | You are… | Read |
@@ -32,10 +34,11 @@ Tests are a design tool, not a tax. If something is hard to test, it is usually 
 | Testing use cases, services, domain logic, repositories | `fundamentals.md`, then `backend-patterns.md` |
 | Testing UI components, frontend logic | `fundamentals.md`, then `frontend-patterns.md` |
 | Writing browser E2E / Playwright tests | `frontend-patterns.md`, then `playwright.md` |
-| Defining acceptance criteria, BDD scenarios, a test DSL | `acceptance-bdd.md` |
+| Defining acceptance criteria, BDD scenarios | `acceptance-bdd.md` |
+| Growing a test DSL (builders, matchers, composed results) | `fundamentals.md`, then `backend-patterns.md` / `frontend-patterns.md` |
 | Reviewing tests for quality | `fundamentals.md` + the relevant area file |
 
-- `fundamentals.md` — pyramid, F.I.R.S.T., AAA, SUT, single-act, determinism, tests as first-class code.
+- `fundamentals.md` — pyramid, F.I.R.S.T., AAA, SUT, single-act, determinism, tests as first-class code, and the test DSL.
 - `backend-patterns.md` — in-memory repository fakes, Mother Object / test data factories, Either/Result testing, dependency inversion for testability.
 - `frontend-patterns.md` — Testing Trophy, user-centric queries, network-boundary mocking, component and async testing.
 - `playwright.md` — locators, web-first assertions, storageState auth, Page Object Model, custom fixtures, network mocking, projects, trace debugging.
