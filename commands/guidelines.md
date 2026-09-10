@@ -1,10 +1,12 @@
 ---
-description: Generate a self-contained Engineering Guidelines document for the project (once, from its language and stack).
-argument-hint: <language> [--orm= --web= --framework= --db= --testing= --logging= --validation= ...]
+description: Generate the project's engineering guidelines router — an index of stack guides, documents, conventions and real commands (≤150 lines, lazy-loaded).
+argument-hint: (none) — detected from the repo; re-run when the stack changes
 ---
 
-Use the `guideline-generator` agent to generate `docs/guidelines.md` for: $ARGUMENTS
+Use the `guideline-generator` agent to generate `docs/guidelines.md` for this project.
 
-If no language was given, ask for it. Pass any `--param=value` flags through to the agent; it auto-populates the essentials you don't specify.
+The output is a **router**: which guide covers which files, where the project's documents are, and what the repo's real commands are. The depth per technology lives in `.claude/skills/<tech>-guide/` — generate those with `/generate-stack-guide <tech>`.
 
-After the agent returns, show a short summary: the Project Stack (specified vs auto-populated), which optional sections were included or skipped and why, and the final length. This is a generate-once document — re-run only when the stack changes.
+After the agent returns, show: the detected stack, the routing table, which technologies have a guide and which are marked missing, the commands it found, and the final line count. Then offer to run `/generate-stack-guide` for each missing technology.
+
+This is a generate-once document — re-run it when the stack changes, not per feature.
