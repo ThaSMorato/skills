@@ -35,6 +35,15 @@ intent — delete it when you fill the section.
 ## Constraints (optional)
 > Quality/operational/business/compliance limits (latency, availability, multi-tenant, GDPR…).
 
+## Inherited constraints (optional — brownfield)
+> What **cannot change**, because a system already exists: published contracts, persisted schemas,
+> public events, runtime floors, integrations others depend on. Every other section says what is
+> wanted; this one says what is immovable, which in legacy is the more expensive input to get wrong.
+> Source it from `docs/analysis/system-profile.md` when it exists, and confirm each with the user.
+
+| What | Why it can't change | Evidence |
+|---|---|---|
+
 ## Recorded decisions (optional)
 > Trade-offs already resolved during the interview. Link the ADRs emitted inline (e.g. `docs/adr/0003-*.md`).
 
@@ -42,4 +51,6 @@ intent — delete it when you fill the section.
 > What is still undefined. The ambiguity gate only passes when nothing critical remains here.
 
 ## Glossary (optional)
-> Key terms and their canonical definition (or point to `CONTEXT.md`).
+> Key terms and their canonical definition (or point to `CONTEXT.md`, which owns them). Terms that a
+> later stage will act on are **load-bearing** and get two descriptions on different axes — see the
+> `Load-bearing terms` section of `CONTEXT.md`.
