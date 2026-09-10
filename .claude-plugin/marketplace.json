@@ -9,9 +9,9 @@
     {
       "name": "thasmorato-skills",
       "source": "./",
-      "description": "Interview → documentation (PRD→HLD→FDD→ADR→C4→Guidelines) → development flow, with AI.",
+      "description": "Interview → documentation and architecture (PRD→HLD→components→FDD→boundaries→ADR→C4) → a validated test-first development loop, with machine-checked verification in both phases.",
       "category": "engineering",
-      "keywords": ["engineering", "documentation", "design-docs", "adr", "c4", "tdd", "interview"]
+      "keywords": ["engineering", "documentation", "design-docs", "adr", "c4", "tdd", "interview", "architecture", "security"]
     }
   ]
 }

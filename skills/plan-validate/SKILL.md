@@ -1,6 +1,6 @@
 ---
 name: plan-validate
-description: Validate an implementation plan before coding — check the SIs for gaps, ambiguity, dependency cycles, and untestable acceptance criteria, and emit a clean/dirty verdict that gates /implement. Use after /plan, on "validate the plan / is this plan ready".
+description: Validate an implementation plan before coding — check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates /implement. Use after /plan, on "validate the plan / is this plan ready".
 disable-model-invocation: true
 ---
 
@@ -9,17 +9,29 @@ Read the plan and decide whether it is safe to implement. This skill **finds pro
 ## Input
 `/plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`. If it does not exist, abort: *"No plan at <path>. Run /plan <ticket> first."*
 
+## Sources
+Read the plan, and everything it is accountable to:
+- **the ticket** it points to — the acceptance criteria and exclusions;
+- **the node map** at the `design:` path — the modules, interfaces and seams the plan is supposed to encode;
+- **the FDD** the ticket names — the declared test seams and the public contracts;
+- **the ADRs, the boundary contract and the guidelines** binding in the area.
+
 ## Checks
-Read the plan and the ticket it points to, then scan for issues in these categories:
 
 | ID prefix | Category | The problem it catches |
 |---|---|---|
-| `IC-N` | Inconsistency | Two SIs (or an SI and the ticket/ADR/guidelines) contradict each other |
+| `IC-N` | Inconsistency | Two SIs, or an SI and the ticket / node map / **FDD** / ADR / boundary contract / guidelines, contradict each other |
 | `AMB-N` | Ambiguity | An SI's actions or acceptance criteria are too vague to implement or verify |
 | `DG-N` | Dependency gap | An SI depends on something no earlier SI produces; or the Dependency Map has a cycle |
 | `UT-N` | Untestable | An acceptance criterion no SI's Tests section makes observable, or an SI with real behavior and no seam |
 | `CV-N` | Coverage | A ticket acceptance criterion no SI owns |
+| `SZ-N` | Oversized SI | An SI that needs two Acts to describe, or spans two seams, or whose actions are a sequence of independent deliverables — it violates the single-act rule and will not fit one red-green-refactor cycle |
+| `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, or attaches tests at a seam the map and FDD don't name |
 | `DL-N` | Deliverables | Deliverables missing the repo's real test / type-check / build commands |
+
+For a plan with `type: structural`, also check that no SI modifies an existing test and that no SI adds behavior — a structural plan that changes behavior is an `IC` against its own ticket type.
+
+`CV` and `SZ` are the two the author cannot reliably catch alone: coverage because omission is invisible from inside, and size because the author who wrote the slice believes it is one thing. `DM` exists because the plan claims to encode the node map and nothing used to check that claim.
 
 ## Output
 Write `.scratch/<feature-slug>/plans/<NN>-<slug>/validation.md`:

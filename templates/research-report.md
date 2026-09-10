@@ -9,11 +9,27 @@ to a PRIMARY source. PRUNE optional sections that don't apply; (required) sectio
 ## Metadata (required)
 - **Question:** <the exact question investigated>
 - **Date:** <YYYY-MM-DD>
+- **Applies to:** <the exact versions/releases the findings hold for, e.g. "React 19.1, Next 15.3">
 - **Scope:** <what was in/out of scope for this investigation>
 
+> **Applies to** is what dates this report, not `Date`. "Researched in March" says nothing about
+> whether the answer still holds; "applies to React 18" says exactly when it stops holding.
+
 ## Findings (required)
-> Each finding is a claim with its **primary** source (official docs, source code, spec, first-party API). Follow every claim back to the source that owns it.
-- <finding> — [source](url-or-path)
+> Each finding is a claim with its source. **Primary sources** — official docs, source code, specs,
+> first-party APIs — are required for any claim of fact; follow the claim back to the source that owns
+> it. **Secondary sources** are allowed for what no spec can tell you (production experience,
+> comparisons, benchmarks, failure reports) and are **labelled as such**, so a reader can weigh them.
+- <finding> — [source](url-or-path) *(primary)*
+- <finding> — [source](url-or-path) *(secondary — experience report)*
+
+## Conflicts (optional)
+> Where two sources disagree — the classic case being a spec against a real implementation. A conflict
+> is a **finding**, not something to resolve silently by picking one. State both positions, both
+> sources, and what would settle it.
+
+| Claim | Source A says | Source B says | What would settle it |
+|---|---|---|---|
 
 ## Synthesis (required)
 > What the findings mean together — the answer to the question, and the trade-offs that surfaced.

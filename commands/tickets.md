@@ -5,33 +5,46 @@ argument-hint: <feature name or slug> (or a path/issue reference)
 
 Break the feature's design into a set of **tickets** — tracer-bullet vertical slices, each declaring the tickets that **block** it. This is interactive: quiz the user before publishing anything.
 
+A ticket may be executed by an agent **or picked up by the owner**, so it carries the why and the constraints, not only the instruction. `${CLAUDE_PLUGIN_ROOT}/templates/ticket.md` is the contract.
+
 ## 1. Gather context
-Read `docs/fdd/<feature>.md` for: $ARGUMENTS (or the reference passed as an argument). Also read the relevant `docs/adr/*.md` and `CONTEXT.md` — ticket titles and descriptions use the project's glossary and respect the ADRs in the area you're touching. If no FDD exists, tell the user to run `/fdd` first.
+Read `docs/fdd/<feature>.md` for: $ARGUMENTS (or the reference passed as an argument). Also read `docs/boundaries.md` (the components this feature may touch and the edges it may add), the relevant `docs/adr/*.md`, and `CONTEXT.md`. If no FDD exists, tell the user to run `/fdd` first.
 
 ## 2. Explore the codebase (optional)
 Understand the current state. Look for **prefactoring** opportunities — "make the change easy, then make the easy change."
 
 ## 3. Draft vertical slices
-Each slice cuts a **narrow but complete** path through every layer (schema, API, UI, tests) — vertical, never a horizontal slice of one layer. A completed slice is **demoable on its own** and fits one fresh context window. Prefactoring goes first. Give each ticket its **blocking edges** (the tickets that must complete before it can start).
+Each slice cuts a **narrow but complete** path through every layer (schema, API, UI, tests) — vertical, never a horizontal slice of one layer. A completed slice is **demoable on its own**. Prefactoring goes first. Give each ticket its **blocking edges**.
 
-**Wide-refactor exception:** a single mechanical change whose blast radius breaks thousands of call sites can't land green as a vertical slice. Sequence it **expand → migrate (batches, each blocked by expand) → contract (blocked by every batch)**; if batches can't stay green alone, share an integration branch that all block a final integrate-and-verify ticket.
+**Size by the seam.** The FDD declares its test seams in a required section; **one ticket crosses one seam end to end**. That is observable at planning time, comparable between tickets, and already written down — unlike "fits one context window", which is none of those and which the SI-based implement loop made obsolete anyway (the unit that must fit a context is the SI, not the ticket). Where a feature has one seam for everything, fall back to a range of 2–5 acceptance criteria per ticket.
 
-## 4. Quiz the user
-Present the breakdown as a numbered list — per ticket: **Title**, **Blocked by**, **What it delivers** (the end-to-end behavior). Ask: is the granularity right? are the blocking edges correct (only genuine gates)? should any be merged or split? Iterate until the user approves.
+**Size relatively.** After drafting, put the tickets side by side and compare them to each other, not to an absolute limit. Comparison is far more reliable than estimation, for a model and for a person, and dispersion is what actually goes wrong here.
+
+**Mark the type.** A **structural** ticket (prefactoring, expand/migrate/contract) changes shape and not behavior: existing tests stay unchanged and stay green, and that is verifiable at review. A **behavioral** ticket changes what the system does.
+
+**Wide-refactor exception:** a single mechanical change whose blast radius breaks thousands of call sites can't land green as a vertical slice. Sequence it **expand → migrate (batches, each blocked by expand) → contract (blocked by every batch)** — all structural; if batches can't stay green alone, share an integration branch that all block a final integrate-and-verify ticket.
+
+## 4. Check the set, then quiz the user
+Before presenting, check two things mechanically:
+
+- **Cycles.** Walk the blocking graph. A cycle means no ticket ever has all its blockers done and the frontier is empty forever — it is the Acyclic Dependencies Principle at ticket scale, and it is trivial to detect and invisible to read. Report any cycle as its full path and break it before presenting.
+- **Coverage.** Every acceptance criterion in the FDD is owned by at least one ticket. Anything uncovered is either a missing ticket or an out-of-scope decision that should be written down.
+
+Then present the breakdown as a numbered list — per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers**. Ask:
+1. Is the granularity right?
+2. **Are these comparable to each other?** — show the sizes side by side; this is the question that catches dispersion, and asking only about the set as a whole never does.
+3. Are the blocking edges genuine gates?
+4. Should any be merged or split?
+
+Iterate until the user approves.
 
 ## 5. Publish (blockers first)
-Default to **local files** — one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order. If the user asks for a real tracker (GitHub, etc.) and a remote exists, publish one issue per ticket in dependency order using native blocking links, and apply a `ready-for-agent` label. Never close or modify a parent issue.
+Default to **local files** — one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order, each filling `${CLAUDE_PLUGIN_ROOT}/templates/ticket.md`. Number the acceptance criteria `AC-1`, `AC-2` — `/plan` maps each to an SI and `/plan-validate` checks the coverage by id, which it cannot do against unlabelled bullets.
 
-Per-ticket format (avoid file paths/code snippets — they go stale; exception: a decision-encoding snippet from a prototype, trimmed to the decision):
-```
-# <NN> — <Ticket title>
+If the user asks for a real tracker (GitHub, etc.) and a remote exists, publish one issue per ticket in dependency order using native blocking links. Never close or modify a parent issue.
 
-**What to build:** the end-to-end behavior this ticket makes work, from the user's perspective — not a layer-by-layer list.
-**Blocked by:** the tickets that gate this one, or "None — can start immediately".
-**Status:** ready-for-agent
+Avoid file paths and code snippets — they go stale; the exception is a decision-encoding snippet from a prototype, trimmed to the decision.
 
-- [ ] Acceptance criterion 1
-- [ ] Acceptance criterion 2
-```
+`Status` starts `ready` for unblocked tickets and `blocked` for the rest. It records **readiness, not who executes** — the old `ready-for-agent` presumed the executor, and the owner picking the ticket up made the field a lie.
 
-Work the **frontier** — any ticket whose blockers are all done — one ticket per fresh context: `/design` → `/plan` → `/plan-validate` → `/implement`.
+Work the **frontier** — any ticket whose blockers are all done: `/design` → `/plan` → `/plan-validate` → `/implement` → `/review`.
