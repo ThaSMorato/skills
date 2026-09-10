@@ -18,7 +18,12 @@ Default mode **pauses after every SI** (this is what lets the user `/compact` be
 - **Resume check:** look for the sibling `progress.md`. If present, read which SIs are already done and tell the user: *"Found progress: X/Y SIs done. Resuming at SI-Z."*
 
 ## Load references
-Load the `tdd` skill (the red → green → refactor doctrine and seam discipline), the `testing` skill (what to test, at which seam, and how to keep tests clean), and the `code-smells` + `clean-code` skills (the refactor checklist). If the repo ships a `testing-guide-<project>` skill, load that too for project-specific recipes. Load only what the current SIs need.
+Load the `tdd` skill (the red → green → refactor doctrine and seam discipline), the `testing` skill (what to test, at which seam, and how to keep tests clean), and the `code-smells` + `clean-code` skills (the refactor checklist).
+
+Then load the **project's own guides**, resolved deterministically rather than remembered: read `docs/guidelines.md`'s routing table and load every guide whose file patterns match the files this SI touches — the stack guides (`.claude/skills/<tech>-guide/`) and `testing-guide-<project>` if the repo ships one. Those are additive: they specialize the generic skills, they never replace this loop. Load only what the current SI needs.
+
+## Structural tickets
+If the plan's `type` is `structural`, the loop changes shape: there is no red step, because no behavior is being added. **Existing tests are not modified**, and they must stay green after every SI. Refactor production code freely; changing a test to accommodate a structural change means the change was not structural, and that is a stop-and-report, not something to work around.
 
 ## Task list + progress file
 Before the first SI, create one task per SI (in Dependency-Map order) so the user sees the whole plan. Then create `progress.md` (all SIs `pending`) — or, on resume, mark already-done SIs complete.
