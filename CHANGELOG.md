@@ -43,6 +43,34 @@ found four structural gaps and one live hazard; all are fixed here.
   measure against, so every cell it fills is a decision or a reading of a document, never a
   measurement. A sentence that sounds like evidence and isn't is worse than none.
 
+### `/retro` — the learning loop
+
+The suite had no stage that writes back. Every other one writes forward, the documents freeze at
+approval, and what the work taught lived in progress notes nobody reopened and in a conversation that
+is gone at the next `/compact`. The out-of-scope observations `/implement` collects were "reported as
+follow-ups" — into a chat window.
+
+`/retro <epic | feature | cycle>` reads what finished work left on disk — tickets, node maps, plans,
+`validation.md` (including its `Resolved` history, the closest thing the suite has to a record of which
+mistakes this project actually makes), `progress.md`, and the review files — and sorts what it finds by
+subject: **process** findings to `docs/retro/<scope>.md`, **product** findings appended to
+`docs/evolutions.md`. A defect is neither, and goes back as a ticket.
+
+It runs over a set of tickets, never one: repetition is most of the value, and a finding that recurs
+across tickets is a standard that should move into a stack guide or a rule — a conclusion no single
+review can reach.
+
+Two constraints make it trustworthy rather than plausible. **Every claim cites the artifact it came
+from**: it may not say the work was hard or a decision was debated, because none of that is on disk;
+what is on disk is a fix loop that hit three attempts and a validation that took four rounds. And a
+required section names **what the artifacts couldn't tell it**, so the document doesn't imply coverage
+it doesn't have. Both outputs are append-only logs — nothing derives current state from them, which is
+why they don't violate `/flow`'s refusal of maintained state files.
+
+**`/review` now persists its findings** to `.scratch/<slug>/reviews/<NN>-<slug>.md`. Without that, a
+review's output lived only in the conversation, and the retro's best input would have been an empty
+directory.
+
 Deliberately not adopted: a Task rung between epic and feature (its only datum is a cascade
 of its children's edges); a per-feature mutable state column (the disk already answers it, and
 `/flow` refuses maintained state files); and a fixed cap on slices per item — the review
