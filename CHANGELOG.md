@@ -1,5 +1,54 @@
 # Changelog
 
+## 0.3.1
+
+Hardening of `/decompose`, from a review that compared its output against a
+hand-built backlog corrected across seventeen shipped tickets. The comparison
+found four structural gaps and one live hazard; all are fixed here.
+
+- **Ids are permanent addresses.** A re-run may never renumber — `docs/fdd/<slug>.md`
+  paths and the `.scratch/<slug>/issues/` directories `/tickets` published are keyed
+  on these ids, so inserting a feature and renumbering silently invalidated artifacts
+  that already existed. New items take a suffix (`F3a`); retired ids are never reused.
+- **Re-runs amend instead of rewriting.** A removed, merged or split feature is struck
+  through in a `Retired` section with its reason and where its scope went. Previously a
+  re-run overwrote the file and the earlier cut survived only in git, which left a reader
+  unable to tell a deliberate removal from an oversight.
+- **Cross-feature dependencies have somewhere to live.** `/tickets` reads one FDD at a
+  time, so its blocking graph — authoritative at ticket level — is necessarily
+  per-feature, and an edge between two features had nowhere to be written down. The
+  Features table gains a `Depends on` column, declared coarse and advisory so two graphs
+  don't get maintained as rivals, plus a product-wide cycle check in the decomposer's
+  workflow and a `DG-N` category in `/doc-validate`.
+- **Epics are ordered by risk, not only by parallel safety.** Component overlap says what
+  may run *together*; nothing said what should run *first*. An epic that exists to
+  **falsify** a structural decision now names it, by ADR id or HLD section, and belongs at
+  the front — the cheapest moment to be wrong about a decision is before anything is built
+  on it. A soft `Adopted by` edge covers the epic that should precede its consumers but
+  must never block them.
+- **Partial coverage is not coverage.** A requirement naming two things, of which a feature
+  delivers one, is listed as `partial` rather than ticked. Half a proof credited as a proof
+  is how a requirement gets marked done by a release that does not meet it. `/doc-validate`
+  gains `PC-N` for it.
+- **A negative scope bound per feature.** `Not delivering` records the boundary with the
+  neighbouring features — a scope decision knowable at decomposition time — and `/fdd` now
+  carries it into `Scope and exclusions` instead of inferring it, differently, per run.
+- **A third disposition for untraced findings.** Besides "scope creep" and "missing
+  requirement", a finding that traces to neither the PRD nor an ADR goes to
+  `docs/evolutions.md` — which keeps it without turning the decomposition into a junk drawer.
+- **ADRs traced where they exist.** A `Constrained by` column, populated from formal ADRs or
+  from the candidates the HLD flagged, explicitly left empty rather than guessed: most ADRs
+  are formalized after this stage runs.
+- **A guardrail against unearned evidence.** The decomposer has no shell and no repository to
+  measure against, so every cell it fills is a decision or a reading of a document, never a
+  measurement. A sentence that sounds like evidence and isn't is worse than none.
+
+Deliberately not adopted: a Task rung between epic and feature (its only datum is a cascade
+of its children's edges); a per-feature mutable state column (the disk already answers it, and
+`/flow` refuses maintained state files); and a fixed cap on slices per item — the review
+records that rule being violated four times without its remedy ever being chosen, which is the
+signature of a rule naming the wrong subject. Relative sizing against a declared seam stays.
+
 ## 0.3.0
 
 A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped everything below.

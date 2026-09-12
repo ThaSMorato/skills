@@ -10,6 +10,8 @@ A ticket may be executed by an agent **or picked up by the owner**, so it carrie
 ## 1. Gather context
 Read `docs/fdd/<feature>.md` for: $ARGUMENTS (or the reference passed as an argument). Also read `docs/boundaries.md` (the components this feature may touch and the edges it may add), the relevant `docs/adr/*.md`, and `CONTEXT.md`. If no FDD exists, tell the user to run `/fdd` first.
 
+Read this feature's row in `docs/features.md` too, if it exists. You can only see **one** feature's FDD, so its **`Depends on`** column is the only place a cross-feature blocker is written down — a ticket here that needs something another feature delivers must say so, even though that blocker lives outside the graph you are about to build. Its **`Not delivering`** bound feeds the tickets' exclusions.
+
 ## 2. Explore the codebase (optional)
 Understand the current state. Look for **prefactoring** opportunities — "make the change easy, then make the easy change."
 

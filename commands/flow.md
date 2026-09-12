@@ -23,6 +23,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/hld.md` | HLD | `/hld` |
 | `docs/components.md` | component map | `/components` |
 | `docs/features.md` | decomposition | `/decompose` |
+| `docs/evolutions.md` | findings kept but traced to no requirement — read it when scope is next revisited | any stage may append |
 | `docs/fdd/<feature>.md` | FDD, per feature | `/fdd <feature>` |
 | `docs/boundaries.md` | boundary contract | `/boundaries` |
 | `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `/adr-identify` → `/adr-generate` |
