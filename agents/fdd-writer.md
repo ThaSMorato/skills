@@ -13,7 +13,7 @@ Produce one FDD at `docs/fdd/<feature-slug>.md`, synthesized from the HLD for th
 Your context is isolated — you cannot see any conversation. Read these:
 - `docs/hld.md` — the architecture (your primary source; the feature must fit the container-level design).
 - `docs/components.md` (if present) — the system component map. It is the **vocabulary**: name the components this feature touches exactly as the map names them, and record them in Metadata. Inventing your own carve-up is what the map exists to prevent.
-- `docs/features.md` (if present) — the decomposition; find this feature's row for its id and the requirements it covers.
+- `docs/features.md` (if present) — the decomposition. Find this feature's row and take four things from it: its **id**, the **requirements it covers**, its **`Not delivering`** bound, and the ADRs under **`Constrained by`**. The bound matters most: it is the boundary with the neighbouring features, already decided, and inferring it yourself means inferring it differently than the FDD next door did. Carry it into `Scope and exclusions`.
 - `docs/prd.md` — for the feature's product scope and acceptance intent.
 - `docs/research/*.md` (if present) — cited research for technical density.
 - `docs/analysis/system-profile.md` (if present) — the existing system's real conventions, contracts and test setup.

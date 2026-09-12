@@ -1,5 +1,5 @@
 ---
-description: Cut the product into epics and features, with requirement coverage — the list every FDD and every parallel-work decision depends on.
+description: Cut the product into epics and features — ordered by risk, with cross-feature dependencies and requirement coverage.
 argument-hint: (none) — runs once per product scope, re-run when the PRD scope changes
 ---
 
@@ -9,8 +9,17 @@ Nothing else in the flow produces this list. `/fdd` asks *which feature to spec*
 
 If `docs/prd.md` is missing, tell the user to run `/prd` first. If `docs/components.md` is missing, say so and continue — the decomposition still works, but the parallel-safety column will be empty and `/boundaries` will have less to check against.
 
-After the agent returns, show: the epics with their parallel-safe sets, the features under each with the requirements they cover, **any requirement no feature covers**, and any journey-vs-component divergences.
+## If `docs/features.md` already exists
+This is an **amendment**, not a rewrite. Ids are permanent addresses — `docs/fdd/<slug>.md` paths and the `.scratch/<slug>/issues/` directories `/tickets` published are keyed on them, so renumbering breaks artifacts that already exist. New items get a suffixed id (`F3a`); removed ones are struck through in `Retired` with their reason. Tell the user which rows changed.
 
-**GATE (medium).** The user confirms the cut. Uncovered requirements are the thing to look at first — that column is the whole reason this stage exists. On approval, set `Status: approved`.
+## After the agent returns
+Show:
+- the **epic order and why** — what each front-loaded epic exists to falsify, and which edges are soft (should precede, must never block);
+- the epics' parallel-safe sets;
+- the features under each, with their cross-feature dependencies;
+- **any requirement not fully covered**, including anything marked `partial`;
+- any journey-vs-component divergence, and any `Retired` rows this run added.
 
-Then run `/fdd <feature>` per feature. Independent features can be specced in parallel.
+**GATE (medium).** Coverage is the thing to look at first — that column is the whole reason this stage exists, and `partial` rows are the ones most likely to be wrong, because a half-covered requirement looks covered from every other angle.
+
+Then run `/doc-validate prd features` before the gate, and `/fdd <feature>` per feature afterwards. Independent features can be specced in parallel.

@@ -32,7 +32,22 @@ Narrow agents trade precision for recall, and the two costs land here:
 - **Primed findings.** Each agent is looking for its own subject and will produce plausible material on demand. **Drop any finding without a named rule and a concrete failure scenario** — that is the filter, and applying it is most of what this step does.
 - **Severity drift.** Each lens believes its own subject matters most. Re-rank across all of them on the shared scale, judging by consequence rather than by which agent reported it.
 
-## 5. Report
+## 5. Report and persist
 Show the merged findings, most-severe first, each with `file:line`, the rule it violates, the failure scenario, and the fix. Then a one-line note per lens saying what it covered — and name any lens that was skipped or that reported having no standard to apply.
 
-The user decides what to fix. Nothing here edits code.
+Write the same merged list to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md`, with the fixed point, the lenses that ran, and the lenses that were skipped and why:
+
+```markdown
+---
+kind: review
+slug: <NN>-<slug>
+fixed_point: <ref>
+lenses_run: [quality, tests, security, spec, standards, architecture]
+lenses_skipped: [<lens>: <reason>]
+findings: <count>
+---
+```
+
+Without the file, a review's findings live only in this conversation and are gone at the next `/compact`. `/retro` reads these across a whole epic to find the finding that **repeats** — and a finding that recurs across tickets is a standard that should move into a stack guide or a rule, which is a conclusion no single review can reach.
+
+The user decides what to fix. Nothing here edits code — persisting the findings is a record of what was reported, not a change to the work.

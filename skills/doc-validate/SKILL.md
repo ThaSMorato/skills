@@ -34,6 +34,8 @@ If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` firs
 |---|---|---|
 | `CV-N` | Coverage (omission) | An element of the source that nothing in the target carries forward |
 | `SC-N` | Set coverage | In a 1:N pair, a source item no member of the target set owns |
+| `PC-N` | Partial credit | A source item the target marks as covered but only partly delivers — ticked where it should be listed as `partial` |
+| `DG-N` | Dependency graph | A cycle in `docs/features.md`'s epic or feature graph, or a feature depending on one that no longer exists |
 | `IV-N` | Invention | An element of the target that traces to nothing in the source |
 | `RN-N` | Unanswered driver | An `RNF` in the PRD with no architectural response in the HLD |
 | `IC-N` | Inconsistency | Two documents contradict — including two FDDs specifying conflicting contracts for a component they both list as touched |
