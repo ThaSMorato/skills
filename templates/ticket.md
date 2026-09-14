@@ -11,7 +11,7 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 ## Metadata (required)
 - **Status:** ready | blocked | in progress | done
 - **Type:** behavioral | structural
-- **Source:** <docs/fdd/<feature>.md — the FDD this slice comes from>
+- **Source:** <docs/fdd/<feature>.md — the FDD this slice comes from; or `direct — <gear> gear, no FDD: <why>` when the flow deliberately skipped one>
 - **Components touched:** <names from docs/components.md, or `unknown — no component map`>
 
 > **Type** is verifiable, not decorative. A **structural** ticket (prefactoring, expand/migrate/contract)

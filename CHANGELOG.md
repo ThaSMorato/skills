@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.3.2
+
+From running the flow on a small task and watching it manufacture scope. The
+agent's own post-mortem named the mechanism: *"o fluxo amplificou em vez de
+checar. Cada estágio tomou o anterior como dado. O `/plan-validate` confere o
+plano contra o node map — mas ninguém conferiu o node map contra o repositório.
+O portão que existia para pegar excesso foi justamente o que o introduziu."*
+
+**The structural cause.** Every artifact in the chain is derived from the
+previous artifact, and every check the suite performs is internal consistency —
+`/doc-validate` compares document to document, `/plan-validate` compares plan to
+ticket and node map, `/review` compares diff to spec. Nothing consults the
+repository. So a wrong assumption made early passes every gate, because it is
+perfectly consistent all the way down, and each stage elaborates it instead of
+questioning it. This is the failure the overloading principle already named for
+documents, one level up: the second representation has to be one the first did
+not produce, and the only independent source in the chain is the code itself.
+
+- **`/design` reads the repository before drawing.** A new section, before the
+  map is built: grep the domain nouns, the likely symbols, the neighbouring
+  feature that already does this. The node map's `Reuses` field becomes
+  **`Grounding`**, and `new` is only accepted with the search recorded — what was
+  searched for, where, and what was found. A claim that something must be built
+  is falsifiable by one grep, and that asymmetry is what makes the discipline
+  cheap. A new `Grounding summary` table collects the claims.
+- **`/plan-validate` gains `GR-N`** — a node called `new` with no recorded search,
+  or with a search a grep contradicts. It is the only check in the suite that
+  leaves the documents, and the validator runs the searches itself rather than
+  trusting the map. A node that turns out to already exist is the highest-value
+  finding the stage can produce: everything below it was about to be built twice.
+- **`/design` says so when the search shrinks the ticket**, and offers to amend it
+  before planning. That outcome is the stage working, not the ticket failing.
+- **`/tickets` codebase exploration is no longer optional** when code exists. The
+  amplification in this incident began one stage earlier than the post-mortem
+  found: the ticket already said "build" for something that was already built.
+
+**Gears.** The flow had one speed and applied it to everything. Running the full
+chain on a two-hour change does not merely cost more — it manufactures scope,
+because every template is a completeness contract and a completeness contract
+applied to small work gets filled with invented content. `/flow` now sizes the
+work before proposing anything and picks the shortest path that fits: **full**,
+**feature**, **small** (straight to the dev loop, no FDD), or **direct** (no stage
+at all — say so and let the user just do it). The choice is stated and confirmed,
+and it is recorded in the ticket's `Source`, so a later scan can tell a deliberate
+skip from a missing document and stops offering to generate what was declined.
+
 ## 0.3.1
 
 Hardening of `/decompose`, from a review that compared its output against a

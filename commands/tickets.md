@@ -12,8 +12,12 @@ Read `docs/fdd/<feature>.md` for: $ARGUMENTS (or the reference passed as an argu
 
 Read this feature's row in `docs/features.md` too, if it exists. You can only see **one** feature's FDD, so its **`Depends on`** column is the only place a cross-feature blocker is written down — a ticket here that needs something another feature delivers must say so, even though that blocker lives outside the graph you are about to build. Its **`Not delivering`** bound feeds the tickets' exclusions.
 
-## 2. Explore the codebase (optional)
-Understand the current state. Look for **prefactoring** opportunities — "make the change easy, then make the easy change."
+## 2. Explore the codebase
+**Required whenever code exists** — optional only on an empty repository. A ticket written without looking asks for things that are already built, and every stage below it elaborates that request instead of questioning it.
+
+For each capability the FDD describes, grep the domain nouns and the likely symbol names before writing a ticket that says "build". Then say, per ticket, **what already exists that it can reuse** — and where the answer is "most of it", the ticket is a wiring job and should be written as one.
+
+Look for **prefactoring** opportunities too — "make the change easy, then make the easy change."
 
 ## 3. Draft vertical slices
 Each slice cuts a **narrow but complete** path through every layer (schema, API, UI, tests) — vertical, never a horizontal slice of one layer. A completed slice is **demoable on its own**. Prefactoring goes first. Give each ticket its **blocking edges**.
