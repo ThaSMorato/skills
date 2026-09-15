@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.3.3
+
+Two rules about how a stage talks to the user, in one shared `asking` skill loaded
+by every command that reports, gates, or asks.
+
+- **An id is an address, not a message.** `CV-3`, `RF-007`, ticket `04`, `ADR 0012`
+  — cited alone, each one sends the reader hunting through documents for a row the
+  asker already had open. Every identifier now gets resolved where it is spoken:
+  the id **plus** the shortest phrase that makes it recognisable, preferably quoted
+  from the original so it can be searched for. This holds for findings, gate
+  reports, progress summaries, questions, and the `> Needs Input` markers isolated
+  agents write — those now say to name the thing rather than cite its id.
+- **Offer a choice when the answer is a closed set.** A structured option list
+  beats an open question the user has to compose an answer to: recommendation
+  first, labelled by outcome rather than mechanism, each with what it costs. Free
+  text stays for genuinely open answers. Twelve findings do not become twelve
+  prompts — ask about what blocks, report the rest.
+
+The skill also carries two principles the suite already held in one place each and
+now states once: **ask only what is a decision** (facts are yours to discover —
+lifted from the `interview` skill, where it was a local rule), and **make the
+default visible** when proceeding under an assumption, so a wrong one costs a
+one-word correction instead of being discovered three stages later.
+
 ## 0.3.2
 
 From running the flow on a small task and watching it manufacture scope. The

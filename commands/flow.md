@@ -5,6 +5,8 @@ argument-hint: (none) — whole project · or <feature/ticket/goal> to scope to 
 
 You are the **coordinator**. Scope: $ARGUMENTS
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 ## Always scan first — before running anything
 The first thing this command does, every time, is **read the disk and say where the project stands**. Not "start at stage one": scan, report, then propose. This is the most common way the command is used — "where am I, what's next, what's waiting on me" — and running a stage before answering that is how work gets redone.
 

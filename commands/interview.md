@@ -7,6 +7,8 @@ Load **both** the `interview` skill (the elicitation discipline — one question
 
 Elicit requirements for: $ARGUMENTS
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 ## Before the first question
 - Read `docs/analysis/system-profile.md` if it exists. Its **Inherited constraints** section is the input a greenfield interview never needs and a brownfield one cannot do without — the immovable, as opposed to the desired. Confirm each with the user rather than assuming it still binds.
 - Read `docs/prd.md` and `docs/hld.md` if they exist. When the argument names a **feature inside an existing product**, the problem, the users and the goals are already settled upstream — **inherit them and say so**, then elicit only what is new. Re-eliciting produces a brief that contradicts the document above it.

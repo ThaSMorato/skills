@@ -5,6 +5,8 @@ argument-hint: (none) — runs once per product scope, re-run when the PRD scope
 
 Use the `decomposer` agent to write `docs/features.md` from `docs/prd.md`, `docs/hld.md` and `docs/components.md`.
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 Nothing else in the flow produces this list. `/fdd` asks *which feature to spec* and takes the answer from whoever is at the keyboard — so the set of features exists only in someone's head, sizes drift, and coverage cannot be checked because there is no denominator.
 
 If `docs/prd.md` is missing, tell the user to run `/prd` first. If `docs/components.md` is missing, say so and continue — the decomposition still works, but the parallel-safety column will be empty and `/boundaries` will have less to check against.

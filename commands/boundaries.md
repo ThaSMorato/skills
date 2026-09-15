@@ -5,6 +5,8 @@ argument-hint: (none) — runs once per project, revisited when a large epic cha
 
 Use the `boundary-architect` agent to write `docs/boundaries.md`.
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 This is the second of the two architecture beats. `/components` said **what the parts are**, before the FDDs, so every feature spec had a shared vocabulary. This one says **who may depend on whom**, after the FDDs, because only the feature specs reveal the axes of change that a boundary is supposed to separate.
 
 If `docs/components.md` is missing, tell the user to run `/components` first. If no FDD exists yet, say so — a contract written before the specs is a guess, and the whole point of the ordering is not to guess.

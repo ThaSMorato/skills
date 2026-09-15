@@ -5,6 +5,8 @@ argument-hint: <fixed point — commit/branch/tag, e.g. main or HEAD~5>
 
 Review the diff between `HEAD` and the fixed point: $ARGUMENTS
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 ## 1. Preflight
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty — a bad ref or an empty diff fails here, not inside six agents.
 

@@ -39,7 +39,7 @@ Before writing the contracts, identify the **test seams**: the highest, most sta
 Record in Metadata every component from `docs/components.md` this feature crosses. Two FDDs written in parallel can specify contradictory contracts for a component they share, and this field is what makes that detectable. If the feature needs a component the map does not have, put it in `Open questions` rather than naming something new — the map is corrected in one place, not per feature.
 
 ## Ambiguity (you cannot ask — isolated)
-If an input is undefined, choose the most reasonable default and mark it `> Needs Input: <what's missing>`. Errors, fallbacks, and concurrency are never "left to the implementer" — specify them, marking assumptions.
+If an input is undefined, choose the most reasonable default and mark it `> Needs Input: <what's missing — name the thing, don't just cite its id>`. Errors, fallbacks, and concurrency are never "left to the implementer" — specify them, marking assumptions.
 
 ## Error handling
 If `docs/hld.md` is missing, do not guess an FDD — stop and report that `/hld` must run first.
