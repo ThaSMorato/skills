@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.3.6
+
+0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the
+frontmatter the plugin **generates** — which is where it actually bit: a guide
+produced by `/generate-test-guide` failed to load, and the only signal was a
+startup warning.
+
+- `generate-test-guide` and `generate-stack-guide` now require the generated
+  `description` to be quoted. These two write the exact shape that breaks strict
+  YAML: a description that names trigger phrases carries double quotes and a
+  `Triggers:` label, and the unquoted colon-space reads as a nested mapping.
+  Single quotes, since the trigger phrases use double ones.
+- `docs/anatomy/skill-anatomy.md` states the rule and quotes `description` in its
+  own example — the unquoted example is what propagated the pattern.
+
+The failure mode is worth naming: a skill whose frontmatter does not parse **does
+not load at all**, and nothing says so at the point of use. It also fails loudly
+under a strict parser and silently under a lenient one, so "it works on my host"
+is not evidence that the file is correct.
+
 ## 0.3.5
 
 Command frontmatter is strict YAML, and two `argument-hint` values were not valid

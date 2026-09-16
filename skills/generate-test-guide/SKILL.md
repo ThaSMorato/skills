@@ -44,6 +44,7 @@ testing-guide-<project>/
 ```
 
 Rules for the generated skill:
+- **Quote the `description` in the frontmatter.** It is strict YAML, and the description you are about to write is the shape that breaks it: it names trigger phrases, so it carries quotes and a `Triggers:` label, and an unquoted `: ` reads as a nested mapping and aborts the parse. Use single quotes, since the trigger phrases themselves use double ones. A skill whose frontmatter fails to parse does not load at all — and the failure is a startup warning, not an error at the point of use.
 - **Trigger phrases are project-scoped** (e.g. "test <project>", "implement <project> feature") so they don't collide with the generic `testing` skill. Cover the whole lifecycle — planning, implementing, testing, reviewing — since the guide is most useful *before* code is written.
 - **Reference sub-files with backticks** (`` `artifacts/services.md` ``), never markdown links — links risk eager-loading and break lazy disclosure. Sub-files carry no frontmatter and a one-line back-reference to `SKILL.md`.
 - **Concrete, not generic.** Every bullet anchors to an artifact type or code pattern in *this* project. The setup templates are reusable, not instance-specific. Layer assignments trace back to `fundamentals.md`.
