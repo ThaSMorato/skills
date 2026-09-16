@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.5
+
+Command frontmatter is strict YAML, and two `argument-hint` values were not valid
+YAML at all. They loaded under a lenient parser and failed under a strict one — and
+a command that fails to parse is simply **absent**, with no error at the point of use.
+
+- `commands/generate-test-guide.md` — `<project folder> (default: current directory)`
+  reads as a nested mapping because of the colon-space, aborting the parse.
+- `commands/interview.md` — `[feature or project name]` parses as a **list**, so the
+  field is rejected as the wrong type.
+- **All 26 `argument-hint` values are now quoted**, not only the two that broke. A rule
+  applied to the failures alone does not prevent the next one; the field attracts both
+  traps because it is written as prose. Single quotes where the text contains double
+  quotes.
+- `docs/anatomy/command-anatomy.md` states the rule and names both traps — and its own
+  example, which showed an unquoted `[feature]`, was the thing propagating the bug.
+
 ## 0.3.4
 
 Auto-discovered directories have no ignore convention: every `.md` under `agents/`

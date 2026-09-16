@@ -1,6 +1,6 @@
 ---
 description: Validate an implementation plan before coding — gaps, ambiguity, dependency cycles, untestable criteria — and emit a clean/dirty verdict that gates /implement.
-argument-hint: <plan slug, e.g. 03-checkout>
+argument-hint: "<plan slug, e.g. 03-checkout>"
 ---
 
 Use the `plan-validate` skill to validate the plan for: $ARGUMENTS

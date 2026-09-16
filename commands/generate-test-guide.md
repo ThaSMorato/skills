@@ -1,6 +1,6 @@
 ---
 description: Analyze a project's stack and generate a project-specific testing-guide skill — what to test, at which layer, and how, per artifact type, including acceptance-test flows.
-argument-hint: <project folder> (default: current directory)
+argument-hint: "<project folder> (default: current directory)"
 ---
 
 Use the `generate-test-guide` skill for: $ARGUMENTS

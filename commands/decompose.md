@@ -1,6 +1,6 @@
 ---
 description: Cut the product into epics and features — ordered by risk, with cross-feature dependencies and requirement coverage.
-argument-hint: (none) — runs once per product scope, re-run when the PRD scope changes
+argument-hint: "(none) — runs once per product scope, re-run when the PRD scope changes"
 ---
 
 Use the `decomposer` agent to write `docs/features.md` from `docs/prd.md`, `docs/hld.md` and `docs/components.md`.

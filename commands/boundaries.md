@@ -1,6 +1,6 @@
 ---
 description: Write the boundary contract from the component map and the FDDs — allowed dependency edges, policy vs detail, plug points, as a machine-checkable manifest.
-argument-hint: (none) — runs once per project, revisited when a large epic changes the structure
+argument-hint: "(none) — runs once per project, revisited when a large epic changes the structure"
 ---
 
 Use the `boundary-architect` agent to write `docs/boundaries.md`.

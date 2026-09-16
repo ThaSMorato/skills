@@ -1,6 +1,6 @@
 ---
 description: Look back over a finished epic, feature or cycle from what it left on disk — plans, validations, progress notes, reviews — and record what it taught about the process and the product.
-argument-hint: <epic, feature slug, or a set of ticket ids>
+argument-hint: "<epic, feature slug, or a set of ticket ids>"
 ---
 
 Use the `retro` skill over: $ARGUMENTS

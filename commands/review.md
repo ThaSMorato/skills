@@ -1,6 +1,6 @@
 ---
 description: Review the diff since a fixed point across six narrow lenses in parallel — quality, tests, security, spec, standards, architecture — then synthesize.
-argument-hint: <fixed point — commit/branch/tag, e.g. main or HEAD~5>
+argument-hint: "<fixed point — commit/branch/tag, e.g. main or HEAD~5>"
 ---
 
 Review the diff between `HEAD` and the fixed point: $ARGUMENTS

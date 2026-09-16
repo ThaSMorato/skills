@@ -1,6 +1,6 @@
 ---
 description: Open the Doc-Dev flow with the requirements interview, producing the brief, glossary, and ADRs.
-argument-hint: [feature or project name]
+argument-hint: "[feature or project name]"
 ---
 
 Load **both** the `interview` skill (the elicitation discipline — one question at a time, the PRD checklist, the gate) and the `domain-model` skill (the glossary and the inline ADRs). They compose: `interview` drives the conversation, `domain-model` sharpens the vocabulary as it goes. Loading only one silently drops half the stage.

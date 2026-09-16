@@ -1,6 +1,6 @@
 ---
 description: Audit the project's dependencies for vulnerable, deprecated, unmaintained or license-risky libraries — using the ecosystem's own audit tools.
-argument-hint: (optional) focus — e.g. security, licensing, or an ecosystem
+argument-hint: "(optional) focus — e.g. security, licensing, or an ecosystem"
 ---
 
 Use the `dependency-auditor` agent to audit the project's dependencies into `docs/analysis/dependencies.md`. Focus: $ARGUMENTS

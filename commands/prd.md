@@ -1,6 +1,6 @@
 ---
 description: Write the PRD from the requirements brief (docs/requirements-brief.md).
-argument-hint: (optional) path to the brief, if not docs/requirements-brief.md
+argument-hint: "(optional) path to the brief, if not docs/requirements-brief.md"
 ---
 
 Use the `prd-writer` agent to synthesize a PRD into `docs/prd.md` from the requirements brief ($ARGUMENTS, or `docs/requirements-brief.md` by default).

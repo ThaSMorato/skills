@@ -1,6 +1,6 @@
 ---
 description: Drive the Doc-Dev flow — scan where the project stands, report what's waiting, and run the next stage with human gates.
-argument-hint: (none) — whole project · or <feature/ticket/goal> to scope to one thing
+argument-hint: "(none) — whole project · or <feature/ticket/goal> to scope to one thing"
 ---
 
 You are the **coordinator**. Scope: $ARGUMENTS

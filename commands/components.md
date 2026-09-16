@@ -1,6 +1,6 @@
 ---
 description: Build the system component map from the HLD — the named parts every FDD maps its feature onto (the system-level C3).
-argument-hint: (none) — runs once per system, re-run when the HLD changes
+argument-hint: "(none) — runs once per system, re-run when the HLD changes"
 ---
 
 Use the `component-mapper` agent to write `docs/components.md` from `docs/hld.md`.

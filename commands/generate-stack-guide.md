@@ -1,6 +1,6 @@
 ---
 description: Generate a per-technology engineering guide skill — conventions, idioms, gotchas and security idioms for one language or framework, as a lazy-loaded router.
-argument-hint: <technology> — e.g. ruby, react, nestjs, go
+argument-hint: "<technology> — e.g. ruby, react, nestjs, go"
 ---
 
 Use the `generate-stack-guide` skill for: $ARGUMENTS
