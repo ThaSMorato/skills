@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.3.4
+
+Auto-discovered directories have no ignore convention: every `.md` under `agents/`
+and `commands/` is loaded as an artifact, so the directory READMEs were shipping as
+a malformed agent and as a real `/README` command. Under a host that treats commands
+as description-matched skills, that stray entry also competed for auto-invocation
+with a description that describes nothing.
+
+- **`agents/README.md` and `commands/README.md` removed.** Their content — the agent
+  inventory, why the `review-*` lenses are narrow, why commands stay thin, why
+  `/flow` keeps no state file — moved into `docs/anatomy/agent-anatomy.md` and
+  `docs/anatomy/command-anatomy.md`, which already owned "how to write one". One
+  place per concept instead of two.
+- Both anatomy docs now state the loading rule outright, so the next person does not
+  re-add a README to a scanned directory.
+- `skills/README.md` and `templates/README.md` stay: skills are discovered as
+  `skills/<name>/SKILL.md` and `templates/` is not scanned, so neither is loaded.
+
 ## 0.3.3
 
 Two rules about how a stage talks to the user, in one shared `asking` skill loaded
