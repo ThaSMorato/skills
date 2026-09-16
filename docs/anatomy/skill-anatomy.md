@@ -7,12 +7,16 @@
 ```markdown
 ---
 name: <kebab-case>             # = folder name
-description: <WHAT it does + WHEN to use / trigger phrases>
+description: '<WHAT it does + WHEN to use / trigger phrases>'
 disable-model-invocation: true # optional: user-invoked only (wrapper), never auto-fires
 ---
 
 <imperative, short instructions, addressed to the model>
 ```
+
+**The frontmatter is strict YAML, and `description` is the field that breaks it.** A good description names trigger phrases, so it tends to carry quotes and a `Triggers:` label — and an unquoted **colon followed by a space** reads as a nested mapping and aborts the parse. A value opening with `[` or `{` parses as a list or map rather than a string. Quote it; use single quotes when the trigger phrases use double ones.
+
+This fails loudly in a strict parser and silently in a lenient one, so "it works here" is not evidence. A skill whose frontmatter does not parse simply **does not load** — the only signal is a startup warning, never an error where you try to use it.
 
 Folder: `skills/<category>/<name>/SKILL.md`. List the path in `plugin.json → skills`.
 
