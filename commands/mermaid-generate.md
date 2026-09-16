@@ -1,6 +1,6 @@
 ---
 description: Generate Mermaid diagrams from an FDD into a single Markdown file.
-argument-hint: <feature name or slug>
+argument-hint: "<feature name or slug>"
 ---
 
 Use the `mermaid-generator` agent to generate Mermaid diagrams into `docs/diagrams/<feature>.md` from `docs/fdd/<feature>.md` for the feature: $ARGUMENTS

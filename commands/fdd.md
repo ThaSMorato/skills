@@ -1,6 +1,6 @@
 ---
 description: Write a Feature Design Doc for one feature, from the HLD (docs/hld.md).
-argument-hint: <feature name or slug>
+argument-hint: "<feature name or slug>"
 ---
 
 Use the `fdd-writer` agent to synthesize a Feature Design Doc into `docs/fdd/<feature-slug>.md` for the feature: $ARGUMENTS

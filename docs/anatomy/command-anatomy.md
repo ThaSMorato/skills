@@ -17,15 +17,22 @@ Each stage command carries a **preflight** (does the input exist? if not, name t
 ```markdown
 ---
 description: <what the command does — shown in the /command list>
-argument-hint: <e.g. [feature] or "<path to FDD>">   # optional
-allowed-tools: Read, Edit, Bash(git*)                 # optional (restricts)
-model: sonnet                                         # optional
+argument-hint: "<e.g. [feature], or (none) — runs once>"   # optional, always quoted
+allowed-tools: Read, Edit, Bash(git*)                       # optional (restricts)
+model: sonnet                                               # optional
 ---
 
 <the prompt; use $ARGUMENTS, $1, $2 for the user's arguments>
 ```
 
 File: `commands/<name>.md`. Auto-discovered (no need to list it in `plugin.json`).
+
+**The frontmatter is strict YAML.** Hosts differ in how forgiving their parser is, so a file that loads fine in one silently fails to load in another — and a command that fails to parse is simply absent, with no error at the point of use. Two plain-scalar traps, both of which look like ordinary prose:
+
+- A **colon followed by a space** inside an unquoted value — `(default: current directory)` — reads as a nested mapping and aborts the parse.
+- A value that **starts with `[` or `{`** — `[feature or project name]` — parses as a list, not a string, so the field is rejected as the wrong type.
+
+Quote `argument-hint` always; it is the field that attracts both. Use single quotes when the text itself contains double quotes.
 
 ## Golden rules
 

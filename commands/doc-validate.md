@@ -1,6 +1,6 @@
 ---
 description: Validate a design document against the one it came from before the human gate — coverage both ways, contradictions, glossary drift, unanswered RNFs — with a clean/dirty verdict.
-argument-hint: <from> <to> — e.g. "prd hld", or omit to validate every available pair
+argument-hint: '<from> <to> — e.g. "prd hld", or omit to validate every available pair'
 ---
 
 Use the `doc-validate` skill to check: $ARGUMENTS

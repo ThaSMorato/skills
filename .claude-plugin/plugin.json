@@ -1,6 +1,6 @@
 {
   "name": "thasmorato-skills",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "AI Doc-Dev flow \u2014 interview \u2192 complete documentation (PRD\u2192HLD\u2192components\u2192features\u2192FDD\u2192boundaries\u2192ADR\u2192C4) \u2192 a validated, test-first development loop (design \u2192 plan \u2192 validate \u2192 implement SI-by-SI \u2192 review), with machine-checked verification in both phases and vendored testing, architecture, security and code-quality references. Skills/commands/agents importable per project.",
   "author": {
     "name": "Thales Morato",

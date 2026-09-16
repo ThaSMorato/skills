@@ -1,6 +1,6 @@
 ---
 description: Execute a validated plan one SI at a time — test-first (red → green → refactor), run the SI's tests, then STOP before the next SI.
-argument-hint: <plan slug> [continuous]
+argument-hint: "<plan slug> [continuous]"
 ---
 
 Use the `implement` skill to build the plan: $ARGUMENTS

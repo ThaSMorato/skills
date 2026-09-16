@@ -1,6 +1,6 @@
 ---
 description: Break an FDD into tracer-bullet tickets with blocking edges, then publish them (local files or a real tracker).
-argument-hint: <feature name or slug> (or a path/issue reference)
+argument-hint: "<feature name or slug> (or a path/issue reference)"
 ---
 
 Break the feature's design into a set of **tickets** — tracer-bullet vertical slices, each declaring the tickets that **block** it. This is interactive: quiz the user before publishing anything.

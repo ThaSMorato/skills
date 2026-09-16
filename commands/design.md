@@ -1,6 +1,6 @@
 ---
 description: Build and persist the node map for one ticket — deep modules behind small interfaces at clean seams — before planning or coding.
-argument-hint: <ticket file/number, or the work to design>
+argument-hint: "<ticket file/number, or the work to design>"
 ---
 
 Use the `design` skill to build the node map for: $ARGUMENTS

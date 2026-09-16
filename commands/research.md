@@ -1,6 +1,6 @@
 ---
 description: Investigate a technical question against primary sources, producing a cited report that feeds the HLD/FDD.
-argument-hint: <the research question>
+argument-hint: "<the research question>"
 ---
 
 Investigate: $ARGUMENTS
