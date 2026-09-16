@@ -5,6 +5,8 @@ argument-hint: <from> <to> — e.g. "prd hld", or omit to validate every availab
 
 Use the `doc-validate` skill to check: $ARGUMENTS
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 With no argument, validate every pair whose two documents exist: `brief → prd`, `prd → hld`, `prd → features`, `hld → components`, `features → fdd`.
 
 Before delegating, confirm both sides of each pair exist — a missing target should fail here, with the name of the command that produces it, not inside the check.

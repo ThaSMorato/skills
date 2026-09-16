@@ -1,5 +1,93 @@
 # Changelog
 
+## 0.3.4
+
+Auto-discovered directories have no ignore convention: every `.md` under `agents/`
+and `commands/` is loaded as an artifact, so the directory READMEs were shipping as
+a malformed agent and as a real `/README` command. Under a host that treats commands
+as description-matched skills, that stray entry also competed for auto-invocation
+with a description that describes nothing.
+
+- **`agents/README.md` and `commands/README.md` removed.** Their content — the agent
+  inventory, why the `review-*` lenses are narrow, why commands stay thin, why
+  `/flow` keeps no state file — moved into `docs/anatomy/agent-anatomy.md` and
+  `docs/anatomy/command-anatomy.md`, which already owned "how to write one". One
+  place per concept instead of two.
+- Both anatomy docs now state the loading rule outright, so the next person does not
+  re-add a README to a scanned directory.
+- `skills/README.md` and `templates/README.md` stay: skills are discovered as
+  `skills/<name>/SKILL.md` and `templates/` is not scanned, so neither is loaded.
+
+## 0.3.3
+
+Two rules about how a stage talks to the user, in one shared `asking` skill loaded
+by every command that reports, gates, or asks.
+
+- **An id is an address, not a message.** `CV-3`, `RF-007`, ticket `04`, `ADR 0012`
+  — cited alone, each one sends the reader hunting through documents for a row the
+  asker already had open. Every identifier now gets resolved where it is spoken:
+  the id **plus** the shortest phrase that makes it recognisable, preferably quoted
+  from the original so it can be searched for. This holds for findings, gate
+  reports, progress summaries, questions, and the `> Needs Input` markers isolated
+  agents write — those now say to name the thing rather than cite its id.
+- **Offer a choice when the answer is a closed set.** A structured option list
+  beats an open question the user has to compose an answer to: recommendation
+  first, labelled by outcome rather than mechanism, each with what it costs. Free
+  text stays for genuinely open answers. Twelve findings do not become twelve
+  prompts — ask about what blocks, report the rest.
+
+The skill also carries two principles the suite already held in one place each and
+now states once: **ask only what is a decision** (facts are yours to discover —
+lifted from the `interview` skill, where it was a local rule), and **make the
+default visible** when proceeding under an assumption, so a wrong one costs a
+one-word correction instead of being discovered three stages later.
+
+## 0.3.2
+
+From running the flow on a small task and watching it manufacture scope. The
+agent's own post-mortem named the mechanism: *"o fluxo amplificou em vez de
+checar. Cada estágio tomou o anterior como dado. O `/plan-validate` confere o
+plano contra o node map — mas ninguém conferiu o node map contra o repositório.
+O portão que existia para pegar excesso foi justamente o que o introduziu."*
+
+**The structural cause.** Every artifact in the chain is derived from the
+previous artifact, and every check the suite performs is internal consistency —
+`/doc-validate` compares document to document, `/plan-validate` compares plan to
+ticket and node map, `/review` compares diff to spec. Nothing consults the
+repository. So a wrong assumption made early passes every gate, because it is
+perfectly consistent all the way down, and each stage elaborates it instead of
+questioning it. This is the failure the overloading principle already named for
+documents, one level up: the second representation has to be one the first did
+not produce, and the only independent source in the chain is the code itself.
+
+- **`/design` reads the repository before drawing.** A new section, before the
+  map is built: grep the domain nouns, the likely symbols, the neighbouring
+  feature that already does this. The node map's `Reuses` field becomes
+  **`Grounding`**, and `new` is only accepted with the search recorded — what was
+  searched for, where, and what was found. A claim that something must be built
+  is falsifiable by one grep, and that asymmetry is what makes the discipline
+  cheap. A new `Grounding summary` table collects the claims.
+- **`/plan-validate` gains `GR-N`** — a node called `new` with no recorded search,
+  or with a search a grep contradicts. It is the only check in the suite that
+  leaves the documents, and the validator runs the searches itself rather than
+  trusting the map. A node that turns out to already exist is the highest-value
+  finding the stage can produce: everything below it was about to be built twice.
+- **`/design` says so when the search shrinks the ticket**, and offers to amend it
+  before planning. That outcome is the stage working, not the ticket failing.
+- **`/tickets` codebase exploration is no longer optional** when code exists. The
+  amplification in this incident began one stage earlier than the post-mortem
+  found: the ticket already said "build" for something that was already built.
+
+**Gears.** The flow had one speed and applied it to everything. Running the full
+chain on a two-hour change does not merely cost more — it manufactures scope,
+because every template is a completeness contract and a completeness contract
+applied to small work gets filled with invented content. `/flow` now sizes the
+work before proposing anything and picks the shortest path that fits: **full**,
+**feature**, **small** (straight to the dev loop, no FDD), or **direct** (no stage
+at all — say so and let the user just do it). The choice is stated and confirmed,
+and it is recorded in the ticket's `Source`, so a later scan can tell a deliberate
+skip from a missing document and stops offering to generate what was declined.
+
 ## 0.3.1
 
 Hardening of `/decompose`, from a review that compared its output against a

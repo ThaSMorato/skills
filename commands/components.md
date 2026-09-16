@@ -5,6 +5,8 @@ argument-hint: (none) — runs once per system, re-run when the HLD changes
 
 Use the `component-mapper` agent to write `docs/components.md` from `docs/hld.md`.
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 This is the step that closes a real gap in the chain: the HLD is **required** to list components, and until now nothing turned that list into a shared map — so each FDD invented its own carve-up and nobody owned the cross-feature picture.
 
 If `docs/hld.md` doesn't exist, tell the user to run `/hld` first instead of delegating.

@@ -5,6 +5,8 @@ argument-hint: <epic, feature slug, or a set of ticket ids>
 
 Use the `retro` skill over: $ARGUMENTS
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 ## Preflight
 Resolve the scope to its tickets under `.scratch/`. At least one must have a `progress.md` marked `completed` — a retro over unfinished work reads the plan, not the outcome. If nothing finished, say so and stop.
 

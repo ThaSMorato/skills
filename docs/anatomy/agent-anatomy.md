@@ -2,6 +2,18 @@
 
 > How to write a subagent. An agent runs in an **isolated context**, is invoked by the main agent (delegation), is **parallelizable**, and **returns an artifact** — it does **not** talk live to the user. When to use agent × skill × command: see [`plugin-anatomy.md`](./plugin-anatomy.md#choosing-skill--command--agent-by-role).
 
+## What lives in `agents/`
+
+Two families:
+
+**Generation** — one artifact each, from the templates: `prd-writer`, `hld-writer`, `component-mapper`, `decomposer`, `fdd-writer`, `boundary-architect`, `adr-analyzer`, `adr-generator`, `adr-linker`, `c4-generator`, `mermaid-generator`, `guideline-generator`, `researcher`, `source-reader`.
+
+**Analysis and review** — read-only, reporting only: `architectural-analyzer`, `component-analyzer`, `dependency-auditor`, and the six `review-*` lenses fanned out by `/review`.
+
+The `review-*` agents are deliberately narrow. A narrow lens can be held to *"every rule, against every changed hunk"* — a bar no agent doing five jobs can meet. The cost is precision: each is primed to find its own subject, so every finding must carry a **named rule** and a **concrete failure scenario**, and `/review`'s synthesis step drops the ones that don't.
+
+**Every `.md` in this directory is loaded as an agent.** There is no ignore convention, and a file without valid frontmatter is either rejected with a warning or — worse — accepted as a malformed agent. Prose about the directory belongs here in `docs/`, not beside the agents.
+
 ## Format
 
 ```markdown

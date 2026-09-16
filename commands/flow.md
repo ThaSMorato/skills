@@ -5,6 +5,8 @@ argument-hint: (none) — whole project · or <feature/ticket/goal> to scope to 
 
 You are the **coordinator**. Scope: $ARGUMENTS
 
+> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
 ## Always scan first — before running anything
 The first thing this command does, every time, is **read the disk and say where the project stands**. Not "start at stage one": scan, report, then propose. This is the most common way the command is used — "where am I, what's next, what's waiting on me" — and running a stage before answering that is how work gets redone.
 
@@ -32,6 +34,8 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/validation/*.md` | doc validation verdicts | `/doc-validate` |
 | `.scratch/<feature>/issues/` | tickets | `/tickets <feature>` |
 
+**A missing artifact is not automatically a gap.** Before reporting one as missing, check whether a ticket's `Source` records it as a deliberate skip — small work legitimately has no FDD. Report a skip as a skip; offering to generate a document the user consciously declined is how a coordinator teaches people to stop reading it.
+
 ### Phase 2 — a matrix, not a stage
 Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which sub-stage it stopped at*. Build this table from the sibling artifacts:
 
@@ -51,6 +55,22 @@ The **frontier** is the tickets whose blockers are all `done`, crossed with wher
 
 ### Then report
 Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage** — then ask before running it.
+
+## Then size the work, and pick the shortest path that fits
+**Before proposing any stage, decide how big this is.** The full chain exists for work whose shape is genuinely unknown. Run it on a two-hour change and it does not merely cost more — it *manufactures* scope, because every template below is a completeness contract, and a completeness contract applied to a small task gets filled with invented content. The machine that makes omission detectable is the same machine that produces bulk.
+
+| Gear | When | Path |
+|---|---|---|
+| **Full** | a new product, or an epic whose structure is unknown | everything, phase 1 → phase 2 |
+| **Feature** | a feature inside a product that already has a PRD, HLD and component map | `/fdd` → `/tickets` → the per-ticket loop |
+| **Small** | one seam, no architectural question, fits in a ticket or two | straight to `/design` → `/plan` → `/plan-validate` → `/implement` → `/review`, no FDD |
+| **Direct** | a fix or a change whose shape is already obvious | no stage at all — say so and let the user just do it |
+
+**Say which gear you chose and why, and confirm it** before running anything. Choosing a gear is a decision the user should get to overrule in either direction — and it is far cheaper to move up a gear after discovering a real design question than to unwind a week of documents produced for a small task.
+
+**Record the choice where a later scan can see it.** When a ticket is written without an FDD, its `Source` says so — `direct — small gear, no FDD: single seam, no contract change` — so the scan can tell a deliberate skip from a missing document. An unrecorded skip reads exactly like an omission, and the next run will offer to fill it.
+
+The instinct to reach for the full chain on everything is the same instinct Shape Up's *appetite* corrects: the question is not "what is the complete process?", it is "how much process does this problem deserve?".
 
 ## Resolving the argument
 - **No argument** → the whole project. Report what's missing and what's pending approval. This is the most frequent use.

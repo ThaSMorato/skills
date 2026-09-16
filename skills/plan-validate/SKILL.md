@@ -27,11 +27,14 @@ Read the plan, and everything it is accountable to:
 | `CV-N` | Coverage | A ticket acceptance criterion no SI owns |
 | `SZ-N` | Oversized SI | An SI that needs two Acts to describe, or spans two seams, or whose actions are a sequence of independent deliverables — it violates the single-act rule and will not fit one red-green-refactor cycle |
 | `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, or attaches tests at a seam the map and FDD don't name |
+| `GR-N` | Grounding | A node the map calls `new` with no recorded search — or with a search a grep contradicts, because the thing already exists |
 | `DL-N` | Deliverables | Deliverables missing the repo's real test / type-check / build commands |
 
 For a plan with `type: structural`, also check that no SI modifies an existing test and that no SI adds behavior — a structural plan that changes behavior is an `IC` against its own ticket type.
 
 `CV` and `SZ` are the two the author cannot reliably catch alone: coverage because omission is invisible from inside, and size because the author who wrote the slice believes it is one thing. `DM` exists because the plan claims to encode the node map and nothing used to check that claim.
+
+**`GR` is the only check in this suite that leaves the documents.** Every other category — here and in `/doc-validate` — compares one artifact against another, which means a wrong assumption made early passes every gate, because it is internally consistent all the way down. Run the map's searches yourself: take each node marked `new`, grep the terms it says it searched for, and see whether the repository agrees. A node that turns out to already exist is the highest-value finding this stage can produce, because everything below it was about to be built twice.
 
 ## Output
 Write `.scratch/<feature-slug>/plans/<NN>-<slug>/validation.md`:
