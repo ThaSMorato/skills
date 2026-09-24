@@ -80,7 +80,7 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 |---|---|
 
 ## Open decisions
-<anything confirmed with the user, and anything still uncertain>
+<anything confirmed with the user (`> Decided:`), and anything still uncertain (`> Assumed:` or `> Needs Input:`, per the `asking` skill §4)>
 ```
 
 The node map is the authoritative contract between design and code — every implementation decision traces back to it. **That is only true if it exists as a file.** Left in the conversation it dies at the next `/compact`, it is invisible to `/flow`'s scan, `/plan-validate` cannot check the plan against it, and `/review` can only reach the design decisions the plan happened to capture.

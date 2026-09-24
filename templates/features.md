@@ -8,6 +8,9 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 IDS ARE PERMANENT ADDRESSES. On a re-run, never renumber: other artifacts are keyed on these ids and
 slugs (docs/fdd/<slug>.md, .scratch/<slug>/issues/). Insert with a suffix (E1b, F3a); a retired id is
 never reused. A removed or merged row is struck through in "Retired", not deleted.
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
+value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+An unmarked one is a validation finding (AS-N).
 -->
 
 # Decomposition — <product>

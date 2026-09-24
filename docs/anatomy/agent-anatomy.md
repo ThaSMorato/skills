@@ -37,7 +37,7 @@ Inherited from the agent-prompt anatomy (persona → workflow). Not all are mand
 3. **Inputs** — **what it receives and from where** (files, args). Since the context is isolated, it **can't see the conversation**: everything it needs arrives via file/parameter. List paths and what to read in each.
 4. **Output format** — the **exact artifact** it returns (a file at a given path, or structured text/JSON). The return is data for a machine, not a message for a human.
 5. **Quality criteria** — what "good" means (e.g. filled every required section of the template, cited the source).
-6. **Ambiguity & assumptions** — how to act without being able to ask: assume the reasonable default and **mark it** (`Needs Input`) instead of stalling.
+6. **Ambiguity & assumptions** — how to act without being able to ask: assume the reasonable default and **mark it** instead of stalling — `> Assumed:` when the default is defensible (the gate lists it), `> Needs Input:` when none is (the gate blocks). The `asking` skill §4 and §6 define both.
 7. **Negative instructions** — what **not** to do (don't invent elements outside the input, don't exceed scope).
 8. **Error handling** — what to do when an input is missing or invalid.
 9. **Workflow** — the order of steps (read input → produce → self-review → write).
@@ -54,7 +54,7 @@ Inherited from the agent-prompt anatomy (persona → workflow). Not all are mand
 - [ ] `description` states **when to delegate**.
 - [ ] Inputs list paths and what to read (isolated!).
 - [ ] Output = exact artifact at a defined path.
-- [ ] Ambiguity → assume-and-mark (`Needs Input`), don't stall.
+- [ ] Ambiguity → assume-and-mark (`Assumed`, or `Needs Input` when no default is defensible), don't stall.
 - [ ] `tools` restricted; self-review at the end.
 
 ## Red flags

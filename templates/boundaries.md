@@ -7,6 +7,9 @@ It is deliberately OVERLOADED: prose says the rule, the manifest block says the 
 Two representations of one intent means a contradiction is machine-detectable. Keep them in sync —
 if they disagree, that IS the finding.
 PRUNE + RENUMBER optional sections that don't apply; (required) sections always stay.
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
+value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+An unmarked one is a validation finding (AS-N).
 -->
 
 # Boundary contract — <system>

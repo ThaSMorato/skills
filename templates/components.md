@@ -5,6 +5,9 @@ HLD and BEFORE the FDDs. This is the VOCABULARY the FDDs map features onto — w
 invents its own carve-up and nobody owns the cross-feature picture.
 It is a MAP (what parts exist), not a CONTRACT (who may depend on whom) — the contract is
 docs/boundaries.md, written after the FDDs. PRUNE + RENUMBER optional sections; (required) stay.
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
+value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+An unmarked one is a validation finding (AS-N).
 -->
 
 # Component map — <system>

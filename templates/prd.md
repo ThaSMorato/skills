@@ -5,6 +5,9 @@ Filled by the PRD agent from the requirements-brief. States WHAT and WHY — nev
 don't apply; (required) sections always stay. Product level uses less detail than feature level.
 AI practices: NUMBER the requirements (RF-001, RNF-001) for stable references; optionally add a JSON
 twin (same info, English keys, empty fields omitted) for deterministic consumption.
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
+value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+An unmarked one is a validation finding (AS-N).
 -->
 
 # PRD — <name>

@@ -71,4 +71,5 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 - **Prefactoring SIs lead.** Reshape first, then build on the easy shape.
 - **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
 - **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them — the final verification runs exactly these.
+- **Mark the decisions the sources do not give.** A threshold, a failure behavior or a visibility rule that the ticket, node map and FDD are silent on is written with `> Assumed:` under the SI that depends on it (the `asking` skill §4 and §6). Facts are not assumptions: if the repo can answer it, look it up.
 - **No stale detail.** Prefer intent over hard-coded file paths and code snippets; the exception is a decision-encoding snippet trimmed to the decision.

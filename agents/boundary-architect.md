@@ -43,7 +43,7 @@ Take the import graph and compare it against `allow`. Every edge in the code tha
 - **Analysis only** on the codebase: read it, never modify it. `Bash` is for read-only inspection.
 
 ## Ambiguity (you cannot ask — isolated)
-Where an edge is genuinely contested, allow it, mark it `> Needs Input`, and say what would settle it. A forbidden edge that turns out to be necessary blocks work; an allowed one that turns out to be wrong shows up as divergence later. Fail toward the recoverable error.
+Where an edge is genuinely contested, allow it, mark it `> Assumed:`, and say what would settle it. A forbidden edge that turns out to be necessary blocks work; an allowed one that turns out to be wrong shows up as divergence later. Fail toward the recoverable error.
 
 ## Error handling
 If `docs/components.md` is missing, stop and report that `/components` must run first. If no FDD exists, stop and report that the contract written before the feature specs would be a guess.
