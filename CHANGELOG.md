@@ -125,6 +125,31 @@ and passed validation.
 
 In the Small gear there is no `/tickets`, so the size gate there is `plan-validate`'s.
 
+### Findings are verified against the code (epic 4)
+
+`/review`'s synthesis step filters findings by what they say about themselves: a named
+rule, a failure scenario. A wrong finding that is well argued passes that filter. The
+lenses were never checked against the repository, which is the same gap this suite
+keeps finding between stages.
+
+- **New `review-verifier` agent**, run inside `/review` after synthesis and before the
+  user sees anything. It opens every cited location and returns one verdict per
+  finding, **each backed by cited code**: `confirmed`, `wrong location`, `rule does not
+  apply`, `impossible scenario`, `already handled`, `duplicate`, `pre-existing` (real,
+  but in code the diff did not change).
+- **When in doubt, keep it.** The verdict annotates and orders; it never deletes. If
+  the verifier cannot cite the code that refutes a finding, it is `confirmed`. A false
+  positive costs a minute of reading; a false negative ships.
+- **One verifier, not one per finding**, because `duplicate` needs the whole set.
+- It stays read-only like the lenses: it returns verdicts and `/review`, which owns the
+  file, writes them in, with `verdicts` and `refuted_by_lens` in the frontmatter.
+- `/review` now reports by verdict, then severity. Refuted findings stay visible, at
+  the end.
+- The retro reads `refuted_by_lens` as each lens's **precision**. This is the first
+  measure of review quality the suite has.
+- `/flow` reads the review file for the review column instead of asking; the file has
+  existed since v0.3.1 and the scan never used it.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the

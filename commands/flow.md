@@ -50,7 +50,7 @@ Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which
 - **plan** — `plans/<NN>-<slug>/plan.md` exists
 - **validate** — `validation.md`'s `status:` frontmatter
 - **implement** — `progress.md`'s `sis_done`/`sis_total` frontmatter (a `progress.md` without frontmatter predates it — read the count from the body and say so)
-- **review** — no artifact; ask, or infer from the last `/review` in conversation
+- **review** — `.scratch/<feature>/reviews/<NN>-<slug>.md` exists; its `verdicts` say how many findings the verifier confirmed
 
 The **frontier** is the tickets whose blockers are all `done`, crossed with where each stopped.
 
