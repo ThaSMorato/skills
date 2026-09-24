@@ -12,6 +12,8 @@ A ticket may be executed by an agent **or picked up by the owner**, so it carrie
 ## 1. Gather context
 Read `docs/fdd/<feature>.md` for: $ARGUMENTS (or the reference passed as an argument). Also read `docs/boundaries.md` (the components this feature may touch and the edges it may add), the relevant `docs/adr/*.md`, and `CONTEXT.md`. If no FDD exists, tell the user to run `/fdd` first.
 
+Read `docs/guidelines.md` too, if it exists, and load what its routing table names for the code this feature will touch — the stack guides and `testing-guide-<project>`. Every ticket declares a `Test seam`, and what a seam can be (a request spec, a component test, a service object's public method) is decided by the stack and by this project's testing guide, not by the FDD alone.
+
 Read this feature's row in `docs/features.md` too, if it exists. You can only see **one** feature's FDD, so its **`Depends on`** column is the only place a cross-feature blocker is written down — a ticket here that needs something another feature delivers must say so, even though that blocker lives outside the graph you are about to build. Its **`Not delivering`** bound feeds the tickets' exclusions.
 
 ## 2. Explore the codebase
