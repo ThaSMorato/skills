@@ -15,7 +15,7 @@ Default mode **pauses after every SI** (this is what lets the user `/compact` be
 - **Validation gate:** read the sibling `validation.md`. If it is missing or `status: dirty`, abort: *"Plan is not clean. Run /plan-validate <slug>."* This gate is non-negotiable.
 - **Branch check:** `git status` + current branch. If on the trunk (`main`/`master`/`dev`) or the tree is dirty with unrelated changes, stop and ask the user to set up the branch.
 - **Plan sanity:** the plan has Step Implementations, a Dependency Map, and Deliverables. If malformed, stop and report.
-- **Resume check:** look for the sibling `progress.md`. If present, read which SIs are already done and tell the user: *"Found progress: X/Y SIs done. Resuming at SI-Z."*
+- **Resume check:** look for the sibling `progress.md`. If present, read `sis_done` / `sis_total` from its frontmatter and which SIs are marked done, and tell the user: *"Found progress: X/Y SIs done. Resuming at SI-Z."*
 
 ## Load references
 Load the `tdd` skill (the red → green → refactor doctrine and seam discipline), the `testing` skill (what to test, at which seam, and how to keep tests clean), and the `code-smells` + `clean-code` skills (the refactor checklist).
@@ -29,15 +29,24 @@ If the plan's `type` is `structural`, the loop changes shape: there is no red st
 Before the first SI, create one task per SI (in Dependency-Map order) so the user sees the whole plan. Then create `progress.md` (all SIs `pending`) — or, on resume, mark already-done SIs complete.
 
 ```markdown
+---
+kind: progress
+slug: <NN>-<slug>
+status: in_progress | completed
+sis_done: <X>
+sis_total: <Y>
+escalations: <count — see step 5 and Final verification>
+---
+
 # Progress — <NN> <Ticket title>
-**Status:** in_progress | completed
-**SIs:** X/Y done
 
 ### SI-N — <name>
-- **Status:** done | pending
+- **Status:** done | pending | escalated
 - **Tests:** <result, or "no tests">
 - **Notes:** <out-of-scope observations, or "none">
 ```
+
+**Keep this frontmatter exactly as shown**, integers included. `/flow` reads `sis_done`/`sis_total` to place the ticket in its matrix, and `/retro` sums them across an epic; a count written into the body, under another key, or as `5/5` is a count neither of them can read. Update the frontmatter in the same edit that marks an SI.
 
 ## The per-SI loop
 Run SIs in Dependency-Map order. Never skip ahead; never run two SIs in one pass. For each **pending** SI:
@@ -48,7 +57,7 @@ Run SIs in Dependency-Map order. Never skip ahead; never run two SIs in one pass
 4. **Refactor — production _and_ tests.** With tests green, clean both:
    - *Production:* run the `code-smells` checklist; leave it cleaner than you found it.
    - *Tests:* they are first-class code and the low-level documentation of this behavior — refactor them too. Enforce F.I.R.S.T. and the single-act rule (one Act per test), and grow the **test DSL** (builders / mother objects, custom matchers, composed results) so each test reads like a spec. Never weaken a test to make it pass.
-5. **Run this SI's tests only** (not the full suite). On failure, enter the fix loop: read the error, fix the root cause, re-run — at most **3 times**. Do not retry blindly, do not swallow errors, do not add skips. If the failure is in a *previous* SI's code, stop and escalate rather than editing completed work. After 3 failed attempts, stop and report (which SI, the failure, your hypothesis, what you tried).
+5. **Run this SI's tests only** (not the full suite). On failure, enter the fix loop: read the error, fix the root cause, re-run — at most **3 times**. Do not retry blindly, do not swallow errors, do not add skips. If the failure is in a *previous* SI's code, stop and escalate rather than editing completed work. After 3 failed attempts, stop and report (which SI, the failure, your hypothesis, what you tried). Either stop is an **escalation**: mark the SI `escalated`, add 1 to `escalations`, and write the report into its Notes — the count is the only durable record of where the loop got stuck.
 6. **Record + STOP.** Mark the task and `progress.md` entry `done` (with test result and any out-of-scope notes). Then:
    - **Default mode:** emit a one-line SI report and end with exactly: **"SI-N done. Run `/implement <slug>` to continue with SI-N+1 (or /compact first if context is large)."** Then STOP — no further tool calls. Resuming re-reads `progress.md` and picks up at the next pending SI.
    - **Continuous mode:** emit the SI report and go straight to the next SI's step 1.
@@ -56,7 +65,7 @@ Run SIs in Dependency-Map order. Never skip ahead; never run two SIs in one pass
 Treat the stop as a terminator, not a rhetorical question — starting the next SI without approval is this skill's most common failure.
 
 ## Final verification — after the last SI
-Run the plan's **Deliverables** checklist: the full test suite, then type-check, lint, and build (whichever the repo has). Apply the same 3-attempt fix discipline, shared across all failing checks. Then mark `progress.md` `Status: completed` and report the results plus the aggregated out-of-scope notes as follow-ups. Version control (commit/PR) is the user's call — hand back to `/review` first.
+Run the plan's **Deliverables** checklist: the full test suite, then type-check, lint, and build (whichever the repo has). Apply the same 3-attempt fix discipline, shared across all failing checks; hitting the limit here is an escalation too. Then set `status: completed` in `progress.md`'s frontmatter and report the results plus the aggregated out-of-scope notes as follow-ups. Version control (commit/PR) is the user's call — hand back to `/review` first.
 
 ## Rules
 - The plan is the contract: don't add, drop, or reshape SIs mid-run. If it's wrong, stop and send the user back to `/plan`.

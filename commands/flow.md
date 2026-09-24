@@ -48,7 +48,7 @@ Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which
 - **design** — `.scratch/<feature>/design/<NN>-<slug>.md` exists
 - **plan** — `plans/<NN>-<slug>/plan.md` exists
 - **validate** — `validation.md`'s `status:` frontmatter
-- **implement** — `progress.md`'s SI count
+- **implement** — `progress.md`'s `sis_done`/`sis_total` frontmatter (a `progress.md` without frontmatter predates it — read the count from the body and say so)
 - **review** — no artifact; ask, or infer from the last `/review` in conversation
 
 The **frontier** is the tickets whose blockers are all `done`, crossed with where each stopped.
@@ -69,6 +69,8 @@ Announce, in this order: **where the project stands**, **what is waiting for you
 **Say which gear you chose and why, and confirm it** before running anything. Choosing a gear is a decision the user should get to overrule in either direction — and it is far cheaper to move up a gear after discovering a real design question than to unwind a week of documents produced for a small task.
 
 **Record the choice where a later scan can see it.** When a ticket is written without an FDD, its `Source` says so — `direct — small gear, no FDD: single seam, no contract change` — so the scan can tell a deliberate skip from a missing document. An unrecorded skip reads exactly like an omission, and the next run will offer to fill it.
+
+**Record the gear itself, too.** Every ticket carries it in its `Gear` field, and `/plan` copies it into the plan's frontmatter, because the stages below run standalone and cannot ask this command. It is also what lets `/retro` measure each gear separately — and tell whether the gear chosen matched the size the work turned out to be.
 
 The instinct to reach for the full chain on everything is the same instinct Shape Up's *appetite* corrects: the question is not "what is the complete process?", it is "how much process does this problem deserve?".
 

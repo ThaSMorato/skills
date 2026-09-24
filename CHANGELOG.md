@@ -1,5 +1,36 @@
 # Changelog
 
+## Unreleased — v0.4
+
+v0.4 lands one epic per PR; the version is bumped with the last one.
+
+### Measurement (epic 7)
+
+The flow could not say whether a change to it helped. Every count a retro would need
+was on disk only as prose — and a snapshot of 26 tickets across two projects found
+it written five different ways. `progress.md` had no frontmatter at all (its format
+lived only in the body), so each run invented one: `sis_done: 5/5`, `si_done: 4`,
+`completed: 6`, `done: [SI-1, …]`, or nothing. Plan rounds were recorded as `run:`,
+as `revision:`, or not at all. Review findings named their lens in three formats,
+or not at all in more than half of them. Three validations numbered findings with
+no category (`PV-1`), which drops them out of every per-category count.
+
+- **`gear` is recorded.** A `Gear` field on the ticket, copied into the plan's
+  frontmatter. Until now only `/flow` knew the gear, so no stage below it could act
+  on it, and nothing could be measured per gear. Absent means `full`.
+- **Fixed, countable frontmatter** on every phase-2 artifact:
+  - `plan.md` — `gear`, `sis_planned`, `revision`;
+  - `progress.md` — `status`, `sis_done`, `sis_total`, `escalations` (an SI that
+    hits the 3-attempt limit is now marked `escalated` and counted);
+  - `validation.md` — `run`, and `fired`: every id ever raised, by prefix;
+  - the review — `by_severity`, `by_lens`, and one `Lenses:` line per finding.
+- **No uncategorised findings.** `/plan-validate` ids must use a prefix from its
+  checks table.
+- **`## Measurements` in the retro.** Numbers only, only from frontmatter, compared
+  with the previous retro's. The comparison is the point: one retro is a snapshot.
+  Artifacts that predate the fields are listed as not measured rather than
+  reconstructed from prose.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the

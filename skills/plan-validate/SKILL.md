@@ -45,6 +45,8 @@ kind: validation
 slug: <NN>-<slug>
 status: clean | dirty
 open_issues: <count of open issues>
+run: <1 on the first validation; +1 on every re-run>
+fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by prefix — e.g. {IC: 2, SZ: 1}
 ---
 
 # Validation — <NN> <Ticket title>
@@ -60,6 +62,8 @@ open_issues: <count of open issues>
 ```
 
 `status: clean` only when every finding is resolved — no open issues. Otherwise `status: dirty`.
+
+**Every id uses a prefix from the Checks table** — never a generic numbering (`PV-1`, `F-3`). The prefix is the finding's category, and `fired` is the per-project record of which mistakes this flow actually catches; a finding with no category is invisible to it. `fired` is cumulative: a re-run adds its new ids and never drops resolved ones.
 
 ## Gate
 - **dirty** → tell the user exactly what to fix: *"validation.md has N open issues. Revise the plan (edit it or re-run /plan <slug>), then re-run /plan-validate <slug>."* Never auto-fix; never partially proceed.

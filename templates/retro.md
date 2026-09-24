@@ -17,18 +17,38 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 - **Date:** <YYYY-MM-DD>
 - **Read from:** <the artifact paths this was built out of>
 
-## What shipped against what was planned (required)
-> Per ticket: the slices planned, the slices done, and — where they differ — what the artifacts say
-> about why. A difference is not a failure; an *unexplained* difference is the finding.
+## Measurements (required)
+> Numbers only, and only from frontmatter: the ticket's `Gear` and acceptance criteria, `plan.md`'s
+> `sis_planned` and `revision`, `progress.md`'s `sis_done` and `escalations`, `validation.md`'s `run`
+> and `fired`, the review's `findings`, `by_severity` and `by_lens`. Nothing here is estimated. A ticket
+> whose artifacts lack these fields predates them: list it as `not measured — pre-v0.4 frontmatter`
+> rather than reconstructing its numbers from prose.
+>
+> This section is the series. Keep its shape identical between retros, so the next one can put its
+> numbers beside this one's.
 
-| Ticket | SIs planned | SIs done | Divergence, and what shows it |
-|---|---|---|---|
+| Ticket | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Review findings |
+|---|---|---|---|---|---|---|---|---|
+
+**Totals by gear:** <per gear: tickets, median ACs, median SIs, SIs per AC, median review findings>
+
+**Review findings by lens:** <summed `by_lens` across the scope>
+
+**Compared with the previous retro:** <the same totals from the latest earlier `docs/retro/*.md`, side
+by side — or `first measured retro` when none has a Measurements section>
+
+## What shipped against what was planned (required)
+> Where the Measurements table shows planned and done differ, what the artifacts say about why. A
+> difference is not a failure; an *unexplained* difference is the finding.
+
+| Ticket | Divergence, and what shows it |
+|---|---|
 
 ## Where the gates earned their keep (required)
-> Which `plan-validate` categories actually fired, and how many rounds it took to reach `clean`.
-> The `## Resolved` section of each `validation.md` keeps that history. A category that never fires
-> across many cycles is either a problem this project doesn't have or a check that isn't working —
-> say which you can tell from the artifacts, and which you can't.
+> Which `plan-validate` categories fired — summed from each `validation.md`'s `fired` — and how many
+> runs it took to reach `clean`. A category that never fires across many cycles is either a problem
+> this project doesn't have or a check that isn't working — say which you can tell from the
+> artifacts, and which you can't.
 
 | Category | Times fired | Example |
 |---|---|---|
@@ -39,8 +59,7 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 > impressions.
 
 ## Review findings, by lens (optional)
-> From the persisted review files: which lenses produced findings, and whether any class of finding
-> repeats across tickets. A repeating finding is a standard that should move into a stack guide or a
+> Beyond the counts in Measurements: whether any class of finding repeats across tickets. A repeating finding is a standard that should move into a stack guide or a
 > rule — the repetition is the signal, and one occurrence is not.
 
 ## What to change in the process (required)

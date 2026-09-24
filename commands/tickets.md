@@ -53,6 +53,8 @@ If the user asks for a real tracker (GitHub, etc.) and a remote exists, publish 
 
 Avoid file paths and code snippets — they go stale; the exception is a decision-encoding snippet from a prototype, trimmed to the decision.
 
+`Gear` is the gear `/flow` confirmed for this feature — `full` or `feature`, since this command needs an FDD — or `full` when this runs standalone.
+
 `Status` starts `ready` for unblocked tickets and `blocked` for the rest. It records **readiness, not who executes** — the old `ready-for-agent` presumed the executor, and the owner picking the ticket up made the field a lie.
 
 Work the **frontier** — any ticket whose blockers are all done: `/design` → `/plan` → `/plan-validate` → `/implement` → `/review`.

@@ -8,14 +8,15 @@ Use the `retro` skill over: $ARGUMENTS
 > Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 ## Preflight
-Resolve the scope to its tickets under `.scratch/`. At least one must have a `progress.md` marked `completed` — a retro over unfinished work reads the plan, not the outcome. If nothing finished, say so and stop.
+Resolve the scope to its tickets under `.scratch/`. At least one must have a `progress.md` with `status: completed` (or, in one that predates the frontmatter, `**Status:** completed` in the body) — a retro over unfinished work reads the plan, not the outcome. If nothing finished, say so and stop.
 
 If no review files exist under `.scratch/<slug>/reviews/`, note it: those tickets were reviewed before `/review` began persisting its findings, so that lens is missing from this retro rather than empty.
 
 ## Postflight
 Show:
+- **the measurements** — per ticket and by gear, from frontmatter, beside the previous retro's totals;
 - **planned versus done** per ticket, and the divergences the artifacts explain;
-- **which gate categories actually fired**, from the `Resolved` sections of each `validation.md` — this is the closest thing the suite has to a measurement of which mistakes this project makes;
+- **which gate categories actually fired**, summed from each `validation.md`'s `fired` — the record of which mistakes this project actually makes;
 - **where the loop escalated** — three-attempt fix limits, failed deliverables;
 - **findings that repeat across tickets**, with their instances, since repetition is what turns an incident into a standard worth moving into a guide;
 - the product findings appended to `docs/evolutions.md`;

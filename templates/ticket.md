@@ -11,12 +11,17 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 ## Metadata (required)
 - **Status:** ready | blocked | in progress | done
 - **Type:** behavioral | structural
+- **Gear:** full | feature | small — the gear `/flow` confirmed for this work; `full` when nobody chose one
 - **Source:** <docs/fdd/<feature>.md — the FDD this slice comes from; or `direct — <gear> gear, no FDD: <why>` when the flow deliberately skipped one>
 - **Components touched:** <names from docs/components.md, or `unknown — no component map`>
 
 > **Type** is verifiable, not decorative. A **structural** ticket (prefactoring, expand/migrate/contract)
 > changes shape and **not behavior**: existing tests stay unchanged and stay green. A **behavioral**
 > ticket changes what the system does, so it changes or adds tests.
+>
+> **Gear** is how every later stage learns how much process this work deserves — `/plan` copies it into
+> the plan's frontmatter, and a gate that only belongs in the larger gears reads it there. An absent
+> gear means `full`: a stage that cannot tell errs toward checking more, not less.
 
 ## What to build (required)
 > The end-to-end behavior this ticket makes work, from the user's perspective — not a layer-by-layer list.

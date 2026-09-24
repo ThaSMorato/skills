@@ -20,6 +20,9 @@ slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 design: .scratch/<feature-slug>/design/<NN>-<slug>.md
 type: behavioral | structural
+gear: full | feature | small
+sis_planned: <number of SIs below>
+revision: <1 when first written; +1 every time the plan is revised after a dirty validation>
 ---
 
 # Plan — <NN> <Ticket title>
@@ -55,6 +58,9 @@ type: behavioral | structural
 - [ ] <build command> passes (if the repo has one)
 - [ ] <each ticket acceptance criterion, restated as a checkable line>
 ```
+
+## The frontmatter is what gets counted
+`gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose — `/retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
 
 ## Rules for a good plan
 - **One SI = one red → green → refactor cycle** that fits a fresh context window. **If an SI needs two Acts to describe, split it** — the single-act rule, at plan scale.

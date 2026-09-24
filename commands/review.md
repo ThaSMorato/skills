@@ -35,7 +35,7 @@ Narrow agents trade precision for recall, and the two costs land here:
 - **Severity drift.** Each lens believes its own subject matters most. Re-rank across all of them on the shared scale, judging by consequence rather than by which agent reported it.
 
 ## 5. Report and persist
-Show the merged findings, most-severe first, each with `file:line`, the rule it violates, the failure scenario, and the fix. Then a one-line note per lens saying what it covered — and name any lens that was skipped or that reported having no standard to apply.
+Show the merged findings, most-severe first, each with `file:line`, the rule it violates, the failure scenario, the fix, and a `- **Lenses:** <lens>, <lens>` line naming every lens that raised it — merged duplicates keep all their lenses. Then a one-line note per lens saying what it covered — and name any lens that was skipped or that reported having no standard to apply.
 
 Write the same merged list to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md`, with the fixed point, the lenses that ran, and the lenses that were skipped and why:
 
@@ -47,8 +47,12 @@ fixed_point: <ref>
 lenses_run: [quality, tests, security, spec, standards, architecture]
 lenses_skipped: [<lens>: <reason>]
 findings: <count>
+by_severity: {critical: <n>, high: <n>, medium: <n>, low: <n>}
+by_lens: {quality: <n>, tests: <n>, security: <n>, spec: <n>, standards: <n>, architecture: <n>}
 ---
 ```
+
+The severity keys stay in English whatever language the headings are in. In `by_lens`, a finding raised by two lenses counts once for each, so the lens counts can sum to more than `findings` — that overlap is itself worth seeing. These counts are how `/retro` tells which lens earns its cost on this project, and a lens that is attributed nowhere cannot be judged.
 
 Without the file, a review's findings live only in this conversation and are gone at the next `/compact`. `/retro` reads these across a whole epic to find the finding that **repeats** — and a finding that recurs across tickets is a standard that should move into a stack guide or a rule, which is a conclusion no single review can reach.
 
