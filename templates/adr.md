@@ -3,6 +3,9 @@ TEMPLATE: adr (MADR — Markdown ADR)
 Filled by the adr-generator from a confirmed Potential ADR. One decision per ADR. Machine-parseable:
 keep the frontmatter fields stable. Never rewrite a past ADR — a new decision is a new ADR.
 PRUNE optional sections that don't apply; (required) sections always stay.
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
+value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+An unmarked one is a validation finding (AS-N).
 -->
 ---
 status: proposed | accepted | rejected | deprecated | superseded

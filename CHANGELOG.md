@@ -60,6 +60,39 @@ applying the rule was never told to.
 Phase 1's policy stages (`hld-writer`, `fdd-writer`) deliberately do not load stack
 guides: policy should not be shaped by the detail.
 
+### Marked assumptions — `AS-N` (epic 9)
+
+A value derived from a source and a value completed from the most likely pattern read
+identically: same fluency, same confidence. Asking the model to notice when it is
+inferring does not help, because that answer is generated the same way. v0.3.2 solved
+the factual half of this with checkable evidence (`Grounding:` + `GR-N`); this is the
+other half — the decisions the repository can never answer.
+
+- **Three markers, defined once in the `asking` skill.** `> Needs Input:` — no value is
+  defensible, **blocks** the gate (unchanged). `> Assumed:` — a defensible value the
+  sources do not give, with what changes if it is wrong; **listed** at the gate, not
+  blocking. `> Decided:` — an `Assumed` the owner confirmed or corrected, which later
+  validators treat as a source.
+- **Recognise by category, not by introspection.** `asking` §6 lists the classes no
+  repository answers — business thresholds, conflicting priorities, authority, external
+  contract semantics, failure tolerance, domain names, future intent — and the
+  **ceiling**: mark only when a different value would change a contract, schema,
+  boundary or slice. A detector that fires on everything becomes an interrogation.
+- **`AS-N`** in `doc-validate` and `plan-validate`: an unmarked value in one of those
+  classes, above the ceiling. (`/tickets-validate` gets it when epic 1 creates it.)
+- **Every gate lists the `Assumed` markers** as one grouped question. Confirming
+  rewrites the marker in place; correcting goes through whoever owns the document.
+- **Writers choose the weight.** `prd-writer`, `hld-writer`, `fdd-writer` write
+  `Assumed` for a defensible default and `Needs Input` only when there is none;
+  `component-mapper`, `decomposer` and `boundary-architect`, which choose a reading and
+  proceed, now mark it `Assumed` instead of blocking.
+- **The 11 templates that carry decisions** say so in their header, which is the one
+  channel that reaches the isolated agents filling them. The node map's `Open
+  decisions` and the plan's rules use the same markers.
+
+Per the gear matrix, in the Small gear this reaches only `/design` and `/plan` — the
+two stages that produce documents there.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the

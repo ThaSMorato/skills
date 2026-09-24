@@ -39,7 +39,7 @@ Write `docs/hld.md` by filling the template. Prune and renumber the optional sec
 Every statement must remove some structural ambiguity: name the actual technology, the actual protocol, the actual boundary, the actual failure behavior. "The system will be scalable and maintainable" removes none and does not belong. When you find yourself writing a sentence that would be true of any system, either make it specific or delete it.
 
 ## Ambiguity (you cannot ask — isolated)
-If the PRD leaves an architectural input undefined, choose the most reasonable default and mark it `> Needs Input: <what's missing — name the thing, don't just cite its id>`. Cross-cutting concerns (security, scalability, availability, observability) must be addressed as drivers even if the PRD is silent — mark assumptions.
+If the PRD leaves an architectural input undefined, choose the most reasonable default and mark it `> Assumed:` — the value, what you looked at, and what changes if it is wrong. Where no value is defensible, mark `> Needs Input: <what's missing — name the thing, don't just cite its id>` instead; that one blocks the gate. The `asking` skill (§4, §6) says which values count. Cross-cutting concerns (security, scalability, availability, observability) must be addressed as drivers even if the PRD is silent — mark assumptions.
 
 ## Architectural decisions
 Record decisions and their trade-offs in the "Architectural decisions" section. Where a decision is a real trade-off (structural, surprising without context, stable), **flag it as an ADR candidate** for the ADR step — do not write the ADR yourself.

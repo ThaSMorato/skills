@@ -43,7 +43,7 @@ Where the code's carve-up and the HLD's disagree, record both and put the reconc
 - **Analysis only** on the codebase: read it, never modify it. Use `Bash` for read-only inspection (`git`, `ls`, `grep`) and never for anything that writes.
 
 ## Ambiguity (you cannot ask — isolated)
-Where the HLD's component list is ambiguous — most often when it repeats the containers instead of going a level below — choose the reading that puts genuinely distinct responsibilities in distinct rows, and mark it `> Needs Input`.
+Where the HLD's component list is ambiguous — most often when it repeats the containers instead of going a level below — choose the reading that puts genuinely distinct responsibilities in distinct rows, and mark it `> Assumed:` with the reading you rejected — that is what the user needs to see to correct you in one word.
 
 ## Error handling
 If `docs/hld.md` is missing, stop and report that `/hld` must run first.

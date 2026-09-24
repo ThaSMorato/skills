@@ -43,8 +43,11 @@ If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` firs
 | `OL-N` | Overloading conflict | The two descriptions of a load-bearing term disagree with each other |
 | `SR-N` | Serialization gap | The prose and the JSON contract carry different content |
 | `MD-N` | Metadata | A `(required)` section empty, an unresolved `> Needs Input`, or `Status`/`Level` incoherent between source and target |
+| `AS-N` | Unmarked assumption | A value in one of the `asking` skill's assumption classes (§6) that the source does not give, that carries no `> Assumed:` or `> Decided:` marker — and that would change the target if it were different |
 
 `CV` is the direction that matters most and the one nothing else asks for. Documents are routinely checked for invention — "does everything trace back?" — and almost never for omission. Walk the **source** item by item and account for each in the target; anything unaccounted for is a `CV`, including items deliberately dropped whose reason was never written down.
+
+`AS` is `IV`'s sibling, and the difference matters. An invention is an element the source never asked for; an unmarked assumption is a value the source **needed and did not give**, filled in as if it had. Both trace to nothing — but an invention should usually be removed, while an assumption usually has to stay and only needs to say what it is. A marked `> Assumed:` is not a finding: it is the writer doing its job, and it goes to the gate. An `Assumed` that survived an approved gate is `MD`. Fire `AS` only above the ceiling — if a different value would change nothing in the target, it is noise.
 
 `OL` is detection, not correction: report that the two descriptions disagree and say how. Which one is wrong is a human decision, and it is the reason the pair goes to the user at all.
 

@@ -5,6 +5,9 @@ components, communication, technologies, main patterns — at the C4 container l
 PRD (what/why) and BEFORE detailed specs (FDD/LLD). Two failure modes to avoid: becoming a full spec,
 or staying so generic it guides no decision. PRUNE + RENUMBER optional sections that don't apply;
 (required) sections always stay.
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
+value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+An unmarked one is a validation finding (AS-N).
 -->
 
 # HLD — <name>
