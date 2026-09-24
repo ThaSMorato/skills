@@ -33,6 +33,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `/guidelines`, `/generate-stack-guide` |
 | `docs/validation/*.md` | doc validation verdicts | `/doc-validate` |
 | `.scratch/<feature>/issues/` | tickets | `/tickets <feature>` |
+| `.scratch/<feature>/tickets-validation.md` | the ticket set's verdict, `clean` or `dirty` | `/tickets-validate <feature>` (the postflight of `/tickets`) |
 
 **A missing artifact is not automatically a gap.** Before reporting one as missing, check whether a ticket's `Source` records it as a deliberate skip — small work legitimately has no FDD. Report a skip as a skip; offering to generate a document the user consciously declined is how a coordinator teaches people to stop reading it.
 
@@ -101,7 +102,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first
 **The guides come before both.** `/components` and `/boundaries` both have to know what a component *is* in this ecosystem — a Rails engine, an Nx package, a Go module — and that is written in the stack guide, not in the abstract principle. So the guides are generated as soon as the stack is known: after `/analyze` in brownfield, after `/hld` in greenfield. Generated last, they reach the code stages but miss the two stages that draw the structure.
 
 ## Phase 2 — Development (per frontier ticket)
-12. `/tickets <feature>` → vertical slices with blocking edges.
+12. `/tickets <feature>` → vertical slices with blocking edges, validated as a set by `/tickets-validate` before the gate. **GATE:** the set must be `clean`, and the tickets-to-seams count is the first thing to read.
 13. Per frontier ticket: `/design` → **GATE** → `/plan` → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI by SI, STOP between SIs) → `/review <fixed-point>` → **GATE**.
     - **Back-edge:** if implementation surfaces a real architectural decision, run `/adr-identify` and update the FDD — and if it revealed a new axis of change, revisit `/boundaries`. Keep the docs live.
 14. When an epic or a cycle finishes: `/retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught — process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
