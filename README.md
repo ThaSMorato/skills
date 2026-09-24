@@ -16,12 +16,12 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
  │       → /adr-identify → /adr-generate → /adr-link
  │     with /doc-validate between each pair, before every gate
  └─ Phase 2 — dev, per frontier ticket:
-       /tickets → /design → /plan → /plan-validate → /implement → /review
+       /tickets (→ /tickets-validate) → /design → /plan → /plan-validate → /implement → /review
 ```
 
 **Two architecture beats, deliberately apart.** `/components` builds the system component map *before* the feature specs, so every FDD shares one vocabulary. `/boundaries` writes the dependency contract *after* them, because the axes of change a boundary separates are only knowable once the features are specced.
 
-**Authoring is separated from verification, in both phases.** `/plan-validate` gates the code phase with a machine-readable `clean | dirty` verdict; `/doc-validate` does the same for the doc phase, checking coverage in the direction nothing else asks about — what the source said and the target dropped.
+**Authoring is separated from verification, in both phases.** `/plan-validate` gates the code phase with a machine-readable `clean | dirty` verdict; `/doc-validate` does the same for the doc phase, checking coverage in the direction nothing else asks about — what the source said and the target dropped. `/tickets-validate` covers the step between them: the ticket set as a whole, including the tickets that are too **small**, which no ceiling can catch.
 
 **The dev loop is test-first and gated.** `/design` writes the node map to a file, `/plan` slices a ticket into vertical SIs, `/plan-validate` must report `clean`, and `/implement` runs each SI red → green → refactor (production *and* tests), stopping between SIs so you can `/compact` and resume.
 
@@ -46,14 +46,14 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Diagrams | `/c4-generate` · `/mermaid-generate` |
 | Decisions (ADR) | `/adr-identify` · `/adr-generate` · `/adr-link` |
 | Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` |
-| Development | `/tickets` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/review` |
+| Development | `/tickets` · `/tickets-validate` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/review` |
 | Looking back | `/retro` |
 
 ## Structure
 
 | Folder | Role |
 |---|---|
-| `skills/` | Skills (model-invoked / interactive) — run in the main context. Doc/design (`interview`, `domain-model`, `design`), the dev loop (`plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`) |
+| `skills/` | Skills (model-invoked / interactive) — run in the main context. Doc/design (`interview`, `domain-model`, `design`), the dev loop (`plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`) |
 | `commands/` | User entrypoints (`/flow`, `/interview`, `/prd`…) |
 | `agents/` | Heavy generation and review subagents (isolated context, parallelizable) |
 | `templates/` | Canonical skeleton per artifact (generation scaffold + handoff anchor + gate checklist) |

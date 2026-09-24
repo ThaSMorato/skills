@@ -93,6 +93,38 @@ other half — the decisions the repository can never answer.
 Per the gear matrix, in the Small gear this reaches only `/design` and `/plan` — the
 two stages that produce documents there.
 
+### Ticket and SI size has a floor — `/tickets-validate` (epic 1)
+
+Granularity broke in both directions: a large task cut into five tickets, and a
+simple one cut into seven, one of them "write a test" and another "change a value".
+Two causes. The ticket set was the **only artifact with no validator**: `doc-validate`
+stops at the FDD, `plan-validate` starts at one ticket. And **every size rule was a
+ceiling**, which cannot stop over-splitting, because anything small fits under it.
+The one relative check, "compare side by side", lets a whole set drift together.
+The v0.3 baseline shows it: in the Small gear plans ran at about one SI per
+acceptance criterion (≈0.4 in the Feature gear), and one plan had 28 SIs for 16 ACs
+and passed validation.
+
+- **New `/tickets-validate`** (skill + command), run as the postflight of `/tickets`
+  before the gate: `SC` coverage against the FDD, `IV` invention, `SZ` oversized
+  (two seams), **`UZ` undersized**, **`SM` several tickets on one seam**, `DG` blocking
+  graph, **`DS` dispersion** (max/min ACs above 3×), `AS` unmarked assumption. Writes
+  `.scratch/<feature>/tickets-validation.md` with `tickets`, `seams` and `dispersion`.
+- **The anchor: tickets ≈ seams.** Seven tickets over two seams means five are slicing
+  inside a seam, which is the plan's job. It is a count, not a judgment.
+- **The floor, as two rejection tests** at both levels: something observable changes
+  through the seam (rules out "write a test"), and it traces to an acceptance
+  criterion (rules out "change a value"). Structural work passes by keeping tests green
+  and naming what it enables.
+- **`plan-validate` gains `UZ`, `IV` and `DS` for SIs**, and points at the fastest
+  signal: a plan with more SIs than the ticket has ACs.
+- **`/tickets` writes local files first, always**, then validates, then asks; a tracker
+  publish happens after approval. The cycle and coverage checks it did by hand are now
+  the validator's `DG` and `SC`.
+- The retro's Measurements report tickets, seams and dispersion per feature.
+
+In the Small gear there is no `/tickets`, so the size gate there is `plan-validate`'s.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the

@@ -26,7 +26,9 @@ Look for **prefactoring** opportunities too — "make the change easy, then make
 ## 3. Draft vertical slices
 Each slice cuts a **narrow but complete** path through every layer (schema, API, UI, tests) — vertical, never a horizontal slice of one layer. A completed slice is **demoable on its own**. Prefactoring goes first. Give each ticket its **blocking edges**.
 
-**Size by the seam.** The FDD declares its test seams in a required section; **one ticket crosses one seam end to end**. That is observable at planning time, comparable between tickets, and already written down — unlike "fits one context window", which is none of those and which the SI-based implement loop made obsolete anyway (the unit that must fit a context is the SI, not the ticket). Where a feature has one seam for everything, fall back to a range of 2–5 acceptance criteria per ticket.
+**Size by the seam.** The FDD declares its test seams in a required section; **one ticket crosses one seam end to end**, and so **the number of tickets should be close to the number of seams.** Seven tickets over two seams means five are slicing *within* a seam, which is the plan's job one level down. The seam is observable at planning time, comparable between tickets, and already written down. "Fits one context window" is none of those, and the SI-based implement loop made it obsolete anyway: the unit that must fit a context is the SI, not the ticket. Where a feature has one seam for everything, fall back to a range of 2–5 acceptance criteria per ticket.
+
+**Size has a floor, not just a ceiling.** A ticket is too small when nothing observable changes through its seam ("add a test"), or when none of its ACs traces to an FDD criterion ("change a constant"). Either of those belongs inside another ticket's plan, as an SI or as a step of one.
 
 **Size relatively.** After drafting, put the tickets side by side and compare them to each other, not to an absolute limit. Comparison is far more reliable than estimation, for a model and for a person, and dispersion is what actually goes wrong here.
 
@@ -34,24 +36,22 @@ Each slice cuts a **narrow but complete** path through every layer (schema, API,
 
 **Wide-refactor exception:** a single mechanical change whose blast radius breaks thousands of call sites can't land green as a vertical slice. Sequence it **expand → migrate (batches, each blocked by expand) → contract (blocked by every batch)** — all structural; if batches can't stay green alone, share an integration branch that all block a final integrate-and-verify ticket.
 
-## 4. Check the set, then quiz the user
-Before presenting, check two things mechanically:
+## 4. Write the set, then validate it
+Write **local files** first, always, even when the tickets will end up in a tracker: one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order, each filling `${CLAUDE_PLUGIN_ROOT}/templates/ticket.md`. Number the acceptance criteria `AC-1`, `AC-2`. `/plan` maps each to an SI and `/plan-validate` checks the coverage by id, which it cannot do against unlabelled bullets.
 
-- **Cycles.** Walk the blocking graph. A cycle means no ticket ever has all its blockers done and the frontier is empty forever — it is the Acyclic Dependencies Principle at ticket scale, and it is trivial to detect and invisible to read. Report any cycle as its full path and break it before presenting.
-- **Coverage.** Every acceptance criterion in the FDD is owned by at least one ticket. Anything uncovered is either a missing ticket or an out-of-scope decision that should be written down.
+Then run the `tickets-validate` skill over the set. This is the postflight, and it is not optional: it checks coverage against the FDD, invention, tickets too big or too small, several tickets on one seam, blocking cycles and dispersion, and writes `.scratch/<feature-slug>/tickets-validation.md`. If it comes back `dirty`, fix the set and re-run it **before** showing the user anything. A set the user sees should already have a verdict, so their attention goes to judgment, not to catching a cycle.
 
-Then present the breakdown as a numbered list — per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers**. Ask:
+## 5. Quiz the user
+Present the breakdown as a numbered list — per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers** — headed by the verdict and the **tickets-to-seams count**. Ask:
 1. Is the granularity right?
-2. **Are these comparable to each other?** — show the sizes side by side; this is the question that catches dispersion, and asking only about the set as a whole never does.
+2. **Are these comparable to each other?** Show the sizes side by side. This is the question that catches dispersion; asking only about the set as a whole never does.
 3. Are the blocking edges genuine gates?
 4. Should any be merged or split?
 
-Iterate until the user approves.
+Every change edits the files and re-runs the validation. Iterate until the user approves a `clean` set.
 
-## 5. Publish (blockers first)
-Default to **local files** — one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order, each filling `${CLAUDE_PLUGIN_ROOT}/templates/ticket.md`. Number the acceptance criteria `AC-1`, `AC-2` — `/plan` maps each to an SI and `/plan-validate` checks the coverage by id, which it cannot do against unlabelled bullets.
-
-If the user asks for a real tracker (GitHub, etc.) and a remote exists, publish one issue per ticket in dependency order using native blocking links. Never close or modify a parent issue.
+## 6. Publish (blockers first)
+The local files are the default and are already written. If the user asks for a real tracker (GitHub, etc.) and a remote exists, publish one issue per ticket in dependency order using native blocking links. Never close or modify a parent issue.
 
 Avoid file paths and code snippets — they go stale; the exception is a decision-encoding snippet from a prototype, trimmed to the decision.
 

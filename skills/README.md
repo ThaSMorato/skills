@@ -6,7 +6,7 @@
 |---|---|
 | Doc & design | `interview`, `domain-model`, `design` |
 | Dev loop | `plan`, `implement`, `tdd` |
-| Verification | `plan-validate`, `doc-validate` |
+| Verification | `doc-validate`, `tickets-validate`, `plan-validate` |
 | Generators | `generate-test-guide`, `generate-stack-guide` |
 | References | `testing`, `code-smells`, `clean-code`, `architecture`, `security` |
 

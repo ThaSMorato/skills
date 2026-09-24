@@ -20,7 +20,7 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 ## Measurements (required)
 > Numbers only, and only from frontmatter: the ticket's `Gear` and acceptance criteria, `plan.md`'s
 > `sis_planned` and `revision`, `progress.md`'s `sis_done` and `escalations`, `validation.md`'s `run`
-> and `fired`, the review's `findings`, `by_severity` and `by_lens`. Nothing here is estimated. A ticket
+> and `fired`, the review's `findings`, `by_severity` and `by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams` and `dispersion`. Nothing here is estimated. A ticket
 > whose artifacts lack these fields predates them: list it as `not measured — pre-v0.4 frontmatter`
 > rather than reconstructing its numbers from prose.
 >
@@ -31,6 +31,8 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 |---|---|---|---|---|---|---|---|---|
 
 **Totals by gear:** <per gear: tickets, median ACs, median SIs, SIs per AC, median review findings>
+
+**Ticket sets:** <per feature: tickets, seams, dispersion, and the categories `tickets-validate` fired>
 
 **Review findings by lens:** <summed `by_lens` across the scope>
 
