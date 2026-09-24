@@ -31,6 +31,35 @@ no category (`PV-1`), which drops them out of every per-category count.
   Artifacts that predate the fields are listed as not measured rather than
   reconstructed from prose.
 
+### Generated guides reach the stages that need them (epic 5)
+
+The plugin generates a guidelines router, stack guides and a project testing guide,
+and the code stages already load them. But three places that need them had no path
+to them at all — and in one case the rule said to read the guide while the agent
+applying the rule was never told to.
+
+- **`review-architecture`** now loads the stack guide. The `architecture` skill it
+  applies says *"read the repo's stack guide before asserting that something should
+  be its own component"*; the agent had no instruction to read any guide.
+- **`component-mapper` and `boundary-architect`** load the stack guide too — they
+  are the two stages that decide what a component *is* in this ecosystem. The system
+  profile they already read describes what the code does today, which in a repo
+  that packages things wrong confirms the mistake. Without a guide, each says so in
+  its output.
+- **`/tickets`** loads the guides, because every ticket declares a `Test seam` and
+  what a seam can be is decided by the stack and the testing guide.
+- **The `testing` skill** points at `testing-guide-<project>`, and says the project
+  guide wins where they disagree.
+- **The guides are generated earlier.** `/flow` ran `/guidelines` last in phase 1,
+  after `/components` and `/boundaries` — so in the default order, the two stages
+  that draw the structure could never see a guide. Now: right after `/analyze` in
+  brownfield, right after `/hld` in greenfield (where the stack is decided). The
+  generator reads the HLD for the stack when there is no code yet, and marks
+  commands and conventions `to be established` instead of inventing them.
+
+Phase 1's policy stages (`hld-writer`, `fdd-writer`) deliberately do not load stack
+guides: policy should not be shaped by the detail.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the

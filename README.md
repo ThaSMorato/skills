@@ -8,11 +8,12 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
 
 ```
 /flow  (coordinator: scans state from artifacts, never from a status file)
- ├─ brownfield:  /analyze · /audit-deps
+ ├─ brownfield:  /analyze · /audit-deps → /guidelines (+ stack guides)
  ├─ Phase 1 — docs:
  │     /interview → /research → /prd → /hld (+/c4-generate)
+ │       → greenfield: /guidelines (+ stack guides)
  │       → /components → /decompose → /fdd (+/mermaid-generate) → /boundaries
- │       → /adr-identify → /adr-generate → /adr-link → /guidelines
+ │       → /adr-identify → /adr-generate → /adr-link
  │     with /doc-validate between each pair, before every gate
  └─ Phase 2 — dev, per frontier ticket:
        /tickets → /design → /plan → /plan-validate → /implement → /review

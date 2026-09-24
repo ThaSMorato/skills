@@ -84,19 +84,21 @@ Detect by objective signal — source files outside `docs/`, or a git history wi
 Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first and writes `docs/analysis/system-profile.md`; every later stage reads that file **if it exists** and discovers on its own if it doesn't. The profile accelerates, it never gates. Concretely: `/interview` asks what cannot change, `/prd` states whether requirements are the delta or the whole system, `/hld` documents the AS-IS and marks the delta, `/components` measures the real graph, `/boundaries` reports divergence between the contract and the code, `/guidelines` mines real conventions, `/tickets` plans migration sequences, and `/review` holds the diff to the repo's own conventions.
 
 ## Phase 1 — Documentation
-1. `/analyze` (+ `/audit-deps`) if brownfield.
+1. `/analyze` (+ `/audit-deps`) if brownfield — then `/guidelines` + `/generate-stack-guide <tech>` per technology right away, since the stack is already in the repo.
 2. `/interview` → brief + glossary + inline ADRs. **GATE (ambiguity):** every required section filled, and the user confirms the shared understanding.
 3. Optional `/research` for open technical questions.
 4. `/prd` → `/doc-validate brief prd`. **GATE (strong):** a wrong PRD contaminates everything below.
-5. `/hld` (+ `/c4-generate` for C1/C2) → `/doc-validate prd hld`. **GATE (strong).**
+5. `/hld` (+ `/c4-generate` for C1/C2) → `/doc-validate prd hld`. **GATE (strong).** In greenfield, this is where the stack is decided: run `/guidelines` + `/generate-stack-guide <tech>` now, before `/components`.
 6. `/components` → `/doc-validate hld components` (+ `/c4-generate` for the system C3). **GATE (strong):** every FDD below uses these names.
 7. `/decompose` → `/doc-validate prd features`. **GATE (medium):** look at uncovered requirements first.
 8. `/fdd <feature>` per feature (+ `/mermaid-generate`) → `/doc-validate features fdd`. **GATE (per feature, medium).** Independent features can be specced in parallel.
 9. `/boundaries`. **GATE (strong):** every ticket below is sliced against this.
 10. `/adr-identify` → confirm → `/adr-generate` → `/adr-link`.
-11. `/guidelines` once per project, plus `/generate-stack-guide <tech>` per technology.
+11. Re-run `/guidelines` only if the FDDs or ADRs brought in a technology its stack table does not list.
 
 **Two architecture beats, deliberately apart.** `/components` runs **before** the FDDs so every feature spec shares one vocabulary; `/boundaries` runs **after** them, because the axes of change a boundary separates are only knowable once the features are specced. Reversing the first would make the map a reconciliation of N contradictory carve-ups; moving the second earlier would make it a guess.
+
+**The guides come before both.** `/components` and `/boundaries` both have to know what a component *is* in this ecosystem — a Rails engine, an Nx package, a Go module — and that is written in the stack guide, not in the abstract principle. So the guides are generated as soon as the stack is known: after `/analyze` in brownfield, after `/hld` in greenfield. Generated last, they reach the code stages but miss the two stages that draw the structure.
 
 ## Phase 2 — Development (per frontier ticket)
 12. `/tickets <feature>` → vertical slices with blocking edges.

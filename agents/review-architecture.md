@@ -14,6 +14,7 @@ Your context is isolated — you receive:
 - **`docs/boundaries.md`** — the allow-list of edges and the manifest. Without it, most of this lens has nothing to judge against; say so rather than inventing a contract.
 - `docs/components.md` — the component map and the path globs each component owns.
 - `docs/analysis/system-profile.md` (if present) — the previous import graph, for comparison.
+- `docs/guidelines.md`'s routing table → load the stack guide for the files the diff touches. The `architecture` skill tells you to read it before asserting that something should be its own component, and this lens is where that assertion gets made.
 
 Load the `architecture` skill.
 

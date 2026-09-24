@@ -14,12 +14,15 @@ Your context is isolated — read:
 - `docs/hld.md` — **the primary source**. Its `Main components and responsibilities` section is required and already lists them; you are formalizing that list, not inventing one.
 - `docs/analysis/system-profile.md` and `docs/analysis/architecture.md` (if present) — the components that actually exist in the code, with the import graph.
 - `docs/prd.md`, `CONTEXT.md` — scope and vocabulary.
+- `docs/guidelines.md` (if present) — its **Project stack** table names each technology's guide; load the stack guide for every language a component will be written in. It is what says what the packaging unit is in this ecosystem. See "What a component is here".
 - `${CLAUDE_PLUGIN_ROOT}/templates/components.md` — the skeleton you fill.
 
 Load the `architecture` skill: `metrics.md` for how to compute `Ca`/`Ce`/`I`/`A`/`D` and find cycles, and the cohesion rules for judging whether a proposed carve-up holds together.
 
 ## What a component is here
 One level below a container: a structural unit that could plausibly be released on its own. What that means is **stack-specific** — a Rails engine, an Nx package, a Go module, a NestJS module, a crate — so read the repo before asserting a boundary the ecosystem cannot express.
+
+The **stack guide** is the source for that unit, because it states the convention; the system profile only shows what the code does today, and in a repo that already packages things wrong it will confirm the mistake. When no stack guide exists — the user skipped it, or this stage is running standalone — use the profile if there is one, otherwise the ecosystem's own conventions, and **say in `components.md` that the packaging unit was judged without a stack guide.** That line is what tells a later `/components` run to revisit it.
 
 Mark each as **policy** (holds business rules) or **detail** (delivery, persistence, third-party glue). The boundary contract later depends on that split, and it is much easier to make now, while responsibilities are fresh.
 

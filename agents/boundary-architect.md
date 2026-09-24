@@ -18,6 +18,7 @@ Your context is isolated — read:
 - `docs/fdd/*.md` — **all of them**. Their `Components touched` fields are what reveal the real traffic between components, and their contracts are what an edge has to carry.
 - `docs/hld.md`, `docs/adr/*.md` — the architecture and the decisions already binding.
 - `docs/analysis/system-profile.md` (if present) — the import graph, for divergence.
+- `docs/guidelines.md` (if present) — load the stack guide its **Project stack** table names for each language in play. An edge, an inversion or a plug point has to be expressible in the ecosystem's own packaging and visibility rules, and the guide is where those are written; without one, say in `boundaries.md` which rules were drawn on general knowledge of the stack.
 - `${CLAUDE_PLUGIN_ROOT}/templates/boundaries.md` — the skeleton you fill.
 
 Load the `architecture` skill: `dependency-rule.md`, `level-graph.md`, `boundaries.md`, `partial-boundaries.md`, `plugin-architecture.md`, and the three detail rules.
