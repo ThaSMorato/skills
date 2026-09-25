@@ -1,8 +1,12 @@
 # Changelog
 
-## Unreleased — v0.4
+## 0.4.0
 
-v0.4 lands one epic per PR; the version is bumped with the last one.
+Nine epics, landed one per PR (#7–#15) onto a single v0.4 branch. The flow ran, and it
+went wrong in ways only use shows. Tickets were cut too fine and too coarse, a review
+missed an N+1, the owner had to repeat corrections across compactions. Every epic here
+traces to one of those, or to measuring whether the fix worked. The v0.3 baseline
+(26 tickets, two projects) was taken before any of it landed.
 
 ### Measurement (epic 7)
 
@@ -234,6 +238,48 @@ used to **judge** a structure, never to **find** one.
   (Beck's *tidy after*) so it does not collide with Claude Code's built-in `/simplify`.
 - The retro reads `tidy/*.md`. Many reverted tidyings means the proposals were not
   really structural.
+
+### Reading the whole session — `/session-analyze` (epic 3)
+
+`/retro` reads what the work left on disk. It cannot see what only the conversation
+holds: the owner correcting a proposal, rejecting a question, saying "this got too
+big", asking for the same thing twice. Both symptoms that opened this version were
+noticed that way, not by a gate. `/compact` deletes nothing from the transcript; one
+measured session was 208 MB, of which 2.5 MB was conversation, across 15 compaction
+segments.
+
+- **`scripts/session-extract.mjs`**: the plugin's first script. It uses the Node
+  standard library only and streams the JSONL. It resolves the transcript from the
+  working directory (the most recent session, or `--session <id>`) and writes one file
+  per compaction segment to `.scratch/session-analyze/<id>/`, plus an index. It keeps
+  what the owner **said**, **answered** in structured questions (with notes) and
+  **rejected** (the text given with a refused tool call), and the assistant's text with
+  only the **names** of its tools. It drops file snapshots, tool results and arguments
+  (where file contents and secrets live), thinking, subagent turns, compaction
+  summaries, injected reminders and harness notifications. Its 28 tests cover all of
+  that; the 208 MB session extracts in about a second.
+- **New `session-segment-analyst` agent**, one per segment, all in parallel. A segment
+  fits one agent whole, so it reads the original conversation, not a summary.
+- **The evidence rule is stricter than `/retro`'s.** A finding exists only on an owner
+  turn that corrects, rejects or repeats, cited by uuid and timestamp with the owner's
+  own words. The assistant criticizing itself is not evidence, and neither is accepting
+  a recommendation.
+- **Repetition across segments comes first** in the report: the owner said it once,
+  the flow did not learn, and they said it again.
+- **Every finding is tagged `flow` or `project`.** A flow finding becomes an
+  improvement to the plugin; a project finding becomes a skill or guide in that project.
+  Acting on the tags comes after 0.4, but the tag is set now, because re-classifying
+  later means re-reading everything.
+- Report: `docs/meta-retro/<date>-<session>.md`, from `templates/meta-retro.md`.
+  Copilot transcripts are out of scope.
+
+### Fix — three v0.4 skills were never registered
+
+`tickets-validate` (epic 1), `data-access` (epic 2) and `tidy` (epic 6) were added on
+disk but not to `plugin.json → skills`, which lists skills explicitly. They would not
+have loaded, and nothing would have said so. They are registered now, and
+**`scripts/plugin-manifest.test.mjs`** fails whenever a skill folder and the manifest
+disagree. Run `node --test scripts/*.test.mjs` before shipping a skill.
 
 ## 0.3.6
 
