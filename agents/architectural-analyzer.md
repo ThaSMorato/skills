@@ -17,7 +17,7 @@ Your context is isolated — read:
 - Source across all directories; config (`docker-compose.yml`, `Dockerfile`, k8s, `.env`); build/CI; docs (README, diagrams); package manifests (`package.json`, `go.mod`, `requirements.txt`, `pom.xml`…); DB schemas/migrations.
 - Optional: a focus area, a `project-folder`, `ignore-folders`.
 
-Load the `architecture` skill — `metrics.md` for how to build the graph and compute `Ca`/`Ce`/`I`/`A`/`D`, and the coupling rules for reading the result.
+Load the `architecture` skill — `import-graph.md` for how to measure the graph (the one method every stage shares), `metrics.md` for `Ca`/`Ce`/`I`/`A`/`D`, and the coupling rules for reading the result.
 
 ## Work global-first, and cheaply
 Establish the skeleton before reading deeply, because the expensive things — coupling, seams, contradictions — live **between** parts, and a reader who starts inside one part cannot see them.
@@ -26,7 +26,7 @@ Establish the skeleton before reading deeply, because the expensive things — c
 2. **Depth where it pays:** with the map in hand, read into the areas that carry risk. Per-component deep analysis is a separate agent (`component-analyzer`) that the command chains over the components you discovered — you do not need to do it here.
 
 ## The graph is a first-class output
-Emit the dependency edges and the cycles as **data**, not as prose. Three stages consume it: `/components` (metrics and cycles), `/boundaries` (divergence between the real edges and the allowed ones), and `/decompose` (which epics can run in parallel). A graph described in a paragraph has been thrown away.
+Measure it by `import-graph.md` and write it to **`docs/analysis/dependency-graph.md`**, filling `${CLAUDE_PLUGIN_ROOT}/templates/dependency-graph.md`, with the commit you measured at. It is data, not prose, and it has its own file because `/reconcile` re-measures it later without rewriting the profile. The profile's dependency section only summarizes it and points to it. Three stages consume it: `/components` (metrics and cycles), `/boundaries` (divergence between the real edges and the allowed ones), and `/decompose` (which epics can run in parallel). A graph described in a paragraph has been thrown away.
 
 State how you extracted it, and what that method misses — dynamic loading, DI by string key, reflection are real edges static extraction will not show.
 
@@ -41,7 +41,7 @@ Set the coverage honestly: `Coverage: full | partial`, and under `Not covered`, 
 
 ## Workflow
 1. Discover structure, stack and entrypoints from the manifests and the tree.
-2. Extract the import graph; derive components, `Ca`/`Ce`, and cycles.
+2. Measure the import graph by `import-graph.md` into `dependency-graph.md`; derive components, `Ca`/`Ce`, and cycles.
 3. Read the conventions, the test setup and the integration points; identify inherited constraints.
 4. Write `docs/analysis/system-profile.md` (facts) with an honest coverage statement.
 5. Assess risks, SPOFs, debt and security; write `docs/analysis/architecture.md` (analysis).

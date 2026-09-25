@@ -16,7 +16,8 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
  │       → /adr-identify → /adr-generate → /adr-link
  │     with /doc-validate between each pair, before every gate
  └─ Phase 2 — dev, per frontier ticket:
-       /tickets (→ /tickets-validate) → /design → /plan → /plan-validate → /implement → /review
+       /tickets (→ /tickets-validate) → /design → /plan → /plan-validate → /implement → /review → /tidy
+       structure drifts: /reconcile → /components · /boundaries amend
 ```
 
 **Two architecture beats, deliberately apart.** `/components` builds the system component map *before* the feature specs, so every FDD shares one vocabulary. `/boundaries` writes the dependency contract *after* them, because the axes of change a boundary separates are only knowable once the features are specced.
@@ -42,11 +43,11 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Brownfield analysis | `/analyze` · `/audit-deps` |
 | Requirements | `/interview` · `/research` |
 | Documentation | `/prd` · `/hld` · `/fdd` · `/doc-validate` |
-| Architecture | `/components` · `/decompose` · `/boundaries` |
+| Architecture | `/components` · `/decompose` · `/boundaries` · `/reconcile` |
 | Diagrams | `/c4-generate` · `/mermaid-generate` |
 | Decisions (ADR) | `/adr-identify` · `/adr-generate` · `/adr-link` |
 | Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` |
-| Development | `/tickets` · `/tickets-validate` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/review` |
+| Development | `/tickets` · `/tickets-validate` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/review` · `/tidy` |
 | Looking back | `/retro` |
 
 ## Structure

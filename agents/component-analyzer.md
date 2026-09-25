@@ -12,7 +12,7 @@ Deep analysis of **one** component: internal structure; business rules, validati
 ## Inputs
 Your context is isolated — read:
 - **REQUIRED:** the component to analyze — a name from `docs/analysis/system-profile.md`, or a path. One component per run.
-- **`docs/analysis/system-profile.md` (if present) — read this first.** It carries the global map: the other components, the import graph, and this component's place in it. Without it you can describe the inside of a box and miss everything about the seams around it, which is where the interesting findings live.
+- **`docs/analysis/system-profile.md` (if present) — read this first.** It carries the global map: the other components, a pointer to the import graph in `docs/analysis/dependency-graph.md`, and this component's place in it. Without it you can describe the inside of a box and miss everything about the seams around it, which is where the interesting findings live.
 - Its source, tests, configs, docs; import/DI declarations.
 
 ## You own a boundary, not just a folder

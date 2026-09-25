@@ -192,6 +192,49 @@ a new advisory lands against a lockfile nobody touched.
 - The detection lives in a new "Checks that go stale on their own" section of `/flow`,
   where structural reconciliation (epic 6) will join it.
 
+### Structural reconciliation, and a tidy stage (epic 6)
+
+Component architecture and the dependency graph are always moving, through the agent's
+own changes and the team's. Cycles were checked well **at the moment of a change**,
+but nothing re-read the whole structure afterwards. `/components` re-ran only when the
+HLD changed, `review-architecture` saw only its own diff, and a teammate could merge a
+cycle that nothing in the flow noticed. Re-running `/components` rewrote the vocabulary
+every FDD uses, with no ids and no history. And the architecture rules were only ever
+used to **judge** a structure, never to **find** one.
+
+- **One way to measure the graph.** `architecture/import-graph.md` is the method
+  `/analyze`, `/reconcile` and `review-architecture` all use: the ecosystem's native
+  tool when installed (`go list`, `madge`, `pydeps`, `jdeps`, …), otherwise a
+  per-language grep recipe. Ruby and Rails autoloading is covered by constant
+  references, flagged `approximate`. Edges are counted by file references, and the
+  method is recorded per language.
+- **The graph gets its own file**, `docs/analysis/dependency-graph.md`, with
+  `measured_commit`, so it can be re-measured without rewriting the system profile.
+- **New `/reconcile`** (`reconciler` agent). It re-measures, then reports the drift:
+  new edges the contract does not allow, new cycles, unassigned files, empty or
+  split components. Each item comes with the commits behind it, and the report says
+  which stage should amend. It never edits `components.md` or `boundaries.md`; those
+  stages apply the amendments with their own protocols.
+- **Latent-component detection**, run with the reconciliation because the graph is
+  already measured. A set of modules is proposed as a component only when **two of
+  the three** principles agree, each by measurement: CCP by co-change in `git log`,
+  CRP by co-import, REP by existing packaging. At most **3 proposals** per run,
+  ranked; the rest are reported as a count. It never applies anything.
+- **`components.md` gets permanent ids and `Retired` rows**, the same protocol
+  `/decompose` has had since v0.3.1. Re-runs amend instead of rewrite.
+- **`/flow` offers `/reconcile`** when a commit by someone else landed after
+  `measured_commit`, in the Full and Feature gears only, and only once a component map
+  exists.
+- **New `/tidy`**, after `/review`, scoped to the ticket's diff. It applies Beck's four
+  rules of Simple Design in order: rule 1 (tests) is already guaranteed by
+  `/implement`, so it starts at expression, then duplication, then size, never size
+  first. Each tidying is proposed with evidence and applied only if the user picks it,
+  one at a time, as a structural change. Existing tests are not modified; a tidying
+  that needs a test change, or turns the suite red, is reverted. It is named `/tidy`
+  (Beck's *tidy after*) so it does not collide with Claude Code's built-in `/simplify`.
+- The retro reads `tidy/*.md`. Many reverted tidyings means the proposals were not
+  really structural.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the

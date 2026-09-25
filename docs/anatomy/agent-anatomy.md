@@ -8,7 +8,7 @@ Two families:
 
 **Generation** — one artifact each, from the templates: `prd-writer`, `hld-writer`, `component-mapper`, `decomposer`, `fdd-writer`, `boundary-architect`, `adr-analyzer`, `adr-generator`, `adr-linker`, `c4-generator`, `mermaid-generator`, `guideline-generator`, `researcher`, `source-reader`.
 
-**Analysis and review** — read-only, reporting only: `architectural-analyzer`, `component-analyzer`, `dependency-auditor`, the seven `review-*` lenses fanned out by `/review`, and `review-verifier`, which checks their synthesized findings against the code. Like the lenses it is read-only: it returns a verdict per finding, and `/review` writes them into its own file. It never drops a finding.
+**Analysis and review** — read-only, reporting only: `architectural-analyzer`, `component-analyzer`, `dependency-auditor`, `reconciler` (which writes only its measurement and report, under `docs/analysis/`), the seven `review-*` lenses fanned out by `/review`, and `review-verifier`, which checks their synthesized findings against the code. Like the lenses it is read-only: it returns a verdict per finding, and `/review` writes them into its own file. It never drops a finding.
 
 The `review-*` agents are deliberately narrow. A narrow lens can be held to *"every rule, against every changed hunk"* — a bar no agent doing five jobs can meet. The cost is precision: each is primed to find its own subject, so every finding must carry a **named rule** and a **concrete failure scenario**, and `/review`'s synthesis step drops the ones that don't. Synthesis can only judge a finding by what it says about itself; `review-verifier` then judges it by what the repository says, citing code for every verdict.
 
