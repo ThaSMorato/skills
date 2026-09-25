@@ -178,6 +178,20 @@ construction.
 The hop multiplies reading by seven lenses. Measure it on first use; if it weighs,
 narrow it to the patterns each lens names.
 
+### Dependency audits go stale, and `/flow` notices (epic 8)
+
+`/audit-deps` had no recurrence at all. The report also carried no date, so a
+three-month-old audit read as current. Dependencies drift even when the code does not:
+a new advisory lands against a lockfile nobody touched.
+
+- **The audit records itself**: `audited_at`, `audited_commit` and `lockfiles` in the
+  frontmatter of `docs/analysis/dependencies.md`.
+- **`/flow` detects staleness and asks**, in the Full and Feature gears only. It fires
+  on either of two signals: a listed lockfile changed since `audited_commit`, or the
+  audit is more than 30 days old. It never re-runs anything on its own.
+- The detection lives in a new "Checks that go stale on their own" section of `/flow`,
+  where structural reconciliation (epic 6) will join it.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the
