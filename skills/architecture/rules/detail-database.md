@@ -18,4 +18,4 @@ Behind a gateway interface the policy declares (`OrderRepository`, `find`, `save
 - A "unit test" of a business rule that needs a database.
 
 ## The caveat
-This is about **source-code dependency**, not about pretending the database is unimportant. Data modelling is a serious design activity, performance characteristics are real, and choosing the engine is a genuine ADR. The rule is only that the policy must not be *shaped* by that choice — which is what makes changing the choice possible at all.
+This is about **source-code dependency**, not about pretending the database is unimportant. Data modelling is a serious design activity, performance characteristics are real, and choosing the engine is a genuine ADR. The rule is only that the policy must not be *shaped* by that choice — which is what makes changing the choice possible at all. What a query **costs** (N+1, missing indexes, unbounded reads) is a different question, and the `data-access` skill covers it.

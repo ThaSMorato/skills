@@ -53,7 +53,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 
 | Folder | Role |
 |---|---|
-| `skills/` | Skills (model-invoked / interactive) — run in the main context. Doc/design (`interview`, `domain-model`, `design`), the dev loop (`plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`) |
+| `skills/` | Skills (model-invoked / interactive) — run in the main context. Doc/design (`interview`, `domain-model`, `design`), the dev loop (`plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`) |
 | `commands/` | User entrypoints (`/flow`, `/interview`, `/prd`…) |
 | `agents/` | Heavy generation and review subagents (isolated context, parallelizable) |
 | `templates/` | Canonical skeleton per artifact (generation scaffold + handoff anchor + gate checklist) |

@@ -1,5 +1,5 @@
 ---
-description: Review the diff since a fixed point across six narrow lenses in parallel — quality, tests, security, spec, standards, architecture — then synthesize, and verify every finding against the code before you decide.
+description: Review the diff since a fixed point across seven narrow lenses in parallel — quality, tests, security, spec, standards, architecture, data — then synthesize, and verify every finding against the code before you decide.
 argument-hint: "<fixed point — commit/branch/tag, e.g. main or HEAD~5>"
 ---
 
@@ -11,7 +11,7 @@ Review the diff between `HEAD` and the fixed point: $ARGUMENTS
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty — a bad ref or an empty diff fails here, not inside six agents.
 
 ## 2. Compute the diff once
-Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list. Every reviewer receives **the path to that file**, not the instruction to compute it — six agents each running the same diff is six times the cost for one result, and the same work done six ways.
+Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list. Every reviewer receives **the path to that file**, not the instruction to compute it — seven agents each running the same diff is seven times the cost for one result, and the same work done six ways.
 
 ## 3. Fan out
 Dispatch these agents **in a single message** so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the fixed point, and the artifacts its own definition names.
@@ -24,8 +24,11 @@ Dispatch these agents **in a single message** so they run in parallel. Each is n
 | `review-spec` | plan / ticket / FDD — all of it, and only it |
 | `review-standards` | the repo's own guidelines, stack guides, ADRs, glossary |
 | `review-architecture` | boundary contract, cycles, detail leaking into policy |
+| `review-data` | what each line costs against real data: N+1, queries in loops, indexes, unbounded reads, transactions, caches |
 
 Skip `review-architecture` when `docs/boundaries.md` doesn't exist — it would have nothing to judge against — and say that you skipped it.
+
+**Every lens may follow the call one hop outside the diff.** Tell each agent so when you dispatch it: it may open the definition of any function the changed code calls, one level deep, and judge it against its own lens. A diff-scoped lens is structurally blind to the defect that lives one call away. The loop is in the diff and the query is in a repository that did not change. The cycle closes through an untouched file. The tainted value reaches a sink in a helper. A finding found through a hop cites **both** locations, the changed call site and the unchanged code, and it is about **this** change: the diff made the unchanged code expensive, reachable or wrong. Unchanged code that was already wrong on its own is the verifier's `pre-existing`. One hop, not a walk: a lens that follows the whole call graph is reviewing the repository, not the change.
 
 ## 4. Synthesize — this step is not optional
 Narrow agents trade precision for recall, and the two costs land here:
@@ -42,11 +45,11 @@ Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md`, m
 kind: review
 slug: <NN>-<slug>
 fixed_point: <ref>
-lenses_run: [quality, tests, security, spec, standards, architecture]
+lenses_run: [quality, tests, security, spec, standards, architecture, data]
 lenses_skipped: [<lens>: <reason>]
 findings: <count>
 by_severity: {critical: <n>, high: <n>, medium: <n>, low: <n>}
-by_lens: {quality: <n>, tests: <n>, security: <n>, spec: <n>, standards: <n>, architecture: <n>}
+by_lens: {quality: <n>, tests: <n>, security: <n>, spec: <n>, standards: <n>, architecture: <n>, data: <n>}
 ---
 ```
 

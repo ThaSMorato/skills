@@ -150,6 +150,34 @@ keeps finding between stages.
 - `/flow` reads the review file for the review column instead of asking; the file has
   existed since v0.3.1 and the scan never used it.
 
+### Review recall — a data lens, and one hop outside the diff (epic 2)
+
+An N+1 query passed the whole review. Verification (epic 4) improves precision; this
+was a finding that never existed, which is recall, and it had two causes. **A catalog
+gap:** none of the six lenses asks what a line costs against real data, and the only
+database material in the suite was about dependency direction, with performance
+explicitly out of scope. **Diff scope:** the loop was in the diff and the query was in
+a repository that did not change, so a lens confined to the diff could not see it by
+construction.
+
+- **New `data-access` skill**: a stack-neutral catalog with eight rules, each with its
+  tell, a failure scenario stated as a data size, and the fix. The rules: N+1, query in
+  a loop, chatty I/O, unbounded result, missing index, over- and under-fetching, wide
+  transaction, cache invalidation. The ORM-specific spelling comes from the repo's
+  stack guide.
+- **New `review-data` lens**, the seventh in `/review`'s fan-out. It checks every loop,
+  new query, transaction and cached write in the diff. "This could be slow" is not a
+  finding; "2,000 invoices issue 2,001 queries" is.
+- **Every lens may follow the call one hop.** Each lens may open the definition of a
+  function the changed code calls, one level deep. This is not only for data:
+  `architecture` sees a cycle that closes through an untouched file, and `security`
+  follows a tainted value to its sink. A hop finding cites both locations and must be
+  about this change; one that is not is the verifier's `pre-existing`.
+- `lenses_run` and `by_lens` include `data`.
+
+The hop multiplies reading by seven lenses. Measure it on first use; if it weighs,
+narrow it to the patterns each lens names.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the
