@@ -28,6 +28,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/features.md` | decomposition | `/decompose` |
 | `docs/evolutions.md` | findings kept but traced to no requirement — read it when scope is next revisited | `/decompose`, `/retro` append |
 | `docs/retro/*.md` | what finished work taught about the process | `/retro` |
+| `docs/meta-retro/*.md` | what a working session taught: where the owner corrected, rejected or repeated | `/session-analyze` |
 | `docs/fdd/<feature>.md` | FDD, per feature | `/fdd <feature>` |
 | `docs/boundaries.md` | boundary contract | `/boundaries` |
 | `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `/adr-identify` → `/adr-generate` |
@@ -119,6 +120,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first
 13. Per frontier ticket: `/design` → **GATE** → `/plan` → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI by SI, STOP between SIs) → `/review <fixed-point>` → **GATE** → optional `/tidy <slug> <fixed-point>`: the four rules of Simple Design over what the ticket changed, applied only where the user chooses, as structural changes.
     - **Back-edge:** if implementation surfaces a real architectural decision, run `/adr-identify` and update the FDD — and if it revealed a new axis of change, revisit `/boundaries`. Keep the docs live.
 14. When an epic or a cycle finishes: `/retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught — process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
+15. When a working session ends, whether a whole flow driven through several `/compact`s or a long stretch of work: `/session-analyze`. `/retro` reads the artifacts; this reads what only the conversation holds (the owner correcting, rejecting, repeating), across every compaction segment, and tags each finding `flow` (improve the plugin) or `project` (a skill or guide here).
 
 ## Parallelism: fan out on reads, stay serial on writes
 - ✅ **Fan out** for documentation, codebase exploration and review — read-only work where agents don't collide and results add up. Already the case for `/review`, independent FDDs, and the `/analyze` component pass.

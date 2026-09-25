@@ -48,7 +48,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Decisions (ADR) | `/adr-identify` · `/adr-generate` · `/adr-link` |
 | Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` |
 | Development | `/tickets` · `/tickets-validate` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/review` · `/tidy` |
-| Looking back | `/retro` |
+| Looking back | `/retro` · `/session-analyze` |
 
 ## Structure
 
@@ -58,6 +58,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | `commands/` | User entrypoints (`/flow`, `/interview`, `/prd`…) |
 | `agents/` | Heavy generation and review subagents (isolated context, parallelizable) |
 | `templates/` | Canonical skeleton per artifact (generation scaffold + handoff anchor + gate checklist) |
+| `scripts/` | The few things that have to be code: the session-transcript extractor behind `/session-analyze`, and the plugin's own consistency tests. Node standard library only, no dependencies; run the tests with `node --test scripts/*.test.mjs` |
 | `docs/anatomy/` | Authoring standards (skill/command/agent/plugin anatomy) |
 
 ## Design principles
