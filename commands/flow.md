@@ -75,6 +75,15 @@ Announce, in this order: **where the project stands**, **what is waiting for you
 
 The instinct to reach for the full chain on everything is the same instinct Shape Up's *appetite* corrects: the question is not "what is the complete process?", it is "how much process does this problem deserve?".
 
+## Checks that go stale on their own
+Some artifacts are true when written and drift without anyone touching them. The scan detects that drift and **asks**. It never re-runs a stage on its own, and it asks only in the **Full** and **Feature** gears: in a Small task the interruption costs more than the check, and the warning comes back the next time a larger gear runs.
+
+| Artifact | Stale when | Offer |
+|---|---|---|
+| `docs/analysis/dependencies.md` | a lockfile in its `lockfiles` changed after `audited_commit` (`git log <audited_commit>..HEAD -- <lockfiles>`), **or** `audited_at` is more than **30 days** old | `/audit-deps` |
+
+Say which signal fired, and what it means. A changed lockfile means the audit describes dependencies the project no longer has. An old date means new advisories may exist against the same lockfile, because dependencies drift when the world changes, not only when the code does. An audit without these fields predates them: report its age as unknown and offer the re-run once.
+
 ## Resolving the argument
 - **No argument** → the whole project. Report what's missing and what's pending approval. This is the most frequent use.
 - **An argument** → try to match it against an existing FDD, feature id, ticket slug, or epic. **Matches → resume** and report where that thing stopped. **No match → treat it as a new goal, and confirm that with the user before starting from scratch**; free text against slugs is a fuzzy match, and starting a new flow over an existing one is expensive to undo.

@@ -45,7 +45,20 @@ A report that flags healthy libraries teaches the reader to ignore it.
 Read the project's `LICENSE` and determine how it is distributed — internal service, distributed binary, SaaS, published library. Copyleft in an internal tool is usually irrelevant; the same license in a distributed proprietary product is fatal. Without that context you can only emit a generic warning, so if the distribution model cannot be determined, **say so and scope the finding** rather than issuing one anyway.
 
 ## Output shape: action first, catalog last
-Write `docs/analysis/dependencies.md` as:
+Write `docs/analysis/dependencies.md`, opening with this frontmatter:
+
+```markdown
+---
+kind: dependency-audit
+audited_at: <YYYY-MM-DD>
+audited_commit: <git rev-parse HEAD>
+lockfiles: [<every manifest and lockfile read, repo-relative>]
+---
+```
+
+An audit is a snapshot of a moving target: a new advisory can land against a lockfile nobody touched. These three fields are what let `/flow` tell when this one has gone stale, either because a listed lockfile changed after `audited_commit` or because `audited_at` is old. Without them, the report reads as current forever.
+
+Then the body:
 
 1. **Act now** — vulnerable, deprecated, or license-incompatible, ranked by severity, each with the advisory or evidence and the specific action.
 2. **Worth planning** — outdated by a major version, unmaintained by the signals above, or a maintenance burden.
@@ -63,4 +76,4 @@ A row-per-dependency table with hundreds of rows and no ranking is unreadable at
 2. Run the native outdated/audit commands per ecosystem; fall back to web/Context7 where none exists.
 3. Split direct from transitive; assess maintenance health on the direct ones by the signals above.
 4. Read the project's `LICENSE` and distribution model; evaluate license risk in that context.
-5. Rank by required action; write the report with the catalog as an appendix.
+5. Rank by required action; write the report with the catalog as an appendix, and the frontmatter above.
