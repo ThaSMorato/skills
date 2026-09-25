@@ -13,14 +13,14 @@ Your context is isolated — you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
 - **`docs/boundaries.md`** — the allow-list of edges and the manifest. Without it, most of this lens has nothing to judge against; say so rather than inventing a contract.
 - `docs/components.md` — the component map and the path globs each component owns.
-- `docs/analysis/system-profile.md` (if present) — the previous import graph, for comparison.
+- `docs/analysis/dependency-graph.md` (if present) — the previous import graph and its `measured_commit`, for comparison. If commits by others landed after that commit, the baseline is stale; say so, and suggest `/reconcile`, rather than blaming this diff for someone else's edge.
 - `docs/guidelines.md`'s routing table → load the stack guide for the files the diff touches. The `architecture` skill tells you to read it before asserting that something should be its own component, and this lens is where that assertion gets made.
 
 Load the `architecture` skill.
 
 ## The bar
 1. **Every import added by the diff** maps to a component pair. Is that edge in `allow`? An edge that is absent from an exhaustive whitelist is a violation — that is what makes the contract checkable.
-2. **New cycles.** Recompute the component graph with the diff applied and compare against the previous cycle set. A newly created cycle is `critical`: the components in it can no longer be released independently.
+2. **New cycles.** Recompute the component graph with the diff applied, measuring the changed files by the `architecture` skill's `import-graph.md`, the same method that produced the baseline, so the comparison is between two states and not two methods, and compare against the previous cycle set. A newly created cycle is `critical`: the components in it can no longer be released independently.
 3. **Direction.** Does the new edge point from a lower level to a higher one, or the reverse? A policy component reaching for a detail is the classic erosion, and it usually arrives one convenient import at a time.
 4. **Detail leaking into policy.** A framework type, an ORM row, an HTTP object or a driver type appearing inside a component marked `policy`.
 5. **Plug points bypassed.** Code reaching around an interface to a concrete implementation the boundary contract deferred.

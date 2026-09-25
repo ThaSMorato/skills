@@ -28,15 +28,12 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 | Component | Path | Entrypoint | Ca | Ce |
 |---|---|---|---|---|
 
-## Dependency edges (required)
-> The import graph between components, as facts. Consumed by `/components` (metrics), `/boundaries`
-> (divergence), and `/decompose` (which epics are parallel-safe).
-
-| From | To | Evidence |
-|---|---|---|
-
-## Dependency cycles (required)
-> Every cycle found, as its full path — or `none`.
+## Dependency graph (required)
+> The measured graph lives in `docs/analysis/dependency-graph.md` (measured by the architecture skill's
+> `import-graph.md`, with its `measured_commit`), where `/reconcile` can re-measure it without rewriting
+> this profile. Here, only the summary: component count, edge count, the method per language, and every
+> cycle as its full path — or `none`. Consumed by `/components` (metrics), `/boundaries` (divergence),
+> and `/decompose` (which epics are parallel-safe).
 
 ## Conventions observed (required)
 > The repo's real conventions, each with a file that demonstrates it. This is what `/guidelines` mines

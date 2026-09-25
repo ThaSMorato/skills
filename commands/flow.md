@@ -19,6 +19,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 |---|---|---|
 | `docs/analysis/system-profile.md`, `docs/analysis/architecture.md` | brownfield analysis | `/analyze` |
 | `docs/analysis/dependencies.md` | dependency audit | `/audit-deps` |
+| `docs/analysis/dependency-graph.md`, `docs/analysis/reconcile.md` | the measured import graph, and the drift since the documents | `/analyze` first, `/reconcile` after |
 | `docs/requirements-brief.md` + `CONTEXT.md` | interview | `/interview` |
 | `docs/research/*.md` | research (optional) | `/research` |
 | `docs/prd.md` | PRD | `/prd` |
@@ -81,8 +82,11 @@ Some artifacts are true when written and drift without anyone touching them. The
 | Artifact | Stale when | Offer |
 |---|---|---|
 | `docs/analysis/dependencies.md` | a lockfile in its `lockfiles` changed after `audited_commit` (`git log <audited_commit>..HEAD -- <lockfiles>`), **or** `audited_at` is more than **30 days** old | `/audit-deps` |
+| `docs/analysis/dependency-graph.md` | a commit by **someone else** landed after `measured_commit` (`git log <measured_commit>..HEAD --format=%ae`, against `git config user.email`). The structure moved in ways no review in this flow saw | `/reconcile` |
 
 Say which signal fired, and what it means. A changed lockfile means the audit describes dependencies the project no longer has. An old date means new advisories may exist against the same lockfile, because dependencies drift when the world changes, not only when the code does. An audit without these fields predates them: report its age as unknown and offer the re-run once.
+
+Offer `/reconcile` only when `docs/components.md` exists. A project that does not have its structure documents yet has nothing to reconcile against, and a missing artifact is not automatically a gap.
 
 ## Resolving the argument
 - **No argument** → the whole project. Report what's missing and what's pending approval. This is the most frequent use.
@@ -112,7 +116,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first
 
 ## Phase 2 — Development (per frontier ticket)
 12. `/tickets <feature>` → vertical slices with blocking edges, validated as a set by `/tickets-validate` before the gate. **GATE:** the set must be `clean`, and the tickets-to-seams count is the first thing to read.
-13. Per frontier ticket: `/design` → **GATE** → `/plan` → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI by SI, STOP between SIs) → `/review <fixed-point>` → **GATE**.
+13. Per frontier ticket: `/design` → **GATE** → `/plan` → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI by SI, STOP between SIs) → `/review <fixed-point>` → **GATE** → optional `/tidy <slug> <fixed-point>`: the four rules of Simple Design over what the ticket changed, applied only where the user chooses, as structural changes.
     - **Back-edge:** if implementation surfaces a real architectural decision, run `/adr-identify` and update the FDD — and if it revealed a new axis of change, revisit `/boundaries`. Keep the docs live.
 14. When an epic or a cycle finishes: `/retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught — process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
 

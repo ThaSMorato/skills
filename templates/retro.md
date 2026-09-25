@@ -34,6 +34,8 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 
 **Ticket sets:** <per feature: tickets, seams, dispersion, and the categories `tickets-validate` fired>
 
+**Tidying:** <summed `proposed` / `applied` / `reverted` from `.scratch/*/tidy/*.md`; many reverted means the proposals were not really structural>
+
 **Review findings by lens:** <summed `by_lens` across the scope, and beside it `refuted_by_lens` — each lens's precision: of what it raised, how much the verifier refuted with code>
 
 **Compared with the previous retro:** <the same totals from the latest earlier `docs/retro/*.md`, side
