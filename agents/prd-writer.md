@@ -37,7 +37,7 @@ Fill the **JSON contract**. It is a serialization of the same content, and its j
 - Don't relitigate decisions already recorded (brief / ADRs).
 
 ## Ambiguity (you cannot ask — isolated)
-If a required PRD input is missing, or a brief item is still `Needs Input`, write the most reasonable default and mark it inline `> Needs Input: <what's missing — name the thing, don't just cite its id>` rather than stalling.
+If a required PRD input is missing, or a brief item is still `Needs Input`, write the most reasonable default and mark it inline `> Assumed:` — the value, what you looked at, and what changes if it is wrong — rather than stalling. Where no value is defensible, mark `> Needs Input: <what's missing — name the thing, don't just cite its id>`; that one blocks the gate. The `asking` skill (§4, §6) says which values count.
 
 ## Error handling
 If `docs/requirements-brief.md` is missing, do not guess a PRD — stop and report that `/interview` must run first to produce the brief.

@@ -13,10 +13,11 @@
 ├── agents/                # subagents (auto-discovered)
 ├── skills/                # skills (listed in plugin.json)
 ├── templates/             # doc skeletons (optional, this flow)
+├── scripts/               # code a command runs via ${CLAUDE_PLUGIN_ROOT}/scripts/ (Node stdlib only), with tests
 └── docs/                  # authoring/usage guides (not runtime)
 ```
 
-`commands/` and `agents/` are **auto-discovered** from their directories; `skills/` are **listed explicitly** in `plugin.json → skills` (relative paths to each folder containing a `SKILL.md`).
+`commands/` and `agents/` are **auto-discovered** from their directories; `skills/` are **listed explicitly** in `plugin.json → skills` (relative paths to each folder containing a `SKILL.md`). A skill folder that is not listed **does not load, and nothing says so**; `scripts/plugin-manifest.test.mjs` fails when the two disagree, so run `node --test scripts/*.test.mjs` before shipping a new skill.
 
 ## Manifests
 

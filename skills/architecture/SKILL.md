@@ -10,7 +10,7 @@ SOLID arranges **classes**. This skill is the next step up: how classes are grou
 Two things make architecture different from code review:
 
 - **It is not diff-scoped.** You cannot see a dependency cycle in a diff. Most of this material is design-time (where does the boundary go?) or repo-time (does the graph still obey the contract?), not hunk-time.
-- **Part of it is computable.** Instability, abstractness, distance from the Main Sequence and cycle detection are graph arithmetic over imports, not judgement. Prefer the number where a number exists — see `rules/metrics.md`.
+- **Part of it is computable.** Instability, abstractness, distance from the Main Sequence and cycle detection are graph arithmetic over imports, not judgement. Prefer the number where a number exists — see `rules/metrics.md`. The graph itself is measured one way by every stage, by `import-graph.md`, so two measurements compare states and not methods.
 
 Read a rule file **only when its row matches** what you are deciding.
 

@@ -2,6 +2,9 @@
 TEMPLATE: research-report
 Filled by the researcher agent (AFK). A cited investigation that feeds the HLD/FDD. Every claim traces
 to a PRIMARY source. PRUNE optional sections that don't apply; (required) sections always stay.
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
+value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+An unmarked one is a validation finding (AS-N).
 -->
 
 # Research — <question, short>

@@ -19,6 +19,7 @@ It also solves the case a single document could not express at all: a **fullstac
 Your context is isolated — read:
 - **The codebase** (`Grep`/`Glob`, read-only `Bash`) — the real conventions already in use, the real directory layout, and the **real commands** from `package.json` scripts, `Makefile`, `Rakefile`, `justfile`, CI config. What the repo does beats what the ecosystem recommends.
 - `docs/analysis/system-profile.md` (if present) — stack, conventions and test setup already discovered. Use it and don't rediscover; if it is absent, discover it yourself.
+- `docs/hld.md` (if present) — in **greenfield** there is no code to mine yet, and this is where the stack was decided. Take the technologies from it, and mark every command and structural convention as `to be established` rather than inventing one; a second run once code exists fills them in.
 - `.claude/skills/` — which stack guides already exist, so the routing table points at real files.
 - `${CLAUDE_PLUGIN_ROOT}/templates/guidelines.md` — the skeleton you fill.
 

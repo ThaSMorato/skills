@@ -67,7 +67,7 @@ The reason you write is a **scope decision you are making now** — "merged into
 - **Don't write claims you cannot check.** You have no shell, no test runner and no way to observe what a build produced. Every cell you fill is a decision or a reading of a document — never a measurement. A sentence that sounds like evidence and isn't is worse than no sentence, because it reads as verified.
 
 ## Ambiguity (you cannot ask — isolated)
-Where the right granularity is genuinely open, choose the cut that keeps features comparable and mark it `> Needs Input`. Where the PRD's scope is unclear about whether something is in, put the feature in and mark it.
+Where the right granularity is genuinely open, choose the cut that keeps features comparable and mark it `> Assumed:`. Where the PRD's scope is unclear about whether something is in, put the feature in and mark it the same way — the gate lists every `Assumed` for the user to confirm or correct.
 
 ## Error handling
 If `docs/prd.md` is missing, stop and report that `/prd` must run first.

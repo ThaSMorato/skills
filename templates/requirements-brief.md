@@ -4,6 +4,9 @@ Output of the interview (N0). This is NOT the PRD — it is the aligned understa
 consumes (its isolated context can't see the conversation). Fill the sections; PRUNE + RENUMBER the
 optional ones that don't apply. Sections marked (required) always stay. Each `>` is the section's
 intent — delete it when you fill the section.
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
+value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+An unmarked one is a validation finding (AS-N).
 -->
 
 # Requirements Brief — <feature/project name>

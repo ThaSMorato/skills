@@ -20,6 +20,9 @@ slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 design: .scratch/<feature-slug>/design/<NN>-<slug>.md
 type: behavioral | structural
+gear: full | feature | small
+sis_planned: <number of SIs below>
+revision: <1 when first written; +1 every time the plan is revised after a dirty validation>
 ---
 
 # Plan — <NN> <Ticket title>
@@ -56,13 +59,18 @@ type: behavioral | structural
 - [ ] <each ticket acceptance criterion, restated as a checkable line>
 ```
 
+## The frontmatter is what gets counted
+`gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose — `/retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
+
 ## Rules for a good plan
 - **One SI = one red → green → refactor cycle** that fits a fresh context window. **If an SI needs two Acts to describe, split it** — the single-act rule, at plan scale.
 - **Vertical, not horizontal.** Each SI cuts through every layer it needs; never "all schema, then all API".
 - **Seams are named up front.** The `implement` loop writes the failing test at the seam the SI declares — no test seam, no test-first.
 - **Every AC is owned, by id.** The coverage table is what makes that mechanical rather than a reading exercise.
 - **The plan encodes the node map.** Modules, interfaces and seams come from the map; a plan that invents one has diverged from the design contract.
-- **Prefactoring SIs lead.** Reshape first, then build on the easy shape.
+- **Prefactoring SIs lead.** Reshape first, then build on the easy shape. A prefactoring SI names the AC it makes easy (`enables AC-2`) in place of an AC it owns.
+- **An SI has a floor.** It changes something observable at its seam and owns at least one AC. "Write the test for X" and "change the value" are steps of an SI, not SIs. If the plan has more SIs than the ticket has ACs, check that each one clears the floor before you present it.
 - **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
 - **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them — the final verification runs exactly these.
+- **Mark the decisions the sources do not give.** A threshold, a failure behavior or a visibility rule that the ticket, node map and FDD are silent on is written with `> Assumed:` under the SI that depends on it (the `asking` skill §4 and §6). Facts are not assumptions: if the repo can answer it, look it up.
 - **No stale detail.** Prefer intent over hard-coded file paths and code snippets; the exception is a decision-encoding snippet trimmed to the decision.

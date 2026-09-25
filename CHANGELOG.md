@@ -1,5 +1,286 @@
 # Changelog
 
+## 0.4.0
+
+Nine epics, landed one per PR (#7–#15) onto a single v0.4 branch. The flow ran, and it
+went wrong in ways only use shows. Tickets were cut too fine and too coarse, a review
+missed an N+1, the owner had to repeat corrections across compactions. Every epic here
+traces to one of those, or to measuring whether the fix worked. The v0.3 baseline
+(26 tickets, two projects) was taken before any of it landed.
+
+### Measurement (epic 7)
+
+The flow could not say whether a change to it helped. Every count a retro would need
+was on disk only as prose — and a snapshot of 26 tickets across two projects found
+it written five different ways. `progress.md` had no frontmatter at all (its format
+lived only in the body), so each run invented one: `sis_done: 5/5`, `si_done: 4`,
+`completed: 6`, `done: [SI-1, …]`, or nothing. Plan rounds were recorded as `run:`,
+as `revision:`, or not at all. Review findings named their lens in three formats,
+or not at all in more than half of them. Three validations numbered findings with
+no category (`PV-1`), which drops them out of every per-category count.
+
+- **`gear` is recorded.** A `Gear` field on the ticket, copied into the plan's
+  frontmatter. Until now only `/flow` knew the gear, so no stage below it could act
+  on it, and nothing could be measured per gear. Absent means `full`.
+- **Fixed, countable frontmatter** on every phase-2 artifact:
+  - `plan.md` — `gear`, `sis_planned`, `revision`;
+  - `progress.md` — `status`, `sis_done`, `sis_total`, `escalations` (an SI that
+    hits the 3-attempt limit is now marked `escalated` and counted);
+  - `validation.md` — `run`, and `fired`: every id ever raised, by prefix;
+  - the review — `by_severity`, `by_lens`, and one `Lenses:` line per finding.
+- **No uncategorised findings.** `/plan-validate` ids must use a prefix from its
+  checks table.
+- **`## Measurements` in the retro.** Numbers only, only from frontmatter, compared
+  with the previous retro's. The comparison is the point: one retro is a snapshot.
+  Artifacts that predate the fields are listed as not measured rather than
+  reconstructed from prose.
+
+### Generated guides reach the stages that need them (epic 5)
+
+The plugin generates a guidelines router, stack guides and a project testing guide,
+and the code stages already load them. But three places that need them had no path
+to them at all — and in one case the rule said to read the guide while the agent
+applying the rule was never told to.
+
+- **`review-architecture`** now loads the stack guide. The `architecture` skill it
+  applies says *"read the repo's stack guide before asserting that something should
+  be its own component"*; the agent had no instruction to read any guide.
+- **`component-mapper` and `boundary-architect`** load the stack guide too — they
+  are the two stages that decide what a component *is* in this ecosystem. The system
+  profile they already read describes what the code does today, which in a repo
+  that packages things wrong confirms the mistake. Without a guide, each says so in
+  its output.
+- **`/tickets`** loads the guides, because every ticket declares a `Test seam` and
+  what a seam can be is decided by the stack and the testing guide.
+- **The `testing` skill** points at `testing-guide-<project>`, and says the project
+  guide wins where they disagree.
+- **The guides are generated earlier.** `/flow` ran `/guidelines` last in phase 1,
+  after `/components` and `/boundaries` — so in the default order, the two stages
+  that draw the structure could never see a guide. Now: right after `/analyze` in
+  brownfield, right after `/hld` in greenfield (where the stack is decided). The
+  generator reads the HLD for the stack when there is no code yet, and marks
+  commands and conventions `to be established` instead of inventing them.
+
+Phase 1's policy stages (`hld-writer`, `fdd-writer`) deliberately do not load stack
+guides: policy should not be shaped by the detail.
+
+### Marked assumptions — `AS-N` (epic 9)
+
+A value derived from a source and a value completed from the most likely pattern read
+identically: same fluency, same confidence. Asking the model to notice when it is
+inferring does not help, because that answer is generated the same way. v0.3.2 solved
+the factual half of this with checkable evidence (`Grounding:` + `GR-N`); this is the
+other half — the decisions the repository can never answer.
+
+- **Three markers, defined once in the `asking` skill.** `> Needs Input:` — no value is
+  defensible, **blocks** the gate (unchanged). `> Assumed:` — a defensible value the
+  sources do not give, with what changes if it is wrong; **listed** at the gate, not
+  blocking. `> Decided:` — an `Assumed` the owner confirmed or corrected, which later
+  validators treat as a source.
+- **Recognise by category, not by introspection.** `asking` §6 lists the classes no
+  repository answers — business thresholds, conflicting priorities, authority, external
+  contract semantics, failure tolerance, domain names, future intent — and the
+  **ceiling**: mark only when a different value would change a contract, schema,
+  boundary or slice. A detector that fires on everything becomes an interrogation.
+- **`AS-N`** in `doc-validate` and `plan-validate`: an unmarked value in one of those
+  classes, above the ceiling. (`/tickets-validate` gets it when epic 1 creates it.)
+- **Every gate lists the `Assumed` markers** as one grouped question. Confirming
+  rewrites the marker in place; correcting goes through whoever owns the document.
+- **Writers choose the weight.** `prd-writer`, `hld-writer`, `fdd-writer` write
+  `Assumed` for a defensible default and `Needs Input` only when there is none;
+  `component-mapper`, `decomposer` and `boundary-architect`, which choose a reading and
+  proceed, now mark it `Assumed` instead of blocking.
+- **The 11 templates that carry decisions** say so in their header, which is the one
+  channel that reaches the isolated agents filling them. The node map's `Open
+  decisions` and the plan's rules use the same markers.
+
+Per the gear matrix, in the Small gear this reaches only `/design` and `/plan` — the
+two stages that produce documents there.
+
+### Ticket and SI size has a floor — `/tickets-validate` (epic 1)
+
+Granularity broke in both directions: a large task cut into five tickets, and a
+simple one cut into seven, one of them "write a test" and another "change a value".
+Two causes. The ticket set was the **only artifact with no validator**: `doc-validate`
+stops at the FDD, `plan-validate` starts at one ticket. And **every size rule was a
+ceiling**, which cannot stop over-splitting, because anything small fits under it.
+The one relative check, "compare side by side", lets a whole set drift together.
+The v0.3 baseline shows it: in the Small gear plans ran at about one SI per
+acceptance criterion (≈0.4 in the Feature gear), and one plan had 28 SIs for 16 ACs
+and passed validation.
+
+- **New `/tickets-validate`** (skill + command), run as the postflight of `/tickets`
+  before the gate: `SC` coverage against the FDD, `IV` invention, `SZ` oversized
+  (two seams), **`UZ` undersized**, **`SM` several tickets on one seam**, `DG` blocking
+  graph, **`DS` dispersion** (max/min ACs above 3×), `AS` unmarked assumption. Writes
+  `.scratch/<feature>/tickets-validation.md` with `tickets`, `seams` and `dispersion`.
+- **The anchor: tickets ≈ seams.** Seven tickets over two seams means five are slicing
+  inside a seam, which is the plan's job. It is a count, not a judgment.
+- **The floor, as two rejection tests** at both levels: something observable changes
+  through the seam (rules out "write a test"), and it traces to an acceptance
+  criterion (rules out "change a value"). Structural work passes by keeping tests green
+  and naming what it enables.
+- **`plan-validate` gains `UZ`, `IV` and `DS` for SIs**, and points at the fastest
+  signal: a plan with more SIs than the ticket has ACs.
+- **`/tickets` writes local files first, always**, then validates, then asks; a tracker
+  publish happens after approval. The cycle and coverage checks it did by hand are now
+  the validator's `DG` and `SC`.
+- The retro's Measurements report tickets, seams and dispersion per feature.
+
+In the Small gear there is no `/tickets`, so the size gate there is `plan-validate`'s.
+
+### Findings are verified against the code (epic 4)
+
+`/review`'s synthesis step filters findings by what they say about themselves: a named
+rule, a failure scenario. A wrong finding that is well argued passes that filter. The
+lenses were never checked against the repository, which is the same gap this suite
+keeps finding between stages.
+
+- **New `review-verifier` agent**, run inside `/review` after synthesis and before the
+  user sees anything. It opens every cited location and returns one verdict per
+  finding, **each backed by cited code**: `confirmed`, `wrong location`, `rule does not
+  apply`, `impossible scenario`, `already handled`, `duplicate`, `pre-existing` (real,
+  but in code the diff did not change).
+- **When in doubt, keep it.** The verdict annotates and orders; it never deletes. If
+  the verifier cannot cite the code that refutes a finding, it is `confirmed`. A false
+  positive costs a minute of reading; a false negative ships.
+- **One verifier, not one per finding**, because `duplicate` needs the whole set.
+- It stays read-only like the lenses: it returns verdicts and `/review`, which owns the
+  file, writes them in, with `verdicts` and `refuted_by_lens` in the frontmatter.
+- `/review` now reports by verdict, then severity. Refuted findings stay visible, at
+  the end.
+- The retro reads `refuted_by_lens` as each lens's **precision**. This is the first
+  measure of review quality the suite has.
+- `/flow` reads the review file for the review column instead of asking; the file has
+  existed since v0.3.1 and the scan never used it.
+
+### Review recall — a data lens, and one hop outside the diff (epic 2)
+
+An N+1 query passed the whole review. Verification (epic 4) improves precision; this
+was a finding that never existed, which is recall, and it had two causes. **A catalog
+gap:** none of the six lenses asks what a line costs against real data, and the only
+database material in the suite was about dependency direction, with performance
+explicitly out of scope. **Diff scope:** the loop was in the diff and the query was in
+a repository that did not change, so a lens confined to the diff could not see it by
+construction.
+
+- **New `data-access` skill**: a stack-neutral catalog with eight rules, each with its
+  tell, a failure scenario stated as a data size, and the fix. The rules: N+1, query in
+  a loop, chatty I/O, unbounded result, missing index, over- and under-fetching, wide
+  transaction, cache invalidation. The ORM-specific spelling comes from the repo's
+  stack guide.
+- **New `review-data` lens**, the seventh in `/review`'s fan-out. It checks every loop,
+  new query, transaction and cached write in the diff. "This could be slow" is not a
+  finding; "2,000 invoices issue 2,001 queries" is.
+- **Every lens may follow the call one hop.** Each lens may open the definition of a
+  function the changed code calls, one level deep. This is not only for data:
+  `architecture` sees a cycle that closes through an untouched file, and `security`
+  follows a tainted value to its sink. A hop finding cites both locations and must be
+  about this change; one that is not is the verifier's `pre-existing`.
+- `lenses_run` and `by_lens` include `data`.
+
+The hop multiplies reading by seven lenses. Measure it on first use; if it weighs,
+narrow it to the patterns each lens names.
+
+### Dependency audits go stale, and `/flow` notices (epic 8)
+
+`/audit-deps` had no recurrence at all. The report also carried no date, so a
+three-month-old audit read as current. Dependencies drift even when the code does not:
+a new advisory lands against a lockfile nobody touched.
+
+- **The audit records itself**: `audited_at`, `audited_commit` and `lockfiles` in the
+  frontmatter of `docs/analysis/dependencies.md`.
+- **`/flow` detects staleness and asks**, in the Full and Feature gears only. It fires
+  on either of two signals: a listed lockfile changed since `audited_commit`, or the
+  audit is more than 30 days old. It never re-runs anything on its own.
+- The detection lives in a new "Checks that go stale on their own" section of `/flow`,
+  where structural reconciliation (epic 6) will join it.
+
+### Structural reconciliation, and a tidy stage (epic 6)
+
+Component architecture and the dependency graph are always moving, through the agent's
+own changes and the team's. Cycles were checked well **at the moment of a change**,
+but nothing re-read the whole structure afterwards. `/components` re-ran only when the
+HLD changed, `review-architecture` saw only its own diff, and a teammate could merge a
+cycle that nothing in the flow noticed. Re-running `/components` rewrote the vocabulary
+every FDD uses, with no ids and no history. And the architecture rules were only ever
+used to **judge** a structure, never to **find** one.
+
+- **One way to measure the graph.** `architecture/import-graph.md` is the method
+  `/analyze`, `/reconcile` and `review-architecture` all use: the ecosystem's native
+  tool when installed (`go list`, `madge`, `pydeps`, `jdeps`, …), otherwise a
+  per-language grep recipe. Ruby and Rails autoloading is covered by constant
+  references, flagged `approximate`. Edges are counted by file references, and the
+  method is recorded per language.
+- **The graph gets its own file**, `docs/analysis/dependency-graph.md`, with
+  `measured_commit`, so it can be re-measured without rewriting the system profile.
+- **New `/reconcile`** (`reconciler` agent). It re-measures, then reports the drift:
+  new edges the contract does not allow, new cycles, unassigned files, empty or
+  split components. Each item comes with the commits behind it, and the report says
+  which stage should amend. It never edits `components.md` or `boundaries.md`; those
+  stages apply the amendments with their own protocols.
+- **Latent-component detection**, run with the reconciliation because the graph is
+  already measured. A set of modules is proposed as a component only when **two of
+  the three** principles agree, each by measurement: CCP by co-change in `git log`,
+  CRP by co-import, REP by existing packaging. At most **3 proposals** per run,
+  ranked; the rest are reported as a count. It never applies anything.
+- **`components.md` gets permanent ids and `Retired` rows**, the same protocol
+  `/decompose` has had since v0.3.1. Re-runs amend instead of rewrite.
+- **`/flow` offers `/reconcile`** when a commit by someone else landed after
+  `measured_commit`, in the Full and Feature gears only, and only once a component map
+  exists.
+- **New `/tidy`**, after `/review`, scoped to the ticket's diff. It applies Beck's four
+  rules of Simple Design in order: rule 1 (tests) is already guaranteed by
+  `/implement`, so it starts at expression, then duplication, then size, never size
+  first. Each tidying is proposed with evidence and applied only if the user picks it,
+  one at a time, as a structural change. Existing tests are not modified; a tidying
+  that needs a test change, or turns the suite red, is reverted. It is named `/tidy`
+  (Beck's *tidy after*) so it does not collide with Claude Code's built-in `/simplify`.
+- The retro reads `tidy/*.md`. Many reverted tidyings means the proposals were not
+  really structural.
+
+### Reading the whole session — `/session-analyze` (epic 3)
+
+`/retro` reads what the work left on disk. It cannot see what only the conversation
+holds: the owner correcting a proposal, rejecting a question, saying "this got too
+big", asking for the same thing twice. Both symptoms that opened this version were
+noticed that way, not by a gate. `/compact` deletes nothing from the transcript; one
+measured session was 208 MB, of which 2.5 MB was conversation, across 15 compaction
+segments.
+
+- **`scripts/session-extract.mjs`**: the plugin's first script. It uses the Node
+  standard library only and streams the JSONL. It resolves the transcript from the
+  working directory (the most recent session, or `--session <id>`) and writes one file
+  per compaction segment to `.scratch/session-analyze/<id>/`, plus an index. It keeps
+  what the owner **said**, **answered** in structured questions (with notes) and
+  **rejected** (the text given with a refused tool call), and the assistant's text with
+  only the **names** of its tools. It drops file snapshots, tool results and arguments
+  (where file contents and secrets live), thinking, subagent turns, compaction
+  summaries, injected reminders and harness notifications. Its 28 tests cover all of
+  that; the 208 MB session extracts in about a second.
+- **New `session-segment-analyst` agent**, one per segment, all in parallel. A segment
+  fits one agent whole, so it reads the original conversation, not a summary.
+- **The evidence rule is stricter than `/retro`'s.** A finding exists only on an owner
+  turn that corrects, rejects or repeats, cited by uuid and timestamp with the owner's
+  own words. The assistant criticizing itself is not evidence, and neither is accepting
+  a recommendation.
+- **Repetition across segments comes first** in the report: the owner said it once,
+  the flow did not learn, and they said it again.
+- **Every finding is tagged `flow` or `project`.** A flow finding becomes an
+  improvement to the plugin; a project finding becomes a skill or guide in that project.
+  Acting on the tags comes after 0.4, but the tag is set now, because re-classifying
+  later means re-reading everything.
+- Report: `docs/meta-retro/<date>-<session>.md`, from `templates/meta-retro.md`.
+  Copilot transcripts are out of scope.
+
+### Fix — three v0.4 skills were never registered
+
+`tickets-validate` (epic 1), `data-access` (epic 2) and `tidy` (epic 6) were added on
+disk but not to `plugin.json → skills`, which lists skills explicitly. They would not
+have loaded, and nothing would have said so. They are registered now, and
+**`scripts/plugin-manifest.test.mjs`** fails whenever a skill folder and the manifest
+disagree. Run `node --test scripts/*.test.mjs` before shipping a skill.
+
 ## 0.3.6
 
 0.3.5 quoted the frontmatter the plugin ships. This closes the same trap in the

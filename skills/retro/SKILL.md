@@ -9,7 +9,7 @@ Every stage in this flow writes forward. Nothing writes back: the documents free
 ## Input
 `/retro <epic | feature | cycle>` — a set of **completed** tickets. Resolve them to their `.scratch/<feature-slug>/` directories.
 
-If nothing in scope has a `progress.md` marked `completed`, abort: *"Nothing finished in `<scope>` yet. A retro over unfinished work reads the plan, not the outcome."*
+If nothing in scope has a `progress.md` with `status: completed` (or, in one that predates the frontmatter, `**Status:** completed` in the body), abort: *"Nothing finished in `<scope>` yet. A retro over unfinished work reads the plan, not the outcome."*
 
 ## The one rule
 **Every claim cites the artifact it came from.** You are reading files, not remembering a project. This is the difference between a retro that is worth writing down and one that manufactures plausible observations — and the second kind is worse than none, because it reads as verified.
@@ -28,6 +28,11 @@ Concretely: you may not write that something was hard, that a decision was debat
 | `git log` over the ticket's range | the shape of what landed |
 
 `validation.md`'s `Resolved` section is the most underused file in the suite: it is a per-ticket record of which category of mistake this project actually makes. Read it across the whole scope before writing anything.
+
+## Measure from frontmatter, never from prose
+The counts come from fields each stage writes for exactly this purpose: the ticket's `Gear`, `plan.md`'s `sis_planned` and `revision`, `progress.md`'s `sis_done`/`sis_total` and `escalations`, `validation.md`'s `run` and `fired`, the review's `findings`, `by_severity`, `by_lens`, `verdicts` and `refuted_by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams`, `dispersion` and `fired`, and each `tidy/*.md`'s `proposed`, `applied` and `reverted`. Sum them; do not re-derive them from the body. A ticket whose artifacts lack the fields predates them — report it as not measured instead of reading a count out of a sentence, because a number reconstructed from prose looks exactly like a measured one and is not.
+
+Then read the **Measurements** section of the most recent earlier `docs/retro/*.md` and put its totals beside this one's. One retro is a snapshot; the comparison is what shows whether a change to the flow did anything.
 
 ## Two outputs, two subjects
 Sort every finding by **what it is about**, and never mix them:
@@ -53,8 +58,8 @@ One occurrence is an incident. The same finding across several tickets is a **st
 ## Workflow
 1. Resolve the scope to its completed tickets; abort if none finished.
 2. Read the artifacts above across the whole scope, `validation.md`'s `Resolved` sections included.
-3. Build the planned-versus-done table, per ticket, citing the files.
-4. Count which gate categories fired and how many rounds each ticket took to reach `clean`.
+3. Fill **Measurements** from frontmatter, per ticket and by gear, and compare with the previous retro's.
+4. Explain the planned-versus-done divergences and the gate categories that fired, citing the files.
 5. Collect escalations, failed deliverables, and repeated review findings — with their instances.
 6. Sort every finding: process, product, or defect.
 7. Write `docs/retro/<scope>.md`; append the product findings to `docs/evolutions.md`.

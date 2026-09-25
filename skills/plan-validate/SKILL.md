@@ -26,15 +26,25 @@ Read the plan, and everything it is accountable to:
 | `UT-N` | Untestable | An acceptance criterion no SI's Tests section makes observable, or an SI with real behavior and no seam |
 | `CV-N` | Coverage | A ticket acceptance criterion no SI owns |
 | `SZ-N` | Oversized SI | An SI that needs two Acts to describe, or spans two seams, or whose actions are a sequence of independent deliverables — it violates the single-act rule and will not fit one red-green-refactor cycle |
+| `UZ-N` | Undersized SI | An SI with no behavior observable at its seam — "write the test for X", "rename Y", "bump the constant" — which is a step of some other SI, not a slice |
+| `IV-N` | Invention | An SI that owns no ticket acceptance criterion, so nothing the ticket asked for needs it |
+| `DS-N` | Dispersion | The SI owning the most ACs owns more than **3×** as many as the one owning the fewest — the slicing is out of scale with itself |
 | `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, or attaches tests at a seam the map and FDD don't name |
 | `GR-N` | Grounding | A node the map calls `new` with no recorded search — or with a search a grep contradicts, because the thing already exists |
 | `DL-N` | Deliverables | Deliverables missing the repo's real test / type-check / build commands |
+| `AS-N` | Unmarked assumption | A decision in one of the `asking` skill's assumption classes (§6) — a threshold, a failure behavior, a visibility rule — that the ticket, node map and FDD do not give, written into an SI with no `> Assumed:` marker, and that would change what the SI builds if it were different |
 
 For a plan with `type: structural`, also check that no SI modifies an existing test and that no SI adds behavior — a structural plan that changes behavior is an `IC` against its own ticket type.
+
+**`SZ` is a ceiling; `UZ` and `IV` are the floor.** Every size rule used to be a ceiling, and a ceiling cannot stop over-splitting: "write a test" fits comfortably under any of them. An SI is too small when **either** test fails. The first is **observable behavior**: its own red step fails because something a caller can see is missing. That rules out "write the test", since a test is how an SI verifies behavior, not an SI. The second is **trace**: it owns at least one ticket AC. That rules out "change the value", unless an AC asks for it. The quickest place to look is the count. **A plan with more SIs than the ticket has ACs** is where over-splitting lives, so read those SIs first. A prefactoring SI adds no behavior by definition; for it, the tests become *existing tests stay green, and it names the AC it makes easy* (`enables AC-2`). One that enables nothing is refactoring for its own sake.
+
+`DS`'s 3× is a starting value, recalibrated from real plans; record the ratio in the finding.
 
 `CV` and `SZ` are the two the author cannot reliably catch alone: coverage because omission is invisible from inside, and size because the author who wrote the slice believes it is one thing. `DM` exists because the plan claims to encode the node map and nothing used to check that claim.
 
 **`GR` is the only check in this suite that leaves the documents.** Every other category — here and in `/doc-validate` — compares one artifact against another, which means a wrong assumption made early passes every gate, because it is internally consistent all the way down. Run the map's searches yourself: take each node marked `new`, grep the terms it says it searched for, and see whether the repository agrees. A node that turns out to already exist is the highest-value finding this stage can produce, because everything below it was about to be built twice.
+
+**`AS` is `GR`'s other half.** `GR` catches a fact nobody looked up — the repository had the answer. `AS` catches a decision nobody could have looked up — the repository never has that answer, and the plan filled one in as though it did. A `GR` is fixed by searching; an `AS` is fixed by marking it, so the user sees it at the gate. By this stage most assumptions should already have been caught upstream; the ones that reach a plan are usually small and local, so hold them to the ceiling hard.
 
 ## Output
 Write `.scratch/<feature-slug>/plans/<NN>-<slug>/validation.md`:
@@ -45,6 +55,8 @@ kind: validation
 slug: <NN>-<slug>
 status: clean | dirty
 open_issues: <count of open issues>
+run: <1 on the first validation; +1 on every re-run>
+fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by prefix — e.g. {IC: 2, SZ: 1}
 ---
 
 # Validation — <NN> <Ticket title>
@@ -60,6 +72,8 @@ open_issues: <count of open issues>
 ```
 
 `status: clean` only when every finding is resolved — no open issues. Otherwise `status: dirty`.
+
+**Every id uses a prefix from the Checks table** — never a generic numbering (`PV-1`, `F-3`). The prefix is the finding's category, and `fired` is the per-project record of which mistakes this flow actually catches; a finding with no category is invisible to it. `fired` is cumulative: a re-run adds its new ids and never drops resolved ones.
 
 ## Gate
 - **dirty** → tell the user exactly what to fix: *"validation.md has N open issues. Revise the plan (edit it or re-run /plan <slug>), then re-run /plan-validate <slug>."* Never auto-fix; never partially proceed.
