@@ -4,27 +4,27 @@
 
 ### A stage that makes the change smaller — `/trim`
 
-`/tidy` judges the shape of the code a ticket leaves, by the four rules of Simple
-Design, as structural changes. Nothing judged the **size of the change itself**: a
-diff can pass every rule and still carry a drive-by rename, a parameter nobody
-passes, a helper the repo already had, a new file where an edit would do.
+Nothing in the loop asked whether a change **needed to be this big**. `/implement`
+makes the ticket work, `/review` judges whether it is right, `/tidy` shapes the code by
+the rules of Simple Design. A working diff still carries a drive-by rename, a helper
+the repo already had, a new file where an edit would do, one behavior threaded
+through five files, and the review then spends its lenses on all of it.
 
-- **New `/trim`**, after `/review` and before `/tidy`, on the same fixed point. It reads
-  every file the diff created or modified against the ticket's ACs and the plan's SIs,
-  and proposes cuts by four criteria, in order: **trace** (a hunk no SI or AC answers
-  for — incidental, or unrequested behavior), **reuse** (new code re-implementing a
+- **New `/trim`**, after `/implement` and **before `/review`**, so the review reads the
+  smaller diff. It reads every file the diff created or modified against the ticket's
+  ACs and the plan's SIs, and proposes cuts by four criteria, in order: **trace**
+  (incidental hunks no SI or AC answers for), **reuse** (new code re-implementing a
   primitive the repo has, cited at `file:line`), **footprint** (a file, layer or
   interface the change did not need), **locality** (one behavior spread over more
   files than it needs).
-- It only subtracts or substitutes with existing code. It runs after the review, so it
-  never adds code nobody reviewed; shaping what is left stays `/tidy`'s job.
-- Cuts are `structural` or `behavioral`. A behavioral cut removes behavior no AC asked
-  for, and may delete only the tests that exist exclusively for it; a test that traces
-  to an AC is never touched. Every cut is applied only if the user picks it, one at a
-  time, with the suite green after each; the behavioral ones are listed so any of them
-  can come back as a ticket.
+- **Behavior does not change.** Every cut is structural, existing tests are not
+  modified, and a cut that needs a test change or turns the suite red is reverted. It
+  may rewrite code to make it smaller but never adds an abstraction.
+- Behavior no AC asked for is scope, not size: `/trim` records it as an
+  **unrequested behavior** note, and `/review` hands the notes to `review-spec` as leads.
+- Cuts are applied only if the user picks them, one at a time.
 - `.scratch/<feature>/trim/<NN>-<slug>.md` records the diff's size `before` and
-  `after`, and the retro sums them.
+  `after`, and the retro sums it.
 - Runs in every gear that has a review.
 
 ## 0.4.0
