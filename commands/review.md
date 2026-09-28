@@ -26,6 +26,8 @@ Dispatch these agents **in a single message** so they run in parallel. Each is n
 | `review-architecture` | boundary contract, cycles, detail leaking into policy |
 | `review-data` | what each line costs against real data: N+1, queries in loops, indexes, unbounded reads, transactions, caches |
 
+If `/trim` ran, `.scratch/<feature-slug>/trim/<NN>-<slug>.md` has an **Unrequested behavior** section: hand it to `review-spec` as leads — behavior in the diff that no AC asked for, which trimming could not cut because cutting it changes behavior. Leads, not findings: the lens confirms each against the plan and the ticket like anything else.
+
 Skip `review-architecture` when `docs/boundaries.md` doesn't exist — it would have nothing to judge against — and say that you skipped it.
 
 **Every lens may follow the call one hop outside the diff.** Tell each agent so when you dispatch it: it may open the definition of any function the changed code calls, one level deep, and judge it against its own lens. A diff-scoped lens is structurally blind to the defect that lives one call away. The loop is in the diff and the query is in a repository that did not change. The cycle closes through an untouched file. The tainted value reaches a sink in a helper. A finding found through a hop cites **both** locations, the changed call site and the unchanged code, and it is about **this** change: the diff made the unchanged code expensive, reachable or wrong. Unchanged code that was already wrong on its own is the verifier's `pre-existing`. One hop, not a walk: a lens that follows the whole call graph is reviewing the repository, not the change.

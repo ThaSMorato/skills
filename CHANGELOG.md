@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.4.1
+
+### A stage that makes the change smaller — `/trim`
+
+Nothing in the loop asked whether a change **needed to be this big**. `/implement`
+makes the ticket work, `/review` judges whether it is right, `/tidy` shapes the code by
+the rules of Simple Design. A working diff still carries a drive-by rename, a helper
+the repo already had, a new file where an edit would do, one behavior threaded
+through five files, and the review then spends its lenses on all of it.
+
+- **New `/trim`**, after `/implement` and **before `/review`**, so the review reads the
+  smaller diff. It reads every file the diff created or modified against the ticket's
+  ACs and the plan's SIs, and proposes cuts by four criteria, in order: **trace**
+  (incidental hunks no SI or AC answers for), **reuse** (new code re-implementing a
+  primitive the repo has, cited at `file:line`), **footprint** (a file, layer or
+  interface the change did not need), **locality** (one behavior spread over more
+  files than it needs).
+- **Behavior does not change.** Every cut is structural, existing tests are not
+  modified, and a cut that needs a test change or turns the suite red is reverted. It
+  may rewrite code to make it smaller but never adds an abstraction.
+- Behavior no AC asked for is scope, not size: `/trim` records it as an
+  **unrequested behavior** note, and `/review` hands the notes to `review-spec` as leads.
+- Cuts are applied only if the user picks them, one at a time.
+- `.scratch/<feature>/trim/<NN>-<slug>.md` records the diff's size `before` and
+  `after`, and the retro sums it.
+- Runs in every gear that has a review.
+
 ## 0.4.0
 
 Nine epics, landed one per PR (#7–#15) onto a single v0.4 branch. The flow ran, and it
