@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased
+
+### A stage that makes the change smaller — `/trim`
+
+`/tidy` judges the shape of the code a ticket leaves, by the four rules of Simple
+Design, as structural changes. Nothing judged the **size of the change itself**: a
+diff can pass every rule and still carry a drive-by rename, a parameter nobody
+passes, a helper the repo already had, a new file where an edit would do.
+
+- **New `/trim`**, after `/review` and before `/tidy`, on the same fixed point. It reads
+  every file the diff created or modified against the ticket's ACs and the plan's SIs,
+  and proposes cuts by four criteria, in order: **trace** (a hunk no SI or AC answers
+  for — incidental, or unrequested behavior), **reuse** (new code re-implementing a
+  primitive the repo has, cited at `file:line`), **footprint** (a file, layer or
+  interface the change did not need), **locality** (one behavior spread over more
+  files than it needs).
+- It only subtracts or substitutes with existing code. It runs after the review, so it
+  never adds code nobody reviewed; shaping what is left stays `/tidy`'s job.
+- Cuts are `structural` or `behavioral`. A behavioral cut removes behavior no AC asked
+  for, and may delete only the tests that exist exclusively for it; a test that traces
+  to an AC is never touched. Every cut is applied only if the user picks it, one at a
+  time, with the suite green after each; the behavioral ones are listed so any of them
+  can come back as a ticket.
+- `.scratch/<feature>/trim/<NN>-<slug>.md` records the diff's size `before` and
+  `after`, and the retro sums them.
+- Runs in every gear that has a review.
+
 ## 0.4.0
 
 Nine epics, landed one per PR (#7–#15) onto a single v0.4 branch. The flow ran, and it

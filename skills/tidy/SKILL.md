@@ -21,6 +21,8 @@ Kent Beck's four rules of Simple Design, as Robert C. Martin sets them out in *C
 ## Scope: what this ticket changed
 Only the code in the ticket's diff (`git diff <fixed-point>...HEAD`), the same fixed point `/review` used. Tidying code the ticket did not touch is a different change, with a different reviewer and a different risk. Note it as a candidate for later, and leave it.
 
+If `/trim` ran, the same fixed point gives the diff it left: tidy that. Trimming first means no tidying is spent on code a cut would remove.
+
 ## 1. Propose
 Walk the diff rule by rule, 2 → 3 → 4, and propose each tidying with:
 - **the rule** it serves, and for rule 2 the smell it removes (from the `code-smells` and `clean-code` skills);
