@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.1
 
 ### A stage that makes the change smaller — `/trim`
 
