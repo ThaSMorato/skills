@@ -62,6 +62,8 @@ Then the body:
 
 1. **Act now** — vulnerable, deprecated, or license-incompatible, ranked by severity, each with the advisory or evidence and the specific action.
 2. **Worth planning** — outdated by a major version, unmaintained by the signals above, or a maintenance burden.
+
+For every item in these two sections, measure its **blast radius** in this project: how many files import it (a read-only grep of imports, or `docs/analysis/dependency-graph.md` when present), and whether that use is **encapsulated** (one adapter module wraps it and everything else calls the adapter) or **spread** (imported directly across the codebase). Write it as `imported by <n> files · encapsulated in <path>` or `imported by <n> files · spread`. It decides the action: replacing an encapsulated dependency is a change to one adapter; replacing a spread one is an expand / migrate / contract sequence of tickets. For a transitive dependency, measure the direct one that pulls it in.
 3. **Appendix: inventory** — the full table, for lookup.
 
 A row-per-dependency table with hundreds of rows and no ranking is unreadable at real scale, and it recreates in the reader exactly the problem the audit was meant to solve.

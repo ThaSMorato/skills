@@ -7,6 +7,21 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### `/analyze` checks what it delivered (epic 7)
+
+- **The fan-out is checked on disk.** After the per-component deep dives, `/analyze`
+  compares the components chosen with the files written, re-dispatches the missing ones
+  once, and lists what is still missing, with the components not analyzed by choice and
+  every `coverage: partial`. An agent that failed used to leave a silent gap.
+- **New `templates/component-analysis.md`**, which the `component-analyzer` fills
+  (it had no template). Business rules carry a **confidence**: `explicit` in code,
+  `tested` by a cited test, or `inferred`; a FDD built on an inferred rule knows to
+  confirm it. Plus exposed contracts, the tests that exercise the component wherever
+  they live (and the contract each fake assumes), and countable frontmatter.
+- **`dependency-auditor` measures blast radius**: for each item to act on or plan, how
+  many files import it and whether one adapter encapsulates it or the use is spread —
+  which decides between a one-adapter change and an expand / migrate / contract sequence.
+
 ### Altitude in `/tidy`, and `/tidy` on a path (epic 8)
 
 - **New smell `mixed-altitude`**: a body that interleaves intent, domain calls and raw
