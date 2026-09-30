@@ -42,6 +42,13 @@ For each chosen tidying, in rule order:
 
 Structural changes go in their own commit, separate from the behavioral work, so each can be reviewed and reverted on its own. Version control remains the user's call; say which commits you suggest.
 
+## 3. Review what the tidying changed
+Green tests prove the behavior the tests cover; they do not prove the code got better, and this stage runs **after** `/review`, so nothing else will read it. Take the diff of the applied tidyings alone (from the commit before the first one to `HEAD`) and dispatch two review agents on it, in parallel, the way `/review` dispatches them:
+- **`review-spec`**, told that the change claims to be **structural**: any behavior it finds changed is a finding.
+- **`review-quality`**: a tidying that introduced a smell, or traded one smell for another, is a finding.
+
+Drop findings without a rule and a failure scenario, as `/review`'s synthesis does. For each finding that stands, revert the tidying it points at and record why. A tidying that survives its own review is done.
+
 ## Output
 Write `.scratch/<feature-slug>/tidy/<NN>-<slug>.md`:
 
@@ -52,8 +59,9 @@ slug: <NN>-<slug>
 fixed_point: <ref>
 proposed: {expression: <n>, duplication: <n>, size: <n>}
 applied: <n>
-reverted: <n — tidyings that needed a test change or turned the suite red>
+reverted: <n — tidyings that needed a test change, turned the suite red, or failed step 3's review>
+review_findings: <n — findings step 3's review raised and kept>
 ---
 ```
 
-Then each proposal with its rule, evidence and outcome (`applied`, `declined`, `reverted` and why), and the out-of-scope candidates as notes. `/retro` reads it: many `reverted` means the proposals were not really structural.
+Then each proposal with its rule, evidence and outcome (`applied`, `declined`, `reverted` and why), and the out-of-scope candidates as notes. `/retro` reads it: many `reverted`, or any `review_findings`, means the proposals were not really structural.

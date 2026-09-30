@@ -7,6 +7,27 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### Review rules for the failures nobody sees (epic 3A)
+
+- **`code-smells` — three new rules.** `swallowed-error` (empty catch, log and continue,
+  silent default, retries that give up quietly, over-broad catch, an unhandled promise,
+  and the question to ask of every catch: *what would this hide?*); `unenforced-invariant`
+  (a rule the domain relies on that the type lets be broken); `comment-contradicts-code`.
+  `review-quality` reads them through the catalog; `clean-code` points at the first.
+- **`review-tests` checks error paths.** Every error branch the diff adds is driven by a
+  test; an untested catch is where a swallowed error hides.
+- **`security` — third-party integrations.** Four rules: unverified webhooks (signature
+  over raw bytes, constant-time compare, timestamp and replay), OAuth/OIDC flows (`state`,
+  PKCE, exact `redirect_uri`, ID-token checks), JWT validation (server-fixed algorithm,
+  `exp`, `iss`, `aud`), and third-party scripts without subresource integrity.
+- **`/tidy` reviews its own diff.** It runs after `/review`, so nothing else read the
+  tidying commit, and it approved itself on green tests. Now `review-spec` (told the change
+  claims to be structural) and `review-quality` read the tidying diff alone; a kept finding
+  reverts the tidying. Counted as `review_findings`; the retro sums it.
+- **`scripts/skill-rules.test.mjs`.** In every router skill (`code-smells`, `security`,
+  `architecture`, `data-access`), each `rules/*.md` a row cites must exist, and each rule
+  file must be cited by a row; a missing or orphaned rule used to fail silently.
+
 ### Plans are read from the outside, and decisions are weighed (epic 4)
 
 - **`PM-N` — pre-mortem in `/plan-validate`.** Assume the plan shipped exactly as
