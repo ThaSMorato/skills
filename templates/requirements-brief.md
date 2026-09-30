@@ -16,7 +16,8 @@ An unmarked one is a validation finding (AS-N).
 - **Level:** product | module | feature
 - **Date:** <YYYY-MM-DD>
 - **Author(s):** <who>
-- **Status:** draft | aligned
+- **Status:** draft | aligned | early-exit — `early-exit` when the user stopped before the gate; the gaps are in Open questions
+- **Glossary at close:** <terms created / renamed in the last two answers — e.g. `0 / 0`>
 
 ## Problem (required)
 > The concrete pain that motivates this — the problem, not the solution ("too many requests take the system down", not "build a rate limiter").
@@ -45,6 +46,12 @@ An unmarked one is a validation finding (AS-N).
 > Source it from `docs/analysis/system-profile.md` when it exists, and confirm each with the user.
 
 | What | Why it can't change | Evidence |
+|---|---|---|
+
+## Assumptions challenged (optional)
+> The Contrarian and Simplifier questions, and any ontological one, with what they changed.
+
+| Assumption | Challenge | Resolution |
 |---|---|---|
 
 ## Recorded decisions (optional)

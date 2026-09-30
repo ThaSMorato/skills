@@ -7,6 +7,24 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### The interview aims, counts convergence, and challenges once (epic 6)
+
+The interview's gate said when to stop (every required section filled), not where to aim
+next or whether the conversation was converging.
+
+- **Every question names the weakest required section** of the brief it targets, and why.
+- **Convergence is counted in the glossary**: each answer reports how many `CONTEXT.md`
+  terms it created and renamed. Two answers in a row that change no load-bearing term,
+  plus the gate, is the signal. No weighted "ambiguity score": that would be a number the
+  model judges, dressed as a measurement.
+- **Two challenges, once each**: the Contrarian (*what if the opposite were true?*) once
+  the problem and goals are drafted, and the Simplifier (*the smallest version worth
+  having*) before scope, which feeds the gear. Two answers that move no section trigger
+  the ontological question (*what is this, really?*). Recorded in a new **Assumptions
+  challenged** table.
+- **Early exit is recorded**: `Status: early-exit`, the gaps in Open questions, and the
+  `prd-writer` turns them into `> Needs Input:` instead of filling them.
+
 ### Debt the reviews saw, gathered (epic 9)
 
 Technical debt was detected in four places and gathered in none. The clearest case: a
