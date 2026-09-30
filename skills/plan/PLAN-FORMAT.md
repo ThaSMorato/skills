@@ -19,7 +19,7 @@ kind: plan
 slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 design: .scratch/<feature-slug>/design/<NN>-<slug>.md
-type: behavioral | structural
+type: behavioral | structural | bugfix
 gear: full | feature | small
 sis_planned: <number of SIs below>
 revision: <1 when first written; +1 every time the plan is revised after a dirty validation>
@@ -71,6 +71,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 - **The plan encodes the node map.** Modules, interfaces and seams come from the map; a plan that invents one has diverged from the design contract.
 - **Prefactoring SIs lead.** Reshape first, then build on the easy shape. A prefactoring SI names the AC it makes easy (`enables AC-2`) in place of an AC it owns.
 - **An SI has a floor.** It changes something observable at its seam and owns at least one AC. "Write the test for X" and "change the value" are steps of an SI, not SIs. If the plan has more SIs than the ticket has ACs, check that each one clears the floor before you present it.
+- **A bugfix plan starts from the diagnosis.** For `type: bugfix`: the ticket's Source is a `/diagnose` file with `status: cause-found`. The first SI writes the pinned and flipped tests at **every level** the diagnosis lists (`levels`), and the flipped tests are its red step; the fix is the green. The flipped tests are sealed: no later SI edits them.
 - **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
 - **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them — the final verification runs exactly these.
 - **Mark the decisions the sources do not give.** A threshold, a failure behavior or a visibility rule that the ticket, node map and FDD are silent on is written with `> Assumed:` under the SI that depends on it (the `asking` skill §4 and §6). Facts are not assumptions: if the repo can answer it, look it up.

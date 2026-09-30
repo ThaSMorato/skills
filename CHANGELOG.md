@@ -7,6 +7,31 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### A stage for bugs — `/diagnose` (epic 1)
+
+The flow had no stage, gear or ticket type for a bug. A bug of unknown cause fell into
+the Direct gear, and the `/implement` fix loop capped attempts at three without any
+method, so the three were often spent on one guess.
+
+- **New `diagnose` skill and `/diagnose` command.** Reproduce and write down what is seen
+  before any theory; name **three hypotheses of different kinds** (the code, the
+  environment or data, the measurement itself); weigh evidence for and against by
+  strength, from a failing test down to intuition; try to refute the leader; run **one
+  discriminating probe** at a time (`git bisect` included); reduce. It ends with the cause
+  at `file:line` and the pinned and flipped tests at every level the bug crosses, with the
+  expected behavior taken from the spec, not from the intended fix. It does not fix.
+- **Sealed tests.** Once written and seen failing, the flipped tests are not edited until
+  the fix is green; correcting a wrong test is a separate step with its reason.
+- **`Type: bugfix`** on tickets and plans. Its Source is a diagnosis with
+  `status: cause-found`; its first SI writes the pinned and flipped tests per level.
+  `plan-validate` checks the diagnosis, every level (`UT`), and that no SI edits a flipped
+  test (`IC`).
+- **`/implement` uses the method from the second failed attempt**: each attempt names its
+  hypothesis and kind, three in a row of the same kind stop the loop, and the escalation
+  report takes the diagnosis's shape.
+- The retro reports bugs: bugfix tickets by gear, diagnoses found vs unresolved.
+- `/flow`: a bug of unknown cause starts at `/diagnose`, never at a fix.
+
 ### `/analyze` checks what it delivered (epic 7)
 
 - **The fan-out is checked on disk.** After the per-component deep dives, `/analyze`

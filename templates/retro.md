@@ -34,6 +34,8 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 
 **Ticket sets:** <per feature: tickets, seams, dispersion, and the categories `tickets-validate` fired>
 
+**Bugs:** <bugfix tickets by gear; from `.scratch/*/diagnoses/*.md`, how many were `cause-found` vs `unresolved`, and the median hypotheses and probes per diagnosis>
+
 **Trimming:** <summed `before` and `after` from `.scratch/*/trim/*.md` (files and lines), `proposed` by criterion, `applied`, `reverted`, `unrequested`; many `trace` proposals or unrequested notes point at scope creeping in at `/plan` or `/implement`>
 
 **Tidying:** <summed `proposed` / `applied` / `reverted` / `review_findings` from `.scratch/*/tidy/*.md`; many reverted, or review findings on tidy commits, means the proposals were not really structural>
