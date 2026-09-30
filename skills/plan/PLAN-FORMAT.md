@@ -36,6 +36,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 - **Description:** <what this vertical slice delivers>
 - **Technical actions:** <ordered steps; intent-level, not stale full paths>
 - **Tests:** <seam(s) + layer(s) to cover, per the `testing` skill — or `none — <reason>`>
+- **Mirror:** <optional — `path:line` rows from the node map's Conventions to mirror that this SI's code should look like>
 - **Dependencies:** <SI ids that must complete first, or `none`>
 - **Acceptance criteria:** <observable outcome(s), each naming the ticket AC id it serves, e.g. "(AC-2)">
 
@@ -73,4 +74,4 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 - **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
 - **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them — the final verification runs exactly these.
 - **Mark the decisions the sources do not give.** A threshold, a failure behavior or a visibility rule that the ticket, node map and FDD are silent on is written with `> Assumed:` under the SI that depends on it (the `asking` skill §4 and §6). Facts are not assumptions: if the repo can answer it, look it up.
-- **No stale detail.** Prefer intent over hard-coded file paths and code snippets; the exception is a decision-encoding snippet trimmed to the decision.
+- **No stale detail.** Prefer intent over hard-coded file paths and code snippets; the exception is a decision-encoding snippet trimmed to the decision. A `Mirror:` pointer is not stale detail: it names existing code to imitate, copied from the node map, and carries no snippet.
