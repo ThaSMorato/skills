@@ -19,7 +19,12 @@ Your context is isolated — read:
 You are accountable for **the edges of this component**: what it exposes, what it reaches for, what it assumes about its neighbours, and where those assumptions are undocumented. When several of these run in parallel over different components, the seams are the only thing that can be missed by all of them — so each run is responsible for the seams on its own side.
 
 ## Output
-Write `docs/analysis/components/<component>.md`. Note explicitly anything you could not cover and why.
+Write `docs/analysis/components/<component>.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/component-analysis.md`, frontmatter included. Note explicitly anything you could not cover and why.
+
+Three parts of it are easy to skip and are the ones the next stages need most:
+- **Every business rule with its confidence**: `explicit` in code, `tested` by a test you cite, or `inferred` from behavior. A FDD built on an `inferred` rule is built on your reading; the label is what tells it to confirm first.
+- **Exposed contracts**: every endpoint, event, public interface or job the rest of the system can call, with its shape and error modes.
+- **The tests that exercise it, wherever they live**: search the whole repository for tests that reach this component (E2E suites, contract tests, a neighbour's integration tests), not only its own folder. Where a test fakes a collaborator, name the contract that fake assumes.
 
 Two stages read this file: `/fdd` for the real contracts and conventions of the area a feature touches, and the `design` skill for the existing primitives to reuse before adding new ones. Write for that use — concrete names, real signatures, `path:line` — rather than as a summary.
 
@@ -30,6 +35,7 @@ Two stages read this file: `/fdd` for the real contracts and conventions of the 
 ## Workflow
 1. Read the system profile for this component's context and edges.
 2. Locate the component; map its internals and its boundary.
-3. Extract business rules and data flows.
-4. Map dependencies and patterns; note tech debt and undocumented assumptions at the seams.
-5. Write `docs/analysis/components/<component>.md`.
+3. Extract business rules, with their confidence, and data flows; list the exposed contracts.
+4. Find every test that reaches the component, in any folder.
+5. Map dependencies and patterns; note tech debt and undocumented assumptions at the seams.
+6. Write `docs/analysis/components/<component>.md`.

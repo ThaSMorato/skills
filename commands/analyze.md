@@ -14,7 +14,9 @@ Otherwise, run in two passes — the global map first, then depth, because coupl
 
 This partition is safe only because step 1 ran first: each agent gets its slice **plus** the map, and is accountable for the seams on its own side.
 
+3. **Check the fan-out landed.** When they return, compare the components **chosen** with the files **on disk**: each must have `docs/analysis/components/<component>.md`, starting with its frontmatter. An agent that failed or truncated leaves nothing, and nothing says so. Re-dispatch the missing ones **once**, in a single message; whatever is still missing after that is listed, not retried again. Check the disk, not the agents' replies: a reply that says "done" is not a file.
+
 ## After it returns
-Show a short summary, and — first — **what was not covered**: paths sampled, skipped or truncated. A partial analysis reads exactly like a complete one, so the gaps are the part worth surfacing.
+Show a short summary, and — first — **what was not covered**: paths sampled, skipped or truncated; components chosen whose analysis is still missing after the re-dispatch; components discovered but not deep-analyzed, marked as such by choice; and every analysis whose frontmatter says `coverage: partial`. A partial analysis reads exactly like a complete one, so the gaps are the part worth surfacing.
 
 Then note what now consumes this: `/interview` (inherited constraints), `/prd`, `/hld` (the AS-IS), `/components` (metrics and cycles), `/boundaries` (divergence), `/guidelines` and `/generate-test-guide` (real conventions), and `/adr-identify --brownfield`. Each of those reads the profile **if it exists** and falls back to discovering on its own if it doesn't — this stage accelerates them, it is never a prerequisite.
