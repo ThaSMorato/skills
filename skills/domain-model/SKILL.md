@@ -10,7 +10,7 @@ As you design, actively sharpen the domain:
 - Invent edge-case scenarios to force precision on the boundaries between concepts.
 - Cross-reference the **codebase** and the **project's own documents** (`docs/`, prior ADRs, `docs/analysis/*`); if they contradict what was said, surface it.
 - Update `CONTEXT.md` inline the moment a term resolves — a pure glossary, with NO implementation detail.
-- Offer an ADR sparingly — only when all three are true (the 3-Es rule): **structural** (hard to reverse), **evident** (surprising without context), **stable** (a real trade-off). If any is missing, skip it.
+- Offer an ADR sparingly — only when all three are true (the 3-Es rule): **structural** (hard to reverse), **evident** (surprising without context), **stable** (a real trade-off). If any is missing, skip it. The inline ADR follows the ADR template's floor: at least two considered options, each with pros and cons; with only one, it stays `proposed` and asks for the alternative.
 
 ## Load-bearing terms get two descriptions
 A term is **load-bearing** when a later stage will act on it: it names a requirement, a component, an entity, or appears in an acceptance criterion. Those terms are worth defining twice, on **different axes**, so a definition that is wrong but internally consistent cannot cross the whole pipeline unnoticed.
