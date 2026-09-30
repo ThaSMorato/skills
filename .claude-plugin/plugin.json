@@ -44,6 +44,7 @@
     "./skills/architecture",
     "./skills/security",
     "./skills/data-access",
+    "./skills/ui",
     "./skills/generate-test-guide",
     "./skills/generate-stack-guide",
     "./skills/retro",

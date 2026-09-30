@@ -7,6 +7,28 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### Review lenses for contracts, docs and UI (epic 3B)
+
+The seven lenses were all written for server code, and none of them read the
+documentation or asked whether a published contract still held.
+
+- **Contract compatibility**, a new `architecture` rule read by `review-architecture`: a
+  published API, event, public interface or CLI changes only compatibly — removals and
+  renames, type changes, new required inputs, error shapes and observable behavior (Hyrum's
+  Law) break consumers. The fix is expand / migrate / contract, and the removal ticket
+  carries an AC of **zero remaining consumers** with its evidence (`/tickets`). This check
+  runs even without `docs/boundaries.md`.
+- **New `review-docs` lens**: documentation the diff made false — a README step, a required
+  env var missing from `.env.example`, a removed flag, a described default. Every finding
+  cites the doc line and the code line. The flow's own design docs stay with `review-spec`.
+- **New `ui` reference skill** (keyboard access, focus management, accessible names,
+  contrast, loading / empty / error states, layout shift and slow interactions) and a
+  **conditional `review-ui` lens**, dispatched only when the diff touches UI code and
+  recorded in `lenses_skipped` otherwise. It checks what the component library already
+  provides before flagging, and for shift and latency flags the pattern and says how to
+  measure.
+- `lenses_run` and `by_lens` gain `docs` and `ui`, so the retro measures both.
+
 ### The interview aims, counts convergence, and challenges once (epic 6)
 
 The interview's gate said when to stop (every required section filled), not where to aim

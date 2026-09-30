@@ -24,6 +24,7 @@ Load the `architecture` skill.
 3. **Direction.** Does the new edge point from a lower level to a higher one, or the reverse? A policy component reaching for a detail is the classic erosion, and it usually arrives one convenient import at a time.
 4. **Detail leaking into policy.** A framework type, an ORM row, an HTTP object or a driver type appearing inside a component marked `policy`.
 5. **Plug points bypassed.** Code reaching around an interface to a concrete implementation the boundary contract deferred.
+6. **Contract compatibility.** Every published contract the diff touches (an API, an event or message schema, a public interface another component or package uses, a CLI's flags or output; the FDD's Public contracts names the feature's own) changes only compatibly, per the `architecture` skill's `contract-compatibility.md`. A removal needs its expand and migrate steps done, and evidence of zero remaining consumers. **This check runs even without `docs/boundaries.md`**: it judges against what consumers depend on, not against the edge contract.
 
 ## Calibration
 These are directions, not scores. A working system violates several structural ideals at once, and listing them all is noise. Report what **this change** made worse, or what it entrenches — not the pre-existing state, unless the diff is what turns it from tolerable into load-bearing.
@@ -33,7 +34,7 @@ Report findings, most-severe first:
 
 | Severity | Means |
 |---|---|
-| **critical** | a new dependency cycle, or an edge the contract forbids |
+| **critical** | a new dependency cycle, an edge the contract forbids, or a published contract broken with no expand/migrate |
 | **high** | detail type inside a policy component; a plug point bypassed |
 | **medium** | an edge that is allowed but pushes a component further off the Main Sequence |
 | **low** | structural drift worth noting, with no rule broken |
