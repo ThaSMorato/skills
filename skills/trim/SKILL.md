@@ -14,7 +14,7 @@ It runs before `/review` so the review reads the smaller diff and spends no lens
 - **The repository outside the diff** is read, never edited: that is where the reuse criterion looks.
 
 ## Behavior does not change
-Every cut is **structural**: the behavior after it is identical, and **existing tests are not modified**. That is the contract of this stage, and the tests are how it is checked.
+Every cut is **structural**: the behavior after it is identical, and **existing tests are not modified**. That is the contract of this stage, and the tests are how it is checked. The four things that break "pure" refactors most often (order, errors and side effects, observability, type breadth) are listed in the `tidy` skill's Propose step; check them for every cut.
 
 It may rewrite code in the diff to make it smaller (fold a new file into one the ticket already touches, inline a layer, call an existing primitive), but it **never adds an abstraction**: every applied cut leaves the diff smaller than it found it.
 

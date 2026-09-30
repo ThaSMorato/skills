@@ -7,6 +7,11 @@ Code smells are **labelled heuristics, not hard rules** — each is a judgement 
 
 Scan the table below and match what you see to a smell. Read the smell's rule file **only when a row matches** — each holds the full tell, why it hurts, and the fix. Group by family: the family tells you the kind of pressure the smell puts on the code.
 
+## Functions — read at more than one level
+| Smell | Tell | Rule |
+|---|---|---|
+| Mixed Altitude | intent, domain calls and raw mechanics interleaved in one body | `rules/mixed-altitude.md` |
+
 ## Bloaters — grew beyond what they should
 | Smell | Tell | Rule |
 |---|---|---|

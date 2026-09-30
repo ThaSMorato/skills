@@ -7,6 +7,25 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### Altitude in `/tidy`, and `/tidy` on a path (epic 8)
+
+- **New smell `mixed-altitude`**: a body that interleaves intent, domain calls and raw
+  mechanics. Tag each line by band; extract a mechanics block into a leaf named for what
+  it does — and never extract lines already at the caller's altitude (that is a lazy
+  layer, not a fix). `clean-code`'s Stepdown line points at it.
+- **`/tidy` reads with it.** Rule 2 walks each function in scope with the altitude lens;
+  rule 3 collapses the whole duplicated unit, not the easy half, and the two are separate
+  checks; rule 4 removes guards an extraction left dead. A touched function is read whole.
+- **An extracted helper is re-read** under rules 2 and 3 before the suite runs; a helper
+  that is itself mixed moves the mess down a level.
+- **"Why it is structural" names four checks**: order, errors and side effects,
+  observability (logs, metrics, spans), type breadth.
+- **`/tidy <path>`**: existing code with no ticket, when tests cover it. The covering tests
+  are named and run green first; code with none cannot be tidied. Output goes to
+  `.scratch/standalone/tidy/`. `/flow`'s Direct gear points at it for a cleanup.
+- The `tidy` description no longer summarizes its workflow (epic 10's anatomy rule) and
+  names its exclusion.
+
 ### How the repo already does it, before the design (epic 2)
 
 `/design` read the repository with a grep in the same context that was designing, which
