@@ -66,7 +66,8 @@ by side — or `first measured retro` when none has a Measurements section>
 
 ## Review findings, by lens (optional)
 > Beyond the counts in Measurements: whether any class of finding repeats across tickets. A repeating finding is a standard that should move into a stack guide or a
-> rule — the repetition is the signal, and one occurrence is not.
+> rule — the repetition is the signal, and one occurrence is not. Before proposing the move, run it through the promotion filter
+> (`skills/retro/promotion-filter.md`); one that fails stays here as a finding, with the question it failed.
 
 ## What to change in the process (required)
 > The actionable part. Each item names the artifact that motivates it and the file it would change —

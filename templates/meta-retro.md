@@ -13,6 +13,7 @@ analyzed_at: <YYYY-MM-DD>
 segments: <n>
 owner_turns: <n read>
 findings: {flow: <n>, project: <n>}
+promotable: <n project findings that passed the promotion filter>
 repeated: <n findings seen in more than one segment>
 ---
 
@@ -32,10 +33,11 @@ repeated: <n findings seen in more than one segment>
 |---|---|---|---|
 
 ## Project findings (required)
-> Specific to this codebase or this owner. Same columns. These become a skill or a guide in this project.
+> Specific to this codebase or this owner. Same columns, plus the promotion filter (`skills/retro/promotion-filter.md`):
+> `passes`, or the question it failed. Only a finding that passes is proposed as a skill or a guide in this project.
 
-| Pattern | Owner turn | Stage | Change |
-|---|---|---|---|
+| Pattern | Owner turn | Stage | Change | Filter |
+|---|---|---|---|---|
 
 ## What the conversation couldn't tell me (required)
 > Segments too thin to judge, tool results that were dropped by design, anything a reader might

@@ -7,6 +7,21 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### A filter before a finding becomes a skill or a guide (epic 11)
+
+`/session-analyze` tags findings `project` (they become a skill or guide in the project),
+and `/retro` moves repeated findings into stack guides and rules. Nothing filtered what
+deserved it; a generic lesson became a generic skill, loaded on every run and competing
+with the good ones.
+
+- **New `skills/retro/promotion-filter.md`**, read by `/retro` and `/session-analyze`. Three
+  questions, all must pass: not findable in five minutes, specific to this codebase, cost
+  real effort. A vague trigger fails too. A finding that fails stays in the report, marked
+  with the question it failed; it is just not proposed as a skill or guide. The owner still
+  decides what is written.
+- `templates/meta-retro.md` gets a **Filter** column on project findings and a `promotable`
+  count; `templates/retro.md` applies the filter before proposing a guide or rule.
+
 ### Review rules for the failures nobody sees (epic 3A)
 
 - **`code-smells` — three new rules.** `swallowed-error` (empty catch, log and continue,

@@ -46,6 +46,8 @@ A finding that is really a **defect** is neither: it belongs in a ticket. Say so
 ## What repetition means
 One occurrence is an incident. The same finding across several tickets is a **standard that should move**: a review finding that keeps recurring belongs in a stack guide or a rule; a validation category that keeps firing belongs earlier in the flow, in the stage that produces what it catches. Only call something a pattern when you can point at more than one instance — and name them.
 
+Before proposing that a pattern move into a stack guide, a rule or a skill, run it through `promotion-filter.md`: it must not be findable in five minutes, must be specific to this codebase, and must have cost real effort. One that fails stays in the retro as a finding, with the question it failed; it is not proposed as a guide.
+
 ## This is a log, not a state file
 `/flow` derives state from artifacts and refuses documents that must be maintained. These two outputs do not compete with that: they are **append-only history**, nothing derives current state from them, and a stale entry is still a true record of what was observed then. Never edit or remove an earlier entry; if something changed, add an entry that says so.
 
