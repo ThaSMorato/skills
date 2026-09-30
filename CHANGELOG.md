@@ -7,6 +7,23 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### The implement loop keeps what it learns, and says what it did not check (epic 5)
+
+- **`## Learned` in `progress.md`.** When an SI finds out something about the codebase
+  that the next SI would otherwise rediscover (the command that really runs the tests,
+  a fixture that must be reset), it adds one line. The resume check reads it, since a
+  context fresh from `/compact` has no other way to know.
+- **Type-check per SI**, next to the SI's tests, instead of only at the end. A type
+  error found five SIs later is far from the change that caused it.
+- **No suppression to get green.** New `eslint-disable`, `@ts-ignore`, `# noqa`,
+  `rubocop:disable`, skipped or focused tests are a bypass, like a weakened test. One
+  that is genuinely right needs the user's OK and a reason in the SI's notes.
+- **`## Not verified`** at the final verification: every AC or deliverable that no
+  command in the run checked, with what would. Counted as `unverified` in the
+  frontmatter; the retro reports it per ticket.
+- **`tdd` no longer contradicts `implement`.** It said refactoring belongs to the review
+  stage; it now says refactor only on green, which is what `implement` does per SI.
+
 ### Testing and skill-anatomy material the plugin was missing (epic 10)
 
 Two global documents outside the plugin were still loaded in every session: a testing
