@@ -14,12 +14,12 @@ Elicit requirements for: $ARGUMENTS
 - Read `docs/prd.md` and `docs/hld.md` if they exist. When the argument names a **feature inside an existing product**, the problem, the users and the goals are already settled upstream — **inherit them and say so**, then elicit only what is new. Re-eliciting produces a brief that contradicts the document above it.
 
 ## The gate
-The template marks six sections `(required)`: Problem, Users and JTBD, Goals and value, Success metrics, Scope, Open questions. The gate is **countable**: every required section filled, and everything still unsettled written down in Open questions. Then the user confirms the shared understanding.
+The template marks six sections `(required)`: Problem, Users and JTBD, Goals and value, Success metrics, Scope, Open questions. The gate is **countable**: every required section filled, and everything still unsettled written down in Open questions. Then the user confirms the shared understanding. Along the way, each question names the weakest required section it targets, and each answer reports what it did to the glossary (terms created / renamed); two answers in a row that change no load-bearing term is the convergence signal. If the user stops early, persist anyway with `Status: early-exit`.
 
 ## Persist
 Once the gate passes, write the artifacts the `/prd` agent will consume — its isolated context cannot see this conversation:
 
-- `docs/requirements-brief.md` — fill `${CLAUDE_PLUGIN_ROOT}/templates/requirements-brief.md`, pruning and renumbering the optional sections that don't apply. Set `Status: aligned`.
+- `docs/requirements-brief.md` — fill `${CLAUDE_PLUGIN_ROOT}/templates/requirements-brief.md`, pruning and renumbering the optional sections that don't apply. Set `Status: aligned`, or `early-exit` when the user stopped before the gate.
 - `CONTEXT.md` — the glossary, including the two-axis definitions for load-bearing terms.
 - `docs/adr/NNNN-*.md` — any ADRs emitted inline during the interview. Allocate numbers per the rule in `/adr-generate`: the next free number across both `docs/adr/*.md` and `docs/adr/potential/`, four digits.
 

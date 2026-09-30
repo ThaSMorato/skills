@@ -11,7 +11,7 @@ Produce one PRD at `docs/prd.md`, synthesized from the requirements brief. You d
 
 ## Inputs
 Your context is isolated — you cannot see any conversation. Read these:
-- `docs/requirements-brief.md` — the aligned requirements (your primary source).
+- `docs/requirements-brief.md` — the aligned requirements (your primary source). If its Status is `early-exit`, the interview stopped before the gate: every gap listed in its Open questions becomes a `> Needs Input:` in the PRD, never a value you fill in.
 - `CONTEXT.md` (if present) — the glossary; use its canonical terms and carry the load-bearing terms' two-axis definitions through unchanged.
 - `docs/analysis/system-profile.md` (if present) — brownfield facts: what exists and what cannot change.
 - `${CLAUDE_PLUGIN_ROOT}/templates/prd.md` — the skeleton you fill.
