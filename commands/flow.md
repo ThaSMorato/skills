@@ -67,7 +67,7 @@ Announce, in this order: **where the project stands**, **what is waiting for you
 | **Full** | a new product, or an epic whose structure is unknown | everything, phase 1 → phase 2 |
 | **Feature** | a feature inside a product that already has a PRD, HLD and component map | `/fdd` → `/tickets` → the per-ticket loop |
 | **Small** | one seam, no architectural question, fits in a ticket or two | straight to `/design` → `/plan` → `/plan-validate` → `/implement` → `/review`, no FDD |
-| **Direct** | a fix or a change whose shape is already obvious | no stage at all — say so and let the user just do it |
+| **Direct** | a fix or a change whose shape is already obvious | no stage at all — say so and let the user just do it. A cleanup of existing, tested code is `/tidy <path>` |
 
 **Say which gear you chose and why, and confirm it** before running anything. Choosing a gear is a decision the user should get to overrule in either direction — and it is far cheaper to move up a gear after discovering a real design question than to unwind a week of documents produced for a small task.
 

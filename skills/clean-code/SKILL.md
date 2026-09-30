@@ -11,7 +11,7 @@ The standard a change is held to when the repo's own `docs/guidelines.md` is sil
 - Names are pronounceable and searchable; no cryptic abbreviations, no encodings.
 
 ## Functions
-- Small; do **one thing** at a single level of abstraction (the Stepdown Rule: each function is followed by those one level below it).
+- Small; do **one thing** at a single level of abstraction (the Stepdown Rule: each function is followed by those one level below it). Every line of a body reads in one band — intent, domain operations, or mechanics; a mechanics block among domain calls is `code-smells` → `mixed-altitude`.
 - Few arguments (aim ≤3); no boolean flag parameter — split it into two functions.
 - **Command–Query Separation:** a function either *does* something or *answers* something, never both.
 - No hidden side effects — the name tells the whole story.
