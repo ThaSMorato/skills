@@ -19,7 +19,7 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 
 ## Measurements (required)
 > Numbers only, and only from frontmatter: the ticket's `Gear` and acceptance criteria, `plan.md`'s
-> `sis_planned` and `revision`, `progress.md`'s `sis_done` and `escalations`, `validation.md`'s `run`
+> `sis_planned` and `revision`, `progress.md`'s `sis_done`, `escalations` and `unverified`, `validation.md`'s `run`
 > and `fired`, the review's `findings`, `by_severity`, `by_lens`, `verdicts` and `refuted_by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams` and `dispersion`. Nothing here is estimated. A ticket
 > whose artifacts lack these fields predates them: list it as `not measured — pre-v0.4 frontmatter`
 > rather than reconstructing its numbers from prose.
@@ -27,8 +27,8 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 > This section is the series. Keep its shape identical between retros, so the next one can put its
 > numbers beside this one's.
 
-| Ticket | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Review findings |
-|---|---|---|---|---|---|---|---|---|
+| Ticket | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Unverified | Review findings |
+|---|---|---|---|---|---|---|---|---|---|
 
 **Totals by gear:** <per gear: tickets, median ACs, median SIs, SIs per AC, median review findings>
 
