@@ -22,7 +22,7 @@ The standard a change is held to when the repo's own `docs/guidelines.md` is sil
 
 ## Errors
 - Use exceptions, not error codes; put context in the message.
-- Never swallow an error; fail fast. Don't return or accept `null` — use an empty collection, an optional, or a special-case object.
+- Never swallow an error; fail fast (the shapes it takes, and the question to ask of every catch: `code-smells` → `swallowed-error`). Don't return or accept `null` — use an empty collection, an optional, or a special-case object.
 
 ## Design
 - **Single Responsibility:** one reason to change per module; keep them small and cohesive.
