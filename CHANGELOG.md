@@ -1,11 +1,13 @@
 # Changelog
 
-## Unreleased (0.5)
+## 0.5.0
 
-The owner's global `~/.claude` was emptied: collections gathered from other skill repos
-were archived, and this plugin is now the only suite loaded. What it does not cover,
-nothing covers. Each epic here absorbs something those collections did better,
-rewritten inside the suite.
+Eleven epics, landed one per PR (#17–#28) onto a single v0.5 branch. The owner's
+global `~/.claude` was emptied: collections gathered from other skill repos were
+archived, and this plugin is now the only suite loaded, so what it does not cover,
+nothing covers. Each epic absorbs something those collections did better, rewritten
+inside the suite. New stages: `/diagnose`. New lenses: `review-docs`, `review-ui`. New
+agent: `pattern-scout`. New reference skill: `ui`. New ticket type: `bugfix`.
 
 ### Review lenses for contracts, docs and UI (epic 3B)
 
