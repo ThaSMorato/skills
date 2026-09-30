@@ -1,5 +1,45 @@
 # Changelog
 
+## Unreleased (0.5)
+
+The owner's global `~/.claude` was emptied: collections gathered from other skill repos
+were archived, and this plugin is now the only suite loaded. What it does not cover,
+nothing covers. Each epic here absorbs something those collections did better,
+rewritten inside the suite.
+
+### Testing and skill-anatomy material the plugin was missing (epic 10)
+
+Two global documents outside the plugin were still loaded in every session: a testing
+guide with backend and frontend pattern files, and a skill anatomy. The plugin's own
+`testing` skill covered the core, but not the recipes; its anatomy disagreed on five
+rules. The global ones can go now.
+
+- **`testing/fundamentals.md`** — controlling time (a fixed date, the real clock
+  always restored); anti-patterns: conditional logic in a test, testing the framework,
+  magic values; scenario grouping.
+- **`testing/backend-patterns.md`** — wire unit tests by hand, no DI container; fakes
+  mirror the real contract, including not-found; factory defaults are valid and each
+  call independent; void success asserts the side effect; new sections on service
+  fakes (stateful, no-op, literal), domain event subscribers (poll, never sleep), and
+  database isolation for integration/E2E (a schema per suite, dropped at the end).
+- **`testing/frontend-patterns.md`** — the static layer of the Trophy; full mount over
+  shallow, with what to test and what not to; asserting absence with `query*`;
+  `userEvent` over `fireEvent`; network handlers reset after each test; the three
+  states of anything that loads; no side effect inside a retrying wait; new sections on
+  hooks, stores, pages and routes, automated accessibility checks, anti-patterns.
+- **`testing/playwright.md`** — visual comparisons.
+- **New `testing/contract.md`** — consumer-driven contract testing, which the plugin did
+  not mention anywhere: how it works, when it pays off, and its rules.
+- **`tdd` — bugs: pin, then flip.** Tests green because of the bug, then tests red with
+  the correct behavior, at every level the bug crosses; the pinned tests are removed
+  only after the owner has seen them.
+- **`docs/anatomy/skill-anatomy.md`** — a description does not summarize the workflow,
+  and names its exclusion; token-conscious; inline under ~50 lines, a sibling file over
+  ~100; a process skill has an observable exit. The folder path now matches the repo
+  (`skills/<name>/`).
+- Not copied: the global guide's non-deterministic faker defaults, which contradicted
+  its own determinism rule.
+
 ## 0.4.1
 
 ### A stage that makes the change smaller — `/trim`

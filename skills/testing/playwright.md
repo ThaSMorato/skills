@@ -118,6 +118,15 @@ projects: [
 - **Setup project vs `globalSetup`** — `globalSetup` is a plain function running once outside the runner (good for infra), with no trace/fixtures/report. A setup **project** is a real test — it has trace, retry, fixtures, and shows in the report — preferred for login/seed because it's observable when it fails.
 - **Config that fights flakiness** — `use.baseURL` (relative `goto`, swap environments without editing tests); `retries: 2` on CI + `trace: 'on-first-retry'`; `fullyParallel: true` (pairs with per-worker auth when tests mutate state); `webServer` to boot the app and wait for its port.
 
+## Visual comparisons
+
+`await expect(page.locator('.chart')).toHaveScreenshot('chart.png', { maxDiffPixels: 100 })` compares against an approved baseline.
+
+- **Compare an element, not the whole page** — narrower, less brittle.
+- **Run in one fixed environment** (a container image in CI); a different OS or browser version produces pixel differences that are not regressions.
+- **Hide or freeze what changes on its own** — timestamps, animations, random content — or it fails on every run.
+- **Update baselines only on purpose** (`--update-snapshots`), and review the diff like code. A baseline refreshed automatically approves whatever broke.
+
 ## Trace Viewer & debugging
 
 When an E2E test fails — especially on CI where you can't see the screen — the **Trace Viewer** is the answer: a step-by-step record with before/after DOM snapshots, screenshots, network, and console for each action. You go back in time and see exactly what the page looked like before the click that broke.

@@ -69,6 +69,23 @@ Non-determinism is a virulent infection — one flaky test erodes trust in the w
 | filesystem | paths differ across OS | in-memory abstractions |
 | shared mutable state | cascading, order-dependent failures | each test builds and tears down its own world |
 
+**Controlling time.** When logic depends on the date (expiry, periods, "today"), freeze the clock at a **specific** date — never rely on "now" being a particular day — and **always restore the real clock** in teardown. A fake clock that leaks into the next test is shared mutable state. The idea is the same in every stack: fake timers, an injected `Clock`, a freeze-time helper.
+
+```
+beforeEach(() => { useFakeClock(); setNow("2024-01-15T10:00:00") })
+afterEach(()  => { useRealClock() })        // always, even when the test fails
+```
+
+## Anti-patterns
+
+| Anti-pattern | Why it hurts | Fix |
+|---|---|---|
+| **Conditional logic in a test** | `if`/`for` in Act or Assert makes the test code that itself needs testing, and a branch that never runs passes silently | keep tests linear; one scenario per test, or a table-driven test whose rows are data |
+| **Testing the framework** | asserting that the ORM saves or the router routes proves nothing about your code | test only the behavior you wrote |
+| **Magic values** | a bare `42` hides why the test exists | name it, or build it through a factory override that says what it is about |
+
+Group by scenario (`describe('Success')` / `describe('Failure')`) and name each test after the behavior it expects (`it('should …')`); the file-naming convention is the project's, and belongs in its generated test guide.
+
 ## Tests are first-class code (living documentation)
 
 Test code is **not** a second-class citizen. It demands the same thought, design, and care as production code, because it evolves alongside production and, left dirty, rots faster.
