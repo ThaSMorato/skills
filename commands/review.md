@@ -37,7 +37,7 @@ Narrow agents trade precision for recall, and the two costs land here:
 
 - **Duplicates.** A long function is Long Function to the quality lens and a missed convention to the standards lens. Group findings by `file:line`, merge the ones that are the same finding, and keep the clearest naming.
 - **Primed findings.** Each agent is looking for its own subject and will produce plausible material on demand. **Drop any finding without a named rule and a concrete failure scenario** — that is the filter, and applying it is most of what this step does.
-- **Severity drift.** Each lens believes its own subject matters most. Re-rank across all of them on the shared scale, judging by consequence rather than by which agent reported it.
+- **Severity drift.** Each lens believes its own subject matters most. Re-rank across all of them on the shared scale, judging by consequence rather than by which agent reported it. **Lowering a lens's severity needs a reason in the finding:** a `- **Mitigated by:**` line naming what contains it (`file:line` of the guard, the constraint, the caller that never passes that value). With nothing to cite, the lens's severity stands. Findings about **data loss, security or money are never lowered** in synthesis; only the verifier's code check can refute them.
 
 ## 5. Persist
 Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md`, most-severe first. Give each one `file:line`, the rule it violates, the failure scenario, the fix, and a `- **Lenses:** <lens>, <lens>` line naming every lens that raised it; merged duplicates keep all their lenses. Record the fixed point, the lenses that ran, and the lenses that were skipped and why:

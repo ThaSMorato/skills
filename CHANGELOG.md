@@ -7,6 +7,23 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### Plans are read from the outside, and decisions are weighed (epic 4)
+
+- **`PM-N` — pre-mortem in `/plan-validate`.** Assume the plan shipped exactly as
+  written and failed; name the concrete input, state or sequence no SI handles (the
+  empty list, the retry after a partial write, two requests at once). Only inside the
+  ticket's scope, and **at most 3 per run**, ranked — a pre-mortem asked for failures
+  will always find some, and past three it invents them. Counted in `fired`.
+- **`AMB-N` quotes the text and states both readings.** Vague but with one sensible
+  build is not an ambiguity.
+- **Lowering a lens's severity in `/review` synthesis needs `Mitigated by:`** — the
+  guard, constraint or caller that contains it. Data loss, security and money are never
+  lowered there; only the verifier's code check refutes them.
+- **ADRs weigh at least two options**, each with pros and cons (now required, the
+  chosen option's cons included). With one, the ADR stays `proposed` and asks for the
+  rejected alternative. A hybrid nobody proposed is a question to the owner, not an
+  option. The same floor applies to inline ADRs from `/interview`.
+
 ### The implement loop keeps what it learns, and says what it did not check (epic 5)
 
 - **`## Learned` in `progress.md`.** When an SI finds out something about the codebase

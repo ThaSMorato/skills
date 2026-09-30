@@ -25,15 +25,17 @@ amends: []            # ADR ids this partially adjusts
 > The forces/criteria that matter (constraints, quality attributes).
 
 ## Considered Options (required)
-> The options evaluated.
+> The options evaluated — **at least two**. One option means the decision was described, not weighed:
+> leave the ADR `proposed` with a `> Needs Input:` for the rejected alternative. "Keep the current state"
+> counts when it was really on the table. A hybrid nobody proposed is a question to the owner, not an option.
 - Option A
 - Option B
 
 ## Decision Outcome (required)
 > The chosen option and the core justification ("Chosen because…").
 
-## Pros and Cons of the Options (optional)
-> Per option, the trade-offs.
+## Pros and Cons of the Options (required)
+> Per option, the trade-offs — the chosen one's cons included; Consequences has to own them.
 
 ## Consequences (required)
 > What becomes easier and harder as a result (positive and negative).
