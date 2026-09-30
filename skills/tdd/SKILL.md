@@ -25,7 +25,7 @@ A bug is fixed test-first too, in two moves:
 
 Do both at **every level the bug crosses**, from the E2E or integration test that shows the symptom down to the unit where the cause lives: a bug fixed only at the bottom can still escape through the path above it. The fix turns every flipped test green. The pinned tests, which now fail, are removed only after the owner has seen the fix and the tests together. They are the record of what was wrong, and deleting them is the owner's call.
 
-If a proposed fix arrives without its pinned and flipped tests, write them before touching the code.
+If a proposed fix arrives without its pinned and flipped tests, write them before touching the code. When the cause itself is not known, find it first with the `diagnose` skill: pinning a bug you have not located pins a guess.
 
 ## Rules of the loop
 - **Red before green.** Write the failing test first, then only enough code to pass it. No speculative features.

@@ -13,14 +13,16 @@ An unmarked one is a validation finding (AS-N).
 
 ## Metadata (required)
 - **Status:** ready | blocked | in progress | done
-- **Type:** behavioral | structural
+- **Type:** behavioral | structural | bugfix
 - **Gear:** full | feature | small — the gear `/flow` confirmed for this work; `full` when nobody chose one
-- **Source:** <docs/fdd/<feature>.md — the FDD this slice comes from; or `direct — <gear> gear, no FDD: <why>` when the flow deliberately skipped one>
+- **Source:** <docs/fdd/<feature>.md — the FDD this slice comes from; or `direct — <gear> gear, no FDD: <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
 - **Components touched:** <names from docs/components.md, or `unknown — no component map`>
 
 > **Type** is verifiable, not decorative. A **structural** ticket (prefactoring, expand/migrate/contract)
 > changes shape and **not behavior**: existing tests stay unchanged and stay green. A **behavioral**
-> ticket changes what the system does, so it changes or adds tests.
+> ticket changes what the system does, so it changes or adds tests. A **bugfix** ticket makes the system do what
+> it was already supposed to do: its Source is a `/diagnose` file with the cause, and its tests are the pinned
+> and flipped pairs at every level the diagnosis names.
 >
 > **Gear** is how every later stage learns how much process this work deserves — `/plan` copies it into
 > the plan's frontmatter, and a gate that only belongs in the larger gears reads it there. An absent
