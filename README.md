@@ -17,6 +17,7 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
  │     with /doc-validate between each pair, before every gate
  └─ Phase 2 — dev, per frontier ticket:
        /tickets (→ /tickets-validate) → /design → /plan → /plan-validate → /implement → /trim → /review → /tidy
+       bug of unknown cause: /diagnose → fix test-first, or a bugfix ticket → /design → /plan …
        structure drifts: /reconcile → /components · /boundaries amend
 ```
 
@@ -47,14 +48,14 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Diagrams | `/c4-generate` · `/mermaid-generate` |
 | Decisions (ADR) | `/adr-identify` · `/adr-generate` · `/adr-link` |
 | Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` |
-| Development | `/tickets` · `/tickets-validate` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` |
+| Development | `/tickets` · `/tickets-validate` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` · `/diagnose` |
 | Looking back | `/retro` · `/session-analyze` |
 
 ## Structure
 
 | Folder | Role |
 |---|---|
-| `skills/` | Skills (model-invoked / interactive) — run in the main context. Doc/design (`interview`, `domain-model`, `design`), the dev loop (`plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`) |
+| `skills/` | Skills (model-invoked / interactive) — run in the main context. Doc/design (`interview`, `domain-model`, `design`), the dev loop (`plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui`) |
 | `commands/` | User entrypoints (`/flow`, `/interview`, `/prd`…) |
 | `agents/` | Heavy generation and review subagents (isolated context, parallelizable) |
 | `templates/` | Canonical skeleton per artifact (generation scaffold + handoff anchor + gate checklist) |

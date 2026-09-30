@@ -5,10 +5,10 @@
 | Kind | Skills |
 |---|---|
 | Doc & design | `interview`, `domain-model`, `design` |
-| Dev loop | `plan`, `implement`, `tdd`, `trim`, `tidy` |
+| Dev loop | `plan`, `implement`, `tdd`, `trim`, `tidy`, `diagnose` |
 | Verification | `doc-validate`, `tickets-validate`, `plan-validate` |
 | Generators | `generate-test-guide`, `generate-stack-guide` |
-| References | `testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access` |
+| References | `testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui` |
 
 The reference skills are **routers**: a short index plus `rules/` or sibling files, read only when a row matches. That shape is the point — a stage that needs one rule shouldn't pay for the catalog.
 

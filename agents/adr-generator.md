@@ -28,6 +28,9 @@ Read the directory immediately before writing, so two runs in the same session d
 ## Rules (negative)
 - **One decision per ADR.** Don't rewrite the past — a new decision is a new ADR.
 - Fill from the Potential ADR's evidence; **don't invent** options or outcomes.
+- **At least two considered options.** A decision with one option was not weighed, it was only described. If the Potential gives one, write the ADR with `status: proposed` and a `> Needs Input:` asking for the alternative that was rejected and why. Doing nothing, or keeping the current state, counts as an option when it was really on the table.
+- **Pros and cons for every option**, drawn from the evidence and the drivers. The chosen option's cons belong there too; they are what the Consequences section has to own.
+- **A hybrid is a question, not an option.** If combining two options looks better than either, don't add it as an option nobody proposed. Put it to the owner as a `> Needs Input:` and keep the status `proposed`.
 - Use the glossary's ubiquitous language.
 - If the outcome is undecided, set `status: proposed` and mark `> Needs Input`.
 
@@ -38,5 +41,5 @@ If the referenced Potential ADR doesn't exist, stop and report that `/adr-identi
 1. Read the Potential ADR, existing ADRs, and the template.
 2. Allocate the next free number; set the status.
 3. Fill the MADR body from the evidence; set relationships.
-4. Self-review (one decision, every section grounded, links set, number unused).
+4. Self-review (one decision, at least two options each with pros and cons, every section grounded, links set, number unused).
 5. Write `docs/adr/NNNN-<slug>.md`, then mark the Potential `formalized`.

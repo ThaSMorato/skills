@@ -38,11 +38,13 @@ This skill is the generic standard. If the repo ships a `testing-guide-<project>
 | Testing UI components, frontend logic | `fundamentals.md`, then `frontend-patterns.md` |
 | Writing browser E2E / Playwright tests | `frontend-patterns.md`, then `playwright.md` |
 | Defining acceptance criteria, BDD scenarios | `acceptance-bdd.md` |
+| Checking that two separately deployed services agree on an API | `contract.md` |
 | Growing a test DSL (builders, matchers, composed results) | `fundamentals.md`, then `backend-patterns.md` / `frontend-patterns.md` |
 | Reviewing tests for quality | `fundamentals.md` + the relevant area file |
 
 - `fundamentals.md` — pyramid, F.I.R.S.T., AAA, SUT, single-act, determinism, tests as first-class code, and the test DSL.
-- `backend-patterns.md` — in-memory repository fakes, Mother Object / test data factories, Either/Result testing, dependency inversion for testability.
-- `frontend-patterns.md` — Testing Trophy, user-centric queries, network-boundary mocking, component and async testing.
+- `backend-patterns.md` — in-memory repository fakes, Mother Object / test data factories, Either/Result testing, dependency inversion for testability, service fakes, domain event subscribers, database isolation for integration/E2E.
+- `frontend-patterns.md` — Testing Trophy, user-centric queries, network-boundary mocking, component and async testing, hooks, stores, pages and routes, automated accessibility checks.
 - `playwright.md` — locators, web-first assertions, storageState auth, Page Object Model, custom fixtures, network mocking, projects, trace debugging.
 - `acceptance-bdd.md` — acceptance-testing discipline, Given/When/Then, test DSLs, and readability as the goal.
+- `contract.md` — consumer-driven contract tests between services or between a frontend and its API: when they pay off, and how the contract is produced and verified.

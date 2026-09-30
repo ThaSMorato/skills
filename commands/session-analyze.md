@@ -28,6 +28,7 @@ Dispatch `session-segment-analyst` for **every** segment **in a single message**
 - **Put repetition first.** A finding whose owner turns appear in two or more segments is the strongest evidence this suite can get that a stage is wrong: the owner said it once, the flow did not learn, and they had to say it again.
 - **Drop any finding without an owner turn** (uuid, timestamp, quote). No exceptions: this is the rule that keeps the report from becoming narrative.
 - Keep each finding's `flow` / `project` tag. When two agents tagged the same problem differently, `project` wins unless the evidence shows it would recur on any project.
+- **Filter what gets promoted.** Before a `project` finding's change says "make it a skill" or "add it to a guide", run it through `${CLAUDE_PLUGIN_ROOT}/skills/retro/promotion-filter.md`: not findable in five minutes, specific to this codebase, cost real effort, and a trigger the task will actually contain. One that fails stays a finding, marked with the question it failed; it is not proposed as a skill or guide.
 
 ## 4. Write
 Write `docs/meta-retro/<YYYY-MM-DD>-<session-id>.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/meta-retro.md`. It lives in the project: a finding can be specific to it.

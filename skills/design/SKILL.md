@@ -20,7 +20,9 @@ Everything above this line is a **document derived from another document**. The 
 
 The repository is the only independent source in the chain. Consult it here, while a correction still costs a paragraph.
 
-For each capability the ticket needs, **search before you assume it must be built**:
+**First, dispatch the `pattern-scout` agent** with the ticket path. It searches in an isolated context and returns how the repository already does this kind of work: at least three **analogues**, the **conventions to mirror** per category (errors, validation, data access, logging, config, tests), and the **integration points** where new code gets wired in, each at `path:line` with the real code. It documents what exists and judges nothing. Read what it returns before drawing a node: an analogue is the first candidate for `reuses` or `extends`, and a convention is how a `new` node should look.
+
+Then, for each capability the ticket needs, **search before you assume it must be built**:
 - grep the domain nouns and verbs from the ticket and the glossary;
 - grep the likely file and symbol names;
 - read `docs/analysis/components/*.md` for the components involved;
@@ -59,6 +61,25 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 - **Interface:** <signature, invariants, ordering, error modes, config, performance>
 - **Depth:** <what it hides>
 - **Grounding:** `reuses <path:line>` · `extends <path:line>` · `new — searched <terms> in <paths>; found nothing`
+
+## Analogues
+> From `pattern-scout`: the closest existing implementations of this kind of work. Fewer than three is
+> recorded with the terms searched, not padded.
+
+| Analogue | Where | Why it is analogous |
+|---|---|---|
+
+## Conventions to mirror
+> From `pattern-scout`, one row per category this ticket touches. The plan's SIs point here (`Mirror:`),
+> `/trim`'s reuse criterion and `review-standards` read it. A `new` node that departs from a row says
+> why under Open decisions.
+
+| Category | Mirror | Pattern |
+|---|---|---|
+
+## Integration points
+| To make it reachable | Change | Example |
+|---|---|---|
 
 ## Grounding summary
 > Every node marked `new`, and the search that justifies it. A `new` without a recorded search is an

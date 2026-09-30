@@ -51,6 +51,14 @@ Read a rule file **only when its row matches**. Every finding must carry three t
 | Vulnerable dependencies (CWE-1104) | known-vulnerable or unmaintained package | `rules/vulnerable-dependencies.md` |
 | Insecure defaults and configuration (CWE-16) | debug on, permissive CORS, default credentials | `rules/insecure-configuration.md` |
 
+## Third-party integrations
+| Weakness | Tell | Rule |
+|---|---|---|
+| Unverified webhook (CWE-345) | incoming third-party event acted on without a signature check | `rules/webhook-signature.md` |
+| OAuth / OIDC flow weaknesses (CWE-352, 601, 287) | no `state`, no PKCE, loose `redirect_uri`, ID token not validated | `rules/oauth-flow.md` |
+| JWT accepted without validation (CWE-347) | token decoded and trusted; algorithm, expiry or audience not checked | `rules/jwt-validation.md` |
+| Third-party script without integrity (CWE-829) | cross-origin script with no `integrity`, or a moving version | `rules/subresource-integrity.md` |
+
 ## LLM-backed features
 | Weakness | Tell | Rule |
 |---|---|---|

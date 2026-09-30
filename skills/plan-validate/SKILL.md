@@ -21,7 +21,7 @@ Read the plan, and everything it is accountable to:
 | ID prefix | Category | The problem it catches |
 |---|---|---|
 | `IC-N` | Inconsistency | Two SIs, or an SI and the ticket / node map / **FDD** / ADR / boundary contract / guidelines, contradict each other |
-| `AMB-N` | Ambiguity | An SI's actions or acceptance criteria are too vague to implement or verify |
+| `AMB-N` | Ambiguity | An SI's actions or acceptance criteria can be read two ways that would build different things. The finding **quotes the text and states both readings**; a phrase that is merely vague but admits one sensible build is not an `AMB` |
 | `DG-N` | Dependency gap | An SI depends on something no earlier SI produces; or the Dependency Map has a cycle |
 | `UT-N` | Untestable | An acceptance criterion no SI's Tests section makes observable, or an SI with real behavior and no seam |
 | `CV-N` | Coverage | A ticket acceptance criterion no SI owns |
@@ -29,10 +29,13 @@ Read the plan, and everything it is accountable to:
 | `UZ-N` | Undersized SI | An SI with no behavior observable at its seam — "write the test for X", "rename Y", "bump the constant" — which is a step of some other SI, not a slice |
 | `IV-N` | Invention | An SI that owns no ticket acceptance criterion, so nothing the ticket asked for needs it |
 | `DS-N` | Dispersion | The SI owning the most ACs owns more than **3×** as many as the one owning the fewest — the slicing is out of scale with itself |
-| `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, or attaches tests at a seam the map and FDD don't name |
+| `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, attaches tests at a seam the map and FDD don't name, or has a `Mirror:` that is not a row of the map's Conventions to mirror |
 | `GR-N` | Grounding | A node the map calls `new` with no recorded search — or with a search a grep contradicts, because the thing already exists |
 | `DL-N` | Deliverables | Deliverables missing the repo's real test / type-check / build commands |
+| `PM-N` | Pre-mortem | A concrete failure scenario inside the ticket's scope that no SI handles, found by assuming the plan shipped exactly as written and failed (see below) |
 | `AS-N` | Unmarked assumption | A decision in one of the `asking` skill's assumption classes (§6) — a threshold, a failure behavior, a visibility rule — that the ticket, node map and FDD do not give, written into an SI with no `> Assumed:` marker, and that would change what the SI builds if it were different |
+
+For a plan with `type: bugfix`, also check that the ticket's Source is a diagnosis with `status: cause-found` (otherwise `IC`: the cause is not known, so the fix is a guess), that every level in the diagnosis's `levels` has its pinned and flipped tests in an SI (a missing level is `UT`), and that no SI modifies a flipped test (`IC`).
 
 For a plan with `type: structural`, also check that no SI modifies an existing test and that no SI adds behavior — a structural plan that changes behavior is an `IC` against its own ticket type.
 
@@ -43,6 +46,8 @@ For a plan with `type: structural`, also check that no SI modifies an existing t
 `CV` and `SZ` are the two the author cannot reliably catch alone: coverage because omission is invisible from inside, and size because the author who wrote the slice believes it is one thing. `DM` exists because the plan claims to encode the node map and nothing used to check that claim.
 
 **`GR` is the only check in this suite that leaves the documents.** Every other category — here and in `/doc-validate` — compares one artifact against another, which means a wrong assumption made early passes every gate, because it is internally consistent all the way down. Run the map's searches yourself: take each node marked `new`, grep the terms it says it searched for, and see whether the repository agrees. A node that turns out to already exist is the highest-value finding this stage can produce, because everything below it was about to be built twice.
+
+**`PM` is the one check that reads the plan from the outside.** Every other category asks whether the plan is well-formed; this one asks whether it would survive. Assume the plan was implemented exactly as written, shipped, and failed. Then name the failure: a concrete input, state or sequence (an empty list, a retry after a partial write, two requests at once, the row that is not there, the dependency that times out) that no SI's actions or tests handle. Keep it inside the ticket's scope: a scenario only matters if an AC, the FDD or the node map implies the system must survive it; one outside that is a new requirement, which is scope, not a finding. **At most 3 per run, ranked by consequence.** A pre-mortem asked for failures will always produce some, and past three it is inventing them. A scenario an SI already handles is not a finding; name the SI and drop it.
 
 **`AS` is `GR`'s other half.** `GR` catches a fact nobody looked up — the repository had the answer. `AS` catches a decision nobody could have looked up — the repository never has that answer, and the plan filled one in as though it did. A `GR` is fixed by searching; an `AS` is fixed by marking it, so the user sees it at the gate. By this stage most assumptions should already have been caught upstream; the ones that reach a plan are usually small and local, so hold them to the ceiling hard.
 

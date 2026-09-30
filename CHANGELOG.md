@@ -1,5 +1,249 @@
 # Changelog
 
+## 0.5.0
+
+Eleven epics, landed one per PR (#17–#28) onto a single v0.5 branch. The owner's
+global `~/.claude` was emptied: collections gathered from other skill repos were
+archived, and this plugin is now the only suite loaded, so what it does not cover,
+nothing covers. Each epic absorbs something those collections did better, rewritten
+inside the suite. New stages: `/diagnose`. New lenses: `review-docs`, `review-ui`. New
+agent: `pattern-scout`. New reference skill: `ui`. New ticket type: `bugfix`.
+
+### Review lenses for contracts, docs and UI (epic 3B)
+
+The seven lenses were all written for server code, and none of them read the
+documentation or asked whether a published contract still held.
+
+- **Contract compatibility**, a new `architecture` rule read by `review-architecture`: a
+  published API, event, public interface or CLI changes only compatibly — removals and
+  renames, type changes, new required inputs, error shapes and observable behavior (Hyrum's
+  Law) break consumers. The fix is expand / migrate / contract, and the removal ticket
+  carries an AC of **zero remaining consumers** with its evidence (`/tickets`). This check
+  runs even without `docs/boundaries.md`.
+- **New `review-docs` lens**: documentation the diff made false — a README step, a required
+  env var missing from `.env.example`, a removed flag, a described default. Every finding
+  cites the doc line and the code line. The flow's own design docs stay with `review-spec`.
+- **New `ui` reference skill** (keyboard access, focus management, accessible names,
+  contrast, loading / empty / error states, layout shift and slow interactions) and a
+  **conditional `review-ui` lens**, dispatched only when the diff touches UI code and
+  recorded in `lenses_skipped` otherwise. It checks what the component library already
+  provides before flagging, and for shift and latency flags the pattern and says how to
+  measure.
+- `lenses_run` and `by_lens` gain `docs` and `ui`, so the retro measures both.
+
+### The interview aims, counts convergence, and challenges once (epic 6)
+
+The interview's gate said when to stop (every required section filled), not where to aim
+next or whether the conversation was converging.
+
+- **Every question names the weakest required section** of the brief it targets, and why.
+- **Convergence is counted in the glossary**: each answer reports how many `CONTEXT.md`
+  terms it created and renamed. Two answers in a row that change no load-bearing term,
+  plus the gate, is the signal. No weighted "ambiguity score": that would be a number the
+  model judges, dressed as a measurement.
+- **Two challenges, once each**: the Contrarian (*what if the opposite were true?*) once
+  the problem and goals are drafted, and the Simplifier (*the smallest version worth
+  having*) before scope, which feeds the gear. Two answers that move no section trigger
+  the ontological question (*what is this, really?*). Recorded in a new **Assumptions
+  challenged** table.
+- **Early exit is recorded**: `Status: early-exit`, the gaps in Open questions, and the
+  `prd-writer` turns them into `> Needs Input:` instead of filling them.
+
+### Debt the reviews saw, gathered (epic 9)
+
+Technical debt was detected in four places and gathered in none. The clearest case: a
+review finding the verifier marks `pre-existing` is real, but in code the diff did not
+change, so nobody owns it and it vanishes after the review.
+
+- **`/retro` collects the `pre-existing` findings** across the scope, groups them by
+  component (or directory), and calls an area a **hotspot** when two or more tickets ran
+  into it. It proposes **at most 3 structural tickets**, ranked by benefit (severity ×
+  tickets that hit it) against cost (what the fix touches), each citing the findings it
+  closes; the rest are listed. The owner decides; nothing is created.
+- `templates/retro.md` gets a **Debt hotspots** section and a pre-existing count in
+  Measurements.
+
+### A stage for bugs — `/diagnose` (epic 1)
+
+The flow had no stage, gear or ticket type for a bug. A bug of unknown cause fell into
+the Direct gear, and the `/implement` fix loop capped attempts at three without any
+method, so the three were often spent on one guess.
+
+- **New `diagnose` skill and `/diagnose` command.** Reproduce and write down what is seen
+  before any theory; name **three hypotheses of different kinds** (the code, the
+  environment or data, the measurement itself); weigh evidence for and against by
+  strength, from a failing test down to intuition; try to refute the leader; run **one
+  discriminating probe** at a time (`git bisect` included); reduce. It ends with the cause
+  at `file:line` and the pinned and flipped tests at every level the bug crosses, with the
+  expected behavior taken from the spec, not from the intended fix. It does not fix.
+- **Sealed tests.** Once written and seen failing, the flipped tests are not edited until
+  the fix is green; correcting a wrong test is a separate step with its reason.
+- **`Type: bugfix`** on tickets and plans. Its Source is a diagnosis with
+  `status: cause-found`; its first SI writes the pinned and flipped tests per level.
+  `plan-validate` checks the diagnosis, every level (`UT`), and that no SI edits a flipped
+  test (`IC`).
+- **`/implement` uses the method from the second failed attempt**: each attempt names its
+  hypothesis and kind, three in a row of the same kind stop the loop, and the escalation
+  report takes the diagnosis's shape.
+- The retro reports bugs: bugfix tickets by gear, diagnoses found vs unresolved.
+- `/flow`: a bug of unknown cause starts at `/diagnose`, never at a fix.
+
+### `/analyze` checks what it delivered (epic 7)
+
+- **The fan-out is checked on disk.** After the per-component deep dives, `/analyze`
+  compares the components chosen with the files written, re-dispatches the missing ones
+  once, and lists what is still missing, with the components not analyzed by choice and
+  every `coverage: partial`. An agent that failed used to leave a silent gap.
+- **New `templates/component-analysis.md`**, which the `component-analyzer` fills
+  (it had no template). Business rules carry a **confidence**: `explicit` in code,
+  `tested` by a cited test, or `inferred`; a FDD built on an inferred rule knows to
+  confirm it. Plus exposed contracts, the tests that exercise the component wherever
+  they live (and the contract each fake assumes), and countable frontmatter.
+- **`dependency-auditor` measures blast radius**: for each item to act on or plan, how
+  many files import it and whether one adapter encapsulates it or the use is spread —
+  which decides between a one-adapter change and an expand / migrate / contract sequence.
+
+### Altitude in `/tidy`, and `/tidy` on a path (epic 8)
+
+- **New smell `mixed-altitude`**: a body that interleaves intent, domain calls and raw
+  mechanics. Tag each line by band; extract a mechanics block into a leaf named for what
+  it does — and never extract lines already at the caller's altitude (that is a lazy
+  layer, not a fix). `clean-code`'s Stepdown line points at it.
+- **`/tidy` reads with it.** Rule 2 walks each function in scope with the altitude lens;
+  rule 3 collapses the whole duplicated unit, not the easy half, and the two are separate
+  checks; rule 4 removes guards an extraction left dead. A touched function is read whole.
+- **An extracted helper is re-read** under rules 2 and 3 before the suite runs; a helper
+  that is itself mixed moves the mess down a level.
+- **"Why it is structural" names four checks**: order, errors and side effects,
+  observability (logs, metrics, spans), type breadth.
+- **`/tidy <path>`**: existing code with no ticket, when tests cover it. The covering tests
+  are named and run green first; code with none cannot be tidied. Output goes to
+  `.scratch/standalone/tidy/`. `/flow`'s Direct gear points at it for a cleanup.
+- The `tidy` description no longer summarizes its workflow (epic 10's anatomy rule) and
+  names its exclusion.
+
+### How the repo already does it, before the design (epic 2)
+
+`/design` read the repository with a grep in the same context that was designing, which
+finds what the designer expected. The only structured source of existing primitives,
+`docs/analysis/components/*.md`, exists only in brownfield after `/analyze`.
+
+- **New `pattern-scout` agent**, dispatched first by `/design`. In an isolated context it
+  returns at least three **analogues** (or what was searched), the **conventions to
+  mirror** per category (naming, errors, validation, data access, logging, config,
+  tests) and the **integration points** where new code gets wired in, each at `path:line`
+  with the real code. It documents what exists and judges nothing.
+- The node map gets **Analogues**, **Conventions to mirror** and **Integration points**
+  sections. A `new` node that departs from a convention says why.
+- **`Mirror:` per SI** in the plan, a pointer to a Conventions row (no snippet, so it does
+  not go stale). `/implement` opens it before writing; `plan-validate` flags a `Mirror:`
+  that is not in the map as `DM`.
+- **Consumers:** `/trim`'s reuse criterion starts from the analogues and conventions, and
+  `review-standards` flags a hunk that departs from a convention with no recorded reason.
+
+### A filter before a finding becomes a skill or a guide (epic 11)
+
+`/session-analyze` tags findings `project` (they become a skill or guide in the project),
+and `/retro` moves repeated findings into stack guides and rules. Nothing filtered what
+deserved it; a generic lesson became a generic skill, loaded on every run and competing
+with the good ones.
+
+- **New `skills/retro/promotion-filter.md`**, read by `/retro` and `/session-analyze`. Three
+  questions, all must pass: not findable in five minutes, specific to this codebase, cost
+  real effort. A vague trigger fails too. A finding that fails stays in the report, marked
+  with the question it failed; it is just not proposed as a skill or guide. The owner still
+  decides what is written.
+- `templates/meta-retro.md` gets a **Filter** column on project findings and a `promotable`
+  count; `templates/retro.md` applies the filter before proposing a guide or rule.
+
+### Review rules for the failures nobody sees (epic 3A)
+
+- **`code-smells` — three new rules.** `swallowed-error` (empty catch, log and continue,
+  silent default, retries that give up quietly, over-broad catch, an unhandled promise,
+  and the question to ask of every catch: *what would this hide?*); `unenforced-invariant`
+  (a rule the domain relies on that the type lets be broken); `comment-contradicts-code`.
+  `review-quality` reads them through the catalog; `clean-code` points at the first.
+- **`review-tests` checks error paths.** Every error branch the diff adds is driven by a
+  test; an untested catch is where a swallowed error hides.
+- **`security` — third-party integrations.** Four rules: unverified webhooks (signature
+  over raw bytes, constant-time compare, timestamp and replay), OAuth/OIDC flows (`state`,
+  PKCE, exact `redirect_uri`, ID-token checks), JWT validation (server-fixed algorithm,
+  `exp`, `iss`, `aud`), and third-party scripts without subresource integrity.
+- **`/tidy` reviews its own diff.** It runs after `/review`, so nothing else read the
+  tidying commit, and it approved itself on green tests. Now `review-spec` (told the change
+  claims to be structural) and `review-quality` read the tidying diff alone; a kept finding
+  reverts the tidying. Counted as `review_findings`; the retro sums it.
+- **`scripts/skill-rules.test.mjs`.** In every router skill (`code-smells`, `security`,
+  `architecture`, `data-access`), each `rules/*.md` a row cites must exist, and each rule
+  file must be cited by a row; a missing or orphaned rule used to fail silently.
+
+### Plans are read from the outside, and decisions are weighed (epic 4)
+
+- **`PM-N` — pre-mortem in `/plan-validate`.** Assume the plan shipped exactly as
+  written and failed; name the concrete input, state or sequence no SI handles (the
+  empty list, the retry after a partial write, two requests at once). Only inside the
+  ticket's scope, and **at most 3 per run**, ranked — a pre-mortem asked for failures
+  will always find some, and past three it invents them. Counted in `fired`.
+- **`AMB-N` quotes the text and states both readings.** Vague but with one sensible
+  build is not an ambiguity.
+- **Lowering a lens's severity in `/review` synthesis needs `Mitigated by:`** — the
+  guard, constraint or caller that contains it. Data loss, security and money are never
+  lowered there; only the verifier's code check refutes them.
+- **ADRs weigh at least two options**, each with pros and cons (now required, the
+  chosen option's cons included). With one, the ADR stays `proposed` and asks for the
+  rejected alternative. A hybrid nobody proposed is a question to the owner, not an
+  option. The same floor applies to inline ADRs from `/interview`.
+
+### The implement loop keeps what it learns, and says what it did not check (epic 5)
+
+- **`## Learned` in `progress.md`.** When an SI finds out something about the codebase
+  that the next SI would otherwise rediscover (the command that really runs the tests,
+  a fixture that must be reset), it adds one line. The resume check reads it, since a
+  context fresh from `/compact` has no other way to know.
+- **Type-check per SI**, next to the SI's tests, instead of only at the end. A type
+  error found five SIs later is far from the change that caused it.
+- **No suppression to get green.** New `eslint-disable`, `@ts-ignore`, `# noqa`,
+  `rubocop:disable`, skipped or focused tests are a bypass, like a weakened test. One
+  that is genuinely right needs the user's OK and a reason in the SI's notes.
+- **`## Not verified`** at the final verification: every AC or deliverable that no
+  command in the run checked, with what would. Counted as `unverified` in the
+  frontmatter; the retro reports it per ticket.
+- **`tdd` no longer contradicts `implement`.** It said refactoring belongs to the review
+  stage; it now says refactor only on green, which is what `implement` does per SI.
+
+### Testing and skill-anatomy material the plugin was missing (epic 10)
+
+Two global documents outside the plugin were still loaded in every session: a testing
+guide with backend and frontend pattern files, and a skill anatomy. The plugin's own
+`testing` skill covered the core, but not the recipes; its anatomy disagreed on five
+rules. The global ones can go now.
+
+- **`testing/fundamentals.md`** — controlling time (a fixed date, the real clock
+  always restored); anti-patterns: conditional logic in a test, testing the framework,
+  magic values; scenario grouping.
+- **`testing/backend-patterns.md`** — wire unit tests by hand, no DI container; fakes
+  mirror the real contract, including not-found; factory defaults are valid and each
+  call independent; void success asserts the side effect; new sections on service
+  fakes (stateful, no-op, literal), domain event subscribers (poll, never sleep), and
+  database isolation for integration/E2E (a schema per suite, dropped at the end).
+- **`testing/frontend-patterns.md`** — the static layer of the Trophy; full mount over
+  shallow, with what to test and what not to; asserting absence with `query*`;
+  `userEvent` over `fireEvent`; network handlers reset after each test; the three
+  states of anything that loads; no side effect inside a retrying wait; new sections on
+  hooks, stores, pages and routes, automated accessibility checks, anti-patterns.
+- **`testing/playwright.md`** — visual comparisons.
+- **New `testing/contract.md`** — consumer-driven contract testing, which the plugin did
+  not mention anywhere: how it works, when it pays off, and its rules.
+- **`tdd` — bugs: pin, then flip.** Tests green because of the bug, then tests red with
+  the correct behavior, at every level the bug crosses; the pinned tests are removed
+  only after the owner has seen them.
+- **`docs/anatomy/skill-anatomy.md`** — a description does not summarize the workflow,
+  and names its exclusion; token-conscious; inline under ~50 lines, a sibling file over
+  ~100; a process skill has an observable exit. The folder path now matches the repo
+  (`skills/<name>/`).
+- Not copied: the global guide's non-deterministic faker defaults, which contradicted
+  its own determinism rule.
+
 ## 0.4.1
 
 ### A stage that makes the change smaller — `/trim`

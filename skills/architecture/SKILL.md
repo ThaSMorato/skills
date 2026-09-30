@@ -46,6 +46,11 @@ Read a rule file **only when its row matches** what you are deciding.
 | The web is a detail | what is the delivery mechanism allowed to dictate? | `rules/detail-web.md` |
 | Frameworks are details | how much of the framework may reach the policy? | `rules/detail-framework.md` |
 
+## Contracts — what others already depend on
+| Principle | The question it answers | Rule |
+|---|---|---|
+| Contract compatibility | does this change break a consumer of a published contract? | `rules/contract-compatibility.md` |
+
 ## Two calibrations, before you use any of it
 
 **Aim, don't grade.** These are directions, not scores. Every real system violates several at once, and the useful question is never "does this comply" but "is the next change moving toward or away". A report that lists twelve principle violations in a working system has said nothing actionable.

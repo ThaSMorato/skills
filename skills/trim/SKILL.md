@@ -14,7 +14,7 @@ It runs before `/review` so the review reads the smaller diff and spends no lens
 - **The repository outside the diff** is read, never edited: that is where the reuse criterion looks.
 
 ## Behavior does not change
-Every cut is **structural**: the behavior after it is identical, and **existing tests are not modified**. That is the contract of this stage, and the tests are how it is checked.
+Every cut is **structural**: the behavior after it is identical, and **existing tests are not modified**. That is the contract of this stage, and the tests are how it is checked. The four things that break "pure" refactors most often (order, errors and side effects, observability, type breadth) are listed in the `tidy` skill's Propose step; check them for every cut.
 
 It may rewrite code in the diff to make it smaller (fold a new file into one the ticket already touches, inline a layer, call an existing primitive), but it **never adds an abstraction**: every applied cut leaves the diff smaller than it found it.
 
@@ -24,7 +24,7 @@ What it finds but cannot cut, it reports. A behavior no AC asked for (a paramete
 Each criterion shrinks what the next one has to look at, so walk them in this order.
 
 1. **Trace — every hunk answers to an SI or an AC.** An *incidental* hunk answers to none and changes no behavior: a reformat, a drive-by rename, a refactor of neighboring code, an import reshuffle. The cut reverts it to its fixed-point version. (A hunk that answers to none but does change behavior is an unrequested-behavior note, above.)
-2. **Reuse — new code that re-implements something the repo already has.** Search the codebase for the primitive (same name family, same signature, the stack guide's list of shared utilities) and cite it at `file:line`. The substitute must honor the same contract, including the edge cases the ticket's tests exercise; a primitive that almost fits is not a substitute.
+2. **Reuse — new code that re-implements something the repo already has.** Start from the node map's **Analogues** and **Conventions to mirror** (from `pattern-scout`), then search the codebase for the primitive (same name family, same signature, the stack guide's list of shared utilities) and cite it at `file:line`. The substitute must honor the same contract, including the edge cases the ticket's tests exercise; a primitive that almost fits is not a substitute.
 3. **Footprint — structure the change did not need.** A new file whose content fits in an existing one the ticket already touches; an interface or layer with a single implementation and no seam a test or a boundary requires; a file touched only to pass something through.
 4. **Locality — one behavior spread over more files than it needs.** The *Shotgun Surgery* smell (`code-smells` skill), measured on this diff: which files each behavior touches now, and the smaller set that would hold it.
 

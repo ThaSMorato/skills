@@ -7,6 +7,11 @@ Code smells are **labelled heuristics, not hard rules** — each is a judgement 
 
 Scan the table below and match what you see to a smell. Read the smell's rule file **only when a row matches** — each holds the full tell, why it hurts, and the fix. Group by family: the family tells you the kind of pressure the smell puts on the code.
 
+## Functions — read at more than one level
+| Smell | Tell | Rule |
+|---|---|---|
+| Mixed Altitude | intent, domain calls and raw mechanics interleaved in one body | `rules/mixed-altitude.md` |
+
 ## Bloaters — grew beyond what they should
 | Smell | Tell | Rule |
 |---|---|---|
@@ -40,6 +45,12 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 | Inappropriate Intimacy | two classes reach into each other's internals | `rules/inappropriate-intimacy.md` |
 | Middle Man | class only delegates, adds nothing | `rules/middle-man.md` |
 
+## Error handling and contracts — the failure nobody sees
+| Smell | Tell | Rule |
+|---|---|---|
+| Swallowed Error | a failure happens and nothing downstream can tell | `rules/swallowed-error.md` |
+| Unenforced Invariant | a rule the domain relies on, which the type lets be broken | `rules/unenforced-invariant.md` |
+
 ## Cross-cutting / well-known
 | Smell | Tell | Rule |
 |---|---|---|
@@ -62,6 +73,7 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 | Smell | Tell | Rule |
 |---|---|---|
 | Comment Repeats Code | comment restates what the code already says | `rules/comment-repeats-code.md` |
+| Comment Contradicts Code | comment says what the code beside it does not do | `rules/comment-contradicts-code.md` |
 | Implementation Doc Contaminates Interface | interface doc leaks internal detail | `rules/implementation-doc-contaminates-interface.md` |
 | Nonobvious Code | meaning doesn't jump out on first read | `rules/nonobvious-code.md` |
 | Vague Name | generic name (`data`, `tmp`, `result`) reveals nothing | `rules/vague-name.md` |
