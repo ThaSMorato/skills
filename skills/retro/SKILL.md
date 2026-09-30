@@ -48,6 +48,16 @@ One occurrence is an incident. The same finding across several tickets is a **st
 
 Before proposing that a pattern move into a stack guide, a rule or a skill, run it through `promotion-filter.md`: it must not be findable in five minutes, must be specific to this codebase, and must have cost real effort. One that fails stays in the retro as a finding, with the question it failed; it is not proposed as a guide.
 
+## Debt the reviews saw and nobody owned
+A review finding with the verdict `pre-existing` is real, but in code the diff did not change, so it is nobody's work and it vanishes after the review. Across an epic, those are the most honest map of technical debt the project has: found by the lenses, confirmed by the verifier, and located to `file:line`.
+
+1. **Collect** every `pre-existing` finding in the scope's review files.
+2. **Group them by area**: the component that owns the path (`docs/components.md`), or the directory when there is no component map.
+3. **An area is a hotspot** when its findings come from **two or more tickets**. The repetition rule applies here as everywhere: one ticket's `pre-existing` finding is an incident. Where `docs/analysis/components/<c>.md` lists debt for the same area, cite it as corroboration.
+4. **Propose at most 3 structural tickets**, ranked by **benefit against cost**. Benefit is the severity of the findings times the number of tickets that ran into them; cost is how much the fix touches (files, and whether the use is encapsulated or spread). Each proposal cites the findings it would close (review file and finding) and says why it is structural. The rest of the hotspots are listed, not proposed.
+
+Nothing is created here. The owner decides; a chosen proposal becomes a `Type: structural` ticket whose Source is this retro (`retro — docs/retro/<scope>.md`).
+
 ## This is a log, not a state file
 `/flow` derives state from artifacts and refuses documents that must be maintained. These two outputs do not compete with that: they are **append-only history**, nothing derives current state from them, and a stale entry is still a true record of what was observed then. Never edit or remove an earlier entry; if something changed, add an entry that says so.
 
@@ -63,6 +73,7 @@ Before proposing that a pattern move into a stack guide, a rule or a skill, run 
 3. Fill **Measurements** from frontmatter, per ticket and by gear, and compare with the previous retro's.
 4. Explain the planned-versus-done divergences and the gate categories that fired, citing the files.
 5. Collect escalations, failed deliverables, and repeated review findings — with their instances.
-6. Sort every finding: process, product, or defect.
-7. Write `docs/retro/<scope>.md`; append the product findings to `docs/evolutions.md`.
-8. Self-review: every claim points at a file, nothing describes how the work felt, and the gaps are named.
+6. Group the `pre-existing` findings by area; name the hotspots; propose at most 3 structural tickets.
+7. Sort every finding: process, product, or defect.
+8. Write `docs/retro/<scope>.md`; append the product findings to `docs/evolutions.md`.
+9. Self-review: every claim points at a file, nothing describes how the work felt, and the gaps are named.

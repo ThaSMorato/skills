@@ -7,6 +7,20 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### Debt the reviews saw, gathered (epic 9)
+
+Technical debt was detected in four places and gathered in none. The clearest case: a
+review finding the verifier marks `pre-existing` is real, but in code the diff did not
+change, so nobody owns it and it vanishes after the review.
+
+- **`/retro` collects the `pre-existing` findings** across the scope, groups them by
+  component (or directory), and calls an area a **hotspot** when two or more tickets ran
+  into it. It proposes **at most 3 structural tickets**, ranked by benefit (severity ×
+  tickets that hit it) against cost (what the fix touches), each citing the findings it
+  closes; the rest are listed. The owner decides; nothing is created.
+- `templates/retro.md` gets a **Debt hotspots** section and a pre-existing count in
+  Measurements.
+
 ### A stage for bugs — `/diagnose` (epic 1)
 
 The flow had no stage, gear or ticket type for a bug. A bug of unknown cause fell into

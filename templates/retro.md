@@ -40,6 +40,8 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 
 **Tidying:** <summed `proposed` / `applied` / `reverted` / `review_findings` from `.scratch/*/tidy/*.md`; many reverted, or review findings on tidy commits, means the proposals were not really structural>
 
+**Pre-existing findings:** <summed `pre-existing` from the reviews' `verdicts`, and how many areas they fall in>
+
 **Review findings by lens:** <summed `by_lens` across the scope, and beside it `refuted_by_lens` — each lens's precision: of what it raised, how much the verifier refuted with code>
 
 **Compared with the previous retro:** <the same totals from the latest earlier `docs/retro/*.md`, side
@@ -70,6 +72,15 @@ by side — or `first measured retro` when none has a Measurements section>
 > Beyond the counts in Measurements: whether any class of finding repeats across tickets. A repeating finding is a standard that should move into a stack guide or a
 > rule — the repetition is the signal, and one occurrence is not. Before proposing the move, run it through the promotion filter
 > (`skills/retro/promotion-filter.md`); one that fails stays here as a finding, with the question it failed.
+
+## Debt hotspots (required when any review had a `pre-existing` finding)
+> From the `pre-existing` verdicts across the scope's reviews: real problems in code no ticket changed.
+> An area is a hotspot when two or more tickets ran into it. At most 3 are proposed as structural tickets,
+> ranked by benefit (severity × tickets that hit it) against cost (what the fix touches); the rest are
+> listed. Nothing here is a ticket until the owner picks it.
+
+| Area | Findings (review · finding) | Tickets that hit it | Proposed structural ticket | Benefit / cost |
+|---|---|---|---|---|
 
 ## What to change in the process (required)
 > The actionable part. Each item names the artifact that motivates it and the file it would change —
