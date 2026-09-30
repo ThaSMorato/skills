@@ -7,6 +7,25 @@ were archived, and this plugin is now the only suite loaded. What it does not co
 nothing covers. Each epic here absorbs something those collections did better,
 rewritten inside the suite.
 
+### How the repo already does it, before the design (epic 2)
+
+`/design` read the repository with a grep in the same context that was designing, which
+finds what the designer expected. The only structured source of existing primitives,
+`docs/analysis/components/*.md`, exists only in brownfield after `/analyze`.
+
+- **New `pattern-scout` agent**, dispatched first by `/design`. In an isolated context it
+  returns at least three **analogues** (or what was searched), the **conventions to
+  mirror** per category (naming, errors, validation, data access, logging, config,
+  tests) and the **integration points** where new code gets wired in, each at `path:line`
+  with the real code. It documents what exists and judges nothing.
+- The node map gets **Analogues**, **Conventions to mirror** and **Integration points**
+  sections. A `new` node that departs from a convention says why.
+- **`Mirror:` per SI** in the plan, a pointer to a Conventions row (no snippet, so it does
+  not go stale). `/implement` opens it before writing; `plan-validate` flags a `Mirror:`
+  that is not in the map as `DM`.
+- **Consumers:** `/trim`'s reuse criterion starts from the analogues and conventions, and
+  `review-standards` flags a hunk that departs from a convention with no recorded reason.
+
 ### A filter before a finding becomes a skill or a guide (epic 11)
 
 `/session-analyze` tags findings `project` (they become a skill or guide in the project),

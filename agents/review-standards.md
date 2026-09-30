@@ -15,6 +15,7 @@ Your context is isolated — you receive:
 - `docs/adr/*.md` — the decisions binding in the area the diff touches. An ADR is not advice.
 - `docs/boundaries.md` (if present) — for whether an added import is a legal edge.
 - `CONTEXT.md` — the glossary; names in the code should be the project's canonical terms.
+- The ticket's node map (`.scratch/<feature-slug>/design/<NN>-<slug>.md`), if present — its **Conventions to mirror** table is how this repo already does errors, validation, data access, logging and tests for this kind of code. A changed hunk that departs from a row, with no reason under the map's Open decisions, is a finding.
 
 ## The bar
 **Every rule in the loaded guides, against every changed hunk.** Then:

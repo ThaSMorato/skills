@@ -29,7 +29,7 @@ Read the plan, and everything it is accountable to:
 | `UZ-N` | Undersized SI | An SI with no behavior observable at its seam — "write the test for X", "rename Y", "bump the constant" — which is a step of some other SI, not a slice |
 | `IV-N` | Invention | An SI that owns no ticket acceptance criterion, so nothing the ticket asked for needs it |
 | `DS-N` | Dispersion | The SI owning the most ACs owns more than **3×** as many as the one owning the fewest — the slicing is out of scale with itself |
-| `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, or attaches tests at a seam the map and FDD don't name |
+| `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, attaches tests at a seam the map and FDD don't name, or has a `Mirror:` that is not a row of the map's Conventions to mirror |
 | `GR-N` | Grounding | A node the map calls `new` with no recorded search — or with a search a grep contradicts, because the thing already exists |
 | `DL-N` | Deliverables | Deliverables missing the repo's real test / type-check / build commands |
 | `PM-N` | Pre-mortem | A concrete failure scenario inside the ticket's scope that no SI handles, found by assuming the plan shipped exactly as written and failed (see below) |

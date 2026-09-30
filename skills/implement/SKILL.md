@@ -58,7 +58,7 @@ unverified: <count — see Final verification>
 ## The per-SI loop
 Run SIs in Dependency-Map order. Never skip ahead; never run two SIs in one pass. For each **pending** SI:
 
-1. **Read only this SI** (Description, Technical actions, Tests, Dependencies, Acceptance criteria). Keep a short checklist in working memory: one item per technical action, one per test file, plus "run tests".
+1. **Read only this SI** (Description, Technical actions, Tests, Mirror, Dependencies, Acceptance criteria). If it has a `Mirror:`, open those lines before writing anything: the new code should read like them. Keep a short checklist in working memory: one item per technical action, one per test file, plus "run tests".
 2. **Red** — write the failing test(s) first, at the seam(s) the SI names. Each test verifies real behavior through the public interface; expected values come from an independent source, never recomputed the way the code does. Run them; watch them fail for the right reason.
 3. **Green** — write the minimum code to pass. No speculative features.
 4. **Refactor — production _and_ tests.** With tests green, clean both:
