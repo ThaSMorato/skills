@@ -30,7 +30,9 @@ When you know the options, present them as **options** rather than asking an ope
 - **Say what each choice costs.** An option list without consequences is a menu without prices.
 - **Free text is right** when the answer is genuinely open — a name, a business rule, a constraint you cannot enumerate. Don't force a real question into fake options.
 
-**Group, don't flood.** Twelve findings do not become twelve prompts. Ask about the ones where you genuinely cannot proceed, and report the rest for the user to read. When several questions are independent and each has a small set of answers, one grouped set beats a serial interrogation; when the answer to one changes what the next question even is, ask them one at a time.
+**Group, don't flood.** Twelve findings do not become twelve prompts. Ask about the ones where you genuinely cannot proceed, and report the rest for the user to read.
+
+**Ask in rounds.** When several questions are open, the **frontier** is every one whose prerequisites are already settled: the questions you can ask now without guessing at an answer you have not heard. Ask the whole frontier in one round, numbered, each with your recommendation; a question whose answer depends on another one in the same round waits for the next round. The answers move the frontier; recompute it and ask again. With a structured-choice tool, one call carries as many as the tool allows, the most load-bearing first.
 
 ## 3. Ask only what is a decision
 
@@ -59,7 +61,9 @@ Pick between the first two by the ceiling below: if a wrong value would change a
 
 ## 5. For a gate, say what is being decided
 
-A gate is not "approve?". It is: what was produced, what needs attention **with each item resolved**, what happens next if approved, and what to say instead if not. The user should be able to answer without opening anything — and should be able to open everything, because you named the paths.
+**Push the checkpoint right.** Do all the work you can before involving the user, so they are asked once, late, with everything prepared, instead of several times along the way.
+
+A gate is not "approve?". It is a **brief**: what was produced, why, what needs attention **with each item resolved**, what happens next if approved, and what to say instead if not, with the path to each artifact. The user reads the brief, never the raw output: not the full document, not the tool's log, not the list of every finding. They should be able to decide without opening anything, and be able to open everything, because you named the paths.
 
 **Every `> Assumed:` in what was produced is part of the gate.** List them — value, what it rests on, what changes if wrong — as one grouped question, not one prompt each. On the answer, a confirmed one becomes `> Decided: <value> — owner, <date>` — rewrite the marker in place; that is a label, not a content change. A corrected one becomes `> Decided: <the new value> — owner, <date>` too, but the text around it has to change to match, so it goes through whoever owns the document: where a command says to re-run its agent rather than edit, re-run it with the correction. A marker left as `Assumed` after an approval means the gate was skipped, not that the assumption was accepted.
 

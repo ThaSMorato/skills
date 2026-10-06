@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const SKILL_CALL = /[Cc]all the Skill tool with (?:each of: )?`([a-z0-9-]+)`/g
 const AGENT_CALL = /[Cc]all the Agent tool with `([a-z0-9-]+)`/g
-const SOFT_LOAD = /\b(?:Load|load|Use|use|Run|run|Dispatch|dispatch) the `[a-z0-9-]+` (?:skill|agent)\b(?!')/g
+const SOFT_LOAD = /\b(?:Load|load|Use|use|Run|run|Dispatch|dispatch) (?:\*\*both\*\* |both )?the `[a-z0-9-]+` (?:skill|agent)\b(?!')/g
 
 const skillNames = readdirSync(join(root, 'skills')).filter((name) => existsSync(join(root, 'skills', name, 'SKILL.md')))
 const agentNames = readdirSync(join(root, 'agents')).map((file) => file.replace(/\.md$/, ''))

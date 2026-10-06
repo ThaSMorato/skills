@@ -4,7 +4,7 @@
 
 | Kind | Skills |
 |---|---|
-| Doc & design | `interview`, `domain-model`, `design` |
+| Doc & design | `interview`, `questionnaire`, `domain-model`, `design` |
 | Dev loop | `plan`, `implement`, `tdd`, `trim`, `tidy`, `diagnose` |
 | Verification | `doc-validate`, `tickets-validate`, `plan-validate` |
 | Generators | `generate-test-guide`, `generate-stack-guide` |
