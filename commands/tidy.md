@@ -13,4 +13,4 @@ Preflight, by mode:
 
 Show the proposals grouped by rule, in rule order, each with its evidence. Ask which to apply. Then apply them one at a time, reporting per tidying: applied, or reverted and why. Then review the tidying diff alone with `review-spec` and `review-quality`, and revert any tidying a kept finding points at.
 
-Postflight (ticket mode): the tidyings applied and reverted, and the next step, `/pr <slug> <fixed point>` for the pull request body.
+Postflight (ticket mode): the tidyings applied and reverted, and the next steps: the optional `/walkthrough <slug> <fixed point>`, then `/pr <slug> <fixed point>` for the pull request body.

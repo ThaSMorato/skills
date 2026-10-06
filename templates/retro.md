@@ -40,6 +40,8 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 
 **Tidying:** <summed `proposed` / `applied` / `reverted` / `review_findings` from `.scratch/*/tidy/*.md`; many reverted, or review findings on tidy commits, means the proposals were not really structural>
 
+**Understanding:** <summed `questions`, `missed` and `unclear_after` from `.scratch/*/walkthrough/*.md`; misses that cluster in one area point at code its owners cannot follow>
+
 **Pre-existing findings:** <summed `pre-existing` from the reviews' `verdicts`, and how many areas they fall in>
 
 **Review findings by lens:** <summed `by_lens` across the scope, and beside it `refuted_by_lens` — each lens's precision: of what it raised, how much the verifier refuted with code>
