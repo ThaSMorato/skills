@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: Test-driven development — the red-green loop that produces tests worth keeping, and the pin-then-flip rule for bugs. Use when building features or fixing bugs test-first, or when the user mentions red-green-refactor.
+description: Test-driven development, the red-green loop that produces tests worth keeping, and the pin-then-flip rule for bugs. Use when building features or fixing bugs test-first, or when the user mentions red-green-refactor.
 ---
 
 TDD is the red → green loop. Consult these before and during every cycle.
@@ -10,15 +10,15 @@ Read `CONTEXT.md` (if present) so test names and interface vocabulary match the 
 ## What a good test is
 Verifies **behavior through public interfaces**, not implementation details. It reads like a specification ("user can checkout with valid cart") and survives refactors because it doesn't care about internal structure.
 
-## Seams — where tests go
-A **seam** is the public boundary you test at. Test only at **pre-agreed seams** — write them down and confirm them with the user before writing any test. You can't test everything; agreeing seams up front lands effort on the critical paths.
+## Seams: where tests go
+A **seam** is the public boundary you test at. Test only at **pre-agreed seams**; write them down and confirm them with the user before writing any test. You can't test everything; agreeing seams up front lands effort on the critical paths.
 
 When the shape of that interface is itself in question (how deep the module should be, where the seam belongs, what it exposes, whether it needs an adapter), read the `architecture` skill's `rules/deep-modules.md`: the interface is the test surface, and a test that has to reach past it says the module has the wrong shape.
 
 ## Anti-patterns
-- **Implementation-coupled** — mocks internal collaborators, tests privates, or verifies through a side channel. The tell: it breaks on a refactor when behavior didn't change.
-- **Tautological** — the assertion recomputes the expected value the way the code does. Expected values must come from an independent source (a known-good literal, a worked example, the spec).
-- **Horizontal slicing** — all tests first, then all implementation. Work in **vertical slices**: one test → one implementation → repeat, each test a tracer bullet.
+- **Implementation-coupled**: mocks internal collaborators, tests privates, or verifies through a side channel. The tell: it breaks on a refactor when behavior didn't change.
+- **Tautological**: the assertion recomputes the expected value the way the code does. Expected values must come from an independent source (a known-good literal, a worked example, the spec).
+- **Horizontal slicing**: all tests first, then all implementation. Work in **vertical slices**: one test → one implementation → repeat, each test a tracer bullet.
 
 ## Bugs: pin the bug, then flip it
 A bug is fixed test-first too, in two moves:

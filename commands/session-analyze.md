@@ -1,6 +1,6 @@
 ---
-description: Read a whole working session — every compaction segment — and report where the owner had to correct, reject or repeat something, tagged as a problem of the flow or of this project, with the repeats across segments first.
-argument-hint: "(optional) session id — default: the most recent session of this directory"
+description: Read a whole working session (every compaction segment) and report where the owner had to correct, reject or repeat something, tagged as a problem of the flow or of this project, with the repeats across segments first.
+argument-hint: "(optional) session id, default: the most recent session of this directory"
 ---
 
 Analyze the working session: $ARGUMENTS
@@ -23,7 +23,7 @@ With no id it takes the most recent session of the current directory. It writes 
 ## 2. Fan out, one agent per segment
 Call the Agent tool with `session-segment-analyst` for **every** segment **in a single message**, so they run in parallel, each with its segment's path and the index path. A segment fits one agent whole, so there is no chunking and no summarizing, and each agent reads the original conversation rather than a summary of a summary.
 
-## 3. Synthesize — repetition is the signal
+## 3. Synthesize: repetition is the signal
 - **Merge** findings that are the same problem seen twice.
 - **Put repetition first.** A finding whose owner turns appear in two or more segments is the strongest evidence this suite can get that a stage is wrong: the owner said it once, the flow did not learn, and they had to say it again.
 - **Drop any finding without an owner turn** (uuid, timestamp, quote). This is the rule that keeps the report from becoming narrative. The one exception is the **Environment** section below, whose evidence can be the segment and the tool-call names the extract kept.

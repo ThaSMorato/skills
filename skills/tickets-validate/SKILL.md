@@ -1,6 +1,6 @@
 ---
 name: tickets-validate
-description: Validate a feature's set of tickets before the human gate — coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable — and emit a clean/dirty verdict. Runs as the postflight of /tickets, or on "validate the tickets".
+description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Runs as the postflight of /tickets, or on "validate the tickets".
 disable-model-invocation: true
 ---
 
@@ -16,7 +16,7 @@ It exists because the ticket set was the one artifact in the flow with no valida
 - **The FDD** named in their `Source`: its acceptance criteria and its declared **test seams**.
 - `docs/features.md`, this feature's row: the `Depends on` column holds the cross-feature blockers.
 
-A ticket whose `Source` records a deliberate skip (`direct — <gear> gear, no FDD`) has no FDD to check coverage against. Skip `SC` for it, and run everything else, since its seam is in its own `Test seam` field.
+A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)`) has no FDD to check coverage against. Skip `SC` for it, and run everything else, since its seam is in its own `Test seam` field.
 
 ## Checks
 
@@ -62,13 +62,13 @@ seams: <count of distinct seams the tickets cross>
 dispersion: <max ACs / min ACs, one decimal>
 ---
 
-# Tickets validation — <feature>
+# Tickets validation: <feature>
 
 ## Findings
-### <ID> — <one-line headline>
+### <ID>: <one-line headline>
 - **Where:** <ticket number and title>
 - **Why it blocks:** <one or two sentences>
-- **Suggested resolution:** <the smallest change that would clear it — usually a merge or a split, naming the tickets>
+- **Suggested resolution:** <the smallest change that would clear it, usually a merge or a split, naming the tickets>
 
 ## Resolved
 <issues cleared on a re-run, moved here with their ID>

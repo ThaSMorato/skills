@@ -1,5 +1,5 @@
 ---
-description: Generate C4 diagrams (PlantUML) — C1/C2 from the HLD, the system C3 from the component map, C3/C4 per feature from the FDD.
+description: Generate C4 diagrams (PlantUML); C1/C2 from the HLD, the system C3 from the component map, C3/C4 per feature from the FDD.
 argument-hint: "(optional) feature name for the feature-level diagrams; omit for the system levels"
 ---
 

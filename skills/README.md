@@ -1,6 +1,6 @@
 # skills/
 
-**Model-invoked** skills (or interactive via a command wrapper). They run in the **main context**, so they talk to the user live — use them for anything HITL (interview, gates) and for reusable primitives.
+**Model-invoked** skills (or interactive via a command wrapper). They run in the **main context**, so they talk to the user live; use them for anything HITL (interview, gates) and for reusable primitives.
 
 | Kind | Skills |
 |---|---|
@@ -14,7 +14,7 @@
 | Writing | `writing-fragments` (explore), `writing-beats`, `writing-shape` (exploit) |
 | References | `testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui`, `visuals` |
 
-The reference skills are **routers**: a short index plus `rules/` or sibling files, read only when a row matches. That shape is the point — a stage that needs one rule shouldn't pay for the catalog.
+The reference skills are **routers**: a short index plus `rules/` or sibling files, read only when a row matches. That shape is the point: a stage that needs one rule shouldn't pay for the catalog.
 
 The verification skills carry `disable-model-invocation: true`, as do `plan`, `implement`, `design`, `prototype`, `guardrails`, `teach`, `walkthrough`, `wait-what`, `handoff`, the writing skills and the generators: they are consequential enough that firing them by accident is worse than the user typing the command.
 

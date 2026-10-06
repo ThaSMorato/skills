@@ -9,4 +9,4 @@ If neither `docs/hld.md` nor `docs/fdd/*.md` exists (and this isn't a `--brownfi
 
 After the agent returns, show a short summary: the Potential ADRs found (with their Step-0 category or 3-E justification), which came from re-examining the brief's recorded decisions, and any `> Needs Input`.
 
-Then ask the user which to formalize with `/adr-generate`. For the ones they reject, set `state: rejected` in the Potential's frontmatter with a one-line reason — a rejection that is not recorded gets re-proposed on the next sweep, and the sweep stops being trusted.
+Then ask the user which to formalize with `/adr-generate`. For the ones they reject, set `state: rejected` in the Potential's frontmatter with a one-line reason: a rejection that is not recorded gets re-proposed on the next sweep, and the sweep stops being trusted.

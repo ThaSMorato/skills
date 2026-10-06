@@ -1,4 +1,4 @@
-> Part of the `architecture` skill. The one method every stage uses to measure the dependency graph — `/analyze`, `/reconcile` and the `review-architecture` lens — so two measurements of the same code can be compared.
+> Part of the `architecture` skill. The one method every stage uses to measure the dependency graph (`/analyze`, `/reconcile` and the `review-architecture` lens) so two measurements of the same code can be compared.
 
 # Measuring the import graph
 

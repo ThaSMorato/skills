@@ -1,18 +1,18 @@
 <!--
 TEMPLATE: boundaries (the boundary contract)
-Filled by the boundary-architect agent AFTER the FDDs — only then are the real axes of change known.
+Filled by the boundary-architect agent AFTER the FDDs; only then are the real axes of change known.
 This is the Dependency Rule made concrete FOR THIS REPO: which edges are allowed, what is policy and
 what is detail, and where variation is deferred behind a plug point.
 It is deliberately OVERLOADED: prose says the rule, the manifest block says the same rule as a graph.
-Two representations of one intent means a contradiction is machine-detectable. Keep them in sync —
+Two representations of one intent means a contradiction is machine-detectable. Keep them in sync:
 if they disagree, that IS the finding.
 PRUNE + RENUMBER optional sections that don't apply; (required) sections always stay.
-ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
-value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
+value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
 An unmarked one is a validation finding (AS-N).
 -->
 
-# Boundary contract — <system>
+# Boundary contract: <system>
 
 ## Metadata (required)
 - **Status:** draft | in review | approved
@@ -20,18 +20,18 @@ An unmarked one is a validation finding (AS-N).
 
 ## Layering (required)
 > The components ordered by level: higher level = closer to business policy, further from I/O. The
-> Dependency Rule follows from this order — source-code dependencies point **inward/upward only**,
+> Dependency Rule follows from this order: source-code dependencies point **inward/upward only**,
 > toward policy, never from policy toward detail.
 
 | Level | Components | Why this level |
 |---|---|---|
-| 3 — policy | | |
-| 2 — application | | |
-| 1 — adapters | | |
-| 0 — detail | | |
+| 3: policy | | |
+| 2: application | | |
+| 1: adapters | | |
+| 0: detail | | |
 
 ## Policy vs detail (required)
-> Which components hold business policy and which are detail — the database, the web delivery
+> Which components hold business policy and which are detail (the database, the web delivery
 > mechanism, the framework, the third parties. A detail is something the policy must be able to
 > outlive. Name each detail and the abstraction that keeps it replaceable.
 
@@ -40,14 +40,14 @@ An unmarked one is a validation finding (AS-N).
 
 ## Allowed edges (required)
 > Every dependency edge that is permitted, in prose, with its reason. Anything not listed is
-> forbidden — this is a whitelist, and that is what makes it checkable.
+> forbidden; this is a whitelist, and that is what makes it checkable.
 
 | From | To | Why it is allowed |
 |---|---|---|
 
 ## Inversions (required)
 > Every place where the natural call direction and the allowed dependency direction disagree, and the
-> abstraction that flips it. Each inversion is an ADR candidate — flag it, do not write the ADR here.
+> abstraction that flips it. Each inversion is an ADR candidate; flag it, do not write the ADR here.
 
 | Call goes | Dependency points | Abstraction that inverts it | ADR |
 |---|---|---|---|
@@ -58,7 +58,7 @@ An unmarked one is a validation finding (AS-N).
 
 ## Manifest (required)
 > The same contract as a graph, for mechanical checking. Component names must match
-> `docs/components.md` exactly. `allow` is exhaustive — an edge absent from it is a violation.
+> `docs/components.md` exactly. `allow` is exhaustive: an edge absent from it is a violation.
 
 ```yaml
 components:
@@ -75,9 +75,9 @@ deferred:
     implementors: ["<component>"]
 ```
 
-## Divergence from the code (optional — brownfield)
+## Divergence from the code (optional, brownfield)
 > Edges that exist today and are **not** in `allow`, from the import graph. Each is either a violation
-> to fix or a rule to amend — say which, and never leave it unclassified.
+> to fix or a rule to amend; say which, and never leave it unclassified.
 
 | From | To | Evidence | Verdict (fix \| amend) |
 |---|---|---|---|

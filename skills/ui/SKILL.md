@@ -1,6 +1,6 @@
 ---
 name: ui
-description: 'A self-contained catalog of user-interface defects you can see in a diff — keyboard access, focus, accessible names, contrast, the loading / empty / error states, layout shift and slow interactions — each with its tell, its failure scenario and its fix. Use when reviewing a change that touches UI code, or when building a component or a page and asking "is this usable and accessible". Not for visual design taste, and not for how to test UI (the testing skill has that).'
+description: 'A self-contained catalog of user-interface defects you can see in a diff: keyboard access, focus, accessible names, contrast, the loading / empty / error states, layout shift and slow interactions, each with its tell, its failure scenario and its fix. Use when reviewing a change that touches UI code, or when building a component or a page and asking "is this usable and accessible". Not for visual design taste, and not for how to test UI (the testing skill has that).'
 ---
 
 # UI

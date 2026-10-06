@@ -8,7 +8,7 @@ HARD CAP: 150 lines. If it grows past that, the content belongs in a stack guide
 PRUNE + RENUMBER optional sections that don't apply; (required) sections always stay.
 -->
 
-# Engineering Guidelines — <project>
+# Engineering Guidelines: <project>
 
 > The router for this repo's standards. Read the tables, then load only the entry that covers what you
 > are touching. Everything here is a pointer with a trigger; nothing here is a tutorial.
@@ -22,8 +22,8 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 | <language> | <x.y> | specified \| detected | `.claude/skills/<tech>-guide/` |
 
 ## 2. Stack guide routing (required)
-> Which guide applies to which files. A stage that touches `.rb` loads the Ruby guide and nothing else
-> — this table is what makes that choice deterministic instead of a guess.
+> Which guide applies to which files. A stage that touches `.rb` loads the Ruby guide and nothing else.
+> This table is what makes that choice deterministic instead of a guess.
 
 | When you touch | Load |
 |---|---|
@@ -35,7 +35,7 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 > `clean-code`, `code-smells`, and `testing` skills are the fallback standard.
 
 ## 3. Non-negotiables (required)
-> The handful of rules that hold everywhere in this repo, regardless of language. Keep this short —
+> The handful of rules that hold everywhere in this repo, regardless of language. Keep this short:
 > a long list of non-negotiables is a list of suggestions. Anything language-specific belongs in a
 > stack guide.
 
@@ -47,7 +47,7 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 |---|---|
 
 ## 5. Commands (required)
-> The real commands this repo runs, discovered from its own manifests — not the ecosystem's defaults.
+> The real commands this repo runs, discovered from its own manifests, not the ecosystem's defaults.
 > Plans reference these verbatim in their Deliverables.
 
 | Purpose | Command |
@@ -63,7 +63,7 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 
 | Document | Load it when |
 |---|---|
-| `CONTEXT.md` | naming anything — it owns the vocabulary |
+| `CONTEXT.md` | naming anything: it owns the vocabulary |
 | `docs/adr/index.md` | a decision in the area is binding |
 | `docs/components.md` | you need the component map |
 | `docs/boundaries.md` | you are adding a dependency between components |
@@ -76,6 +76,6 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 |---|---|
 
 ## 8. Pre-commit checklist (required)
-> What must be true before a change lands, as checkable lines — each one either a command from section
+> What must be true before a change lands, as checkable lines, each one either a command from section
 > 5 or an objectively verifiable condition.
 - [ ]

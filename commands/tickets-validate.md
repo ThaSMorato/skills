@@ -1,5 +1,5 @@
 ---
-description: Validate a feature's ticket set before the human gate — coverage, invention, tickets too big or too small, several tickets on one seam, blocking cycles, dispersion — with a clean/dirty verdict.
+description: Validate a feature's ticket set before the human gate (coverage, invention, tickets too big or too small, several tickets on one seam, blocking cycles, dispersion), with a clean/dirty verdict.
 argument-hint: "<feature name or slug>"
 ---
 

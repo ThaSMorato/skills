@@ -1,6 +1,6 @@
 ---
-description: Find the cause of a bug by evidence — reproduce, three hypotheses of different kinds, evidence for and against, one discriminating probe at a time — and pin it with tests before anything is fixed.
-argument-hint: "<the symptom — a failing test, an error, a bug report, or a ticket>"
+description: Find the cause of a bug by evidence (reproduce, three hypotheses of different kinds, evidence for and against, one discriminating probe at a time) and pin it with tests before anything is fixed.
+argument-hint: "<the symptom: a failing test, an error, a bug report, or a ticket>"
 ---
 
 Call the Skill tool with `diagnose` for: $ARGUMENTS

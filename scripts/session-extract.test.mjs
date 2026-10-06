@@ -112,7 +112,7 @@ describe('resolveTranscript', () => {
   })
 })
 
-describe('createSegmenter — owner turns', () => {
+describe('createSegmenter: owner turns', () => {
   test('keeps what the owner typed, with uuid and timestamp', () => {
     const [segment] = segmentsOf([makeEntry({ uuid: 'u-7', timestamp: '2026-09-18T10:05:00.000Z' })])
 
@@ -135,7 +135,7 @@ describe('createSegmenter — owner turns', () => {
     assert.equal(segment.turns[0].text, 'before after')
   })
 
-  test('drops the summary written after a compaction — it is not the owner speaking', () => {
+  test('drops the summary written after a compaction: it is not the owner speaking', () => {
     const [segment] = segmentsOf([makeEntry({ isCompactSummary: true, message: { content: 'This session is being continued' } })])
 
     assert.deepEqual(segment.turns, [])
@@ -153,7 +153,7 @@ describe('createSegmenter — owner turns', () => {
     assert.deepEqual(segment.turns, [])
   })
 
-  test('drops background task notifications — the harness speaking, not the owner', () => {
+  test('drops background task notifications: the harness speaking, not the owner', () => {
     const [segment] = segmentsOf([makeEntry({ message: { content: '<task-notification>\n<task-id>x</task-id>' } })])
 
     assert.deepEqual(segment.turns, [])
@@ -178,10 +178,10 @@ describe('createSegmenter — owner turns', () => {
 
     const [segment] = segmentsOf(entries)
 
-    assert.equal(segment.turns[1].text, '[rejected AskUserQuestion to clarify — the clarification is the next owner turn]')
+    assert.equal(segment.turns[1].text, '[rejected AskUserQuestion to clarify; the clarification is the next owner turn]')
   })
 
-  test('drops subagent turns — the owner has no voice there', () => {
+  test('drops subagent turns: the owner has no voice there', () => {
     const [segment] = segmentsOf([makeEntry({ isSidechain: true })])
 
     assert.deepEqual(segment.turns, [])
@@ -249,7 +249,7 @@ describe('createSegmenter — owner turns', () => {
   })
 })
 
-describe('createSegmenter — assistant turns', () => {
+describe('createSegmenter: assistant turns', () => {
   test('keeps the assistant text and only the names of the tools it called', () => {
     const content = [
       { type: 'thinking', thinking: 'private reasoning' },
@@ -279,7 +279,7 @@ describe('createSegmenter — assistant turns', () => {
   })
 })
 
-describe('createSegmenter — segmentation', () => {
+describe('createSegmenter: segmentation', () => {
   test('starts a new segment at every compaction boundary, carrying its metadata', () => {
     const segments = segmentsOf([makeEntry({ uuid: 'u-1' }), makeBoundary(), makeEntry({ uuid: 'u-2' })])
 

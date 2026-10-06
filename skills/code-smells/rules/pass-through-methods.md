@@ -2,7 +2,7 @@
 
 # Pass-Through Methods
 
-**Tell:** a method does little but forward its arguments to another method — often with the same signature.
+**Tell:** a method does little but forward its arguments to another method, often with the same signature.
 
 It grows interface complexity without adding functionality, makes the class shallower, and couples the two classes (change the target's signature and the forwarder must follow). It also confuses the reader: which of the two actually does the work?
 

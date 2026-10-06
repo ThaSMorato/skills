@@ -1,16 +1,16 @@
 <!--
 TEMPLATE: prd (Product Requirements Document)
-Filled by the PRD agent from the requirements-brief. States WHAT and WHY — never HOW
+Filled by the PRD agent from the requirements-brief. States WHAT and WHY, never HOW
 (architecture/implementation belong to the HLD/FDD). PRUNE + RENUMBER the optional sections that
 don't apply; (required) sections always stay. Product level uses less detail than feature level.
 AI practices: NUMBER the requirements (RF-001, RNF-001) for stable references; optionally add a JSON
 twin (same info, English keys, empty fields omitted) for deterministic consumption.
-ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` — or `> Needs Input:` when no
-value is defensible — per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
+ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
+value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
 An unmarked one is a validation finding (AS-N).
 -->
 
-# PRD — <name>
+# PRD: <name>
 
 ## Metadata (required)
 - **Level:** product | module (EPIC) | feature
@@ -19,7 +19,7 @@ An unmarked one is a validation finding (AS-N).
 - **Sources:** <requirements-brief, interview, attached docs>
 
 > **Level** and **Status** are read by other stages, not decoration. **Level** sets the depth of this
-> document — `product` states outcomes, `feature` states behavior — and it propagates from the brief.
+> document (`product` states outcomes, `feature` states behavior) and it propagates from the brief.
 > **Status** is the gate record: it starts `draft`, and only whoever runs the gate moves it to
 > `approved` or `changes-requested`. `/flow` reads it to answer "what is waiting on me?", so a Status
 > nobody writes makes the scan lie.
@@ -31,25 +31,25 @@ An unmarked one is a validation finding (AS-N).
 > Goals as bullets of the expected outcome + the metric that confirms each (observable impact ≠ technical conclusion).
 
 ## Scope (required)
-> `Out` is not a leftover — it is the second axis on the same statement, and it is where a wrong scope
+> `Out` is not a leftover; it is the second axis on the same statement, and it is where a wrong scope
 > reading shows itself. Anything a reader might reasonably assume is in, and isn't, belongs in `Out`.
 - **In:**
 - **Out:**
 
 ## Functional requirements (required)
-> Concrete capabilities, NUMBERED and verifiable. Not technical design. Each carries its **origin** —
-> the brief section or recorded decision it came from — so the trace is *recorded*, not merely
+> Concrete capabilities, NUMBERED and verifiable. Not technical design. Each carries its **origin**:
+> the brief section or recorded decision it came from, so the trace is *recorded*, not merely
 > promised, and the gate can check it without reading both documents side by side.
 > In brownfield, state at the top of this section whether the RFs describe **the delta only** or **the
 > whole system**; the two readings produce completely different documents.
-- **RF-001** — <requirement> *(from: <brief section>)*
-- **RF-002** — <requirement> *(from: <brief section>)*
+- **RF-001**: <requirement> *(from: <brief section>)*
+- **RF-002**: <requirement> *(from: <brief section>)*
 
 ## Non-functional requirements (optional)
 > Quality/operational constraints (latency, availability, security, limits). Numbered, each with its
-> origin. These become the HLD's architectural **drivers** — every one of them must get an
+> origin. These become the HLD's architectural **drivers**: every one of them must get an
 > architectural answer, and `/doc-validate` checks exactly that.
-- **RNF-001** — <constraint> *(from: <brief section>)*
+- **RNF-001**: <constraint> *(from: <brief section>)*
 
 ## User flow (optional)
 > Expected usage path (order, dependency, logic). Reduces wrong inference.
@@ -66,7 +66,7 @@ An unmarked one is a validation finding (AS-N).
 
 ## JSON contract (required)
 > The same information as a structured object (English keys, empty fields omitted), for pipelines and
-> validation. It is a **serialization**, and that is its value: it catches structural omission — a
+> validation. It is a **serialization**, and that is its value: it catches structural omission: a
 > requirement present in prose and absent here, or the reverse. It does **not** catch a wrong meaning,
 > because the same wrong meaning serializes cleanly; that is what the two-axis definitions in
 > `CONTEXT.md` are for. `/doc-validate` compares prose against this block.

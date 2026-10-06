@@ -2,7 +2,7 @@
 
 # Dead Code
 
-**Tell:** code that never runs — an unused variable, parameter, method, or class; an unreachable branch; or commented-out code kept "just in case."
+**Tell:** code that never runs: an unused variable, parameter, method, or class; an unreachable branch; or commented-out code kept "just in case."
 
 It does no harm at runtime but charges a reading tax: everyone who passes through has to understand something that doesn't matter.
 

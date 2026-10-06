@@ -1,5 +1,5 @@
 ---
-description: Re-measure the dependency graph and reconcile it with the component map and boundary contract — drift since the last measurement, the commits behind it, the amendments each owning stage should make, and at most three latent-component proposals backed by measured evidence.
+description: Re-measure the dependency graph and reconcile it with the component map and boundary contract (drift since the last measurement, the commits behind it, the amendments each owning stage should make, and at most three latent-component proposals backed by measured evidence).
 argument-hint: "(none)"
 ---
 

@@ -11,10 +11,10 @@ Distribute testing effort by speed and cost. Many cheap tests at the base, few e
 | Level | Tests | Speed | Isolation | Rough share |
 |---|---|---|---|---|
 | **Unit** | one function/class/use case, dependencies faked | milliseconds | full | ~70% |
-| **Integration** | modules wired together (DB, HTTP, DI) — the "wiring" and boundaries | seconds | partial, may use a real DB | ~20% |
+| **Integration** | modules wired together (DB, HTTP, DI): the "wiring" and boundaries | seconds | partial, may use a real DB | ~20% |
 | **E2E** | the whole system from the user's perspective, everything real | seconds–minutes | none | ~10% |
 
-The shape matters more than the exact numbers: maximize fast, deterministic tests; keep the slow, flaky ones few and reserved for critical flows. Integration tests catch what units miss — O/R mapping, transactions, contract mismatches. E2E gives the most confidence and the most flakiness; spend it only on critical paths. (Frontend shifts the sweet spot toward integration — see `frontend-patterns.md`.)
+The shape matters more than the exact numbers: maximize fast, deterministic tests; keep the slow, flaky ones few and reserved for critical flows. Integration tests catch what units miss: O/R mapping, transactions, contract mismatches. E2E gives the most confidence and the most flakiness; spend it only on critical paths. (Frontend shifts the sweet spot toward integration; see `frontend-patterns.md`.)
 
 ## F.I.R.S.T.
 
@@ -26,15 +26,15 @@ The shape matters more than the exact numbers: maximize fast, deterministic test
 | **Self-validating** | boolean pass/fail, no manual log/file inspection | failure becomes subjective and costly to check |
 | **Timely** | written with (or before) the production code | code written test-last is born hard to test |
 
-Each property removes a source of friction or a lie. Together they keep the suite cheap to run and trustworthy — the only kind a team actually executes and trusts to decide on.
+Each property removes a source of friction or a lie. Together they keep the suite cheap to run and trustworthy: the only kind a team actually executes and trusts to decide on.
 
 ## Arrange-Act-Assert
 
 Three phases, in order:
 
-- **Arrange** — create the SUT, wire fake dependencies, seed data. Keep it to only what this test needs.
-- **Act** — perform exactly one operation on the SUT.
-- **Assert** — verify the outcome: return value, state change, or side effect. Never put a side effect here.
+- **Arrange**: create the SUT, wire fake dependencies, seed data. Keep it to only what this test needs.
+- **Act**: perform exactly one operation on the SUT.
+- **Assert**: verify the outcome: return value, state change, or side effect. Never put a side effect here.
 
 ```
 repository = InMemoryUsersRepository()          // Arrange
@@ -44,21 +44,21 @@ expect(result.isRight()).toBe(true)             // Assert
 expect(repository.items).toHaveLength(1)
 ```
 
-## SUT — System Under Test
+## SUT: System Under Test
 
-The SUT is the specific unit being exercised; everything else is a dependency. Naming the variable `sut` makes any test instantly scannable — the reader sees `sut` and knows *this is the thing being tested*, and `sut.execute(...)` is the one Act.
+The SUT is the specific unit being exercised; everything else is a dependency. Naming the variable `sut` makes any test instantly scannable: the reader sees `sut` and knows *this is the thing being tested*, and `sut.execute(...)` is the one Act.
 
 ## Single responsibility & the single-act rule
 
 Each test verifies **one behavior**, so its name alone tells you what broke.
 
-- **Single logical assertion, not single line.** One test asserts one logical fact. If verifying that fact needs six assertions (e.g. six indicator lights that together represent one state), that is fine — they affirm one thing. When the result is that complex, compose it into a readable form (see **Test DSL** below).
+- **Single logical assertion, not single line.** One test asserts one logical fact. If verifying that fact needs six assertions (e.g. six indicator lights that together represent one state), that is fine; they affirm one thing. When the result is that complex, compose it into a readable form (see **Test DSL** below).
 - **Single Act is the rule that actually matters.** Test one action at a time. Avoid `arrange → act → assert → act → assert`. Each action is tested individually so a downstream assertion is never corrupted by an upstream action, and each test stands alone (this is the "Isolated" of F.I.R.S.T. in practice).
-- **The "and" smell.** A test name with "and" (saves **and** sends **and** returns) hides multiple Acts → split into multiple tests. A multi-Act test fails without telling you which action broke; one Act per test gives a precise diagnosis — the red test's name points at the exact behavior that regressed.
+- **The "and" smell.** A test name with "and" (saves **and** sends **and** returns) hides multiple Acts → split into multiple tests. A multi-Act test fails without telling you which action broke; one Act per test gives a precise diagnosis: the red test's name points at the exact behavior that regressed.
 
 ## Deterministic tests
 
-Non-determinism is a virulent infection — one flaky test erodes trust in the whole suite. Common sources and fixes:
+Non-determinism is a virulent infection: one flaky test erodes trust in the whole suite. Common sources and fixes:
 
 | Source | Problem | Fix |
 |---|---|---|
@@ -69,7 +69,7 @@ Non-determinism is a virulent infection — one flaky test erodes trust in the w
 | filesystem | paths differ across OS | in-memory abstractions |
 | shared mutable state | cascading, order-dependent failures | each test builds and tears down its own world |
 
-**Controlling time.** When logic depends on the date (expiry, periods, "today"), freeze the clock at a **specific** date — never rely on "now" being a particular day — and **always restore the real clock** in teardown. A fake clock that leaks into the next test is shared mutable state. The idea is the same in every stack: fake timers, an injected `Clock`, a freeze-time helper.
+**Controlling time.** When logic depends on the date (expiry, periods, "today"), freeze the clock at a **specific** date (never rely on "now" being a particular day) and **always restore the real clock** in teardown. A fake clock that leaks into the next test is shared mutable state. The idea is the same in every stack: fake timers, an injected `Clock`, a freeze-time helper.
 
 ```
 beforeEach(() => { useFakeClock(); setNow("2024-01-15T10:00:00") })
@@ -90,11 +90,11 @@ Group by scenario (`describe('Success')` / `describe('Failure')`) and name each 
 
 Test code is **not** a second-class citizen. It demands the same thought, design, and care as production code, because it evolves alongside production and, left dirty, rots faster.
 
-- **Dirty tests are worse than none.** As production grows, tests must grow with it. A messy suite makes every change expensive, breaks in swarms on unrelated edits, and becomes a growing liability the team eventually abandons — after which fear of change sets in and bugs accumulate.
-- **Apply production standards.** Readability, meaningful names, small focused helpers, no duplication (via factories and a test DSL). This is what keeps the suite cheap to evolve — and only a suite that survives gives the confidence to decide.
-- **Dual Standard.** Test and production code may differ **only** on efficiency (a test may use a less-optimized but clearer approach). They may **never** differ on design and cleanliness — there the bar is identical.
+- **Dirty tests are worse than none.** As production grows, tests must grow with it. A messy suite makes every change expensive, breaks in swarms on unrelated edits, and becomes a growing liability the team eventually abandons, after which fear of change sets in and bugs accumulate.
+- **Apply production standards.** Readability, meaningful names, small focused helpers, no duplication (via factories and a test DSL). This is what keeps the suite cheap to evolve, and only a suite that survives gives the confidence to decide.
+- **Dual Standard.** Test and production code may differ **only** on efficiency (a test may use a less-optimized but clearer approach). They may **never** differ on design and cleanliness; there the bar is identical.
 - **Minimize coupling to production detail.** If one production change breaks hundreds of tests, the suite is badly designed. Test behavior through the public interface, not internal mechanics, so a requirement change touches the fewest tests.
-- **The payoff — a living, low-level spec.** A clean suite documents the system in your own language, shows how the APIs are used, actually runs, and cannot silently go stale: if it drifts from the code, it breaks. That is documentation no comment or external doc can match.
+- **The payoff: a living, low-level spec.** A clean suite documents the system in your own language, shows how the APIs are used, actually runs, and cannot silently go stale: if it drifts from the code, it breaks. That is documentation no comment or external doc can match.
 
 ### Practical readability lessons
 
@@ -103,26 +103,26 @@ Test code is **not** a second-class citizen. It demands the same thought, design
 - **Test behavior, not internal detail.** Assert the output of a small behavioral concept, so the test survives refactors that don't change behavior.
 - **Don't make things public just to test them.** If an extracted helper only serves its origin, keep it private and cover it via integration through the public class. Promote to public (with its own unit test) only a sub-behavioral unit useful in other contexts.
 
-## Test DSL — the refactor target after green
+## Test DSL: the refactor target after green
 
-The refactor step of red → green → refactor cleans **test** code as much as production code, and its main move is growing a **test DSL**: a layer of intention-revealing helpers that wrap the system's API so each test reads like a specification of the domain. A DSL is never designed up front — it **emerges** from refactoring tests whose setup and assertion noise was hiding intent, exactly as you refactor production code.
+The refactor step of red → green → refactor cleans **test** code as much as production code, and its main move is growing a **test DSL**: a layer of intention-revealing helpers that wrap the system's API so each test reads like a specification of the domain. A DSL is never designed up front; it **emerges** from refactoring tests whose setup and assertion noise was hiding intent, exactly as you refactor production code.
 
-Each technique is the same idea — push the mechanics into a named helper, leave the intent in the test:
+Each technique is the same idea: push the mechanics into a named helper, leave the intent in the test:
 
-- **Builders / mother objects** — construct objects with meaningful defaults so a test states only what it's about. Object Mother + Builder (`UserObjectMother.createUser().admin().build()`) is the domain-language form — see `backend-patterns.md`.
-- **Composed assertions / custom matchers** — helpers that express the goal, not the mechanics: `assertResponseContains(...)`, `expect(user).toBeAdmin()`.
-- **Composed results** — compress a result too large to read into a smaller comparable form and assert against that (six scattered assertions become one).
+- **Builders / mother objects**: construct objects with meaningful defaults so a test states only what it's about. Object Mother + Builder (`UserObjectMother.createUser().admin().build()`) is the domain-language form; see `backend-patterns.md`.
+- **Composed assertions / custom matchers**: helpers that express the goal, not the mechanics: `assertResponseContains(...)`, `expect(user).toBeAdmin()`.
+- **Composed results**: compress a result too large to read into a smaller comparable form and assert against that (six scattered assertions become one).
 
 ```
-// noisy — speaks the raw API
+// noisy: speaks the raw API
 const path     = PagePath.parse("/root/page")
 const response = new Responder(page).respond(request)
 expect(cast(response).body).toContain("welcome")
 
-// with a test DSL — speaks the domain
+// with a test DSL: speaks the domain
 givenPage("/root/page")
 whenRequested()
 assertResponseContains("welcome")
 ```
 
-It applies at **every level**: unit (builders + custom matchers), integration (setup helpers), and acceptance — where Given/When/Then is itself a business-readable DSL (see `acceptance-bdd.md`). Invest in it: the DSL is what lets the suite double as living documentation.
+It applies at **every level**: unit (builders + custom matchers), integration (setup helpers), and acceptance, where Given/When/Then is itself a business-readable DSL (see `acceptance-bdd.md`). Invest in it: the DSL is what lets the suite double as living documentation.

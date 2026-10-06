@@ -2,7 +2,7 @@
 
 # Open redirect
 
-**The tell.** A redirect destination is taken from the request — a `next`, `returnUrl`, `redirect_uri` or `continue` parameter — and used without validation.
+**The tell.** A redirect destination is taken from the request (a `next`, `returnUrl`, `redirect_uri` or `continue` parameter) and used without validation.
 
 **Failure scenario.** A phishing link points at the real, trusted domain with `?next=https://evil.example/login`. The victim sees a legitimate host, authenticates, and is bounced to a copy of the login page. In an OAuth flow, a permissive `redirect_uri` sends the authorization code itself to the attacker.
 
