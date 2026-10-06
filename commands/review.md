@@ -14,7 +14,7 @@ If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-ba
 Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list. Every reviewer receives **the path to that file**, not the instruction to compute it — nine agents each running the same diff is nine times the cost for one result, and the same work redone by every lens.
 
 ## 3. Fan out
-Dispatch these agents **in a single message** so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the fixed point, and the artifacts its own definition names.
+Call the Agent tool once per lens below, all **in a single message** so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the fixed point, and the artifacts its own definition names.
 
 | Agent | Lens |
 |---|---|
@@ -30,7 +30,7 @@ Dispatch these agents **in a single message** so they run in parallel. Each is n
 
 If `/trim` ran, `.scratch/<feature-slug>/trim/<NN>-<slug>.md` has an **Unrequested behavior** section: hand it to `review-spec` as leads — behavior in the diff that no AC asked for, which trimming could not cut because cutting it changes behavior. Leads, not findings: the lens confirms each against the plan and the ticket like anything else.
 
-When `docs/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Dispatch `review-ui` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
+When `docs/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the Agent tool with `review-ui` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
 
 **Every lens may follow the call one hop outside the diff.** Tell each agent so when you dispatch it: it may open the definition of any function the changed code calls, one level deep, and judge it against its own lens. A diff-scoped lens is structurally blind to the defect that lives one call away. The loop is in the diff and the query is in a repository that did not change. The cycle closes through an untouched file. The tainted value reaches a sink in a helper. A finding found through a hop cites **both** locations, the changed call site and the unchanged code, and it is about **this** change: the diff made the unchanged code expensive, reachable or wrong. Unchanged code that was already wrong on its own is the verifier's `pre-existing`. One hop, not a walk: a lens that follows the whole call graph is reviewing the repository, not the change.
 

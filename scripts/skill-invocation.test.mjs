@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const SKILL_CALL = /[Cc]all the Skill tool with (?:each of: )?`([a-z0-9-]+)`/g
 const AGENT_CALL = /[Cc]all the Agent tool with `([a-z0-9-]+)`/g
+const SOFT_DISPATCH = /\b[Dd]ispatch (?:one |a |an |two )?`[a-z0-9-]+`/g
 const SOFT_LOAD = /\b(?:Load|load|Use|use|Run|run|Dispatch|dispatch) (?:\*\*both\*\* |both )?the `[a-z0-9-]+` (?:skill|agent)\b(?!')/g
 
 const skillNames = readdirSync(join(root, 'skills')).filter((name) => existsSync(join(root, 'skills', name, 'SKILL.md')))
@@ -43,7 +44,9 @@ test('every agent called through the Agent tool exists', () => {
 })
 
 test('skills and agents are reached through their tool, not by a softer phrasing', () => {
-  const soft = sources.flatMap((path) => (read(path).match(SOFT_LOAD) ?? []).map((phrase) => `${path}: ${phrase}`))
+  const soft = sources.flatMap((path) =>
+    [...(read(path).match(SOFT_LOAD) ?? []), ...(read(path).match(SOFT_DISPATCH) ?? [])].map((phrase) => `${path}: ${phrase}`),
+  )
 
   assert.deepEqual(soft, [])
 })

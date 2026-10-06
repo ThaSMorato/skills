@@ -35,11 +35,14 @@ Walk the diff rule by rule, 2 → 3 → 4, and propose each tidying with:
   - **observability** — the same logs, metrics and trace spans. Merging two near-copies where only one was traced must keep that asymmetry;
   - **type breadth** — no type narrowed under a caller, and none weakened (no new `any`, `Object`, `interface{}`).
 - for rule 3, **which kind of duplication**, and why it is the essential kind;
-- for rule 4, **what would break if the element were needed**, and why it is not.
+- for rule 4, **what would break if the element were needed**, and why it is not;
+- **its strength** (`visuals` skill): *Strong*, *Worth exploring* or *Speculative*, and the gain in the project's terms, never "cleaner".
 
 A proposal with no evidence, or one that changes behavior, is not a tidying. Drop it.
 
-Present the proposals grouped by rule, in order, as a structured choice. **The user picks which to apply.** None is applied by default.
+Present the proposals grouped by rule, in order, as a structured choice. Where a proposal moves code between functions or files, show its before and after as the smallest view the `visuals` skill lists (a call tree or file tree diff sketch), next to it. **The user picks which to apply.** None is applied by default.
+
+**In path mode, offer the HTML report** before asking: a path usually yields more proposals than a list carries well. Call the Skill tool with `visuals` and render one card per proposal with `html-report.md`, then ask from the report.
 
 ## 2. Apply, one at a time
 For each chosen tidying, in rule order:
@@ -52,7 +55,7 @@ For each chosen tidying, in rule order:
 Structural changes go in their own commit, separate from the behavioral work, so each can be reviewed and reverted on its own. Version control remains the user's call; say which commits you suggest.
 
 ## 3. Review what the tidying changed
-Green tests prove the behavior the tests cover; they do not prove the code got better, and this stage runs **after** `/review`, so nothing else will read it. Take the diff of the applied tidyings alone (from the commit before the first one to `HEAD`) and dispatch two review agents on it, in parallel, the way `/review` dispatches them:
+Green tests prove the behavior the tests cover; they do not prove the code got better, and this stage runs **after** `/review`, so nothing else will read it. Take the diff of the applied tidyings alone (from the commit before the first one to `HEAD`) and call the Agent tool with `review-spec` and with `review-quality` on it, in parallel, the way `/review` dispatches its lenses:
 - **`review-spec`**, told that the change claims to be **structural**: any behavior it finds changed is a finding.
 - **`review-quality`**: a tidying that introduced a smell, or traded one smell for another, is a finding.
 
