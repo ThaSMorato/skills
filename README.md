@@ -48,7 +48,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Diagrams | `/c4-generate` · `/mermaid-generate` |
 | Decisions (ADR) | `/adr-identify` · `/adr-generate` · `/adr-link` |
 | Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` · `/guardrails` |
-| Development | `/tickets` · `/tickets-validate` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` · `/pr` · `/diagnose` |
+| Development | `/tickets` · `/tickets-validate` · `/design` · `/prototype` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` · `/pr` · `/diagnose` |
 | Looking back | `/retro` · `/session-analyze` |
 
 ## Structure

@@ -35,6 +35,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `/guidelines`, `/generate-stack-guide` |
 | `docs/guardrails.md` | the repo's installed checks (pre-commit, CI, git guard, dependency linter) and how each was proven | `/guardrails` |
 | `docs/declined.md` | proposals the owner turned down for a lasting reason, read before `/tidy`, `/trim` and `/review` propose again | `/tidy`, `/trim`, `/review` (append-only) |
+| `.scratch/<feature>/prototypes/*.md` | design questions answered with throwaway code: the question, the answer, the decision-bearing snippet | `/prototype` |
 | `docs/questionnaires/*.md` | questions sent to someone outside the conversation, and their answers (`status: sent / answered / partial`) | `/questionnaire` |
 | `docs/validation/*.md` | doc validation verdicts | `/doc-validate` |
 | `.scratch/<feature>/issues/` | tickets | `/tickets <feature>` |

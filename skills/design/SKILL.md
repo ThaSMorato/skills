@@ -41,7 +41,7 @@ Then, for each capability the ticket needs, **search before you assume it must b
 The map is complete when **every acceptance criterion in the ticket has a node that satisfies it**. Walk the ACs by id and name the node for each. An AC with no node is the gap this check exists to find; a node serving no AC is either scope creep or a missing AC.
 
 ## 5. Confirm, then persist
-Present the map and **confirm uncertain decisions with the user** before coding.
+Present the map and **confirm uncertain decisions with the user** before coding. When a decision cannot be settled on paper (whether a state model holds up, what a screen should look like), offer `/prototype` for it; its answer comes back as a `> Decided:` citing the prototype file.
 
 Then write it to `.scratch/<feature-slug>/design/<NN>-<slug>.md`:
 
