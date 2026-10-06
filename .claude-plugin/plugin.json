@@ -44,6 +44,8 @@
     "./skills/pr",
     "./skills/visuals",
     "./skills/teach",
+    "./skills/wait-what",
+    "./skills/handoff",
     "./skills/guardrails",
     "./skills/tidy",
     "./skills/code-smells",
