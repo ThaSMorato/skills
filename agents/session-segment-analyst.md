@@ -32,6 +32,14 @@ The conversation is where plausible narrative lives, so the bar here is higher t
 
 For each, say **which stage or behavior** of the flow was running, and **what should change**. Name the command, skill, agent or template it would change if you can tell from the conversation; say "unknown" if you cannot.
 
+## Environment signals (the one exception to the owner-turn rule)
+Separately from the findings above, report what the segment shows about the **environment**, where the evidence is the sequence of tool-call **names** rather than an owner turn:
+- **navigation**: a run of searches and reads (`Grep`, `Glob`, `Read`, many in a row) before the assistant names the file it needed;
+- **tool economy**: the same costly call repeated, or a long chain a single command would replace;
+- **information access**: the assistant saying it cannot see something (logs, a database, the UI) and working around it.
+
+Cite the assistant turn (timestamp) and the tool names in order. These are candidates, not findings: the synthesis classifies them with `retro/environment.md`. Report none rather than stretch.
+
 ## Tag every finding: `flow` or `project`
 - **`flow`** — the plugin's process would do this wrong on any project: a stage that asks badly, a gate that lets something through, a template that invites bulk. It becomes an improvement to the plugin.
 - **`project`** — specific to this codebase or this owner's conventions: a naming rule, a library preference, a domain fact. It becomes a skill or a guide **in this project**.
@@ -50,4 +58,13 @@ Return findings as a list. Nothing is written to disk; the synthesis writes the 
   change: <what should change, and where>
 ```
 
-If the segment has no owner turn that meets the evidence rule, return `none` and say how many owner turns you read. An empty segment is a normal result, not a failure.
+Then the environment signals, if any:
+
+```
+- signal: navigation | tool-economy | information-access
+  turn: <timestamp of the assistant turn>
+  tools: [<tool names, in order>]
+  what: <one line: what it was looking for, or what it could not reach>
+```
+
+If the segment has no owner turn that meets the evidence rule, return `none` for the findings and say how many owner turns you read. An empty segment is a normal result, not a failure.

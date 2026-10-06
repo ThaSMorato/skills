@@ -39,6 +39,15 @@ repeated: <n findings seen in more than one segment>
 | Pattern | Owner turn | Stage | Change | Filter |
 |---|---|---|---|---|
 
+## Environment (optional)
+> From `skills/retro/environment.md`: navigation, tool economy and information access, which only a
+> session shows. Evidence is the segment and the tool-call names the extract kept (a run of searches
+> before a file was found, a costly call repeated), or an owner turn when there is one. Each finding is
+> read on two tracks: what it cost this session, and what change to the environment prevents it.
+
+| Category | Evidence (segment · tool calls or owner turn) | Tactical cost | Strategic change | Mechanical / judgement | Where it lands |
+|---|---|---|---|---|---|
+
 ## What the conversation couldn't tell me (required)
 > Segments too thin to judge, tool results that were dropped by design, anything a reader might
 > expect this report to cover that the transcript does not show.

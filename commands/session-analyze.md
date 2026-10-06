@@ -21,14 +21,15 @@ node "${CLAUDE_PLUGIN_ROOT}/scripts/session-extract.mjs" [--session <id>]
 With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected, plus the assistant's text and the **names** of the tools it called. It drops file snapshots, tool results and arguments (where file contents and secrets live), thinking, subagent turns and the compaction summaries.
 
 ## 2. Fan out, one agent per segment
-Dispatch `session-segment-analyst` for **every** segment **in a single message**, so they run in parallel, each with its segment's path and the index path. A segment fits one agent whole, so there is no chunking and no summarizing, and each agent reads the original conversation rather than a summary of a summary.
+Call the Agent tool with `session-segment-analyst` for **every** segment **in a single message**, so they run in parallel, each with its segment's path and the index path. A segment fits one agent whole, so there is no chunking and no summarizing, and each agent reads the original conversation rather than a summary of a summary.
 
 ## 3. Synthesize — repetition is the signal
 - **Merge** findings that are the same problem seen twice.
 - **Put repetition first.** A finding whose owner turns appear in two or more segments is the strongest evidence this suite can get that a stage is wrong: the owner said it once, the flow did not learn, and they had to say it again.
-- **Drop any finding without an owner turn** (uuid, timestamp, quote). No exceptions: this is the rule that keeps the report from becoming narrative.
+- **Drop any finding without an owner turn** (uuid, timestamp, quote). This is the rule that keeps the report from becoming narrative. The one exception is the **Environment** section below, whose evidence can be the segment and the tool-call names the extract kept.
 - Keep each finding's `flow` / `project` tag. When two agents tagged the same problem differently, `project` wins unless the evidence shows it would recur on any project.
 - **Filter what gets promoted.** Before a `project` finding's change says "make it a skill" or "add it to a guide", run it through `${CLAUDE_PLUGIN_ROOT}/skills/retro/promotion-filter.md`: not findable in five minutes, specific to this codebase, cost real effort, and a trigger the task will actually contain. One that fails stays a finding, marked with the question it failed; it is not proposed as a skill or guide.
+- **Read the environment.** A session shows what artifacts cannot: where the agent searched before it found a file (navigation), which tool calls were expensive (tool economy), what it could not see (information access). Classify those with `${CLAUDE_PLUGIN_ROOT}/skills/retro/environment.md`, on its two tracks, and a mechanical standard is proposed as a check. `/retro` reads these reports for exactly those categories.
 
 ## 4. Write
 Write `docs/meta-retro/<YYYY-MM-DD>-<session-id>.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/meta-retro.md`. It lives in the project: a finding can be specific to it.

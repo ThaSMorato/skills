@@ -10,6 +10,9 @@ A project finding that turns into a skill, a stack-guide entry or a rule is load
 
 It also fails when its **trigger is vague**: words that match every task ("errors", "tests", "be careful") make it load everywhere and help nowhere. A promotable finding says when it applies in terms the task will contain (the file pattern, the error text, the command).
 
+## A mechanical finding becomes a check
+When a finding that passes is **mechanical** (a pattern a linter, a hook or a CI job can see), propose the check, not a rule in prose: a check fires every time, prose only when someone reads it. `environment.md` has the classification.
+
 ## What happens to a finding that fails
 It stays in the report as a finding, with **which question it failed**. It is simply not proposed as a skill, guide or rule. The owner still decides what gets written; the filter narrows what is proposed, it does not apply anything.
 

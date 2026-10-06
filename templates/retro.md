@@ -82,6 +82,17 @@ by side — or `first measured retro` when none has a Measurements section>
 | Area | Findings (review · finding) | Tickets that hit it | Proposed structural ticket | Benefit / cost |
 |---|---|---|---|---|
 
+## The environment (required)
+> From the environment lens (`skills/retro/environment.md`). Two tracks per finding: what it cost this
+> work (tactical, cited) and what change to the environment makes the next ticket go right (strategic).
+> A standard is classified **mechanical** (it becomes a check: lint rule, hook, CI job) or **judgement**
+> (it becomes a line in the stack guide or the review standard). Skip a category with no evidence in scope.
+
+**Guardrail:** <the repo's pre-commit hook and CI job, and which of lint / type check / tests each runs; or `none`, which is itself a finding>
+
+| Category | Finding (cited) | Tactical cost | Strategic change | Mechanical / judgement | Where it lands |
+|---|---|---|---|---|---|
+
 ## What to change in the process (required)
 > The actionable part. Each item names the artifact that motivates it and the file it would change —
 > a stack guide, a template, a stage's instructions. An item with no source is an opinion; put it in
