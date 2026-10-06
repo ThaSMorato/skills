@@ -46,7 +46,7 @@ A finding that is really a **defect** is neither: it belongs in a ticket. Say so
 ## What repetition means
 One occurrence is an incident. The same finding across several tickets is a **standard that should move**: a review finding that keeps recurring belongs in a stack guide or a rule; a validation category that keeps firing belongs earlier in the flow, in the stage that produces what it catches. Only call something a pattern when you can point at more than one instance — and name them.
 
-Before proposing that a pattern move into a stack guide, a rule or a skill, run it through `promotion-filter.md`: it must not be findable in five minutes, must be specific to this codebase, and must have cost real effort. One that fails stays in the retro as a finding, with the question it failed; it is not proposed as a guide.
+Before proposing that a pattern move into a stack guide, a rule, a check or a skill, run it through `promotion-filter.md`: it must not be findable in five minutes, must be specific to this codebase, and must have cost real effort. One that fails stays in the retro as a finding, with the question it failed; it is not proposed as a guide.
 
 ## Debt the reviews saw and nobody owned
 A review finding with the verdict `pre-existing` is real, but in code the diff did not change, so it is nobody's work and it vanishes after the review. Across an epic, those are the most honest map of technical debt the project has: found by the lenses, confirmed by the verifier, and located to `file:line`.
@@ -57,6 +57,9 @@ A review finding with the verdict `pre-existing` is real, but in code the diff d
 4. **Propose at most 3 structural tickets**, ranked by **benefit against cost**. Benefit is the severity of the findings times the number of tickets that ran into them; cost is how much the fix touches (files, and whether the use is encapsulated or spread). Each proposal cites the findings it would close (review file and finding) and says why it is structural. The rest of the hotspots are listed, not proposed.
 
 Nothing is created here. The owner decides; a chosen proposal becomes a `Type: structural` ticket whose Source is this retro (`retro — docs/retro/<scope>.md`).
+
+## The environment the work ran in
+Read the scope a second time, through `environment.md`: on two tracks, what each finding cost this work and what change to the environment (a check, a pointer, a standard, an access) would make the next ticket go right. It covers navigation, automated checks, the guardrail, coding standards, the steering files, tool economy and information access, and it classifies every standard as **mechanical** (it becomes a check) or **judgement** (it becomes a line the review reads). Inspect the repository itself for its checks and guardrail; for the categories only a session shows, use the `docs/meta-retro/` reports in scope, and without them name the gap.
 
 ## This is a log, not a state file
 `/flow` derives state from artifacts and refuses documents that must be maintained. These two outputs do not compete with that: they are **append-only history**, nothing derives current state from them, and a stale entry is still a true record of what was observed then. Never edit or remove an earlier entry; if something changed, add an entry that says so.
@@ -74,6 +77,7 @@ Nothing is created here. The owner decides; a chosen proposal becomes a `Type: s
 4. Explain the planned-versus-done divergences and the gate categories that fired, citing the files.
 5. Collect escalations, failed deliverables, and repeated review findings — with their instances.
 6. Group the `pre-existing` findings by area; name the hotspots; propose at most 3 structural tickets.
-7. Sort every finding: process, product, or defect.
-8. Write `docs/retro/<scope>.md`; append the product findings to `docs/evolutions.md`.
-9. Self-review: every claim points at a file, nothing describes how the work felt, and the gaps are named.
+7. Run the environment lens (`environment.md`): check the repo's guardrail, classify each standard as mechanical or judgement, and give each finding its strategic change.
+8. Sort every finding: process, product, or defect.
+9. Write `docs/retro/<scope>.md`; append the product findings to `docs/evolutions.md`.
+10. Self-review: every claim points at a file, nothing describes how the work felt, and the gaps are named.
