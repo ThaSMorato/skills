@@ -3,9 +3,9 @@ description: Validate a feature's ticket set before the human gate — coverage,
 argument-hint: "<feature name or slug>"
 ---
 
-Use the `tickets-validate` skill to validate the tickets for: $ARGUMENTS
+Call the Skill tool with `tickets-validate` to validate the tickets for: $ARGUMENTS
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 `/tickets` runs this on its own as its postflight. Run it directly after editing tickets by hand.
 

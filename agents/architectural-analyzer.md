@@ -17,7 +17,7 @@ Your context is isolated — read:
 - Source across all directories; config (`docker-compose.yml`, `Dockerfile`, k8s, `.env`); build/CI; docs (README, diagrams); package manifests (`package.json`, `go.mod`, `requirements.txt`, `pom.xml`…); DB schemas/migrations.
 - Optional: a focus area, a `project-folder`, `ignore-folders`.
 
-Load the `architecture` skill — `import-graph.md` for how to measure the graph (the one method every stage shares), `metrics.md` for `Ca`/`Ce`/`I`/`A`/`D`, and the coupling rules for reading the result.
+Call the Skill tool with `architecture` — `import-graph.md` for how to measure the graph (the one method every stage shares), `metrics.md` for `Ca`/`Ce`/`I`/`A`/`D`, and the coupling rules for reading the result.
 
 ## Work global-first, and cheaply
 Establish the skeleton before reading deeply, because the expensive things — coupling, seams, contradictions — live **between** parts, and a reader who starts inside one part cannot see them.

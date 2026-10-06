@@ -15,7 +15,7 @@ Your context is isolated — read:
 - The repository and its history, read-only (`git log`, `git diff`, `git blame`).
 - `${CLAUDE_PLUGIN_ROOT}/templates/dependency-graph.md` — the skeleton for the new measurement.
 
-Load the `architecture` skill: `import-graph.md` (the method, followed exactly), `rules/metrics.md`, `rules/adp-acyclic.md`, `rules/ccp-common-closure.md`, `rules/crp-common-reuse.md`, `rules/rep-reuse-release.md`.
+Call the Skill tool with `architecture`: `import-graph.md` (the method, followed exactly), `rules/metrics.md`, `rules/adp-acyclic.md`, `rules/ccp-common-closure.md`, `rules/crp-common-reuse.md`, `rules/rep-reuse-release.md`.
 
 ## 1. Measure
 Measure the graph by `import-graph.md` and write `docs/analysis/dependency-graph.md` with the new `measured_commit`. This is the one file you write besides your report.

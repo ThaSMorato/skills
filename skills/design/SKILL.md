@@ -20,7 +20,7 @@ Everything above this line is a **document derived from another document**. The 
 
 The repository is the only independent source in the chain. Consult it here, while a correction still costs a paragraph.
 
-**First, dispatch the `pattern-scout` agent** with the ticket path. It searches in an isolated context and returns how the repository already does this kind of work: at least three **analogues**, the **conventions to mirror** per category (errors, validation, data access, logging, config, tests), and the **integration points** where new code gets wired in, each at `path:line` with the real code. It documents what exists and judges nothing. Read what it returns before drawing a node: an analogue is the first candidate for `reuses` or `extends`, and a convention is how a `new` node should look.
+**First, call the Agent tool with `pattern-scout`**, passing the ticket path. It searches in an isolated context and returns how the repository already does this kind of work: at least three **analogues**, the **conventions to mirror** per category (errors, validation, data access, logging, config, tests), and the **integration points** where new code gets wired in, each at `path:line` with the real code. It documents what exists and judges nothing. Read what it returns before drawing a node: an analogue is the first candidate for `reuses` or `extends`, and a convention is how a `new` node should look.
 
 Then, for each capability the ticket needs, **search before you assume it must be built**:
 - grep the domain nouns and verbs from the ticket and the glossary;

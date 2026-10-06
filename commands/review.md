@@ -5,7 +5,7 @@ argument-hint: "<fixed point — commit/branch/tag, e.g. main or HEAD~5>"
 
 Review the diff between `HEAD` and the fixed point: $ARGUMENTS
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 ## 1. Preflight
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty — a bad ref or an empty diff fails here, not inside six agents.
@@ -62,7 +62,7 @@ The severity keys stay in English whatever language the headings are in. In `by_
 Without the file, a review's findings live only in this conversation and are gone at the next `/compact`. `/retro` reads these across a whole epic to find the finding that **repeats** — and a finding that recurs across tickets is a standard that should move into a stack guide or a rule, which is a conclusion no single review can reach.
 
 ## 6. Verify against the code — before the user sees anything
-Dispatch the `review-verifier` agent with the review file, the diff file and the fixed point. It opens every cited location and annotates each finding with a verdict backed by code: `confirmed`, `wrong location`, `rule does not apply`, `impossible scenario`, `already handled`, `duplicate` or `pre-existing`. Write what it returns into the review file: a `- **Verdict:** <verdict> — <evidence>` line under each finding, and its `verdicts` and `refuted_by_lens` counts in the frontmatter. Leave `findings`, `by_severity` and `by_lens` as they are: they count what the lenses raised, and the verdicts are a separate column.
+Call the Agent tool with `review-verifier`, passing the review file, the diff file and the fixed point. It opens every cited location and annotates each finding with a verdict backed by code: `confirmed`, `wrong location`, `rule does not apply`, `impossible scenario`, `already handled`, `duplicate` or `pre-existing`. Write what it returns into the review file: a `- **Verdict:** <verdict> — <evidence>` line under each finding, and its `verdicts` and `refuted_by_lens` counts in the frontmatter. Leave `findings`, `by_severity` and `by_lens` as they are: they count what the lenses raised, and the verdicts are a separate column.
 
 Synthesis filters findings by what they say about themselves; this filters them by what the repository says. One verifier sees the whole set, which is what lets it call a `duplicate`. It **never deletes**: in doubt, a finding stays `confirmed`, because a false positive costs a minute of reading and a false negative ships.
 

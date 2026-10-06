@@ -3,9 +3,9 @@ description: Build and persist the node map for one ticket — deep modules behi
 argument-hint: "<ticket file/number, or the work to design>"
 ---
 
-Use the `design` skill to build the node map for: $ARGUMENTS
+Call the Skill tool with `design` to build the node map for: $ARGUMENTS
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 ## Preflight
 - Resolve the ticket under `.scratch/<feature-slug>/issues/`. If there is none and the user pointed at no other work, stop and tell them to run `/tickets <feature>` first.

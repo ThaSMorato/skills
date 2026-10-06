@@ -3,7 +3,7 @@ name: clean-code
 description: The positive standard for writing and refactoring code — naming, functions, comments, errors, and design. The "how to write it well" companion to the code-smells "what to flag". Use in the refactor step of implementing, and as the Standards lens when reviewing.
 ---
 
-The standard a change is held to when the repo's own `docs/guidelines.md` is silent. These are principles, not rules to enforce mechanically — the repo's documented guidelines override, and anything the tooling (linter/formatter) already enforces is not worth a comment. For the *negative* tells that flag a violation, use the `code-smells` skill; this skill is the *positive* target.
+The standard a change is held to when the repo's own `docs/guidelines.md` is silent. These are principles, not rules to enforce mechanically — the repo's documented guidelines override, and anything the tooling (linter/formatter) already enforces is not worth a comment. For the *negative* tells that flag a violation, call the Skill tool with `code-smells`; this skill is the *positive* target.
 
 ## Naming
 - A name reveals intent — if it needs a comment to explain it, rename it.

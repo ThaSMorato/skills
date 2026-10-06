@@ -15,7 +15,7 @@ Your context is isolated — you receive:
 - The ticket and the FDD — the acceptance criteria the tests must make observable, and the seams the FDD declared.
 - `docs/guidelines.md`'s routing table → load `testing-guide-<project>` if the repo ships one; its conventions **override** the generic skill.
 
-Load the `testing` skill.
+Call the Skill tool with `testing`.
 
 ## The bar
 1. **Coverage of criteria.** Every acceptance criterion in the plan's SIs is made observable by at least one test in the diff. Walk them by id; a criterion with no test is the highest-value finding this lens produces.

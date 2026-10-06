@@ -3,9 +3,9 @@ description: Write the boundary contract from the component map and the FDDs —
 argument-hint: "(none) — runs once per project, revisited when a large epic changes the structure"
 ---
 
-Use the `boundary-architect` agent to write `docs/boundaries.md`.
+Call the Agent tool with `boundary-architect` to write `docs/boundaries.md`.
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 This is the second of the two architecture beats. `/components` said **what the parts are**, before the FDDs, so every feature spec had a shared vocabulary. This one says **who may depend on whom**, after the FDDs, because only the feature specs reveal the axes of change that a boundary is supposed to separate.
 

@@ -5,7 +5,7 @@ argument-hint: "(optional) session id — default: the most recent session of th
 
 Analyze the working session: $ARGUMENTS
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 `/retro` reads what the work left on disk. This reads what only the conversation holds: the owner correcting a proposal, rejecting a question, asking for the same thing twice. `/compact` shrinks the context window but deletes nothing from the transcript, so the whole session, every segment, is still there to read.
 

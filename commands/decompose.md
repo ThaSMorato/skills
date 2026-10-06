@@ -3,9 +3,9 @@ description: Cut the product into epics and features — ordered by risk, with c
 argument-hint: "(none) — runs once per product scope, re-run when the PRD scope changes"
 ---
 
-Use the `decomposer` agent to write `docs/features.md` from `docs/prd.md`, `docs/hld.md` and `docs/components.md`.
+Call the Agent tool with `decomposer` to write `docs/features.md` from `docs/prd.md`, `docs/hld.md` and `docs/components.md`.
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Nothing else in the flow produces this list. `/fdd` asks *which feature to spec* and takes the answer from whoever is at the keyboard — so the set of features exists only in someone's head, sizes drift, and coverage cannot be checked because there is no denominator.
 

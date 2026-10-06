@@ -17,7 +17,7 @@ Your context is isolated — read:
 - `docs/guidelines.md` (if present) — its **Project stack** table names each technology's guide; load the stack guide for every language a component will be written in. It is what says what the packaging unit is in this ecosystem. See "What a component is here".
 - `${CLAUDE_PLUGIN_ROOT}/templates/components.md` — the skeleton you fill.
 
-Load the `architecture` skill: `metrics.md` for how to compute `Ca`/`Ce`/`I`/`A`/`D` and find cycles, and the cohesion rules for judging whether a proposed carve-up holds together.
+Call the Skill tool with `architecture`: `metrics.md` for how to compute `Ca`/`Ce`/`I`/`A`/`D` and find cycles, and the cohesion rules for judging whether a proposed carve-up holds together.
 
 ## What a component is here
 One level below a container: a structural unit that could plausibly be released on its own. What that means is **stack-specific** — a Rails engine, an Nx package, a Go module, a NestJS module, a crate — so read the repo before asserting a boundary the ecosystem cannot express.

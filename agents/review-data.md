@@ -15,7 +15,7 @@ Your context is isolated — you receive:
 - `docs/guidelines.md` — load the stack guides its routing table names for the changed files. **The idiom is stack-specific**: eager loading, batching, pagination and transaction boundaries each have a different spelling in every ORM. The guide says what this repo already uses.
 - The schema, when the diff adds a query: migrations or the schema file, for the indexes that exist.
 
-Load the `data-access` skill.
+Call the Skill tool with `data-access`.
 
 ## The bar
 **Every changed hunk that reads or writes a database, cache, queue or remote service, against the catalog.** In particular:

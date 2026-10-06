@@ -3,7 +3,7 @@ description: Sweep the design docs (HLD/FDD/boundaries) for architectural decisi
 argument-hint: "(optional) modules/paths to focus on, or --brownfield to analyze the codebase and git history"
 ---
 
-Use the `adr-analyzer` agent to sweep the design docs for ADR-worthy decisions and write Potential ADRs under `docs/adr/potential/`. Focus: $ARGUMENTS
+Call the Agent tool with `adr-analyzer` to sweep the design docs for ADR-worthy decisions and write Potential ADRs under `docs/adr/potential/`. Focus: $ARGUMENTS
 
 If neither `docs/hld.md` nor `docs/fdd/*.md` exists (and this isn't a `--brownfield` run), tell the user to run `/hld` or `/fdd` first.
 

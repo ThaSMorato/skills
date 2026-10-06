@@ -16,7 +16,7 @@ Your context is isolated — you receive:
 - `docs/analysis/dependency-graph.md` (if present) — the previous import graph and its `measured_commit`, for comparison. If commits by others landed after that commit, the baseline is stale; say so, and suggest `/reconcile`, rather than blaming this diff for someone else's edge.
 - `docs/guidelines.md`'s routing table → load the stack guide for the files the diff touches. The `architecture` skill tells you to read it before asserting that something should be its own component, and this lens is where that assertion gets made.
 
-Load the `architecture` skill.
+Call the Skill tool with `architecture`.
 
 ## The bar
 1. **Every import added by the diff** maps to a component pair. Is that edge in `allow`? An edge that is absent from an exhaustive whitelist is a violation — that is what makes the contract checkable.

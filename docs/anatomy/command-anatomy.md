@@ -39,7 +39,7 @@ Quote `argument-hint` always; it is the field that attracts both. Use single quo
 1. **Thin.** A command is an entrypoint, not the implementation. It orchestrates and **delegates the heavy work to agents** (isolated context, parallelizable). E.g. `/adr-generate` fires the `adr-generator` agent.
 2. **Deterministic entry.** It's an explicit user trigger — name it after the action (`/prd`, `/interview`). Use `argument-hint` to make the input clear.
 3. **Runs in main → can be interactive.** Unlike an agent, a command sees the conversation and talks to the user. Good for HITL flows that also need a named trigger.
-4. **Composes skills.** A command can "run skill X" (e.g. `/interview` runs `interview` + `domain-model`) — reuse instead of rewriting the logic.
+4. **Composes skills.** A command loads skills instead of rewriting their logic (e.g. `/interview` runs `interview` + `domain-model`), and names the tool that loads them: "Call the Skill tool with `interview` for: $ARGUMENTS", and "Call the Agent tool with `prd-writer`" for an agent (see the skill anatomy, rule 4).
 5. **Handoff via files.** If it delegates to an agent (isolated context), the command ensures the **inputs are on disk** (brief, template) and points the agent at them.
 6. **Preflight and postflight.** On the way in, check the inputs exist — and when one is missing, name the command that produces it, so the failure teaches the user the chain. On the way out, summarize what was produced, what needs their attention, and what to run next. That pair is what makes a stage usable on its own, outside `/flow`.
 

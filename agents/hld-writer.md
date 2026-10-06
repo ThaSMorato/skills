@@ -17,7 +17,7 @@ Your context is isolated — you cannot see any conversation. Read these:
 - `CONTEXT.md` (if present) — the glossary; use its canonical terms.
 - `${CLAUDE_PLUGIN_ROOT}/templates/hld.md` — the skeleton you fill.
 
-Load the `architecture` skill when deciding structure — its Dependency Rule, level-graph and detail rules are the standard this design is held to, and its boundary guidance says why the fine-grained boundaries are deliberately **not** settled here.
+Call the Skill tool with `architecture` when deciding structure — its Dependency Rule, level-graph and detail rules are the standard this design is held to, and its boundary guidance says why the fine-grained boundaries are deliberately **not** settled here.
 
 ## Two levels, deliberately distinct
 `Overall architecture` is the **container** level: things that run and deploy. `Main components and responsibilities` is **one level below** — the structural units inside those containers. If a row of the second repeats a container from the first, you have filled one of them wrong.

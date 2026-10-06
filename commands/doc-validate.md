@@ -3,9 +3,9 @@ description: Validate a design document against the one it came from before the 
 argument-hint: '<from> <to> — e.g. "prd hld", or omit to validate every available pair'
 ---
 
-Use the `doc-validate` skill to check: $ARGUMENTS
+Call the Skill tool with `doc-validate` to check: $ARGUMENTS
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 With no argument, validate every pair whose two documents exist: `brief → prd`, `prd → hld`, `prd → features`, `hld → components`, `features → fdd`.
 

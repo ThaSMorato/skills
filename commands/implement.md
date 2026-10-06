@@ -3,7 +3,7 @@ description: Execute a validated plan one SI at a time — test-first (red → g
 argument-hint: "<plan slug> [continuous]"
 ---
 
-Use the `implement` skill to build the plan: $ARGUMENTS
+Call the Skill tool with `implement` to build the plan: $ARGUMENTS
 
 Resolve the plan under `.scratch/<feature-slug>/plans/`, run preflight (validation must be `clean`, branch must be set up), and execute SI by SI: red → green → refactor (production **and** tests), run the SI's tests, record progress, then STOP and wait for the user — unless they asked for continuous mode.
 

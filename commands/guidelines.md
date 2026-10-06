@@ -3,7 +3,7 @@ description: Generate the project's engineering guidelines router — an index o
 argument-hint: "(none) — detected from the repo; re-run when the stack changes"
 ---
 
-Use the `guideline-generator` agent to generate `docs/guidelines.md` for this project.
+Call the Agent tool with `guideline-generator` to generate `docs/guidelines.md` for this project.
 
 The output is a **router**: which guide covers which files, where the project's documents are, and what the repo's real commands are. The depth per technology lives in `.claude/skills/<tech>-guide/` — generate those with `/generate-stack-guide <tech>`.
 

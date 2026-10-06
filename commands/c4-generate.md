@@ -3,7 +3,7 @@ description: Generate C4 diagrams (PlantUML) — C1/C2 from the HLD, the system 
 argument-hint: "(optional) feature name for the feature-level diagrams; omit for the system levels"
 ---
 
-Use the `c4-generator` agent to generate C4 PlantUML diagrams into `docs/c4/`:
+Call the Agent tool with `c4-generator` to generate C4 PlantUML diagrams into `docs/c4/`:
 
 - **System levels** from `docs/hld.md` (C1, C2) and `docs/components.md` (C3).
 - **Feature levels** for $ARGUMENTS from `docs/fdd/<feature>.md` (C3, and C4 where code-level detail exists).

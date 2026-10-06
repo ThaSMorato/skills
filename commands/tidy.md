@@ -3,9 +3,9 @@ description: Make working code simple — Beck's four rules of Simple Design in 
 argument-hint: "<ticket slug> <fixed point — the same one /review used>  |  <path>"
 ---
 
-Use the `tidy` skill for: $ARGUMENTS
+Call the Skill tool with `tidy` for: $ARGUMENTS
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight, by mode:
 - **Ticket** (`<slug> <fixed point>`): the ticket has a review file under `.scratch/<feature-slug>/reviews/`. Tidying before the review mixes two questions, *is it right?* and *is it simple?*, and the answer to the first can change the code the second would tidy. If there is no review, point at `/review` and stop.

@@ -20,7 +20,7 @@ The `review-*` agents are deliberately narrow. A narrow lens can be held to *"ev
 ---
 name: <kebab-case>
 description: <WHEN to delegate to this agent — the main agent uses this to decide>
-tools: Read, Grep, Glob, Write        # allowlist; omit to inherit all
+tools: Read, Grep, Glob, Write        # allowlist; omit to inherit all. Add Skill if the prompt calls the Skill tool
 model: sonnet                          # optional
 ---
 

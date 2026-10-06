@@ -3,9 +3,9 @@ description: Find the cause of a bug by evidence — reproduce, three hypotheses
 argument-hint: "<the symptom — a failing test, an error, a bug report, or a ticket>"
 ---
 
-Use the `diagnose` skill for: $ARGUMENTS
+Call the Skill tool with `diagnose` for: $ARGUMENTS
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: there is a symptom to start from, concrete enough to try to reproduce: a failing test, an error with its text, a bug report with steps, or a ticket. If there is only "it's broken", ask for the one thing that lets you reproduce it (where, doing what, seeing what).
 

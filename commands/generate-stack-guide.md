@@ -3,7 +3,7 @@ description: Generate a per-technology engineering guide skill — conventions, 
 argument-hint: "<technology> — e.g. ruby, react, nestjs, go"
 ---
 
-Use the `generate-stack-guide` skill for: $ARGUMENTS
+Call the Skill tool with `generate-stack-guide` for: $ARGUMENTS
 
 Run all five phases — choose the source, mine it, confirm the calls with the user, generate `.claude/skills/<tech>-guide/`, and register the routing row in `docs/guidelines.md`.
 

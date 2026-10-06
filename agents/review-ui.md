@@ -15,7 +15,7 @@ Your context is isolated — you receive:
 - `docs/guidelines.md` — load the stack guide its routing table names for the changed files, and the design system's documentation if the repo has one. **Check what the component library already provides** (focus handling in its dialog, labels in its inputs) before flagging: a finding against something the library handles is refuted.
 - The ticket and FDD, for the states and flows the UI must support.
 
-Load the `ui` skill.
+Call the Skill tool with `ui`.
 
 ## The bar
 **Every rule in the `ui` catalog, against every changed hunk of UI code** (components, templates, styles). Follow the call one hop out when a changed component renders a shared one. Then check the states: for every piece of UI the diff makes data-driven, are loading, empty and error handled?

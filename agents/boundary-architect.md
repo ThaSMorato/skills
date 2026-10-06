@@ -22,7 +22,7 @@ Your context is isolated — read:
 - `docs/guidelines.md` (if present) — load the stack guide its **Project stack** table names for each language in play. An edge, an inversion or a plug point has to be expressible in the ecosystem's own packaging and visibility rules, and the guide is where those are written; without one, say in `boundaries.md` which rules were drawn on general knowledge of the stack.
 - `${CLAUDE_PLUGIN_ROOT}/templates/boundaries.md` — the skeleton you fill.
 
-Load the `architecture` skill: `dependency-rule.md`, `level-graph.md`, `boundaries.md`, `partial-boundaries.md`, `plugin-architecture.md`, and the three detail rules.
+Call the Skill tool with `architecture`: `dependency-rule.md`, `level-graph.md`, `boundaries.md`, `partial-boundaries.md`, `plugin-architecture.md`, and the three detail rules.
 
 ## The contract is deliberately said twice
 Prose states each rule with its reason; the YAML manifest states the same rules as a graph. Two representations of one intent make a contradiction **detectable by machine** — the closest thing this suite has to a test for a design document. Keep them in sync, and when they disagree, that disagreement is the finding, not something to quietly reconcile.

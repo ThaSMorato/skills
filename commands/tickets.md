@@ -5,7 +5,7 @@ argument-hint: "<feature name or slug> (or a path/issue reference)"
 
 Break the feature's design into a set of **tickets** — tracer-bullet vertical slices, each declaring the tickets that **block** it. This is interactive: quiz the user before publishing anything.
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 A ticket may be executed by an agent **or picked up by the owner**, so it carries the why and the constraints, not only the instruction. `${CLAUDE_PLUGIN_ROOT}/templates/ticket.md` is the contract.
 
@@ -39,7 +39,7 @@ Each slice cuts a **narrow but complete** path through every layer (schema, API,
 ## 4. Write the set, then validate it
 Write **local files** first, always, even when the tickets will end up in a tracker: one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order, each filling `${CLAUDE_PLUGIN_ROOT}/templates/ticket.md`. Number the acceptance criteria `AC-1`, `AC-2`. `/plan` maps each to an SI and `/plan-validate` checks the coverage by id, which it cannot do against unlabelled bullets.
 
-Then run the `tickets-validate` skill over the set. This is the postflight, and it is not optional: it checks coverage against the FDD, invention, tickets too big or too small, several tickets on one seam, blocking cycles and dispersion, and writes `.scratch/<feature-slug>/tickets-validation.md`. If it comes back `dirty`, fix the set and re-run it **before** showing the user anything. A set the user sees should already have a verdict, so their attention goes to judgment, not to catching a cycle.
+Then call the Skill tool with `tickets-validate` over the set. This is the postflight, and it is not optional: it checks coverage against the FDD, invention, tickets too big or too small, several tickets on one seam, blocking cycles and dispersion, and writes `.scratch/<feature-slug>/tickets-validation.md`. If it comes back `dirty`, fix the set and re-run it **before** showing the user anything. A set the user sees should already have a verdict, so their attention goes to judgment, not to catching a cycle.
 
 ## 5. Quiz the user
 Present the breakdown as a numbered list — per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers** — headed by the verdict and the **tickets-to-seams count**. Ask:

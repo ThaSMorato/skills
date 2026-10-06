@@ -3,7 +3,7 @@ description: Write the PRD from the requirements brief (docs/requirements-brief.
 argument-hint: "(optional) path to the brief, if not docs/requirements-brief.md"
 ---
 
-Use the `prd-writer` agent to synthesize a PRD into `docs/prd.md` from the requirements brief ($ARGUMENTS, or `docs/requirements-brief.md` by default).
+Call the Agent tool with `prd-writer` to synthesize a PRD into `docs/prd.md` from the requirements brief ($ARGUMENTS, or `docs/requirements-brief.md` by default).
 
 If the brief doesn't exist, tell the user to run `/interview` first instead of delegating.
 

@@ -3,7 +3,7 @@ description: Write the High-Level Design from the PRD (docs/prd.md).
 argument-hint: "(optional) path to the PRD, if not docs/prd.md"
 ---
 
-Use the `hld-writer` agent to synthesize a High-Level Design into `docs/hld.md` from the PRD ($ARGUMENTS, or `docs/prd.md` by default).
+Call the Agent tool with `hld-writer` to synthesize a High-Level Design into `docs/hld.md` from the PRD ($ARGUMENTS, or `docs/prd.md` by default).
 
 If the PRD doesn't exist, tell the user to run `/prd` first instead of delegating.
 
