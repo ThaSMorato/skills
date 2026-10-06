@@ -1,5 +1,5 @@
 ---
-description: Write a ticket's pull request body from what the work left on disk: a summary drawn as the smallest view, before-and-after evidence, and the merge danger (one-way or two-way door, blast radius).
+description: 'Write a ticket''s pull request body from what the work left on disk: a summary drawn as the smallest view, before-and-after evidence, and the merge danger (one-way or two-way door, blast radius).'
 argument-hint: "<ticket slug> <fixed point, the one /review used>"
 ---
 

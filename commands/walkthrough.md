@@ -1,5 +1,5 @@
 ---
-description: Teach the owner the change the AI built before it merges: an HTML lesson over the ticket's diff (what it does, where it lives, the path per acceptance criterion, what can go wrong) with a recall quiz, then re-explain what was missed.
+description: 'Teach the owner the change the AI built before it merges: an HTML lesson over the ticket''s diff (what it does, where it lives, the path per acceptance criterion, what can go wrong) with a recall quiz, then re-explain what was missed.'
 argument-hint: "<ticket slug> <fixed point, the one /review used>"
 ---
 

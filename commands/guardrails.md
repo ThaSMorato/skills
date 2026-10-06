@@ -1,5 +1,5 @@
 ---
-description: Install the checks a repository is missing, using the commands it already has: pre-commit hook, CI job, a Claude Code hook that blocks destructive git, and optionally a dependency linter for docs/boundaries.md. Each one is proven to fire.
+description: 'Install the checks a repository is missing, using the commands it already has: pre-commit hook, CI job, a Claude Code hook that blocks destructive git, and optionally a dependency linter for docs/boundaries.md. Each one is proven to fire.'
 argument-hint: "[what to set up: pre-commit, ci, git-guard, deps; empty for all]"
 ---
 

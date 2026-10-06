@@ -18,6 +18,8 @@ disable-model-invocation: true # optional: user-invoked only (wrapper), never au
 
 This fails loudly in a strict parser and silently in a lenient one, so "it works here" is not evidence. A skill whose frontmatter does not parse simply **does not load** — the only signal is a startup warning, never an error where you try to use it.
 
+`scripts/frontmatter.test.mjs` fails on an unquoted value that would break the parse.
+
 Folder: `skills/<name>/SKILL.md`. List the path in `plugin.json → skills` — a skill that is on disk but not listed does not load, and `scripts/plugin-manifest.test.mjs` fails on it.
 
 ## Golden rules
