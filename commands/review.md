@@ -70,3 +70,5 @@ Synthesis filters findings by what they say about themselves; this filters them 
 Show the findings **ordered by verdict, then severity**: `confirmed` first, then `pre-existing` (real, but not this change's work), then the refuted ones and duplicates last, each with its one line of evidence. Nothing is hidden: the user may disagree with a verdict, and the finding is still there to act on. Then add a one-line note per lens saying what it covered, and name any lens that was skipped or that reported having no standard to apply.
 
 The user decides what to fix. Nothing here edits code — persisting the findings and their verdicts is a record of what was reported, not a change to the work.
+
+Once the findings the user chose are fixed, the next steps are the optional `/tidy <slug> <fixed point>`, then `/pr <slug> <fixed point>` for the pull request body.
