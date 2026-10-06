@@ -32,6 +32,8 @@ If `/trim` ran, `.scratch/<feature-slug>/trim/<NN>-<slug>.md` has an **Unrequest
 
 When `docs/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the Agent tool with `review-ui` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
 
+**Pass `docs/declined.md` to every lens** when it exists: proposals the owner already turned down, with the scope and the reason. A lens does not raise a finding that matches a `declined` entry (same kind, a scope the entry covers) unless the entry's **Revisit when** has happened; if it believes that has happened, it raises the finding and cites the entry.
+
 **Every lens may follow the call one hop outside the diff.** Tell each agent so when you dispatch it: it may open the definition of any function the changed code calls, one level deep, and judge it against its own lens. A diff-scoped lens is structurally blind to the defect that lives one call away. The loop is in the diff and the query is in a repository that did not change. The cycle closes through an untouched file. The tainted value reaches a sink in a helper. A finding found through a hop cites **both** locations, the changed call site and the unchanged code, and it is about **this** change: the diff made the unchanged code expensive, reachable or wrong. Unchanged code that was already wrong on its own is the verifier's `pre-existing`. One hop, not a walk: a lens that follows the whole call graph is reviewing the repository, not the change.
 
 ## 4. Synthesize — this step is not optional
@@ -69,6 +71,6 @@ Synthesis filters findings by what they say about themselves; this filters them 
 ## 7. Report
 Show the findings **ordered by verdict, then severity**: `confirmed` first, then `pre-existing` (real, but not this change's work), then the refuted ones and duplicates last, each with its one line of evidence. Nothing is hidden: the user may disagree with a verdict, and the finding is still there to act on. Then add a one-line note per lens saying what it covered, and name any lens that was skipped or that reported having no standard to apply.
 
-The user decides what to fix. Nothing here edits code — persisting the findings and their verdicts is a record of what was reported, not a change to the work.
+The user decides what to fix. **A finding the user declines with a reason that will still hold next time** (a deliberate trade-off, a convention the lens did not know) is offered for `docs/declined.md`, in the format of `${CLAUDE_PLUGIN_ROOT}/templates/declined.md`, so the next review does not raise it again. A passing reason is not recorded, and a reason that is really an architectural decision is an ADR (`/adr-generate`). Nothing here edits code — persisting the findings and their verdicts is a record of what was reported, not a change to the work.
 
 Once the findings the user chose are fixed, the next steps are the optional `/tidy <slug> <fixed point>`, then `/pr <slug> <fixed point>` for the pull request body.

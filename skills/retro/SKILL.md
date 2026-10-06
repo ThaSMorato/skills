@@ -53,7 +53,7 @@ A review finding with the verdict `pre-existing` is real, but in code the diff d
 
 1. **Collect** every `pre-existing` finding in the scope's review files.
 2. **Group them by area**: the component that owns the path (`docs/components.md`), or the directory when there is no component map.
-3. **An area is a hotspot** when its findings come from **two or more tickets**. The repetition rule applies here as everywhere: one ticket's `pre-existing` finding is an incident. Where `docs/analysis/components/<c>.md` lists debt for the same area, cite it as corroboration.
+3. **An area is a hotspot** when its findings come from **two or more tickets**. The repetition rule applies here as everywhere: one ticket's `pre-existing` finding is an incident. Where `docs/analysis/components/<c>.md` lists debt for the same area, cite it as corroboration. Where `docs/declined.md` has a `declined` entry covering the area, list the hotspot with that entry instead of proposing it, unless the entry's **Revisit when** has happened; then propose it and cite the entry.
 4. **Propose at most 3 structural tickets**, ranked by **benefit against cost**. Benefit is the severity of the findings times the number of tickets that ran into them; cost is how much the fix touches (files, and whether the use is encapsulated or spread). Each proposal cites the findings it would close (review file and finding) and says why it is structural. The rest of the hotspots are listed, not proposed.
 
 Nothing is created here. The owner decides; a chosen proposal becomes a `Type: structural` ticket whose Source is this retro (`retro — docs/retro/<scope>.md`).

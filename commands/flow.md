@@ -34,6 +34,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `/adr-identify` → `/adr-generate` |
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `/guidelines`, `/generate-stack-guide` |
 | `docs/guardrails.md` | the repo's installed checks (pre-commit, CI, git guard, dependency linter) and how each was proven | `/guardrails` |
+| `docs/declined.md` | proposals the owner turned down for a lasting reason, read before `/tidy`, `/trim` and `/review` propose again | `/tidy`, `/trim`, `/review` (append-only) |
 | `docs/questionnaires/*.md` | questions sent to someone outside the conversation, and their answers (`status: sent / answered / partial`) | `/questionnaire` |
 | `docs/validation/*.md` | doc validation verdicts | `/doc-validate` |
 | `.scratch/<feature>/issues/` | tickets | `/tickets <feature>` |

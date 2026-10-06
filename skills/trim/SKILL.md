@@ -29,6 +29,8 @@ Each criterion shrinks what the next one has to look at, so walk them in this or
 4. **Locality — one behavior spread over more files than it needs.** The *Shotgun Surgery* smell (`code-smells` skill), measured on this diff: which files each behavior touches now, and the smaller set that would hold it.
 
 ## 1. Propose
+**Read `docs/declined.md` first**, when it exists (`${CLAUDE_PLUGIN_ROOT}/templates/declined.md` has its format). A proposal that matches a `declined` entry (the same kind of move, over a scope the entry covers) is not proposed again unless its **Revisit when** has happened; say which entries suppressed what (*"skipped 2, per D-004 and D-011"*), so a suppression is never silent.
+
 Measure the diff first (files created, files modified, lines added and removed), then walk the criteria. Each proposal carries:
 - **the criterion**;
 - **the evidence**: `file:line` of the hunk; for trace, which SIs and ACs were checked and why none covers it; for reuse, the existing primitive's `file:line` and why its contract matches;
@@ -39,6 +41,8 @@ Measure the diff first (files created, files modified, lines added and removed),
 A proposal without evidence, one that changes behavior, or one that grows the diff, is not a trim. Drop it (a behavior change becomes a note).
 
 Present the proposals grouped by criterion, in order, as a structured choice. **The user picks which to apply.** None is applied by default.
+
+**When the owner declines a proposal with a reason that will still hold next time**, offer to record it in `docs/declined.md`, so no later run proposes it again. A passing reason ("not now") or a self-evident one is not recorded; a reason that is really an architectural decision is an ADR instead (`/adr-generate`).
 
 ## 2. Apply, one at a time
 For each chosen cut, in criterion order:

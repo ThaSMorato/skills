@@ -17,6 +17,12 @@
 | `guidelines.md` | `guideline-generator` | `docs/guidelines.md` (a **router**, ≤150 lines) |
 | `ticket.md` | `/tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
 | `system-profile.md` | `architectural-analyzer` | `docs/analysis/system-profile.md` |
+| `declined.md` | `/tidy`, `/trim`, `/review` (append-only) | `docs/declined.md` |
+| `component-analysis.md` | `component-analyzer` | `docs/analysis/components/<component>.md` |
+| `dependency-graph.md` | `architectural-analyzer` (read by `reconciler`) | `docs/analysis/dependency-graph.md` |
+| `retro.md` | `/retro` | `docs/retro/<scope>.md` |
+| `evolutions.md` | `/retro`, `decomposer` (append-only) | `docs/evolutions.md` |
+| `meta-retro.md` | `/session-analyze` | `docs/meta-retro/<date>-<session>.md` |
 
 Triple duty: (a) generation **scaffold**, (b) **handoff anchor** between isolated agents (known sections), (c) **gate/review checklist**.
 
