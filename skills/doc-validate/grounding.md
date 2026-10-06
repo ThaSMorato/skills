@@ -1,4 +1,4 @@
-> Part of the `doc-validate` skill (see `SKILL.md`). Also read by the document writers (`prd-writer`, `hld-writer`, `fdd-writer`) and the writing skills.
+> Part of the `doc-validate` skill (see `SKILL.md`). Also read by the document writers (`prd-writer`, `hld-writer`, `fdd-writer`) and by `writing-beats` and `writing-shape`, where the reader is the piece's audience.
 
 # Grounding: no concept is used before the reader has it
 

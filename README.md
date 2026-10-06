@@ -52,6 +52,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Looking back | `/retro` · `/session-analyze` |
 | Learning | `/teach` |
 | Session | `/wait-what` · `/handoff` |
+| Writing | `/writing-fragments` · `/writing-beats` · `/writing-shape` |
 
 ## Structure
 
