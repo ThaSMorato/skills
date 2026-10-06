@@ -42,6 +42,7 @@
     "./skills/trim",
     "./skills/pr",
     "./skills/visuals",
+    "./skills/teach",
     "./skills/guardrails",
     "./skills/tidy",
     "./skills/code-smells",
