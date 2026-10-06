@@ -33,7 +33,8 @@ Measure the diff first (files created, files modified, lines added and removed),
 - **the criterion**;
 - **the evidence**: `file:line` of the hunk; for trace, which SIs and ACs were checked and why none covers it; for reuse, the existing primitive's `file:line` and why its contract matches;
 - **the cut**, and what the diff loses: files, lines;
-- **why it is structural**: behavior identical, no test changes.
+- **why it is structural**: behavior identical, no test changes;
+- **its strength** (`visuals` skill): *Strong*, *Worth exploring* or *Speculative*.
 
 A proposal without evidence, one that changes behavior, or one that grows the diff, is not a trim. Drop it (a behavior change becomes a note).
 

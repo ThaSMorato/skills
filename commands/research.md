@@ -12,7 +12,7 @@ Call the Agent tool with `researcher` — run it in the background so you can ke
 When the question spans several sources that must each be read carefully (comparing three libraries, reading four specs), reading them all in one context runs out of room and the last source gets skimmed. Split it:
 
 1. **Survey** — identify the sources that own the answer, with a short `WebSearch` pass in this context.
-2. **Deep-read in parallel** — dispatch one `source-reader` per source, in a single message, each writing to `docs/research/<slug>/sources/`. This partition is safe: the sources are genuinely independent, and nothing of value lives *between* them.
+2. **Deep-read in parallel** — call the Agent tool with `source-reader` once per source, all in a single message, each writing to `docs/research/<slug>/sources/`. This partition is safe: the sources are genuinely independent, and nothing of value lives *between* them.
 3. **Synthesize** — call the Agent tool with `researcher`, which finds the notes and composes the report from them instead of re-fetching.
 
 Cap the fan-out at the sources that genuinely matter and **name any source you dropped** in the report's Scope. A survey that quietly stopped at five reads like a survey that found five.
