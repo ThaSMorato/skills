@@ -27,6 +27,7 @@
   ],
   "skills": [
     "./skills/interview",
+    "./skills/questionnaire",
     "./skills/domain-model",
     "./skills/design",
     "./skills/plan",

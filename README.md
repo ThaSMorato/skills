@@ -42,7 +42,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 |---|---|
 | Orchestration | `/flow` |
 | Brownfield analysis | `/analyze` · `/audit-deps` |
-| Requirements | `/interview` · `/research` |
+| Requirements | `/interview` · `/questionnaire` · `/research` |
 | Documentation | `/prd` · `/hld` · `/fdd` · `/doc-validate` |
 | Architecture | `/components` · `/decompose` · `/boundaries` · `/reconcile` |
 | Diagrams | `/c4-generate` · `/mermaid-generate` |

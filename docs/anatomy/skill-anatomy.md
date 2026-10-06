@@ -26,7 +26,7 @@ Folder: `skills/<name>/SKILL.md`. List the path in `plugin.json → skills` — 
    - **Don't summarize the workflow in it.** A description that lists the steps can be followed *instead of* the skill: the model acts on the summary and never reads the body. Say what it is for and when; leave the how to the body.
    - **Name the exclusion** when a sibling skill is the right one for a nearby request ("not for behavior changes — use `tdd`"). Two skills with overlapping triggers fire wrong half the time.
    - **One trigger per branch.** A branch is a distinct case the skill handles. Synonyms that rename one branch are that branch written twice: keep one. The description sits in context on every turn, so it earns harder pruning than the body.
-2. **Short and imperative.** A good skill is a 5–10 sentence prompt, not a spec. Direct instruction ("Interview the user… Ask one question at a time…"), not explanatory prose.
+2. **Short and imperative.** A good skill is a 5–10 sentence prompt, not a spec. Direct instruction ("Interview the user… Ask the open questions in rounds…"), not explanatory prose.
    - **No-ops go.** A sentence the model already obeys by default spends load to say nothing: delete the whole sentence, not words from it. Whether it is a no-op is settled by running the skill without it, not by debate. A word too weak to beat the default ("be thorough") is a no-op too; the fix is a stronger word ("relentless").
 3. **One capability per skill.** If it does two things, it's two skills.
 4. **Compose primitives.** Reuse other skills by reference instead of rewriting. Thin wrapper > monolith. (Owner rule: don't duplicate, reference.)

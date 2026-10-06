@@ -3,7 +3,7 @@ description: Open the Doc-Dev flow with the requirements interview, producing th
 argument-hint: "[feature or project name]"
 ---
 
-Load **both** the `interview` skill (the elicitation discipline — one question at a time, the PRD checklist, the gate) and the `domain-model` skill (the glossary and the inline ADRs). They compose: `interview` drives the conversation, `domain-model` sharpens the vocabulary as it goes. Loading only one silently drops half the stage.
+Call the Skill tool with `interview` (the elicitation discipline: rounds of questions, the PRD checklist, the gate), then with `domain-model` (the glossary and the inline ADRs). They compose: `interview` drives the conversation, `domain-model` sharpens the vocabulary as it goes. Loading only one silently drops half the stage.
 
 Elicit requirements for: $ARGUMENTS
 
@@ -14,7 +14,7 @@ Elicit requirements for: $ARGUMENTS
 - Read `docs/prd.md` and `docs/hld.md` if they exist. When the argument names a **feature inside an existing product**, the problem, the users and the goals are already settled upstream — **inherit them and say so**, then elicit only what is new. Re-eliciting produces a brief that contradicts the document above it.
 
 ## The gate
-The template marks six sections `(required)`: Problem, Users and JTBD, Goals and value, Success metrics, Scope, Open questions. The gate is **countable**: every required section filled, and everything still unsettled written down in Open questions. Then the user confirms the shared understanding. Along the way, each question names the weakest required section it targets, and each answer reports what it did to the glossary (terms created / renamed); two answers in a row that change no load-bearing term is the convergence signal. If the user stops early, persist anyway with `Status: early-exit`.
+The template marks six sections `(required)`: Problem, Users and JTBD, Goals and value, Success metrics, Scope, Open questions. The gate is **countable**: every required section filled, and everything still unsettled written down in Open questions. Then the user confirms the shared understanding. Along the way, each question names the weakest required section it targets, and each round reports what it did to the glossary (terms created / renamed); two rounds in a row that change no load-bearing term is the convergence signal. A decision held by someone outside the conversation goes to `Open questions` with its holder, and `/questionnaire` can send it. If the user stops early, persist anyway with `Status: early-exit`.
 
 ## Persist
 Once the gate passes, write the artifacts the `/prd` agent will consume — its isolated context cannot see this conversation:
