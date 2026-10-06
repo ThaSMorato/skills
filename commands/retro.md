@@ -19,7 +19,8 @@ Show:
 - **which gate categories actually fired**, summed from each `validation.md`'s `fired`, the record of which mistakes this project actually makes;
 - **where the loop escalated**: three-attempt fix limits, failed deliverables;
 - **findings that repeat across tickets**, with their instances, since repetition is what turns an incident into a standard worth moving into a guide;
-- **the environment**: the repo's guardrail (or its absence), and each environment finding with its strategic change, mechanical findings first, each proposed as the check that would catch it;
+- **the environment, as far as the artifacts show it**: the repo's guardrail (or its absence), the mechanical standards the review kept catching (each proposed as a check), and the meta-retros' Environment sections, or that no session was analyzed;
+- **the measurements per plugin version**, and every process change tagged `flow` (the plugin's) or `project` (this repo's); the `flow` ones are what `/flow-report` gathers across projects;
 - the product findings appended to `docs/evolutions.md`;
 - **what the artifacts couldn't tell you**: say this out loud rather than letting the document imply it covered everything.
 

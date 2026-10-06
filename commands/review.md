@@ -49,6 +49,7 @@ Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md`, m
 ```markdown
 ---
 kind: review
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 fixed_point: <ref>
 lenses_run: [quality, tests, security, spec, standards, architecture, data, docs, ui]

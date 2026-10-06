@@ -16,6 +16,7 @@ The work for one ticket leaves four sibling artifacts, and together they are the
 ```markdown
 ---
 kind: plan
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 design: .scratch/<feature-slug>/design/<NN>-<slug>.md

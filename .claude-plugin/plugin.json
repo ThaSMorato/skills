@@ -60,6 +60,7 @@
     "./skills/generate-test-guide",
     "./skills/generate-stack-guide",
     "./skills/retro",
+    "./skills/flow-report",
     "./skills/asking"
   ]
 }

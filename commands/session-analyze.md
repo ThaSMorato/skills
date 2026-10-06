@@ -1,5 +1,5 @@
 ---
-description: Read a whole working session (every compaction segment) and report where the owner had to correct, reject or repeat something, tagged as a problem of the flow or of this project, with the repeats across segments first.
+description: Read a whole working session (every compaction segment) and report where the owner had to correct, reject or repeat something and what in the environment got in the way, each tagged as a problem of the flow or of this project, with the repeats across segments first.
 argument-hint: "(optional) session id, default: the most recent session of this directory"
 ---
 
@@ -29,7 +29,14 @@ Call the Agent tool with `session-segment-analyst` for **every** segment **in a 
 - **Drop any finding without an owner turn** (uuid, timestamp, quote). This is the rule that keeps the report from becoming narrative. The one exception is the **Environment** section below, whose evidence can be the segment and the tool-call names the extract kept.
 - Keep each finding's `flow` / `project` tag. When two agents tagged the same problem differently, `project` wins unless the evidence shows it would recur on any project.
 - **Filter what gets promoted.** Before a `project` finding's change says "make it a skill" or "add it to a guide", run it through `${CLAUDE_PLUGIN_ROOT}/skills/retro/promotion-filter.md`: not findable in five minutes, specific to this codebase, cost real effort, and a trigger the task will actually contain. One that fails stays a finding, marked with the question it failed; it is not proposed as a skill or guide.
-- **Read the environment.** A session shows what artifacts cannot: where the agent searched before it found a file (navigation), which tool calls were expensive (tool economy), what it could not see (information access). Classify those with `${CLAUDE_PLUGIN_ROOT}/skills/retro/environment.md`, on its two tracks, and a mechanical standard is proposed as a check. `/retro` reads these reports for exactly those categories.
+
+## 3b. The environment: this stage owns it
+A session shows what no artifact records, so this is where the environment lens (`${CLAUDE_PLUGIN_ROOT}/skills/retro/environment.md`) runs in full, on its two tracks: what each problem cost this session, and what change to the environment prevents it next time.
+- **From the segment analysts' environment signals** (tool-call names, the one exception to the owner-turn rule): navigation (a run of searches before the file was found), tool economy (a costly call repeated), information access (something the agent could not see).
+- **From owner turns**: a correction the owner had to make twice about the same convention is a standard; classify it **mechanical** (propose the lint rule, hook or CI job that would catch it) or **judgement** (a line in the stack guide or the review standard). A `CLAUDE.md` instruction the owner had to repeat is not working where it is: say what should replace it (a check, a pointer, a skill).
+- Tag each environment finding `flow` or `project` like every other finding: a gap in the plugin's own stages is `flow`.
+
+`/retro` reads these sections for the session side of its environment, so write them even when they are short.
 
 ## 4. Write
 Write `docs/meta-retro/<YYYY-MM-DD>-<session-id>.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/meta-retro.md`. It lives in the project: a finding can be specific to it.

@@ -8,6 +8,7 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 
 ---
 kind: meta-retro
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 session: <session id>
 analyzed_at: <YYYY-MM-DD>
 segments: <n>
@@ -39,7 +40,7 @@ repeated: <n findings seen in more than one segment>
 | Pattern | Owner turn | Stage | Change | Filter |
 |---|---|---|---|---|
 
-## Environment (optional)
+## Environment (required when any signal or repeated correction exists)
 > From `skills/retro/environment.md`: navigation, tool economy and information access, which only a
 > session shows. Evidence is the segment and the tool-call names the extract kept (a run of searches
 > before a file was found, a costly call repeated), or an owner turn when there is one. Each finding is

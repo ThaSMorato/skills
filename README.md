@@ -49,7 +49,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Decisions (ADR) | `/adr-identify` · `/adr-generate` · `/adr-link` |
 | Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` · `/guardrails` |
 | Development | `/tickets` · `/tickets-validate` · `/design` · `/prototype` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` · `/walkthrough` · `/pr` · `/diagnose` |
-| Looking back | `/retro` · `/session-analyze` |
+| Looking back | `/retro` · `/session-analyze` · `/flow-report` |
 | Learning | `/teach` |
 | Session | `/wait-what` · `/handoff` |
 | Writing | `/writing-fragments` · `/writing-beats` · `/writing-shape` |

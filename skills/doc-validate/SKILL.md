@@ -58,6 +58,7 @@ Write `docs/validation/<from>-to-<to>.md`:
 ```markdown
 ---
 kind: doc-validation
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 pair: <from> → <to>
 status: clean | dirty
 open_issues: <count of open issues>

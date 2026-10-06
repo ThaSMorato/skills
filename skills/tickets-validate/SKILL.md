@@ -52,6 +52,7 @@ Write `.scratch/<feature-slug>/tickets-validation.md`. It sits outside `issues/`
 ```markdown
 ---
 kind: tickets-validation
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 feature: <feature-slug>
 status: clean | dirty
 open_issues: <count of open issues>
