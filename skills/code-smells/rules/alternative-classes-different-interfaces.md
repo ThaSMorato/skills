@@ -2,7 +2,7 @@
 
 # Alternative Classes with Different Interfaces
 
-**Tell:** two classes do the same job but expose different APIs — divergent names or signatures for the same role — so you can't swap one for the other.
+**Tell:** two classes do the same job but expose different APIs (divergent names or signatures for the same role), so you can't swap one for the other.
 
 The conceptual duplication hides behind a superficial interface difference, and you lose the ability to substitute one implementation for the other.
 

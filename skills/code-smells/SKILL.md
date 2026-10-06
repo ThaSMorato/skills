@@ -1,51 +1,51 @@
 ---
 name: code-smells
-description: A catalog of code smells — named symptoms that a design is drifting — with the tell for each and the refactoring that resolves it. Use when reviewing code or a diff, implementing or refactoring, deciding "is this well designed?", or when someone says "code smell" or asks to refactor this.
+description: A catalog of code smells (named symptoms that a design is drifting) with the tell for each and the refactoring that resolves it. Use when reviewing code or a diff, implementing or refactoring, deciding "is this well designed?", or when someone says "code smell" or asks to refactor this.
 ---
 
-Code smells are **labelled heuristics, not hard rules** — each is a judgement call. A smell flags something *worth a second look*, not a guaranteed defect; the repository's own guidelines and context always override this catalog. Many smells have a legitimate twin (an honest DTO, deliberate delegation, a small class with a clear concept) — name the smell, then judge.
+Code smells are **labelled heuristics, not hard rules**; each is a judgement call. A smell flags something *worth a second look*, not a guaranteed defect; the repository's own guidelines and context always override this catalog. Many smells have a legitimate twin (an honest DTO, deliberate delegation, a small class with a clear concept); name the smell, then judge.
 
-Scan the table below and match what you see to a smell. Read the smell's rule file **only when a row matches** — each holds the full tell, why it hurts, and the fix. Group by family: the family tells you the kind of pressure the smell puts on the code.
+Scan the table below and match what you see to a smell. Read the smell's rule file **only when a row matches**; each holds the full tell, why it hurts, and the fix. Group by family: the family tells you the kind of pressure the smell puts on the code.
 
-## Functions — read at more than one level
+## Functions: read at more than one level
 | Smell | Tell | Rule |
 |---|---|---|
 | Mixed Altitude | intent, domain calls and raw mechanics interleaved in one body | `rules/mixed-altitude.md` |
 
-## Bloaters — grew beyond what they should
+## Bloaters: grew beyond what they should
 | Smell | Tell | Rule |
 |---|---|---|
 | Primitive Obsession | raw primitive stands in for a domain concept | `rules/primitive-obsession.md` |
 | Magic Numbers | unnamed literal buried in the code | `rules/magic-numbers.md` |
 
-## Object-orientation abusers — use OO wrong
+## Object-orientation abusers: use OO wrong
 | Smell | Tell | Rule |
 |---|---|---|
 | Refused Bequest | subclass inherits what it doesn't want | `rules/refused-bequest.md` |
 | Temporary Field | field valid only some of the time | `rules/temporary-field.md` |
 | Alternative Classes w/ Different Interfaces | equivalent classes, divergent APIs | `rules/alternative-classes-different-interfaces.md` |
 
-## Change-preventers — freeze the code
+## Change-preventers: freeze the code
 | Smell | Tell | Rule |
 |---|---|---|
 | Divergent Change | one class changes for many reasons | `rules/divergent-change.md` |
 | Shotgun Surgery | one change edits many classes | `rules/shotgun-surgery.md` |
 | Parallel Inheritance Hierarchies | new subclass here forces one there | `rules/parallel-inheritance-hierarchies.md` |
 
-## Dispensables — should disappear
+## Dispensables: should disappear
 | Smell | Tell | Rule |
 |---|---|---|
 | Dead Code | never executed / commented-out | `rules/dead-code.md` |
 | Lazy Class | class doesn't pay its own cost | `rules/lazy-class.md` |
 | Data Class | only getters/setters, no behavior | `rules/data-class.md` |
 
-## Couplers — couple too much
+## Couplers: couple too much
 | Smell | Tell | Rule |
 |---|---|---|
 | Inappropriate Intimacy | two classes reach into each other's internals | `rules/inappropriate-intimacy.md` |
 | Middle Man | class only delegates, adds nothing | `rules/middle-man.md` |
 
-## Error handling and contracts — the failure nobody sees
+## Error handling and contracts: the failure nobody sees
 | Smell | Tell | Rule |
 |---|---|---|
 | Swallowed Error | a failure happens and nothing downstream can tell | `rules/swallowed-error.md` |
@@ -57,7 +57,7 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 | Anemic Domain Model | data with no behavior, logic in services | `rules/anemic-domain-model.md` |
 | Callback Hell | hidden side effect / nested async | `rules/callback-hell.md` |
 
-## Ousterhout red flags — module & interface structure
+## Ousterhout red flags: module & interface structure
 | Smell | Tell | Rule |
 |---|---|---|
 | Shallow Module | interface as complex as the payoff | `rules/shallow-module.md` |
@@ -69,7 +69,7 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 | Conjoined Methods | two methods only make sense read together | `rules/conjoined-methods.md` |
 | Special-General Mixture | general mechanism polluted with one specific use | `rules/special-general-mixture.md` |
 
-## Ousterhout red flags — comments & names
+## Ousterhout red flags: comments & names
 | Smell | Tell | Rule |
 |---|---|---|
 | Comment Repeats Code | comment restates what the code already says | `rules/comment-repeats-code.md` |
@@ -77,5 +77,5 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 | Implementation Doc Contaminates Interface | interface doc leaks internal detail | `rules/implementation-doc-contaminates-interface.md` |
 | Nonobvious Code | meaning doesn't jump out on first read | `rules/nonobvious-code.md` |
 | Vague Name | generic name (`data`, `tmp`, `result`) reveals nothing | `rules/vague-name.md` |
-| Hard to Pick Name | can't find a good name — design is confused | `rules/hard-to-pick-name.md` |
+| Hard to Pick Name | can't find a good name; design is confused | `rules/hard-to-pick-name.md` |
 | Hard to Describe | needs a long, caveat-heavy description | `rules/hard-to-describe.md` |

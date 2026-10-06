@@ -1,6 +1,6 @@
 # Plugin Anatomy
 
-> How to package skills, commands, and agents into a Claude Code plugin — and **how to choose** between the three. This is the single source for the "by role" decision; the other anatomy specs reference this section.
+> How to package skills, commands, and agents into a Claude Code plugin, and **how to choose** between the three. This is the single source for the "by role" decision; the other anatomy specs reference this section.
 
 ## Plugin structure
 
@@ -21,7 +21,7 @@
 
 ## Manifests
 
-**`marketplace.json`** — hosts one or more plugins:
+**`marketplace.json`**: hosts one or more plugins:
 ```json
 {
   "name": "<marketplace>",
@@ -34,7 +34,7 @@
 ```
 `source: "./"` = single plugin at the repo root (Matt style). For several plugins in one repo, use `source: "./plugins/<name>"` (Wesley style).
 
-**`plugin.json`** — the plugin itself:
+**`plugin.json`**: the plugin itself:
 ```json
 {
   "name": "...", "version": "0.1.0", "description": "...",
@@ -46,12 +46,12 @@
 
 ## Choosing: skill × command × agent (by role)
 
-It's not either/or — each solves a different role. **The decisive insight: a subagent doesn't talk live** (it runs to completion and returns). So anything requiring HITL interaction stays in the main context (skill/command).
+It's not either/or; each solves a different role. **The decisive insight: a subagent doesn't talk live** (it runs to completion and returns). So anything requiring HITL interaction stays in the main context (skill/command).
 
 | Dimension | Skill | Command | Agent (subagent) |
 |---|---|---|---|
 | Context | current (main) | main | **isolated**, its own |
-| Talks to the user live | **yes** | **yes** | **no** — runs and returns |
+| Talks to the user live | **yes** | **yes** | **no** (runs and returns) |
 | Invocation | model (via `description`) or user | user (`/name`) | delegated by main |
 | Parallelism | not on its own | no | **yes** (fan-out) |
 | Reuse | primitive reused by skills | thin entrypoint | orchestration worker |

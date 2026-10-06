@@ -7,4 +7,4 @@ Call the Agent tool with `prd-writer` to synthesize a PRD into `docs/prd.md` fro
 
 If the brief doesn't exist, tell the user to run `/interview` first instead of delegating.
 
-After the agent returns, show a short summary: which sections were filled, which optional sections were pruned, and any `> Needs Input` markers (these block approval) and every `> Assumed:` marker, grouped, for the user to confirm or correct. Don't edit the PRD yourself — if changes are needed, re-run the agent with the correction. The one edit you make directly is rewriting a confirmed `> Assumed:` as `> Decided:` (the `asking` skill §5).
+After the agent returns, show a short summary: which sections were filled, which optional sections were pruned, and any `> Needs Input` markers (these block approval) and every `> Assumed:` marker, grouped, for the user to confirm or correct. Don't edit the PRD yourself; if changes are needed, re-run the agent with the correction. The one edit you make directly is rewriting a confirmed `> Assumed:` as `> Decided:` (the `asking` skill §5).

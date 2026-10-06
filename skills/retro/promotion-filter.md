@@ -1,6 +1,6 @@
 > Part of the `retro` skill (see `SKILL.md`). Also read by `/session-analyze`.
 
-# Promotion filter — before a finding becomes a skill, a guide or a rule
+# Promotion filter: before a finding becomes a skill, a guide or a rule
 
 A project finding that turns into a skill, a stack-guide entry or a rule is loaded again on every later run. A generic one is worse than none: it competes with the good ones when the model picks what to load, and it teaches nothing the model did not already know. So before **proposing** that a finding become one of these, it has to pass all three questions:
 

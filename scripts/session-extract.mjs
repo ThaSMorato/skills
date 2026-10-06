@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Turns a Claude Code session transcript (JSONL) into one readable file per compaction segment,
 // keeping only the conversation: what the owner said, answered or rejected, and what the assistant
-// said plus the names of the tools it called. Everything else — file snapshots, tool results,
-// thinking, subagent turns, compaction summaries — is dropped: it is either bulk or not the owner.
+// said plus the names of the tools it called. Everything else (file snapshots, tool results,
+// thinking, subagent turns, compaction summaries) is dropped: it is either bulk or not the owner.
 // No dependencies beyond the Node standard library.
 
 import { createReadStream, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs'
@@ -123,7 +123,7 @@ function formatRejection(entry, toolNamesById) {
   const toolName = toolNamesById.get(result?.tool_use_id) ?? 'tool call'
   const raw = typeof result?.content === 'string' ? result.content : joinText(asBlocks(result?.content))
   const said = REJECTION_PREFIX.test(raw) ? raw.replace(REJECTION_PREFIX, '').trim() : ''
-  if (CLARIFY_BOILERPLATE.test(said)) return `[rejected ${toolName} to clarify — the clarification is the next owner turn]`
+  if (CLARIFY_BOILERPLATE.test(said)) return `[rejected ${toolName} to clarify; the clarification is the next owner turn]`
   return said ? `[rejected ${toolName}] ${said}` : `[rejected ${toolName}]`
 }
 

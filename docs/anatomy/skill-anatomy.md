@@ -14,19 +14,19 @@ disable-model-invocation: true # optional: user-invoked only (wrapper), never au
 <imperative, short instructions, addressed to the model>
 ```
 
-**The frontmatter is strict YAML, and `description` is the field that breaks it.** A good description names trigger phrases, so it tends to carry quotes and a `Triggers:` label — and an unquoted **colon followed by a space** reads as a nested mapping and aborts the parse. A value opening with `[` or `{` parses as a list or map rather than a string. Quote it; use single quotes when the trigger phrases use double ones.
+**The frontmatter is strict YAML, and `description` is the field that breaks it.** A good description names trigger phrases, so it tends to carry quotes and a `Triggers:` label, and an unquoted **colon followed by a space** reads as a nested mapping and aborts the parse. A value opening with `[` or `{` parses as a list or map rather than a string. Quote it; use single quotes when the trigger phrases use double ones.
 
-This fails loudly in a strict parser and silently in a lenient one, so "it works here" is not evidence. A skill whose frontmatter does not parse simply **does not load** — the only signal is a startup warning, never an error where you try to use it.
+This fails loudly in a strict parser and silently in a lenient one, so "it works here" is not evidence. A skill whose frontmatter does not parse simply **does not load**: the only signal is a startup warning, never an error where you try to use it.
 
 `scripts/frontmatter.test.mjs` fails on an unquoted value that would break the parse.
 
-Folder: `skills/<name>/SKILL.md`. List the path in `plugin.json → skills` — a skill that is on disk but not listed does not load, and `scripts/plugin-manifest.test.mjs` fails on it.
+Folder: `skills/<name>/SKILL.md`. List the path in `plugin.json → skills`; a skill that is on disk but not listed does not load, and `scripts/plugin-manifest.test.mjs` fails on it.
 
 ## Golden rules
 
 1. **`description` is the trigger.** It's how the model decides to invoke. State **what** and **when** ("Use when… / on triggers of…"). Vague = never fires or fires wrong.
    - **Don't summarize the workflow in it.** A description that lists the steps can be followed *instead of* the skill: the model acts on the summary and never reads the body. Say what it is for and when; leave the how to the body.
-   - **Name the exclusion** when a sibling skill is the right one for a nearby request ("not for behavior changes — use `tdd`"). Two skills with overlapping triggers fire wrong half the time.
+   - **Name the exclusion** when a sibling skill is the right one for a nearby request ("not for behavior changes; use `tdd`"). Two skills with overlapping triggers fire wrong half the time.
    - **One trigger per branch.** A branch is a distinct case the skill handles. Synonyms that rename one branch are that branch written twice: keep one. The description sits in context on every turn, so it earns harder pruning than the body.
 2. **Short and imperative.** A good skill is a 5–10 sentence prompt, not a spec. Direct instruction ("Interview the user… Ask the open questions in rounds…"), not explanatory prose.
    - **No-ops go.** A sentence the model already obeys by default spends load to say nothing: delete the whole sentence, not words from it. Whether it is a no-op is settled by running the skill without it, not by debate. A word too weak to beat the default ("be thorough") is a no-op too; the fix is a stronger word ("relentless").
@@ -46,7 +46,7 @@ Folder: `skills/<name>/SKILL.md`. List the path in `plugin.json → skills` — 
    (Reference skills, such as `testing` and `clean-code`, have no exit; they are read, not run. Their bar is the same idea applied to flat reference: "every rule applied".)
 8. **Write the positive.** State the behavior you want ("write one-line comments"), not the one you forbid. A prohibition puts the forbidden behavior in context and makes it more available, not less. Keep a prohibition only as a hard guardrail you cannot phrase positively, and pair it with the positive target.
 9. **Leading words.** Prefer a compact word the model already knows (*tracer bullet*, *fog of war*, *tight* loop, a test that goes *red*) over a sentence that gestures at the idea. Repeat the word, never the sentence: it anchors the same behavior each time it appears, in fewer tokens. A coined word has to be defined, so reach for an existing one first.
-10. **Typography.** Where a dash would go, new text uses a comma, a colon, a semicolon or parentheses.
+10. **Typography.** Where a dash would go, text uses a comma, a colon, a semicolon, parentheses or a full stop, whichever says the relation meant. The one exception is the separator inside the three markers (`> Decided:`, `> Needs Input:`, `> Assumed:`), kept so documents in that format stay valid. In an unquoted frontmatter value, the colon is not available (it breaks the YAML); use a comma, a semicolon or parentheses there. `scripts/no-em-dash.test.mjs` fails on any other dash.
 
 ## Invocation: model or user
 

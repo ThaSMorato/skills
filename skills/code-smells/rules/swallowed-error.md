@@ -19,4 +19,4 @@
 
 **Fix:** let it propagate, or catch only the specific failure you can actually handle, and handle it (a fallback the caller is told about, a retry with a final raise, a translated error with the original attached). If swallowing is truly right (best-effort telemetry, a cleanup on an already failing path), say so in a comment that states why the failure does not matter.
 
-**Severity:** an empty catch or a silent default on a path that moves money, data or permissions is a defect, not a heuristic — report it `high` or above.
+**Severity:** an empty catch or a silent default on a path that moves money, data or permissions is a defect, not a heuristic; report it `high` or above.

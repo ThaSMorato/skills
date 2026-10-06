@@ -25,22 +25,22 @@ sis_planned: <number of SIs below>
 revision: <1 when first written; +1 every time the plan is revised after a dirty validation>
 ---
 
-# Plan — <NN> <Ticket title>
+# Plan: <NN> <Ticket title>
 
 ## Objective
 <One or two sentences: the end-to-end behavior this ticket makes work, from the user's perspective.>
 
 ## Step Implementations
 
-### SI-1 — <name>
+### SI-1: <name>
 - **Description:** <what this vertical slice delivers>
 - **Technical actions:** <ordered steps; intent-level, not stale full paths>
-- **Tests:** <seam(s) + layer(s) to cover, per the `testing` skill — or `none — <reason>`>
-- **Mirror:** <optional — `path:line` rows from the node map's Conventions to mirror that this SI's code should look like>
+- **Tests:** <seam(s) + layer(s) to cover, per the `testing` skill, or `none (<reason>)`>
+- **Mirror:** <optional: `path:line` rows from the node map's Conventions to mirror that this SI's code should look like>
 - **Dependencies:** <SI ids that must complete first, or `none`>
 - **Acceptance criteria:** <observable outcome(s), each naming the ticket AC id it serves, e.g. "(AC-2)">
 
-### SI-2 — <name>
+### SI-2: <name>
 - ...
 
 ## Dependency Map
@@ -61,18 +61,18 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 ```
 
 ## The frontmatter is what gets counted
-`gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose — `/retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
+`gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose; `/retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
 
 ## Rules for a good plan
-- **One SI = one red → green → refactor cycle** that fits a fresh context window. **If an SI needs two Acts to describe, split it** — the single-act rule, at plan scale.
+- **One SI = one red → green → refactor cycle** that fits a fresh context window. **If an SI needs two Acts to describe, split it**: the single-act rule, at plan scale.
 - **Vertical, not horizontal.** Each SI cuts through every layer it needs; never "all schema, then all API".
-- **Seams are named up front.** The `implement` loop writes the failing test at the seam the SI declares — no test seam, no test-first.
+- **Seams are named up front.** The `implement` loop writes the failing test at the seam the SI declares; no test seam, no test-first.
 - **Every AC is owned, by id.** The coverage table is what makes that mechanical rather than a reading exercise.
 - **The plan encodes the node map.** Modules, interfaces and seams come from the map; a plan that invents one has diverged from the design contract.
 - **Prefactoring SIs lead.** Reshape first, then build on the easy shape. A prefactoring SI names the AC it makes easy (`enables AC-2`) in place of an AC it owns.
 - **An SI has a floor.** It changes something observable at its seam and owns at least one AC. "Write the test for X" and "change the value" are steps of an SI, not SIs. If the plan has more SIs than the ticket has ACs, check that each one clears the floor before you present it.
 - **A bugfix plan starts from the diagnosis.** For `type: bugfix`: the ticket's Source is a `/diagnose` file with `status: cause-found`. The first SI writes the pinned and flipped tests at **every level** the diagnosis lists (`levels`), and the flipped tests are its red step; the fix is the green. The flipped tests are sealed: no later SI edits them. A level in the diagnosis's `seam_gaps` has no test SI; the plan names it as a known gap instead. The final verification also runs the diagnosis's `loop` command against the original scenario, and it must go green; the commit or PR message names the hypothesis that held.
 - **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
-- **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them — the final verification runs exactly these.
+- **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them; the final verification runs exactly these.
 - **Mark the decisions the sources do not give.** A threshold, a failure behavior or a visibility rule that the ticket, node map and FDD are silent on is written with `> Assumed:` under the SI that depends on it (the `asking` skill §4 and §6). Facts are not assumptions: if the repo can answer it, look it up.
 - **No stale detail.** Prefer intent over hard-coded file paths and code snippets; the exception is a decision-encoding snippet trimmed to the decision. A `Mirror:` pointer is not stale detail: it names existing code to imitate, copied from the node map, and carries no snippet.

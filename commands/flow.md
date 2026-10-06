@@ -1,18 +1,18 @@
 ---
-description: Drive the Doc-Dev flow — scan where the project stands, report what's waiting, and run the next stage with human gates.
-argument-hint: "(none) — whole project · or <feature/ticket/goal> to scope to one thing"
+description: Drive the Doc-Dev flow; scan where the project stands, report what's waiting, and run the next stage with human gates.
+argument-hint: "(none): whole project · or <feature/ticket/goal> to scope to one thing"
 ---
 
 You are the **coordinator**. Scope: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
-## Always scan first — before running anything
-The first thing this command does, every time, is **read the disk and say where the project stands**. Not "start at stage one": scan, report, then propose. This is the most common way the command is used — "where am I, what's next, what's waiting on me" — and running a stage before answering that is how work gets redone.
+## Always scan first, before running anything
+The first thing this command does, every time, is **read the disk and say where the project stands**. Not "start at stage one": scan, report, then propose. This is the most common way the command is used ("where am I, what's next, what's waiting on me") and running a stage before answering that is how work gets redone.
 
 State derives from **artifacts on disk**, never from a status file this command maintains. Every artifact is a by-product of whoever did the work, so nothing owes an update to a document that isn't theirs, and any subcommand can run standalone without knowing this command exists. A state file would have to be written by stages that don't own it, and a state file that lies is worse than none.
 
-### Phase 1 — linear: does it exist, and is it approved?
+### Phase 1 (linear): does it exist, and is it approved?
 Presence proves **produced**; the artifact's own `Status:` frontmatter proves **approved**. Read both.
 
 | Artifact | Stage | Command |
@@ -26,7 +26,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/hld.md` | HLD | `/hld` |
 | `docs/components.md` | component map | `/components` |
 | `docs/features.md` | decomposition | `/decompose` |
-| `docs/evolutions.md` | findings kept but traced to no requirement — read it when scope is next revisited | `/decompose`, `/retro` append |
+| `docs/evolutions.md` | findings kept but traced to no requirement; read it when scope is next revisited | `/decompose`, `/retro` append |
 | `docs/retro/*.md` | what finished work taught about the process | `/retro` |
 | `docs/meta-retro/*.md` | what a working session taught: where the owner corrected, rejected or repeated | `/session-analyze` |
 | `docs/fdd/<feature>.md` | FDD, per feature | `/fdd <feature>` |
@@ -41,43 +41,43 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `.scratch/<feature>/issues/` | tickets | `/tickets <feature>` |
 | `.scratch/<feature>/tickets-validation.md` | the ticket set's verdict, `clean` or `dirty` | `/tickets-validate <feature>` (the postflight of `/tickets`) |
 
-**A missing artifact is not automatically a gap.** Before reporting one as missing, check whether a ticket's `Source` records it as a deliberate skip — small work legitimately has no FDD. Report a skip as a skip; offering to generate a document the user consciously declined is how a coordinator teaches people to stop reading it.
+**A missing artifact is not automatically a gap.** Before reporting one as missing, check whether a ticket's `Source` records it as a deliberate skip: small work legitimately has no FDD. Report a skip as a skip; offering to generate a document the user consciously declined is how a coordinator teaches people to stop reading it.
 
-### Phase 2 — a matrix, not a stage
+### Phase 2: a matrix, not a stage
 Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which sub-stage it stopped at*. Build this table from the sibling artifacts:
 
 | ticket | design | plan | validate | implement | review |
 |---|---|---|---|---|---|
-| `01-auth` | ✅ | ✅ | ✅ clean | 3/5 SIs | — |
-| `02-profile` | ✅ | ✅ | ⚠️ dirty | — | — |
-| `03-billing` | — | — | — | — | — |
+| `01-auth` | ✅ | ✅ | ✅ clean | 3/5 SIs | - |
+| `02-profile` | ✅ | ✅ | ⚠️ dirty | - | - |
+| `03-billing` | - | - | - | - | - |
 
-- **design** — `.scratch/<feature>/design/<NN>-<slug>.md` exists
-- **plan** — `plans/<NN>-<slug>/plan.md` exists
-- **validate** — `validation.md`'s `status:` frontmatter
-- **implement** — `progress.md`'s `sis_done`/`sis_total` frontmatter (a `progress.md` without frontmatter predates it — read the count from the body and say so)
-- **review** — `.scratch/<feature>/reviews/<NN>-<slug>.md` exists; its `verdicts` say how many findings the verifier confirmed
+- **design**: `.scratch/<feature>/design/<NN>-<slug>.md` exists
+- **plan**: `plans/<NN>-<slug>/plan.md` exists
+- **validate**: `validation.md`'s `status:` frontmatter
+- **implement**: `progress.md`'s `sis_done`/`sis_total` frontmatter (a `progress.md` without frontmatter predates it; read the count from the body and say so)
+- **review**: `.scratch/<feature>/reviews/<NN>-<slug>.md` exists; its `verdicts` say how many findings the verifier confirmed
 
 The **frontier** is the tickets whose blockers are all `done`, crossed with where each stopped.
 
 ### Then report
-Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage** — then ask before running it.
+Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, then ask before running it.
 
 ## Then size the work, and pick the shortest path that fits
-**Before proposing any stage, decide how big this is.** The full chain exists for work whose shape is genuinely unknown. Run it on a two-hour change and it does not merely cost more — it *manufactures* scope, because every template below is a completeness contract, and a completeness contract applied to a small task gets filled with invented content. The machine that makes omission detectable is the same machine that produces bulk.
+**Before proposing any stage, decide how big this is.** The full chain exists for work whose shape is genuinely unknown. Run it on a two-hour change and it does not merely cost more; it *manufactures* scope, because every template below is a completeness contract, and a completeness contract applied to a small task gets filled with invented content. The machine that makes omission detectable is the same machine that produces bulk.
 
 | Gear | When | Path |
 |---|---|---|
 | **Full** | a new product, or an epic whose structure is unknown | everything, phase 1 → phase 2 |
 | **Feature** | a feature inside a product that already has a PRD, HLD and component map | `/fdd` → `/tickets` → the per-ticket loop |
 | **Small** | one seam, no architectural question, fits in a ticket or two | straight to `/design` → `/plan` → `/plan-validate` → `/implement` → `/review`, no FDD |
-| **Direct** | a fix or a change whose shape is already obvious | no stage at all — say so and let the user just do it. A cleanup of existing, tested code is `/tidy <path>` |
+| **Direct** | a fix or a change whose shape is already obvious | no stage at all; say so and let the user just do it. A cleanup of existing, tested code is `/tidy <path>` |
 
-**Say which gear you chose and why, and confirm it** before running anything. Choosing a gear is a decision the user should get to overrule in either direction — and it is far cheaper to move up a gear after discovering a real design question than to unwind a week of documents produced for a small task.
+**Say which gear you chose and why, and confirm it** before running anything. Choosing a gear is a decision the user should get to overrule in either direction, and it is far cheaper to move up a gear after discovering a real design question than to unwind a week of documents produced for a small task.
 
-**Record the choice where a later scan can see it.** When a ticket is written without an FDD, its `Source` says so — `direct — small gear, no FDD: single seam, no contract change` — so the scan can tell a deliberate skip from a missing document. An unrecorded skip reads exactly like an omission, and the next run will offer to fill it.
+**Record the choice where a later scan can see it.** When a ticket is written without an FDD, its `Source` says so (`direct (small gear, no FDD): single seam, no contract change`) so the scan can tell a deliberate skip from a missing document. An unrecorded skip reads exactly like an omission, and the next run will offer to fill it.
 
-**Record the gear itself, too.** Every ticket carries it in its `Gear` field, and `/plan` copies it into the plan's frontmatter, because the stages below run standalone and cannot ask this command. It is also what lets `/retro` measure each gear separately — and tell whether the gear chosen matched the size the work turned out to be.
+**Record the gear itself, too.** Every ticket carries it in its `Gear` field, and `/plan` copies it into the plan's frontmatter, because the stages below run standalone and cannot ask this command. It is also what lets `/retro` measure each gear separately, and tell whether the gear chosen matched the size the work turned out to be.
 
 The instinct to reach for the full chain on everything is the same instinct Shape Up's *appetite* corrects: the question is not "what is the complete process?", it is "how much process does this problem deserve?".
 
@@ -98,12 +98,12 @@ Offer `/reconcile` only when `docs/components.md` exists. A project that does no
 - **An argument** → try to match it against an existing FDD, feature id, ticket slug, or epic. **Matches → resume** and report where that thing stopped. **No match → treat it as a new goal, and confirm that with the user before starting from scratch**; free text against slugs is a fuzzy match, and starting a new flow over an existing one is expensive to undo.
 
 ## Brownfield
-Detect by objective signal — source files outside `docs/`, or a git history with commits — and **confirm with the user** rather than deciding alone; getting this wrong changes every stage below.
+Detect by objective signal (source files outside `docs/`, or a git history with commits) and **confirm with the user** rather than deciding alone; getting this wrong changes every stage below.
 
 Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first and writes `docs/analysis/system-profile.md`; every later stage reads that file **if it exists** and discovers on its own if it doesn't. The profile accelerates, it never gates. Concretely: `/interview` asks what cannot change, `/prd` states whether requirements are the delta or the whole system, `/hld` documents the AS-IS and marks the delta, `/components` measures the real graph, `/boundaries` reports divergence between the contract and the code, `/guidelines` mines real conventions, `/tickets` plans migration sequences, and `/review` holds the diff to the repo's own conventions.
 
-## Phase 1 — Documentation
-1. `/analyze` (+ `/audit-deps`) if brownfield — then `/guidelines` + `/generate-stack-guide <tech>` per technology right away, since the stack is already in the repo, and `/guardrails` when the repo has no pre-commit hook or CI running its checks.
+## Phase 1: Documentation
+1. `/analyze` (+ `/audit-deps`) if brownfield, then `/guidelines` + `/generate-stack-guide <tech>` per technology right away, since the stack is already in the repo, and `/guardrails` when the repo has no pre-commit hook or CI running its checks.
 2. `/interview` → brief + glossary + inline ADRs. **GATE (ambiguity):** every required section filled, and the user confirms the shared understanding.
 3. Optional `/research` for open technical questions.
 4. `/prd` → `/doc-validate brief prd`. **GATE (strong):** a wrong PRD contaminates everything below.
@@ -117,19 +117,19 @@ Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first
 
 **Two architecture beats, deliberately apart.** `/components` runs **before** the FDDs so every feature spec shares one vocabulary; `/boundaries` runs **after** them, because the axes of change a boundary separates are only knowable once the features are specced. Reversing the first would make the map a reconciliation of N contradictory carve-ups; moving the second earlier would make it a guess.
 
-**The guides come before both.** `/components` and `/boundaries` both have to know what a component *is* in this ecosystem — a Rails engine, an Nx package, a Go module — and that is written in the stack guide, not in the abstract principle. So the guides are generated as soon as the stack is known: after `/analyze` in brownfield, after `/hld` in greenfield. Generated last, they reach the code stages but miss the two stages that draw the structure.
+**The guides come before both.** `/components` and `/boundaries` both have to know what a component *is* in this ecosystem (a Rails engine, an Nx package, a Go module) and that is written in the stack guide, not in the abstract principle. So the guides are generated as soon as the stack is known: after `/analyze` in brownfield, after `/hld` in greenfield. Generated last, they reach the code stages but miss the two stages that draw the structure.
 
-## Phase 2 — Development (per frontier ticket)
+## Phase 2: Development (per frontier ticket)
 12. `/tickets <feature>` → vertical slices with blocking edges, validated as a set by `/tickets-validate` before the gate. **GATE:** the set must be `clean`, and the tickets-to-seams count is the first thing to read.
 13. Per frontier ticket: `/design` → **GATE** → `/plan` → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI by SI, STOP between SIs) → optional `/trim <slug> <fixed-point>`: make the change smaller with the behavior identical, so the review reads less → `/review <fixed-point>` → **GATE** → optional `/tidy <slug> <fixed-point>`: the four rules of Simple Design over what is left → optional `/walkthrough <slug> <fixed-point>`: a lesson over the change with a recall quiz, so the owner understands what merges → `/pr <slug> <fixed-point>`: the PR body (summary as a picture, before/after evidence, merge danger), opened only when the user says so. Both are structural, apply only what the user chooses, and run in every gear that has a review.
-    - **Back-edge:** if implementation surfaces a real architectural decision, run `/adr-identify` and update the FDD — and if it revealed a new axis of change, revisit `/boundaries`. Keep the docs live.
+    - **Back-edge:** if implementation surfaces a real architectural decision, run `/adr-identify` and update the FDD, and if it revealed a new axis of change, revisit `/boundaries`. Keep the docs live.
     - **Bugs:** a bug whose cause is not known starts at `/diagnose`, never at a fix. It ends with the cause and the pinned and flipped tests; an obvious fix is then made test-first (Direct), anything larger becomes a `Type: bugfix` ticket whose Source is the diagnosis, through `/design` → `/plan` in the Small gear.
-14. When an epic or a cycle finishes: `/retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught — process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
+14. When an epic or a cycle finishes: `/retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught: process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
 15. When a working session ends, whether a whole flow driven through several `/compact`s or a long stretch of work: `/session-analyze`. `/retro` reads the artifacts; this reads what only the conversation holds (the owner correcting, rejecting, repeating), across every compaction segment, and tags each finding `flow` (improve the plugin) or `project` (a skill or guide here).
 
 ## Parallelism: fan out on reads, stay serial on writes
-- ✅ **Fan out** for documentation, codebase exploration and review — read-only work where agents don't collide and results add up. Already the case for `/review`, independent FDDs, and the `/analyze` component pass.
+- ✅ **Fan out** for documentation, codebase exploration and review: read-only work where agents don't collide and results add up. Already the case for `/review`, independent FDDs, and the `/analyze` component pass.
 - ❌ **Implementation is serial in the main context.** Writes conflict, and the code deserves supervision.
-- 🔀 **Real parallelism happens per epic, in worktrees.** `docs/features.md` carries each epic's parallel-safe set, derived from component overlap — so "can these two run at once" is a lookup, not a guess.
+- 🔀 **Real parallelism happens per epic, in worktrees.** `docs/features.md` carries each epic's parallel-safe set, derived from component overlap, so "can these two run at once" is a lookup, not a guess.
 
 Report progress after each stage. The user can stop, redirect, or jump stages at any gate.

@@ -1,6 +1,6 @@
 ---
 name: review-verifier
-description: Check every finding of a synthesized /review against the repository before the owner decides what to fix — give each a verdict backed by cited code, and never drop one. Runs inside /review, after synthesis. Returns verdicts; never edits anything.
+description: Check every finding of a synthesized /review against the repository before the owner decides what to fix; give each a verdict backed by cited code, and never drop one. Runs inside /review, after synthesis. Returns verdicts; never edits anything.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -12,7 +12,7 @@ Seven narrow lenses trade precision for recall, and the synthesis step filters o
 A finding says "N+1 query at `orders.ts:42`". To judge it, **open `orders.ts:42`**. Your refutation has the same bar as the finding: it cites code. A verdict without a citation is one more layer of elaboration, not a verification.
 
 ## Inputs
-Your context is isolated — you receive:
+Your context is isolated; you receive:
 - **REQUIRED:** the path to the review file (`.scratch/<feature-slug>/reviews/<NN>-<slug>.md`), the path to the pre-computed diff file, and the fixed point.
 - **The repository**, read-only: `Read`, `Grep`, `Glob`, and `git` through `Bash` (`blame`, `log`, `show`), never anything that writes.
 - For `rule does not apply`: the rule the finding names, in the skill or guide it cites.
@@ -23,9 +23,9 @@ Give **every** finding exactly one, with the evidence it requires:
 | Verdict | When | Requires |
 |---|---|---|
 | `confirmed` | the code at the cited location does what the finding says | the excerpt |
-| `wrong location` | `file:line` does not contain it — stale or invented | what is actually there |
+| `wrong location` | `file:line` does not contain it: stale or invented | what is actually there |
 | `rule does not apply` | the named rule does not cover this construct | the rule's own words |
-| `impossible scenario` | the failure cannot happen — guarded elsewhere, or the path is unreachable | the guard, or why the path is unreachable |
+| `impossible scenario` | the failure cannot happen: guarded elsewhere, or the path is unreachable | the guard, or why the path is unreachable |
 | `already handled` | what the fix asks for already exists nearby | where |
 | `duplicate` | the same defect as another finding in this file | that finding's number |
 | `pre-existing` | real, but in code the diff did not change | `git blame` or the commit that introduced it |
@@ -42,7 +42,7 @@ Return the verdicts as data. `/review` owns the review file and writes them into
 
 For each finding, by its number:
 ```
-<n>. <verdict> — <the evidence: an excerpt with file:line, a rule quote, a finding number, or a commit>
+<n>. <verdict>: <the evidence: an excerpt with file:line, a rule quote, a finding number, or a commit>
 ```
 
 Then the counts:

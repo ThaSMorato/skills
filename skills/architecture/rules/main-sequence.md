@@ -18,9 +18,9 @@ A  1 |*                          (0,1) stable + abstract
 
 ## The two zones off the line
 
-**Zone of Pain — low `A`, low `I` (bottom-left).** Stable and concrete. Everything depends on it and it cannot be extended without being edited, so every change is expensive and wide. A database schema and a framework's core types live here — and that is tolerable *for things that genuinely do not change*. It is only pain when the thing is volatile.
+**Zone of Pain: low `A`, low `I` (bottom-left).** Stable and concrete. Everything depends on it and it cannot be extended without being edited, so every change is expensive and wide. A database schema and a framework's core types live here, and that is tolerable *for things that genuinely do not change*. It is only pain when the thing is volatile.
 
-**Zone of Uselessness — high `A`, high `I` (top-right).** Abstract and depended on by nothing. Interfaces nobody implements, layers nobody calls. Dead abstraction: the cost of indirection with none of the benefit.
+**Zone of Uselessness: high `A`, high `I` (top-right).** Abstract and depended on by nothing. Interfaces nobody implements, layers nobody calls. Dead abstraction: the cost of indirection with none of the benefit.
 
 ## How to use it
 `D` is a **screening tool**, not a verdict. Rank components by `D`, look at the worst few, and ask whether that position is deliberate. A stable-and-concrete component holding an unchanging value type is fine at `D = 1`; the same position for the pricing engine is the finding.

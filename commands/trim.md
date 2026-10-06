@@ -1,6 +1,6 @@
 ---
-description: After /implement and before /review, make a ticket's change smaller without changing behavior — revert incidental hunks, reuse what the repo already has, drop files and layers the change did not need, pull a spread-out behavior into fewer files. Proposed with evidence, applied only where you choose, tests untouched.
-argument-hint: "<ticket slug> <fixed point — the one /review will use>"
+description: After /implement and before /review, make a ticket's change smaller without changing behavior (revert incidental hunks, reuse what the repo already has, drop files and layers the change did not need, pull a spread-out behavior into fewer files). Proposed with evidence, applied only where you choose, tests untouched.
+argument-hint: "<ticket slug> <fixed point, the one /review will use>"
 ---
 
 Call the Skill tool with `trim` for: $ARGUMENTS

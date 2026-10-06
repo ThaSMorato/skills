@@ -1,6 +1,6 @@
 ---
-description: Make working code simple — Beck's four rules of Simple Design in order (expression, then duplication, then size), as structural changes with the tests untouched and green. After /review on a ticket's diff, or on any path that has tests covering it.
-argument-hint: "<ticket slug> <fixed point — the same one /review used>  |  <path>"
+description: Make working code simple, Beck's four rules of Simple Design in order (expression, then duplication, then size), as structural changes with the tests untouched and green. After /review on a ticket's diff, or on any path that has tests covering it.
+argument-hint: "<ticket slug> <fixed point (the same one /review used)>  |  <path>"
 ---
 
 Call the Skill tool with `tidy` for: $ARGUMENTS

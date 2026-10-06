@@ -30,6 +30,6 @@ Rules: **self-contained** (no external links); sections marked **required × opt
 
 Three fields are read by other stages, so they are contracts rather than decoration:
 
-- **`Status: draft | in review | approved | changes-requested`** — the gate record. Whoever runs the gate writes it; `/flow` reads it to report what is waiting on the user. Nobody else may set it to `approved`.
-- **`Level: product | module (EPIC) | feature`** — sets the depth of the document, and propagates brief → PRD → HLD → FDD.
-- **Numbered ids** (`RF-001`, `AC-1`, `SI-1`) — what makes coverage checks mechanical instead of textual.
+- **`Status: draft | in review | approved | changes-requested`**: the gate record. Whoever runs the gate writes it; `/flow` reads it to report what is waiting on the user. Nobody else may set it to `approved`.
+- **`Level: product | module (EPIC) | feature`**: sets the depth of the document, and propagates brief → PRD → HLD → FDD.
+- **Numbered ids** (`RF-001`, `AC-1`, `SI-1`): what makes coverage checks mechanical instead of textual.

@@ -7,7 +7,7 @@ Splitting a system into services is a **deployment and operational** decision. I
 Two traps follow.
 
 ## The decoupling fallacy
-Services communicating over a network still share data shapes, still depend on each other's behaviour, and still change together. A cross-service call is a function call with worse failure modes and a slower feedback loop. If service A must be redeployed whenever service B's payload changes, the two are coupled — the network between them is a cost, not a boundary.
+Services communicating over a network still share data shapes, still depend on each other's behaviour, and still change together. A cross-service call is a function call with worse failure modes and a slower feedback loop. If service A must be redeployed whenever service B's payload changes, the two are coupled; the network between them is a cost, not a boundary.
 
 ## The independent-development fallacy
 "Each team owns a service" scales to a point, and the same coordination problems return as coordination *between* services: shared schemas, versioned contracts, orchestrated releases. The scaling comes from the boundary being drawn along a real axis of change, not from the service being a separate process.
@@ -21,4 +21,4 @@ The Dependency Rule, applied inside each service and across them:
 A well-structured monolith with real internal boundaries can be split into services later, cheaply. A service mesh with no internal boundaries cannot be fixed by adding more services.
 
 ## The practical reading
-Choose services for operational reasons — independent scaling, independent deployment cadence, team autonomy, fault isolation, technology fit — and be able to state which one you are buying. Then design the boundaries separately, by axis of change, because the two decisions are genuinely independent.
+Choose services for operational reasons (independent scaling, independent deployment cadence, team autonomy, fault isolation, technology fit) and be able to state which one you are buying. Then design the boundaries separately, by axis of change, because the two decisions are genuinely independent.
