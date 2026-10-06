@@ -5,7 +5,7 @@
 | Kind | Skills |
 |---|---|
 | Doc & design | `interview`, `questionnaire`, `domain-model`, `design`, `prototype` |
-| Dev loop | `plan`, `implement`, `tdd`, `trim`, `tidy`, `pr`, `diagnose` |
+| Dev loop | `plan`, `implement`, `tdd`, `trim`, `tidy`, `walkthrough`, `pr`, `diagnose` |
 | Verification | `doc-validate`, `tickets-validate`, `plan-validate` |
 | Generators | `generate-test-guide`, `generate-stack-guide` |
 | Repository setup | `guardrails` |
@@ -14,6 +14,6 @@
 
 The reference skills are **routers**: a short index plus `rules/` or sibling files, read only when a row matches. That shape is the point — a stage that needs one rule shouldn't pay for the catalog.
 
-The verification skills carry `disable-model-invocation: true`, as do `plan`, `implement`, `design`, `prototype`, `guardrails`, `teach` and the generators: they are consequential enough that firing them by accident is worse than the user typing the command.
+The verification skills carry `disable-model-invocation: true`, as do `plan`, `implement`, `design`, `prototype`, `guardrails`, `teach`, `walkthrough` and the generators: they are consequential enough that firing them by accident is worse than the user typing the command.
 
 When it's skill × command × agent: see [`docs/anatomy/plugin-anatomy.md`](../docs/anatomy/plugin-anatomy.md). How to write one: [`docs/anatomy/skill-anatomy.md`](../docs/anatomy/skill-anatomy.md).
