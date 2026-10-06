@@ -31,7 +31,7 @@ Keep only the calls, files, props, states and boundaries the current question ne
 ## Rules
 - **Place each view next to the sentence it supports.** A diagram in an appendix is a diagram nobody connects to the claim.
 - **If a diagram needs a paragraph to be understood, redraw it.** The paragraph is the sign that the view is the wrong one or carries too much.
-- **Name the gain in the project's own terms**: the glossary (`CONTEXT.md`) for the domain, and the architecture vocabulary for structure (module, interface, seam, coupling, cohesion, duplication). "Pricing stops leaking into the order handler", never "cleaner" or "easier to maintain": those name no property anyone can check.
+- **Name the gain in the project's own terms**: the glossary (`CONTEXT.md`) for the domain, and the architecture vocabulary for structure (module, interface, depth, seam, adapter, leverage, locality, in the `architecture` skill's `rules/deep-modules.md`; plus coupling, cohesion and duplication). "Pricing stops leaking into the order handler", never "cleaner" or "easier to maintain": those name no property anyone can check.
 - **Rate every proposal by strength**, so the reader knows where to spend attention:
   - **Strong**: the evidence is direct (`file:line`, a measured number, a repeated finding) and the gain is clear.
   - **Worth exploring**: the evidence is real, but the gain depends on something not yet known (a usage pattern, a future change); say what.

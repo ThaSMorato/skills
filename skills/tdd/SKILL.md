@@ -13,6 +13,8 @@ Verifies **behavior through public interfaces**, not implementation details. It 
 ## Seams — where tests go
 A **seam** is the public boundary you test at. Test only at **pre-agreed seams** — write them down and confirm them with the user before writing any test. You can't test everything; agreeing seams up front lands effort on the critical paths.
 
+When the shape of that interface is itself in question (how deep the module should be, where the seam belongs, what it exposes, whether it needs an adapter), read the `architecture` skill's `rules/deep-modules.md`: the interface is the test surface, and a test that has to reach past it says the module has the wrong shape.
+
 ## Anti-patterns
 - **Implementation-coupled** — mocks internal collaborators, tests privates, or verifies through a side channel. The tell: it breaks on a refactor when behavior didn't change.
 - **Tautological** — the assertion recomputes the expected value the way the code does. Expected values must come from an independent source (a known-good literal, a worked example, the spec).
