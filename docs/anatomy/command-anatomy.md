@@ -32,7 +32,7 @@ File: `commands/<name>.md`. Auto-discovered (no need to list it in `plugin.json`
 - A **colon followed by a space** inside an unquoted value — `(default: current directory)` — reads as a nested mapping and aborts the parse.
 - A value that **starts with `[` or `{`** — `[feature or project name]` — parses as a list, not a string, so the field is rejected as the wrong type.
 
-Quote `argument-hint` always; it is the field that attracts both. Use single quotes when the text itself contains double quotes.
+Quote `argument-hint` always; it is the field that attracts both. Quote `description` whenever it holds a colon followed by a space, which a summary with a colon usually does. Use single quotes when the text itself contains double quotes. `scripts/frontmatter.test.mjs` fails on every one of these, across skills, commands and agents.
 
 ## Golden rules
 
