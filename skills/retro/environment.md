@@ -28,7 +28,7 @@ Each category has its own evidence. Cite it, as everywhere in a retro; a categor
 
 **Read the repository's own check command first** (its `lint` / `check` / `test` scripts, its CI workflow) before proposing a check. A check that already exists but is not wired, or is silently broken, is the finding; a new one would duplicate it.
 
-**A repository with no guardrail is a finding in itself**, even when nothing in scope went wrong: it is a standing missed chance, not a neutral default. The fix is the `guardrails` stage when the suite has it, or the owner's own setup.
+**A repository with no guardrail is a finding in itself**, even when nothing in scope went wrong: it is a standing missed chance, not a neutral default. The fix is `/guardrails`; when it already ran, `docs/guardrails.md` says what was installed and how it was proven.
 
 ## Mechanical or judgement
 Before proposing where a coding-standards finding lands, classify it:

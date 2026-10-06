@@ -47,7 +47,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Architecture | `/components` · `/decompose` · `/boundaries` · `/reconcile` |
 | Diagrams | `/c4-generate` · `/mermaid-generate` |
 | Decisions (ADR) | `/adr-identify` · `/adr-generate` · `/adr-link` |
-| Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` |
+| Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` · `/guardrails` |
 | Development | `/tickets` · `/tickets-validate` · `/design` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` · `/diagnose` |
 | Looking back | `/retro` · `/session-analyze` |
 
