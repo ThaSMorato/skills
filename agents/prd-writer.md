@@ -34,6 +34,7 @@ Fill the **JSON contract**. It is a serialization of the same content, and its j
 ## Rules (negative)
 - **WHAT/WHY only.** If you catch yourself writing architecture or implementation, stop — that's out of scope.
 - Use the glossary's ubiquitous language; don't introduce synonyms.
+- **Ground every concept before you use it** (`${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/grounding.md`): a load-bearing term is in the glossary, in a document above this one, or introduced earlier in this document. `/doc-validate` reports a use that comes first as `UG-N`.
 - Don't relitigate decisions already recorded (brief / ADRs).
 
 ## Ambiguity (you cannot ask — isolated)

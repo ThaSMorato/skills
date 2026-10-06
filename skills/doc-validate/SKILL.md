@@ -43,6 +43,7 @@ If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` firs
 | `OL-N` | Overloading conflict | The two descriptions of a load-bearing term disagree with each other |
 | `SR-N` | Serialization gap | The prose and the JSON contract carry different content |
 | `MD-N` | Metadata | A `(required)` section empty, an unresolved `> Needs Input`, or `Status`/`Level` incoherent between source and target |
+| `UG-N` | Ungrounded concept | A load-bearing concept used before the target introduces it, with no glossary entry or upstream document to bring it; walked top to bottom by [`grounding.md`](grounding.md) |
 | `AS-N` | Unmarked assumption | A value in one of the `asking` skill's assumption classes (§6) that the source does not give, that carries no `> Assumed:` or `> Decided:` marker — and that would change the target if it were different |
 
 `CV` is the direction that matters most and the one nothing else asks for. Documents are routinely checked for invention — "does everything trace back?" — and almost never for omission. Walk the **source** item by item and account for each in the target; anything unaccounted for is a `CV`, including items deliberately dropped whose reason was never written down.
