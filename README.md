@@ -51,6 +51,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Development | `/tickets` · `/tickets-validate` · `/design` · `/prototype` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` · `/walkthrough` · `/pr` · `/diagnose` |
 | Looking back | `/retro` · `/session-analyze` |
 | Learning | `/teach` |
+| Session | `/wait-what` · `/handoff` |
 
 ## Structure
 
