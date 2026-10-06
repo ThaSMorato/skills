@@ -12,3 +12,5 @@ Preflight, by mode:
 - **Path** (`<path>`): name the tests that cover the code under the path and run them; they must be green. If nothing covers it, say so and stop: there is no oracle for "behavior kept". Suggest covering it first.
 
 Show the proposals grouped by rule, in rule order, each with its evidence. Ask which to apply. Then apply them one at a time, reporting per tidying: applied, or reverted and why. Then review the tidying diff alone with `review-spec` and `review-quality`, and revert any tidying a kept finding points at.
+
+Postflight (ticket mode): the tidyings applied and reverted, and the next step, `/pr <slug> <fixed point>` for the pull request body.
