@@ -33,6 +33,7 @@ Write `docs/hld.md` by filling the template. Prune and renumber the optional sec
 ## Rules (negative)
 - **System-level, not code.** Describe structure, not line-by-line implementation or full contracts.
 - Use the glossary's ubiquitous language.
+- **Ground every concept before you use it** (`${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/grounding.md`): a load-bearing term is in the glossary, in a document above this one, or introduced earlier in this document. `/doc-validate` reports a use that comes first as `UG-N`.
 - Don't restate product goals/scope — reference the PRD; the HLD is the technical framing.
 
 ## Say something

@@ -30,6 +30,7 @@ The template is a completeness contract, so the bar is **every `(required)` sect
 ## Rules (negative)
 - **Operational, not code.** Specify contracts and behavior, not coding standards or class internals (LLD).
 - Use the glossary's ubiquitous language and the codebase's real names.
+- **Ground every concept before you use it** (`${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/grounding.md`): a load-bearing term is in the glossary, in a document above this one, or introduced earlier in this document. `/doc-validate` reports a use that comes first as `UG-N`.
 - Don't restate the HLD/PRD — reference them.
 
 ## Seams first
