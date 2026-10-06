@@ -26,6 +26,8 @@ Kent Beck's four rules of Simple Design, as Robert C. Martin sets them out in *C
 In either mode, a function you touch is read **whole** with the rules, not only its changed lines: having touched it is not evidence that it is clean.
 
 ## 1. Propose
+**Read `docs/declined.md` first**, when it exists (`${CLAUDE_PLUGIN_ROOT}/templates/declined.md` has its format). A proposal that matches a `declined` entry (the same kind of move, over a scope the entry covers) is not proposed again unless its **Revisit when** has happened; say which entries suppressed what (*"skipped 2, per D-004 and D-011"*), so a suppression is never silent.
+
 Walk the diff rule by rule, 2 → 3 → 4, and propose each tidying with:
 - **the rule** it serves, and for rule 2 the smell it removes (from the `code-smells` and `clean-code` skills);
 - **the evidence**: `file:line` of what is there now;
@@ -41,6 +43,8 @@ Walk the diff rule by rule, 2 → 3 → 4, and propose each tidying with:
 A proposal with no evidence, or one that changes behavior, is not a tidying. Drop it.
 
 Present the proposals grouped by rule, in order, as a structured choice. Where a proposal moves code between functions or files, show its before and after as the smallest view the `visuals` skill lists (a call tree or file tree diff sketch), next to it. **The user picks which to apply.** None is applied by default.
+
+**When the owner declines a proposal with a reason that will still hold next time**, offer to record it in `docs/declined.md`, so no later run proposes it again. A passing reason ("not now") or a self-evident one is not recorded; a reason that is really an architectural decision is an ADR instead (`/adr-generate`).
 
 **In path mode, offer the HTML report** before asking: a path usually yields more proposals than a list carries well. Call the Skill tool with `visuals` and render one card per proposal with `html-report.md`, then ask from the report.
 
