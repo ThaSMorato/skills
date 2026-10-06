@@ -1,6 +1,6 @@
 ---
 name: architecture
-description: A self-contained reference for structure above the class — the six component principles (REP, CCP, CRP, ADP, SDP, SAP), the Main Sequence metrics, the Dependency Rule, boundaries, plugin architecture, and what counts as a detail. Use when deciding where a boundary goes, mapping components, writing a boundary contract, reviewing whether a dependency is legal, or when someone asks "is this architecture any good".
+description: A self-contained reference for structure. At any scale, the deep-module vocabulary (module, interface, depth, seam, adapter); above the class, the six component principles (REP, CCP, CRP, ADP, SDP, SAP), the Main Sequence metrics, the Dependency Rule, boundaries, plugin architecture, and what counts as a detail. Use when deciding where a boundary or a seam goes, whether a module is deep enough, mapping components, writing a boundary contract, reviewing whether a dependency is legal, or when someone asks "is this architecture any good".
 ---
 
 # Architecture
@@ -13,6 +13,11 @@ Two things make architecture different from code review:
 - **Part of it is computable.** Instability, abstractness, distance from the Main Sequence and cycle detection are graph arithmetic over imports, not judgement. Prefer the number where a number exists — see `rules/metrics.md`. The graph itself is measured one way by every stage, by `import-graph.md`, so two measurements compare states and not methods.
 
 Read a rule file **only when its row matches** what you are deciding.
+
+## Modules, at any scale
+| Topic | The question it answers | Rule |
+|---|---|---|
+| Deep modules | is this unit worth its interface, where does its seam go, and is the seam real? The shared words: module, interface, depth, seam, adapter, leverage, locality | `rules/deep-modules.md` |
 
 ## Component cohesion — what belongs together
 | Principle | The question it answers | Rule |
