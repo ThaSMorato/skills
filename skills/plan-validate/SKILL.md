@@ -35,7 +35,7 @@ Read the plan, and everything it is accountable to:
 | `PM-N` | Pre-mortem | A concrete failure scenario inside the ticket's scope that no SI handles, found by assuming the plan shipped exactly as written and failed (see below) |
 | `AS-N` | Unmarked assumption | A decision in one of the `asking` skill's assumption classes (§6) — a threshold, a failure behavior, a visibility rule — that the ticket, node map and FDD do not give, written into an SI with no `> Assumed:` marker, and that would change what the SI builds if it were different |
 
-For a plan with `type: bugfix`, also check that the ticket's Source is a diagnosis with `status: cause-found` (otherwise `IC`: the cause is not known, so the fix is a guess), that every level in the diagnosis's `levels` has its pinned and flipped tests in an SI (a missing level is `UT`), and that no SI modifies a flipped test (`IC`).
+For a plan with `type: bugfix`, also check that the ticket's Source is a diagnosis with `status: cause-found` (otherwise `IC`: the cause is not known, so the fix is a guess), that every level in the diagnosis's `levels` has its pinned and flipped tests in an SI, unless the level is in `seam_gaps` and the plan names it as a gap (a missing level is `UT`), that the final verification runs the diagnosis's `loop` command (`UT` when it does not), and that no SI modifies a flipped test (`IC`).
 
 For a plan with `type: structural`, also check that no SI modifies an existing test and that no SI adds behavior — a structural plan that changes behavior is an `IC` against its own ticket type.
 
