@@ -77,5 +77,5 @@ Software-engineering concepts apply to building AI workflows, and the suite is d
 
 ## Pattern references
 Skills were re-authored here following these as models (not as dependencies):
-- [mattpocock/skills](https://github.com/mattpocock/skills): grilling, to-spec, to-tickets, domain-modeling, tdd, code-review.
+- [mattpocock/skills](https://github.com/mattpocock/skills): grilling, to-spec, to-tickets, domain-modeling, tdd, code-review; and in v0.6, diagnosing-bugs, retro, writing-for-agents, codebase-design, improve-codebase-architecture (the HTML report), pr (itself crediting Dex Horthy's show-me, Humanlayer), prototype, teach, to-questionnaire, wait-what, handoff, setup-pre-commit, git-guardrails-claude-code, and the writing-fragments / beats / shape trio.
 - [devfullcycle/claude-mkt-place](https://github.com/devfullcycle/claude-mkt-place): adrs-management, diagrams-generator, development-guidelines, project-analizer.
