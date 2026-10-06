@@ -30,6 +30,7 @@
     "./skills/questionnaire",
     "./skills/domain-model",
     "./skills/design",
+    "./skills/prototype",
     "./skills/plan",
     "./skills/plan-validate",
     "./skills/tickets-validate",
