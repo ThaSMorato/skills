@@ -15,6 +15,8 @@
 | `boundaries.md` | `boundary-architect` | `docs/boundaries.md` |
 | `adr.md` | `adr-generator` | `docs/adr/NNNN-<slug>.md` |
 | `guidelines.md` | `guideline-generator` | `docs/guidelines.md` (a **router**, ≤150 lines) |
+| `ui-spec.md` | `/ui-design` | `docs/ui/<screen>.md` |
+| `design-system.md` | `/ui-design` (only when the project has a design system) | `docs/design-system.md` |
 | `ticket.md` | `/tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
 | `system-profile.md` | `architectural-analyzer` | `docs/analysis/system-profile.md` |
 | `declined.md` | `/tidy`, `/trim`, `/review` (append-only) | `docs/declined.md` |

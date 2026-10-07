@@ -22,6 +22,9 @@ const producers = {
   diagnosis: 'skills/diagnose/SKILL.md',
   walkthrough: 'skills/walkthrough/SKILL.md',
   acceptance: 'skills/acceptance/SKILL.md',
+  'ui-audit': 'skills/ui-audit/SKILL.md',
+  'ui-spec': 'templates/ui-spec.md',
+  'design-system': 'templates/design-system.md',
   'meta-retro': 'templates/meta-retro.md',
 }
 
