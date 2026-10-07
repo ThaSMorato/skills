@@ -35,6 +35,7 @@ A session shows what no artifact records, so this is where the environment lens 
 - **From the segment analysts' environment signals** (tool-call names, the one exception to the owner-turn rule): navigation (a run of searches before the file was found), tool economy (a costly call repeated), information access (something the agent could not see).
 - **From owner turns**: a correction the owner had to make twice about the same convention is a standard; classify it **mechanical** (propose the lint rule, hook or CI job that would catch it) or **judgement** (a line in the stack guide or the review standard). A `CLAUDE.md` instruction the owner had to repeat is not working where it is: say what should replace it (a check, a pointer, a skill).
 - Tag each environment finding `flow` or `project` like every other finding: a gap in the plugin's own stages is `flow`.
+- Order the environment findings most severe first, as the lens says.
 
 `/retro` reads these sections for the session side of its environment, so write them even when they are short.
 
