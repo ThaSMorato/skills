@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.6.1
+
+The flow could copy a design (a capture, a site, a Figma file) but had nothing for creating or
+improving one. Two new stages, written from nine sources read in full (credited in the README).
+
+- **`/ui-audit`**: evaluates a screen as it runs. The scope names the surface mode (operate,
+  read, persuade, experience). Two assessments run in isolation: the new `ui-critic` agent
+  scores Nielsen's ten heuristics 0 to 4, runs a cognitive-load checklist, walks the task as two
+  or three personas chosen by screen type and judges design specificity; the technical pass
+  checks design-system drift, responsiveness, integrity, missing states and omissions, and
+  renders the screen with worst-case real data (limits from the schema; 320px, 200% zoom, dark,
+  RTL; a symptom, cause and fix table), fed through the project's own data layer. Findings
+  `UA-N`, P0 to P3, rated after the evaluation, with the strengths; `audit.md` plus the HTML
+  report.
+- **`/ui-design`**: classifies what is already true (extending a surface, a new screen in an
+  established world, a redesign, no visual authority); writes the brief in rounds (job, content
+  with min, typical and max, states, boundaries); proposes three directions of equal weight,
+  each with a short contract, plus the category standard done well, built in the project's
+  stack (brownfield) or as standalone HTML (greenfield); takes the chosen one through every
+  state and width, verified in at most two batched rounds of captures with `ui-critic` as the
+  reviewer; writes the screen spec to `docs/ui/<screen>.md` (`templates/ui-spec.md`).
+- `principles.md` (hierarchy, layout, type, color, states, copy, motion, app screens),
+  decided where the sources disagree: one entrance moment at most and none on app screens,
+  interface motion up to 300ms, the project's own case convention, WCAG 2, containers as
+  legitimate grouping, no fixed option count, a deliberate pause allowed but never fake
+  progress.
+- The design system is inventoried into `docs/design-system.md`
+  (`templates/design-system.md`) **only when the project already has one**.
+- Wired in: `/flow` sends a screen with nothing to copy to `/ui-design` (a redesign to
+  `/ui-audit` first); `/design` builds from the spec; `/acceptance` checks its states and
+  widths; `review-ui` reads the design system for token drift.
+
 ## 0.6.0
 
 Nineteen epics, landed one per PR onto a single v0.6 branch. Epics 1 to 17 (#29 to #45)

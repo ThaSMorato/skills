@@ -48,7 +48,7 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 | Diagrams | `/c4-generate` · `/mermaid-generate` |
 | Decisions (ADR) | `/adr-identify` · `/adr-generate` · `/adr-link` |
 | Standards | `/guidelines` · `/generate-stack-guide` · `/generate-test-guide` · `/guardrails` |
-| Development | `/tickets` · `/tickets-validate` · `/design` · `/prototype` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` · `/acceptance` · `/walkthrough` · `/pr` · `/diagnose` |
+| Development | `/tickets` · `/tickets-validate` · `/ui-audit` · `/ui-design` · `/design` · `/prototype` · `/plan` · `/plan-validate` · `/implement` · `/trim` · `/review` · `/tidy` · `/acceptance` · `/walkthrough` · `/pr` · `/diagnose` |
 | Looking back | `/retro` · `/session-analyze` · `/flow-report` |
 | Learning | `/teach` |
 | Session | `/wait-what` · `/handoff` |
@@ -78,4 +78,5 @@ Software-engineering concepts apply to building AI workflows, and the suite is d
 ## Pattern references
 Skills were re-authored here following these as models (not as dependencies):
 - [mattpocock/skills](https://github.com/mattpocock/skills): grilling, to-spec, to-tickets, domain-modeling, tdd, code-review; and in v0.6, diagnosing-bugs, retro, writing-for-agents, codebase-design, improve-codebase-architecture (the HTML report), pr (itself crediting Dex Horthy's show-me, Humanlayer), prototype, teach, to-questionnaire, wait-what, handoff, setup-pre-commit, git-guardrails-claude-code, and the writing-fragments / beats / shape trio.
+- UI and UX, in v0.6.1 (`/ui-audit`, `/ui-design`, `ui-critic`): Jakob Nielsen's [10 usability heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/) and NN/g's heuristic-evaluation and severity method; [pbakaus/impeccable](https://github.com/pbakaus/impeccable) (critique, audit, shape, new-work, operate, harden, clarify; Apache-2.0); [anthropics/skills](https://github.com/anthropics/skills) frontend-design (Apache-2.0); [emilkowalski/skill](https://github.com/emilkowalski/skill) break-ui and motion (MIT); [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) (MIT); [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) redesign audit (MIT); [google-labs-code/design.md](https://github.com/google-labs-code/design.md) (Apache-2.0); and [Laws of UX](https://lawsofux.com/) by Jon Yablonski, paraphrased.
 - [devfullcycle/claude-mkt-place](https://github.com/devfullcycle/claude-mkt-place): adrs-management, diagrams-generator, development-guidelines, project-analizer.

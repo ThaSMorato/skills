@@ -12,7 +12,7 @@ The other lenses were written for code that runs on a server. A UI change can pa
 ## Inputs
 Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
-- `docs/guidelines.md`: load the stack guide its routing table names for the changed files, and the design system's documentation if the repo has one. **Check what the component library already provides** (focus handling in its dialog, labels in its inputs) before flagging: a finding against something the library handles is refuted.
+- `docs/guidelines.md`: load the stack guide its routing table names for the changed files, and the design system's documentation if the repo has one (`docs/design-system.md`, the tokens and components a diff should use: a hardcoded value where a token exists, or a local copy of a library component, is a finding). When the changed screen has a spec in `docs/ui/<screen>.md`, its states and copy are what the diff should match. **Check what the component library already provides** (focus handling in its dialog, labels in its inputs) before flagging: a finding against something the library handles is refuted.
 - The ticket and FDD, for the states and flows the UI must support.
 
 Call the Skill tool with `ui`.

@@ -10,7 +10,8 @@ Green tests say the code does what the tests ask. The owner asks something else:
 Read, and number every item:
 - the owner's request, from `.scratch/<feature-slug>/request-trace.md` when it exists (every row marked `covered`), or else the request itself (`task.md`, the brief, the message that started the work);
 - every acceptance criterion of the ticket, by id;
-- the plan's **Not verified** list in `progress.md`.
+- the plan's **Not verified** list in `progress.md`;
+- when the ticket builds a screen with a spec in `docs/ui/<screen>.md`: each state and each width it lists, checked against its capture.
 
 An item in the request and in an AC is one item: write it once, with both references.
 

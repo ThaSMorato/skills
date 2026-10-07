@@ -14,6 +14,7 @@ Read, in this order:
 - `docs/boundaries.md` (if present): which components this work may touch and which dependency edges are legal.
 - `docs/adr/*.md` and `docs/guidelines.md`: binding in the area you're touching; load the stack guide the router names for the files involved.
 - `CONTEXT.md`: the vocabulary.
+- `docs/ui/<screen>.md` (if the ticket builds a screen that has one): the screen spec `/ui-design` wrote. Its states, copy, widths and components are decided: the UI nodes implement them, and a node that needs something the spec does not say is an open decision for the owner, not a value to fill in.
 
 ## 2. Read the repository before drawing anything
 Everything above this line is a **document derived from another document**. The chain from the brief down to this map never touches the code, so a wrong assumption made early is elaborated by each stage rather than caught, and every gate downstream checks consistency, which a wrong-but-consistent map passes perfectly.
