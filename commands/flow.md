@@ -61,6 +61,8 @@ Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which
 The **frontier** is the tickets whose blockers are all `done`, crossed with where each stopped.
 
 ### Then report
+Before reporting a ticket done, its request-trace parts all have a ticket or an owner decision, and its acceptance record's `verified_at` is current (no production change since); say which is missing otherwise.
+
 Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, then ask before running it.
 
 ## Then size the work, and pick the shortest path that fits
@@ -70,7 +72,7 @@ Announce, in this order: **where the project stands**, **what is waiting for you
 |---|---|---|
 | **Full** | a new product, or an epic whose structure is unknown | everything, phase 1 → phase 2 |
 | **Feature** | a feature inside a product that already has a PRD, HLD and component map | `/fdd` → `/tickets` → the per-ticket loop |
-| **Small** | one seam, no architectural question, fits in a ticket or two | straight to `/design` → `/plan` → `/plan-validate` → `/implement` → `/review`, no FDD |
+| **Small** | one seam, no architectural question, fits in a ticket or two | write the ticket(s) and `request-trace.md` (the format is in `/tickets`, step 4), then straight to `/design` → `/plan` → `/plan-validate` → `/implement` → `/review` → `/acceptance`, no FDD |
 | **Direct** | a fix or a change whose shape is already obvious | no stage at all; say so and let the user just do it. A cleanup of existing, tested code is `/tidy <path>` |
 
 **Say which gear you chose and why, and confirm it** before running anything. Choosing a gear is a decision the user should get to overrule in either direction, and it is far cheaper to move up a gear after discovering a real design question than to unwind a week of documents produced for a small task.
@@ -121,7 +123,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first
 
 ## Phase 2: Development (per frontier ticket)
 12. `/tickets <feature>` → vertical slices with blocking edges, validated as a set by `/tickets-validate` before the gate. **GATE:** the set must be `clean`, and the tickets-to-seams count is the first thing to read.
-13. Per frontier ticket: `/design` → **GATE** → `/plan` → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI by SI, STOP between SIs) → optional `/trim <slug> <fixed-point>`: make the change smaller with the behavior identical, so the review reads less → `/review <fixed-point>` → **GATE** → optional `/tidy <slug> <fixed-point>`: the four rules of Simple Design over what is left → optional `/walkthrough <slug> <fixed-point>`: a lesson over the change with a recall quiz, so the owner understands what merges → `/pr <slug> <fixed-point>`: the PR body (summary as a picture, before/after evidence, merge danger), opened only when the user says so. Both are structural, apply only what the user chooses, and run in every gear that has a review.
+13. Per frontier ticket: `/design` → **GATE** → `/plan` → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI by SI, STOP between SIs) → optional `/trim <slug> <fixed-point>`: make the change smaller with the behavior identical, so the review reads less → `/review <fixed-point>` → **GATE** → optional `/tidy <slug> <fixed-point>`: the four rules of Simple Design over what is left → `/acceptance <slug>`: every AC and request part checked in the running software, after the last change to production code → optional `/walkthrough <slug> <fixed-point>`: a lesson over the change with a recall quiz, so the owner understands what merges → `/pr <slug> <fixed-point>`: the PR body (summary as a picture, before/after evidence, merge danger), opened only when the user says so. Both are structural, apply only what the user chooses, and run in every gear that has a review.
     - **Back-edge:** if implementation surfaces a real architectural decision, run `/adr-identify` and update the FDD, and if it revealed a new axis of change, revisit `/boundaries`. Keep the docs live.
     - **Bugs:** a bug whose cause is not known starts at `/diagnose`, never at a fix. It ends with the cause and the pinned and flipped tests; an obvious fix is then made test-first (Direct), anything larger becomes a `Type: bugfix` ticket whose Source is the diagnosis, through `/design` → `/plan` in the Small gear.
 14. When an epic or a cycle finishes: `/retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught: process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.

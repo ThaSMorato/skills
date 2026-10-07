@@ -9,6 +9,7 @@ A reviewer decides in minutes whether to trust a change. A PR body that retells 
 Read, do not recall:
 - the diff: `git diff <fixed-point>...HEAD`, the same fixed point `/review` used;
 - the ticket (acceptance criteria, `Type`), the plan and its `progress.md` (the test results per SI, the **Not verified** list);
+- the acceptance record, `.scratch/<feature-slug>/acceptance/<NN>-<slug>.md`: its screenshots are the evidence, and when production code changed after its `verified_at`, say it is stale and offer `/acceptance` again;
 - the review file under `.scratch/<feature-slug>/reviews/`: lenses run, findings and their verdicts;
 - the `trim/` and `tidy/` files, when they exist: which commits are structural;
 - for `Type: bugfix`, the diagnosis: its `loop`, the hypothesis that held, the seam gaps;

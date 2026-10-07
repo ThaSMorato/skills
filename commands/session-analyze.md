@@ -18,7 +18,7 @@ Run:
 node "${CLAUDE_PLUGIN_ROOT}/scripts/session-extract.mjs" [--session <id>]
 ```
 
-With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected, plus the assistant's text and the **names** of the tools it called. It drops file snapshots, tool results and arguments (where file contents and secrets live), thinking, subagent turns and the compaction summaries.
+With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected, the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the **names** of the tools it called. It drops file snapshots, tool results and the other tools' arguments (where file contents and secrets live), thinking, subagent turns and the compaction summaries.
 
 ## 2. Fan out, one agent per segment
 Call the Agent tool with `session-segment-analyst` for **every** segment **in a single message**, so they run in parallel, each with its segment's path and the index path. A segment fits one agent whole, so there is no chunking and no summarizing, and each agent reads the original conversation rather than a summary of a summary.

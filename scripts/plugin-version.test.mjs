@@ -21,6 +21,7 @@ const producers = {
   tidy: 'skills/tidy/SKILL.md',
   diagnosis: 'skills/diagnose/SKILL.md',
   walkthrough: 'skills/walkthrough/SKILL.md',
+  acceptance: 'skills/acceptance/SKILL.md',
   'meta-retro': 'templates/meta-retro.md',
 }
 

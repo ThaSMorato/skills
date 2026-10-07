@@ -77,7 +77,9 @@ Run the plan's **Deliverables** checklist: the full test suite, then type-check,
 
 Then write `## Not verified`: every acceptance criterion or deliverable that **no command in this run actually checked**. Examples: a UI behavior with no E2E tool in the repo, a migration never run against a real database, an integration exercised only through a fake, a performance claim with no measurement. One line each, with what would verify it. Set `unverified` to their count (`0`, and the section says `none`, when everything was checked). Claiming done for what was never run is the failure this section prevents; a short honest list is worth more than a clean-looking report.
 
-Then set `status: completed` in `progress.md`'s frontmatter and report the results, the **Not verified** list, and the aggregated out-of-scope notes as follow-ups. Version control (commit/PR) is the user's call; hand back to `/review` first.
+**A suite that is only green when its tests run alone is not green.** A test that fails or times out in the full run and passes on its own is a defect (shared state, a leak, a missing setup, a slow path in the code), and it stops the run: call the Skill tool with `diagnose`. Rerunning, blaming machine load, or skipping the hook are not options to offer before the cause is found.
+
+Then set `status: completed` in `progress.md`'s frontmatter and report the results, the **Not verified** list, and the aggregated out-of-scope notes as follow-ups. A UI behavior in the **Not verified** list is open work, not a footnote: the report says the ticket is not done until `/acceptance` has checked it. Version control (commit/PR) is the user's call; hand back to `/review` first.
 
 ## Rules
 - The plan is the contract: don't add, drop, or reshape SIs mid-run. If it's wrong, stop and send the user back to `/plan`.

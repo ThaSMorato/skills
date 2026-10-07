@@ -12,7 +12,7 @@ You read **one segment** of a working session (the conversation between one comp
 ## Inputs
 Your context is isolated; you receive:
 - **REQUIRED:** the path to one segment file (`seg-NN.md`) and the path to the session's `index.md`.
-- The segment is already filtered. Owner turns are headed `### owner · said|answered|rejected · <timestamp> · <uuid>`. Assistant turns carry their text and only the **names** of the tools they called.
+- The segment is already filtered. Owner turns are headed `### owner · said|answered|rejected|invoked · <timestamp> · <uuid>`. An `answered` turn lists what the question `offered` under the answer, so an overruled `(Recommended)` is read, not inferred; an `invoked` turn is a slash command the owner ran, with its arguments (a stage re-run is the owner restarting it). Assistant turns carry their text and only the **names** of the tools they called.
 
 ## The evidence rule: stricter than `/retro`'s
 The conversation is where plausible narrative lives, so the bar here is higher than for any other stage:

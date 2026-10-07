@@ -58,7 +58,7 @@ Each test verifies **one behavior**, so its name alone tells you what broke.
 
 ## Deterministic tests
 
-Non-determinism is a virulent infection: one flaky test erodes trust in the whole suite. Common sources and fixes:
+Non-determinism is a virulent infection: one flaky test erodes trust in the whole suite. A test that fails only in the full run, or only under a timeout, is a defect with a cause (usually one of the rows below, or a slow path in the code itself): find it with the `diagnose` skill, never rerun it into green. Common sources and fixes:
 
 | Source | Problem | Fix |
 |---|---|---|

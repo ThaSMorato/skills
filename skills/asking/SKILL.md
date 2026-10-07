@@ -21,6 +21,10 @@ This applies everywhere an identifier is spoken: findings, gate reports, progres
 
 **One exception:** a dense table whose columns already carry the meaning. There, the id is a key and the row is the resolution.
 
+**Where it slips: turning findings into options.** A validator's finding (`DG-3`, `CV-2`) or an AC id that becomes a question's option or header carries its words inside the option, because the option list is all the owner sees. Before sending a question, read it as the owner will: every id quoted, nothing that needs a file opened.
+
+**Show the thing, not where it is.** A question about copy carries the text; about a screen or a screenshot, the absolute path the owner can open (and say where it was saved). A question about a consequence ("how should these tests keep proving the price?") first states the change that causes it: where, which screens, what the user sees. Ask the product question before the mechanics question that depends on it.
+
 ## 2. Offer a choice when the answer is a closed set
 
 When you know the options, present them as **options** rather than asking an open question and making the user compose the answer in prose.
@@ -28,17 +32,22 @@ When you know the options, present them as **options** rather than asking an ope
 - **Lead with your recommendation** and say it is one.
 - **Label by outcome, not by mechanism**: "keep the existing component and write only the link service" rather than "option B".
 - **Say what each choice costs.** An option list without consequences is a menu without prices.
+- **Multi-select when the options combine.** Merges, splits, a set of findings to fix: when the owner may pick several, let them, instead of making them type "2 and 3" into Other.
 - **Free text is right** when the answer is genuinely open: a name, a business rule, a constraint you cannot enumerate. Don't force a real question into fake options.
+
+**When the answer is a question, answer it.** An "Other" that asks something ("what does AC-9 say?") is the owner's turn, not a reply to fold in: answer it in plain words, and stop. Re-ask only after they have read the answer; editing files or rewording the question in the meantime answers nothing.
 
 **Group, don't flood.** Twelve findings do not become twelve prompts. Ask about the ones where you genuinely cannot proceed, and report the rest for the user to read.
 
-**Ask in rounds.** When several questions are open, the **frontier** is every one whose prerequisites are already settled: the questions you can ask now without guessing at an answer you have not heard. Ask the whole frontier in one round, numbered, each with your recommendation; a question whose answer depends on another one in the same round waits for the next round. The answers move the frontier; recompute it and ask again. With a structured-choice tool, one call carries as many as the tool allows, the most load-bearing first.
+**Ask in rounds.** When several questions are open, the **frontier** is every one whose prerequisites are already settled: the questions you can ask now without guessing at an answer you have not heard. Ask the whole frontier in one round, numbered, each with your recommendation; a question whose answer depends on another one in the same round waits for the next round, and so does one that depends on evidence the owner has not seen yet (a prototype, a screenshot, a sample): show it first, then ask. The answers move the frontier; recompute it and ask again. With a structured-choice tool, one call carries as many as the tool allows, the most load-bearing first.
 
 ## 3. Ask only what is a decision
 
 Look it up before you ask. The code, the docs, `CONTEXT.md`, the config, the tool output: anything you can discover is a **fact**, and facts are yours to find. Only **decisions** go to the user: trade-offs, preferences, priorities, things the environment genuinely does not record.
 
 A question whose answer is in a file you could have read is a question that teaches the user their attention is cheap to you.
+
+**Check the premises before the question.** A question rests on facts ("the URL would exceed the limit", "there is no external API", "the list was not provided"). Before sending it, name each one and verify the cheap ones: measure it, search the repo and this session's `.scratch/` for what was already captured, look for the flag, the enum, the history, before claiming something is absent, and pull a real sample from the integration when one is reachable. Each option says what it rests on: *"the task says X"*, *"inferred from Y"*. A question built on an absence ("I found no Z") offers **investigate further** as one of its options. Something the owner already answered or supplied is a fact: never ask it again.
 
 ## 4. Make the default visible: as a marker, not a sentence
 
@@ -50,7 +59,7 @@ In a document, that sentence is a **marker**, because a marker is something a va
 |---|---|---|
 | `> Needs Input: <what> — <why no default is defensible>` | there is no value you can defend; what is written is a placeholder | **blocks**: the document is not approvable until it is answered |
 | `> Assumed: <value> — <no source: what you looked at>. If <other value>, <what changes>.` | you chose a value the sources do not give, and you can defend it | **listed**: the user confirms or corrects, but it does not block |
-| `> Decided: <value> — <who>, <YYYY-MM-DD>` | an `Assumed` the user confirmed or corrected | a **source**: cite it like any other |
+| `> Decided: <value> — <who>, <YYYY-MM-DD>` | an `Assumed` the user confirmed or corrected, or a value the owner supplied (their request, an image, a document: `owner (task.md)`) | a **source**: cite it like any other |
 
 ```
 > Assumed: retention is 90 days — neither the brief nor the PRD states one.
@@ -64,6 +73,8 @@ Pick between the first two by the ceiling below: if a wrong value would change a
 **Push the checkpoint right.** Do all the work you can before involving the user, so they are asked once, late, with everything prepared, instead of several times along the way.
 
 A gate is not "approve?". It is a **brief**: what was produced, why, what needs attention **with each item resolved**, what happens next if approved, and what to say instead if not, with the path to each artifact. The user reads the brief, never the raw output: not the full document, not the tool's log, not the list of every finding. They should be able to decide without opening anything, and be able to open everything, because you named the paths.
+
+**Say exactly what the approval covers.** The count in words and the list ("this approves tickets 01 and 02, and nothing else"), and anything produced beyond what was asked for (a placeholder, a follow-up, an extra file) named on its own line with its own question. An approval that silently covers more than the brief names is not an approval of that part.
 
 **Every `> Assumed:` in what was produced is part of the gate.** List them (value, what it rests on, what changes if wrong) as one grouped question, not one prompt each. On the answer, a confirmed one becomes `> Decided: <value> — owner, <date>`: rewrite the marker in place; that is a label, not a content change. A corrected one becomes `> Decided: <the new value> — owner, <date>` too, but the text around it has to change to match, so it goes through whoever owns the document: where a command says to re-run its agent rather than edit, re-run it with the correction. A marker left as `Assumed` after an approval means the gate was skipped, not that the assumption was accepted.
 
