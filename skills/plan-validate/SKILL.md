@@ -25,7 +25,7 @@ Read the plan, and everything it is accountable to:
 | `DG-N` | Dependency gap | An SI depends on something no earlier SI produces; or the Dependency Map has a cycle |
 | `UT-N` | Untestable | An acceptance criterion no SI's Tests section makes observable, or an SI with real behavior and no seam |
 | `CV-N` | Coverage | A ticket acceptance criterion no SI owns |
-| `SZ-N` | Oversized SI | An SI that needs two Acts to describe, or spans two seams, or whose actions are a sequence of independent deliverables; it violates the single-act rule and will not fit one red-green-refactor cycle |
+| `SZ-N` | Oversized SI | An SI that needs two Acts to describe, or spans two seams, or whose actions are a sequence of independent deliverables (each verified by a different check); it violates the single-act rule and will not fit one red-green-refactor cycle. Work one check verifies at one seam is one deliverable |
 | `UZ-N` | Undersized SI | An SI with no behavior observable at its seam ("write the test for X", "rename Y", "bump the constant") which is a step of some other SI, not a slice |
 | `IV-N` | Invention | An SI that owns no ticket acceptance criterion, so nothing the ticket asked for needs it |
 | `DS-N` | Dispersion | The SI owning the most ACs owns more than **3×** as many as the one owning the fewest: the slicing is out of scale with itself |
@@ -41,7 +41,9 @@ For a plan with `type: structural`, also check that no SI modifies an existing t
 
 **`SZ` is a ceiling; `UZ` and `IV` are the floor.** Every size rule used to be a ceiling, and a ceiling cannot stop over-splitting: "write a test" fits comfortably under any of them. An SI is too small when **either** test fails. The first is **observable behavior**: its own red step fails because something a caller can see is missing. That rules out "write the test", since a test is how an SI verifies behavior, not an SI. The second is **trace**: it owns at least one ticket AC. That rules out "change the value", unless an AC asks for it. The quickest place to look is the count. **A plan with more SIs than the ticket has ACs** is where over-splitting lives, so read those SIs first. A prefactoring SI adds no behavior by definition; for it, the tests become *existing tests stay green, and it names the AC it makes easy* (`enables AC-2`). One that enables nothing is refactoring for its own sake.
 
-`DS`'s 3× is a starting value, recalibrated from real plans; record the ratio in the finding.
+`DS`'s 3× is a starting value, recalibrated from real plans; record the ratio in the finding. `DS` runs only above `gear: small`: across 1 to 3 SIs a ratio says nothing.
+
+**A slicing the owner decided is settled.** When the plan's `## Slicing` carries a `> Decided:` marker, `SZ` and `DS` do not raise an issue that would undo it: write what they would have said under `## Notes`, without an id, so the owner sees it and nothing is blocked. The other checks still apply in full: a merge that leaves an AC unowned (`CV`), untestable (`UT`) or off the node map (`DM`) is an issue whoever chose it. When a fix to another finding forces a new slicing, the plan goes back to the owner's slicing question; it is not re-sliced silently.
 
 `CV` and `SZ` are the two the author cannot reliably catch alone: coverage because omission is invisible from inside, and size because the author who wrote the slice believes it is one thing. `DM` exists because the plan claims to encode the node map and nothing used to check that claim.
 
@@ -75,6 +77,9 @@ fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by 
 
 ## Resolved
 <issues cleared on a re-run, moved here with their ID>
+
+## Notes
+<what SZ or DS would have raised against an owner-decided slicing; information, not issues>
 ```
 
 `status: clean` only when every finding is resolved: no open issues. Otherwise `status: dirty`.
@@ -83,6 +88,6 @@ fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by 
 
 ## Gate
 - **dirty** → tell the user exactly what to fix: *"validation.md has N open issues. Revise the plan (edit it or re-run /plan <slug>), then re-run /plan-validate <slug>."* Never auto-fix; never partially proceed.
-- **clean** → *"Plan is clean. Run /implement <slug> to build it SI by SI."*
+- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Run /implement <slug> to build it SI by SI."* Starting `/implement` is the owner's call. When this stage runs inside `/flow`, ask it as a structured choice (start, pausing after each SI; start, continuous; stop here, I will run `/implement`) and say that the first two begin writing code.
 
 `implement` reads this verdict and refuses to start on a `dirty` (or missing) validation. That refusal is the whole point of this stage.

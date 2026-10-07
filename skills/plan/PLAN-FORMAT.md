@@ -48,6 +48,9 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 <The order SIs execute in. A simple list when linear; an explicit DAG when SIs fan out.
  e.g. SI-1 → SI-2 → SI-3, with SI-4 blocked by SI-2.>
 
+## Slicing
+> Decided: <the SI count and the merges or splits the owner chose, e.g. "3 SIs; validations merged into SI-2"> — owner, <YYYY-MM-DD>
+
 ## AC coverage
 | Ticket AC | Owned by |
 |---|---|
@@ -65,13 +68,14 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 `gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose; `/retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
 
 ## Rules for a good plan
-- **One SI = one red → green → refactor cycle** that fits a fresh context window. **If an SI needs two Acts to describe, split it**: the single-act rule, at plan scale.
+- **Coarse by default.** Propose the fewest SIs that clear the floor below and the ceiling in this rule list; merge what touches the same file, function, node or screen, what one check verifies, and what has only one consumer (`SKILL.md` §2). At `gear: small`, 1 to 3 SIs.
+- **One SI = one red → green → refactor cycle** that fits a fresh context window. **If an SI needs two Acts to describe, split it**: the single-act rule, at plan scale. Work verified by the same check at the same seam is one Act, however many ACs it closes.
 - **Vertical, not horizontal.** Each SI cuts through every layer it needs; never "all schema, then all API".
 - **Seams are named up front.** The `implement` loop writes the failing test at the seam the SI declares; no test seam, no test-first.
 - **Every AC is owned, by id.** The coverage table is what makes that mechanical rather than a reading exercise.
 - **The plan encodes the node map.** Modules, interfaces and seams come from the map; a plan that invents one has diverged from the design contract.
 - **Prefactoring SIs lead.** Reshape first, then build on the easy shape. A prefactoring SI names the AC it makes easy (`enables AC-2`) in place of an AC it owns.
-- **An SI has a floor.** It changes something observable at its seam and owns at least one AC. "Write the test for X" and "change the value" are steps of an SI, not SIs. If the plan has more SIs than the ticket has ACs, check that each one clears the floor before you present it.
+- **An SI has a floor.** It changes production code, changes something observable at its seam, and owns at least one AC. "Write the test for X" and "change the value" are steps of an SI, not SIs. If the plan has more SIs than the ticket has ACs, check that each one clears the floor before you present it.
 - **A bugfix plan starts from the diagnosis.** For `type: bugfix`: the ticket's Source is a `/diagnose` file with `status: cause-found`. The first SI writes the pinned and flipped tests at **every level** the diagnosis lists (`levels`), and the flipped tests are its red step; the fix is the green. The flipped tests are sealed: no later SI edits them. A level in the diagnosis's `seam_gaps` has no test SI; the plan names it as a known gap instead. The final verification also runs the diagnosis's `loop` command against the original scenario, and it must go green; the commit or PR message names the hypothesis that held.
 - **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
 - **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them; the final verification runs exactly these.
