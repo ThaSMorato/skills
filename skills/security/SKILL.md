@@ -1,6 +1,6 @@
 ---
 name: security
-description: A self-contained catalog of security weaknesses at the level you can actually see in code — injection, access control, crypto, secrets, session handling, SSRF, deserialization, upload and rate-limit failures, plus LLM-specific risks — each with its tell, its concrete failure scenario, and its fix. Use when reviewing a diff or a feature for security, threat-modelling a design, or when someone asks "is this safe".
+description: A self-contained catalog of security weaknesses at the level you can actually see in code (injection, access control, crypto, secrets, session handling, SSRF, deserialization, upload and rate-limit failures, plus LLM-specific risks), each with its tell, its concrete failure scenario, and its fix. Use when reviewing a diff or a feature for security, threat-modelling a design, or when someone asks "is this safe".
 ---
 
 # Security
@@ -76,7 +76,7 @@ Group findings by their OWASP category, rank by **exploitability × impact**, an
 | **low** | hardening; no path to impact today, but it removes a step from a future chain |
 
 ## Calibration
-This catalog is a set of **heuristics with a burden of proof**, not a checklist to satisfy. A narrow reviewer is primed to find its own subject, which makes false positives the dominant failure mode here — you will be tempted to report something because the file is a security file. Two guards:
+This catalog is a set of **heuristics with a burden of proof**, not a checklist to satisfy. A narrow reviewer is primed to find its own subject, which makes false positives the dominant failure mode here: you will be tempted to report something because the file is a security file. Two guards:
 
 - **No failure scenario, no finding.** If you cannot state the input and what the attacker obtains, you have found a pattern, not a vulnerability.
-- **The framework may already handle it.** Parameterized queries by default, template auto-escaping, CSRF middleware, an ORM that whitelists attributes — check what is actually configured before flagging. Read the repo's stack guide when one exists; the safe idiom is stack-specific and is exactly what a generic catalog cannot know.
+- **The framework may already handle it.** Parameterized queries by default, template auto-escaping, CSRF middleware, an ORM that whitelists attributes; check what is actually configured before flagging. Read the repo's stack guide when one exists; the safe idiom is stack-specific and is exactly what a generic catalog cannot know.

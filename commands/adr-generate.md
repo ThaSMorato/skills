@@ -3,7 +3,7 @@ description: Write a formal ADR (MADR) from a confirmed Potential ADR.
 argument-hint: "<potential ADR file or slug>"
 ---
 
-Use the `adr-generator` agent to write a formal ADR into `docs/adr/` from the confirmed Potential ADR: $ARGUMENTS
+Call the Agent tool with `adr-generator` to write a formal ADR into `docs/adr/` from the confirmed Potential ADR: $ARGUMENTS
 
 If no Potential ADR was given, list what's in `docs/adr/potential/` **whose `state` is `proposed`** and ask which to formalize. If none are pending, tell the user to run `/adr-identify` first.
 

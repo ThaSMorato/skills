@@ -4,16 +4,16 @@ Filled by the architectural-analyzer alongside the human-facing docs/analysis/ar
 This file is FACTS, not narrative: what the repo IS, in a shape later stages can consume without
 reading a thousand-line report. Every downstream stage reads this one and reaches for the prose
 report only when a human is in the loop.
-Keep the headings and table columns STABLE — stages anchor on them.
+Keep the headings and table columns STABLE; stages anchor on them.
 PRUNE optional sections that don't apply; (required) sections always stay.
 -->
 
-# System profile — <repo>
+# System profile: <repo>
 
 ## Metadata (required)
 - **Generated:** <YYYY-MM-DD>
 - **Coverage:** full | partial
-- **Not covered:** <paths sampled, skipped, or truncated — or `none`. Never leave a gap silent.>
+- **Not covered:** <paths sampled, skipped, or truncated, or `none`. Never leave a gap silent.>
 
 ## Stack (required)
 > One row per ecosystem actually present, with the manifest that proves it.
@@ -23,7 +23,7 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 
 ## Components (required)
 > The structural units discovered, by evidence. This is the raw material `/components` reconciles with
-> the HLD — names here are the code's names, not the design's.
+> the HLD; names here are the code's names, not the design's.
 
 | Component | Path | Entrypoint | Ca | Ce |
 |---|---|---|---|---|
@@ -32,7 +32,7 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 > The measured graph lives in `docs/analysis/dependency-graph.md` (measured by the architecture skill's
 > `import-graph.md`, with its `measured_commit`), where `/reconcile` can re-measure it without rewriting
 > this profile. Here, only the summary: component count, edge count, the method per language, and every
-> cycle as its full path — or `none`. Consumed by `/components` (metrics), `/boundaries` (divergence),
+> cycle as its full path, or `none`. Consumed by `/components` (metrics), `/boundaries` (divergence),
 > and `/decompose` (which epics are parallel-safe).
 
 ## Conventions observed (required)

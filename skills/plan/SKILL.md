@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Break one ticket into a validated implementation plan — vertical Step Implementations (SIs) with tests, dependencies, and acceptance criteria, ready for the SI-by-SI implement loop. Use before implementing a ticket, on "plan this ticket / break this into steps", or right after /design.
+description: Break one ticket into a validated implementation plan, vertical Step Implementations (SIs) with tests, dependencies, and acceptance criteria, ready for the SI-by-SI implement loop. Use before implementing a ticket, on "plan this ticket / break this into steps", or right after /design.
 disable-model-invocation: true
 ---
 
@@ -12,20 +12,28 @@ Read the ticket (`.scratch/<feature-slug>/issues/<NN>-<slug>.md` or the referenc
 **If there is no node map, stop** and tell the user to run `/design <ticket>` first. Do not design inside this skill: the two stages have separate gates, and collapsing them means the user confirms the map and the slicing in one breath, with the map never written down.
 
 ## 2. Slice into Step Implementations
-An **SI** is one **vertical tracer-bullet slice** — a narrow but complete path through the layers it touches, sized for a single red → green → refactor cycle that fits one fresh context. Never slice horizontally (all of one layer, then the next).
+An **SI** is one **vertical tracer-bullet slice**: a narrow but complete path through the layers it touches, sized for a single red → green → refactor cycle that fits one fresh context. Never slice horizontally (all of one layer, then the next).
 
-For each SI, write down: **Description**, **Technical actions** (ordered), **Tests** (which seams/layers, per the `testing` skill — or `none — <reason>` for a pure-infra SI), **Dependencies** (other SIs that gate it), **Acceptance criteria** (observable outcomes, each naming the **ticket AC id** it serves). Tests go at **pre-agreed seams** — name them here so the implement loop writes the failing test first.
+For each SI, write down: **Description**, **Technical actions** (ordered), **Tests** (which seams/layers, per the `testing` skill, or `none (<reason>)` for a pure-infra SI), **Dependencies** (other SIs that gate it), **Acceptance criteria** (observable outcomes, each naming the **ticket AC id** it serves). Tests go at **pre-agreed seams**; name them here so the implement loop writes the failing test first.
 
-The SIs implement the node map's nodes: an SI that introduces a module the map does not have, or gives it a different interface, is a divergence to resolve now — go back to `/design` rather than quietly redesigning here.
+**Start coarse.** Every SI costs a pause, a fresh context and a test cycle, so the plan with the fewest SIs that still clears the floor and the ceiling (`PLAN-FORMAT.md`, Rules) is the one to propose. Before presenting, merge:
+- SIs that touch the same file, function, node or screen;
+- SIs verified by the same check: what one browser pass sees, copy-only changes, several validations of the same input;
+- an SI whose only consumer is another SI (a helper, the plumbing, a "simple version" the next SI replaces with the full rule) into that SI;
+- an SI with no production code of its own (only a test, only setup) into the SI whose behavior it serves.
 
-**A structural ticket plans differently.** When the ticket's `Type` is `structural`, the plan carries the rule explicitly: behavior is unchanged, existing tests are **not modified**, and they stay green throughout. There is no red step for a slice that adds no behavior — the existing suite is the test.
+At `gear: small`, aim for 1 to 3 SIs. Above it, the count follows the seams the ticket crosses, not its ACs: several ACs checked at one seam are one SI.
 
-Prefactoring SIs go first ("make the change easy, then make the easy change"). Then build the **Dependency Map** and the **Deliverables** checklist. The full format is in `PLAN-FORMAT.md` — follow it exactly.
+The SIs implement the node map's nodes: an SI that introduces a module the map does not have, or gives it a different interface, is a divergence to resolve now: go back to `/design` rather than quietly redesigning here.
+
+**A structural ticket plans differently.** When the ticket's `Type` is `structural`, the plan carries the rule explicitly: behavior is unchanged, existing tests are **not modified**, and they stay green throughout. There is no red step for a slice that adds no behavior; the existing suite is the test.
+
+Prefactoring SIs go first ("make the change easy, then make the easy change"). Then build the **Dependency Map** and the **Deliverables** checklist. The full format is in `PLAN-FORMAT.md`; follow it exactly.
 
 ## 3. Confirm, then emit
-Present the SI breakdown to the user — per SI: name, what it delivers, its blockers. Ask whether the granularity and the seams are right; iterate until they approve. Then write the plan to `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`.
+Present the SI breakdown to the user (per SI: name, what it delivers, its blockers), with the coarsest slicing that clears the floor and the ceiling as the recommended answer. Ask whether the granularity and the seams are right as a structured choice; when the options are merges that can combine ("SI-2 into SI-1", "SI-5 with SI-6"), make it multi-select, so the owner picks several instead of typing "2 and 3". Iterate until they approve, then record the approved slicing in the plan's `## Slicing` section as `> Decided: <value> — owner, <YYYY-MM-DD>`: that marker is how `/plan-validate` knows the size question is settled. Then write the plan to `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`.
 
-Every acceptance criterion in the ticket must be owned by at least one SI, **by id**, and every SI's tests must make its acceptance criteria observable. If either fails, the slicing is wrong — fix it before writing.
+Every acceptance criterion in the ticket must be owned by at least one SI, **by id**, and every SI's tests must make its acceptance criteria observable. If either fails, the slicing is wrong; fix it before writing.
 
 ## 4. Validate
 Tell the user to run `/plan-validate <slug>` next. The plan is not ready for `/implement` until validation reports `status: clean`.

@@ -15,7 +15,7 @@ UseCase ──depends on──▶ RepositoryInterface
                     PostgresRepo   InMemoryRepo (tests)
 ```
 
-If a use case is hard to test, the coupling is the smell — inject its collaborators through the constructor.
+If a use case is hard to test, the coupling is the smell: inject its collaborators through the constructor.
 
 **Wire unit tests by hand.** In a unit test, build the SUT with its fakes directly (`new CreateShiftUseCase(shiftsRepo, teamsRepo)`), with no DI container. A unit test that needs the framework's container to run is an integration test in disguise; the container belongs to the integration and E2E levels, where the real wiring is what is under test.
 
@@ -38,11 +38,11 @@ class InMemoryUsersRepository implements UsersRepository {
 ```
 
 Key properties:
-- **`public items`** — tests assert directly against repository state.
-- **Same interface** — the fake honors the exact production contract.
-- **Domain events** — if the entity is an aggregate root, dispatch its events on create/save/delete just like the real repo.
-- **Compose fakes** — if a repo assembles data from others (joins), inject the other in-memory repos through its constructor.
-- **Mirror the contract, edge cases included** — not found returns empty (`null`, an empty list, `none`) exactly as the real one does, instead of throwing; identity is compared the way the domain compares it. A fake that is kinder than production hides the bug the test was for.
+- **`public items`**: tests assert directly against repository state.
+- **Same interface**: the fake honors the exact production contract.
+- **Domain events**: if the entity is an aggregate root, dispatch its events on create/save/delete just like the real repo.
+- **Compose fakes**: if a repo assembles data from others (joins), inject the other in-memory repos through its constructor.
+- **Mirror the contract, edge cases included**: not found returns empty (`null`, an empty list, `none`) exactly as the real one does, instead of throwing; identity is compared the way the domain compares it. A fake that is kinder than production hides the bug the test was for.
 
 ## Mother Object / Test Data Factory
 
@@ -60,23 +60,23 @@ function makeUser(overrides = {}, id?) {
 ```
 
 Two rules keep factories honest:
-- **Defaults produce a valid entity** — one that passes every domain invariant. A factory whose defaults are invalid makes every test that uses it start from a broken world.
-- **Each call is independent** — references to other entities (foreign keys) get a fresh id per call, so two factory calls never collide by accident. Default values stay deterministic (fixed or seeded), per `fundamentals.md`.
+- **Defaults produce a valid entity**: one that passes every domain invariant. A factory whose defaults are invalid makes every test that uses it start from a broken world.
+- **Each call is independent**: references to other entities (foreign keys) get a fresh id per call, so two factory calls never collide by accident. Default values stay deterministic (fixed or seeded), per `fundamentals.md`.
 
-Convention: `makeEntity(overrides?: Partial<Props>, id?: ID)` — `overrides` spread last; optional deterministic `id` for relational setups. Each test overrides only what it is about:
+Convention: `makeEntity(overrides?: Partial<Props>, id?: ID)`: `overrides` spread last; optional deterministic `id` for relational setups. Each test overrides only what it is about:
 
 ```
 makeUser({ email: "invalid" })   // email-validation test
 makeUser({ role: "MANAGER" })    // role test
-makeUser()                        // creation test — defaults are fine
+makeUser()                        // creation test, defaults are fine
 ```
 
 ### Variations
 
-- **Plain function** — flat entities (above).
-- **Test Data Builder** — a fluent `aUser().withRole(ADMIN).build()` when there are many optional fields; defaults live in the builder.
-- **Object literal** — a plain literal implementing the interface, for service fakes.
-- **Object Mother + Builder** — the strongest form: the Mother is a **facade over construction** that exposes **named domain states**, each returning a builder you can still tweak. Named presets keep tests readable; the builder keeps them flexible. Reach for it when an entity has a few well-known kinds (roles, tiers, lifecycle states).
+- **Plain function**: flat entities (above).
+- **Test Data Builder**: a fluent `aUser().withRole(ADMIN).build()` when there are many optional fields; defaults live in the builder.
+- **Object literal**: a plain literal implementing the interface, for service fakes.
+- **Object Mother + Builder**: the strongest form: the Mother is a **facade over construction** that exposes **named domain states**, each returning a builder you can still tweak. Named presets keep tests readable; the builder keeps them flexible. Reach for it when an entity has a few well-known kinds (roles, tiers, lifecycle states).
 
 ```
 class UserObjectMother {
@@ -97,9 +97,9 @@ UserObjectMother.createUser().admin().build()
 UserObjectMother.createUser().pro().withEmail("pro@acme.com").build()
 ```
 
-The named states (`.admin()`, `.pro()`, `.common()`) hide construction detail behind domain vocabulary — a test says *what kind* of user it needs, not *how* to assemble one. This is the domain-language building block of the **test DSL** (`fundamentals.md`).
+The named states (`.admin()`, `.pro()`, `.common()`) hide construction detail behind domain vocabulary: a test says *what kind* of user it needs, not *how* to assemble one. This is the domain-language building block of the **test DSL** (`fundamentals.md`).
 
-## Either / Result testing — both branches
+## Either / Result testing: both branches
 
 When an operation returns `Either<Error, Value>` (or a `Result`) instead of throwing, test **both** sides. The type system forces error paths to be first-class, not afterthoughts, and tests stay `try/catch`-free.
 
@@ -115,7 +115,7 @@ expect(result.isLeft()).toBe(true)
 expect(result.value).toBeInstanceOf(ResourceNotFoundError)
 ```
 
-When success carries no value (a delete returns `Right(null)`), asserting `isRight()` is not enough: assert the **side effect** too — the item is gone from the fake repository's `items`.
+When success carries no value (a delete returns `Right(null)`), asserting `isRight()` is not enough: assert the **side effect** too: the item is gone from the fake repository's `items`.
 
 ## Structure template
 
@@ -124,7 +124,7 @@ let repository   // dependency
 let sut          // system under test
 
 describe('Create User Use Case', () => {
-  beforeEach(() => {                    // fresh instances every test — isolation
+  beforeEach(() => {                    // fresh instances every test, isolation
     repository = new InMemoryUsersRepository()
     sut = new CreateUserUseCase(repository)
   })
@@ -156,8 +156,8 @@ For external service interfaces (storage, email, encryption, payment), fake the 
 
 | Kind | Use when |
 |---|---|
-| **Stateful fake** — a class with a public list of what it received (`uploads[]`, `sentEmails[]`) | the test asserts on what was called |
-| **No-op fake** — satisfies the interface and does nothing | the dependency must exist but is not what the test is about |
+| **Stateful fake**: a class with a public list of what it received (`uploads[]`, `sentEmails[]`) | the test asserts on what was called |
+| **No-op fake**: satisfies the interface and does nothing | the dependency must exist but is not what the test is about |
 | **Object literal** returned by a factory | the interface has one or two methods |
 
 ```
@@ -173,7 +173,7 @@ A subscriber test proves that an event triggers the right side effect.
 
 - **Arrange:** build the fakes, spy on the use case the subscriber calls, and register the subscriber (constructing it usually subscribes it). Reset the spy's counters **after** registration, in a second setup step, so registration calls do not count.
 - **Act:** perform the operation that raises the event, usually creating or saving the aggregate through its fake repository.
-- **Assert:** event dispatch is often asynchronous, so **poll the assertion until it holds or a timeout fires — never sleep**. Then assert the side effect in the target fake's `items`, not only that the spy was called.
+- **Assert:** event dispatch is often asynchronous, so **poll the assertion until it holds or a timeout fires; never sleep**. Then assert the side effect in the target fake's `items`, not only that the spy was called.
 
 ```
 it('creates member goals when a team goal is created', async () => {

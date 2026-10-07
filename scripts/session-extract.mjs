@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Turns a Claude Code session transcript (JSONL) into one readable file per compaction segment,
-// keeping only the conversation: what the owner said, answered or rejected, and what the assistant
-// said plus the names of the tools it called. Everything else — file snapshots, tool results,
-// thinking, subagent turns, compaction summaries — is dropped: it is either bulk or not the owner.
+// keeping only the conversation: what the owner said, answered, rejected or ran as a slash command
+// (with the options a structured question offered), and what the assistant said plus the names of
+// the tools it called. Everything else (file snapshots, tool results,
+// thinking, subagent turns, compaction summaries) is dropped: it is either bulk or not the owner.
 // No dependencies beyond the Node standard library.
 
 import { createReadStream, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs'
@@ -11,7 +12,9 @@ import { basename, join } from 'node:path'
 import { homedir } from 'node:os'
 
 const SYSTEM_REMINDER = /<system-reminder>[\s\S]*?<\/system-reminder>/g
-const HARNESS_MARKUP = /^\s*<(command-name|command-message|local-command-[a-z]+|task-notification)>/
+const HARNESS_MARKUP = /^\s*<(local-command-[a-z]+|task-notification)>/
+const COMMAND_NAME = /<command-name>([^<]*)<\/command-name>/
+const COMMAND_ARGS = /<command-args>([^<]*)<\/command-args>/
 const CLARIFY_BOILERPLATE = /^The user wants to clarify these questions\./
 const REJECTION_PREFIX = /[\s\S]*the user said:\s*/i
 
@@ -106,16 +109,32 @@ function ownerTurnOf(entry, toolNamesById) {
   if (blocks.some((block) => block.type === 'tool_result')) return null
   const text = cleanOwnerText(joinText(blocks))
   if (!text || HARNESS_MARKUP.test(text)) return null
+  const command = slashCommandOf(text)
+  if (command) return { ...base, kind: 'invoked', text: command }
   return { ...base, kind: 'said', text }
 }
 
-function formatAnswers({ answers, annotations = {} }) {
+function slashCommandOf(text) {
+  const name = text.match(COMMAND_NAME)?.[1].trim()
+  if (!name) return null
+  const args = text.match(COMMAND_ARGS)?.[1].trim()
+  return args ? `${name} ${args}` : name
+}
+
+function formatAnswers({ answers, annotations = {}, questions = [] }) {
   return Object.entries(answers)
     .map(([question, answer]) => {
       const notes = annotations[question]?.notes
-      return notes ? `${question} → ${answer} (note: ${notes})` : `${question} → ${answer}`
+      const answered = notes ? `${question} → ${answer} (note: ${notes})` : `${question} → ${answer}`
+      return answered + offeredOptions(questions.find((asked) => asked.question === question))
     })
     .join('\n')
+}
+
+function offeredOptions(asked) {
+  if (!asked?.options?.length) return ''
+  const mode = asked.multiSelect ? ' (multi-select)' : ''
+  return `\n  offered${mode}: ${asked.options.map((option) => option.label).join(' · ')}`
 }
 
 function formatRejection(entry, toolNamesById) {
@@ -123,7 +142,7 @@ function formatRejection(entry, toolNamesById) {
   const toolName = toolNamesById.get(result?.tool_use_id) ?? 'tool call'
   const raw = typeof result?.content === 'string' ? result.content : joinText(asBlocks(result?.content))
   const said = REJECTION_PREFIX.test(raw) ? raw.replace(REJECTION_PREFIX, '').trim() : ''
-  if (CLARIFY_BOILERPLATE.test(said)) return `[rejected ${toolName} to clarify — the clarification is the next owner turn]`
+  if (CLARIFY_BOILERPLATE.test(said)) return `[rejected ${toolName} to clarify; the clarification is the next owner turn]`
   return said ? `[rejected ${toolName}] ${said}` : `[rejected ${toolName}]`
 }
 

@@ -1,6 +1,6 @@
 ---
 name: review-docs
-description: Review a diff for documentation it made false — a README step, an env var, a CLI flag, a described behavior that the changed code no longer matches. One of the /review fan-out. Reports findings; never edits.
+description: Review a diff for documentation it made false (a README step, an env var, a CLI flag, a described behavior that the changed code no longer matches). One of the /review fan-out. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -10,7 +10,7 @@ You review one diff on the **docs** lens: which statements in the repository's d
 Every other lens reads code. A change can pass all of them and still leave the README telling the next developer to run a command that no longer exists, or `.env.example` missing the variable the code now requires. Nobody reads those files during a code review, and they fail the first person who trusts them, usually weeks later.
 
 ## Inputs
-Your context is isolated — you receive:
+Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
 - The repository, read-only.
 

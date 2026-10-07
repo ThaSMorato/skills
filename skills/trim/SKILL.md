@@ -1,6 +1,6 @@
 ---
 name: trim
-description: 'After a ticket is implemented and before it is reviewed, make its change smaller without changing behavior — read every file the diff created or modified against the plan and the acceptance criteria, and propose structural cuts with evidence: incidental hunks nothing asked for, code that re-implements what the repo already has, new files or layers the change did not need, a behavior spread over more files than it needs. Applies only the cuts the user picks, one at a time, with the tests untouched and green. Use after /implement and before /review, on "trim / shrink / make this diff smaller / more targeted".'
+description: 'After a ticket is implemented and before it is reviewed, make its change smaller without changing behavior; read every file the diff created or modified against the plan and the acceptance criteria, and propose structural cuts with evidence: incidental hunks nothing asked for, code that re-implements what the repo already has, new files or layers the change did not need, a behavior spread over more files than it needs. Applies only the cuts the user picks, one at a time, with the tests untouched and green. Use after /implement and before /review, on "trim / shrink / make this diff smaller / more targeted".'
 disable-model-invocation: true
 ---
 
@@ -23,21 +23,26 @@ What it finds but cannot cut, it reports. A behavior no AC asked for (a paramete
 ## The four criteria, in order
 Each criterion shrinks what the next one has to look at, so walk them in this order.
 
-1. **Trace — every hunk answers to an SI or an AC.** An *incidental* hunk answers to none and changes no behavior: a reformat, a drive-by rename, a refactor of neighboring code, an import reshuffle. The cut reverts it to its fixed-point version. (A hunk that answers to none but does change behavior is an unrequested-behavior note, above.)
-2. **Reuse — new code that re-implements something the repo already has.** Start from the node map's **Analogues** and **Conventions to mirror** (from `pattern-scout`), then search the codebase for the primitive (same name family, same signature, the stack guide's list of shared utilities) and cite it at `file:line`. The substitute must honor the same contract, including the edge cases the ticket's tests exercise; a primitive that almost fits is not a substitute.
-3. **Footprint — structure the change did not need.** A new file whose content fits in an existing one the ticket already touches; an interface or layer with a single implementation and no seam a test or a boundary requires; a file touched only to pass something through.
-4. **Locality — one behavior spread over more files than it needs.** The *Shotgun Surgery* smell (`code-smells` skill), measured on this diff: which files each behavior touches now, and the smaller set that would hold it.
+1. **Trace: every hunk answers to an SI or an AC.** An *incidental* hunk answers to none and changes no behavior: a reformat, a drive-by rename, a refactor of neighboring code, an import reshuffle. The cut reverts it to its fixed-point version. (A hunk that answers to none but does change behavior is an unrequested-behavior note, above.)
+2. **Reuse: new code that re-implements something the repo already has.** Start from the node map's **Analogues** and **Conventions to mirror** (from `pattern-scout`), then search the codebase for the primitive (same name family, same signature, the stack guide's list of shared utilities) and cite it at `file:line`. The substitute must honor the same contract, including the edge cases the ticket's tests exercise; a primitive that almost fits is not a substitute.
+3. **Footprint: structure the change did not need.** A new file whose content fits in an existing one the ticket already touches; an interface or layer with a single implementation and no seam a test or a boundary requires; a file touched only to pass something through. Two tests from the `architecture` skill's `rules/deep-modules.md` give the evidence: **one adapter is a hypothetical seam** (an interface nothing substitutes, not even a test), and **the deletion test** (inline the new module into its callers: if the complexity disappears, it was a pass-through).
+4. **Locality: one behavior spread over more files than it needs.** The *Shotgun Surgery* smell (`code-smells` skill), measured on this diff: which files each behavior touches now, and the smaller set that would hold it.
 
 ## 1. Propose
+**Read `docs/declined.md` first**, when it exists (`${CLAUDE_PLUGIN_ROOT}/templates/declined.md` has its format). A proposal that matches a `declined` entry (the same kind of move, over a scope the entry covers) is not proposed again unless its **Revisit when** has happened; say which entries suppressed what (*"skipped 2, per D-004 and D-011"*), so a suppression is never silent.
+
 Measure the diff first (files created, files modified, lines added and removed), then walk the criteria. Each proposal carries:
 - **the criterion**;
 - **the evidence**: `file:line` of the hunk; for trace, which SIs and ACs were checked and why none covers it; for reuse, the existing primitive's `file:line` and why its contract matches;
 - **the cut**, and what the diff loses: files, lines;
-- **why it is structural**: behavior identical, no test changes.
+- **why it is structural**: behavior identical, no test changes;
+- **its strength** (`visuals` skill): *Strong*, *Worth exploring* or *Speculative*.
 
 A proposal without evidence, one that changes behavior, or one that grows the diff, is not a trim. Drop it (a behavior change becomes a note).
 
 Present the proposals grouped by criterion, in order, as a structured choice. **The user picks which to apply.** None is applied by default.
+
+**When the owner declines a proposal with a reason that will still hold next time**, offer to record it in `docs/declined.md`, so no later run proposes it again. A passing reason ("not now") or a self-evident one is not recorded; a reason that is really an architectural decision is an ADR instead (`/adr-generate`).
 
 ## 2. Apply, one at a time
 For each chosen cut, in criterion order:
@@ -54,14 +59,15 @@ Write `.scratch/<feature-slug>/trim/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: trim
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 fixed_point: <ref>
 before: {files_created: <n>, files_modified: <n>, added: <n>, removed: <n>}
 after: {files_created: <n>, files_modified: <n>, added: <n>, removed: <n>}
 proposed: {trace: <n>, reuse: <n>, footprint: <n>, locality: <n>}
 applied: <n>
-reverted: <n — cuts that needed a test change or turned the suite red>
-unrequested: <n — behavior notes handed to the review>
+reverted: <n (cuts that needed a test change or turned the suite red)>
+unrequested: <n (behavior notes handed to the review)>
 ---
 ```
 

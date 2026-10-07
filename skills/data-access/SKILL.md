@@ -1,6 +1,6 @@
 ---
 name: data-access
-description: 'A self-contained catalog of data-access and I/O weaknesses you can see in code — N+1 queries, queries inside loops, missing indexes, unbounded results, over-wide transactions, chatty remote calls, stale caches, over- and under-fetching — each with its tell, a concrete failure scenario, and the fix. Use when reviewing a diff that reads or writes a database, cache or remote service, or when asking "will this scale" or "why is this slow".'
+description: 'A self-contained catalog of data-access and I/O weaknesses you can see in code (N+1 queries, queries inside loops, missing indexes, unbounded results, over-wide transactions, chatty remote calls, stale caches, over- and under-fetching), each with its tell, a concrete failure scenario, and the fix. Use when reviewing a diff that reads or writes a database, cache or remote service, or when asking "will this scale" or "why is this slow".'
 ---
 
 # Data access

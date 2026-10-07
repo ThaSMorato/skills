@@ -10,7 +10,7 @@ The three cohesion principles **cannot all be satisfied at once**. They pull the
    too many components      /
    too many releases       /
                   /        \
-    CCP ————————————————————— CRP
+    CCP ------------------------- CRP
  (change together)       (reuse together)
   giving up reuse         too many changes
                           reach the consumer
@@ -20,7 +20,7 @@ The three cohesion principles **cannot all be satisfied at once**. They pull the
 - Favour **REP + CRP** and you get components that are pleasant to consume, and a change that ripples across many of them.
 
 ## The rule of thumb
-**A young project sits on the CCP side; a mature one drifts toward REP/CRP.** Early on, nobody is reusing anything and every day is a redeploy — developability is what matters. As consumers appear and the code stabilises, the cost moves to them, and the boundary should follow.
+**A young project sits on the CCP side; a mature one drifts toward REP/CRP.** Early on, nobody is reusing anything and every day is a redeploy; developability is what matters. As consumers appear and the code stabilises, the cost moves to them, and the boundary should follow.
 
 This means the right partitioning **changes over time**, and a component structure that was correct two years ago being wrong today is normal evolution, not neglect.
 

@@ -17,10 +17,10 @@ The consumer asks only for what it uses. A field the provider sends and no consu
 
 | Situation | Approach |
 |---|---|
-| Consumer and provider owned by different teams, or deployed separately | contract tests — they replace the coordination an E2E run would need |
+| Consumer and provider owned by different teams, or deployed separately | contract tests; they replace the coordination an E2E run would need |
 | The API changes often | contracts catch the breaking change in the provider's build |
 | One provider, many consumers (services, mobile + web) | each consumer publishes its own contract; the provider verifies all of them |
-| One team, one repository, deployed together | usually not worth it — an integration or E2E test covers the same seam for less |
+| One team, one repository, deployed together | usually not worth it: an integration or E2E test covers the same seam for less |
 
 ## Rules
 

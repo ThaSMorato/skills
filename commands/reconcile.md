@@ -1,11 +1,11 @@
 ---
-description: Re-measure the dependency graph and reconcile it with the component map and boundary contract — drift since the last measurement, the commits behind it, the amendments each owning stage should make, and at most three latent-component proposals backed by measured evidence.
+description: Re-measure the dependency graph and reconcile it with the component map and boundary contract (drift since the last measurement, the commits behind it, the amendments each owning stage should make, and at most three latent-component proposals backed by measured evidence).
 argument-hint: "(none)"
 ---
 
-Use the `reconciler` agent to reconcile the structure of this repository.
+Call the Agent tool with `reconciler` to reconcile the structure of this repository.
 
-> Load the `asking` skill before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: `docs/components.md` must exist. Without a component map there is nothing to reconcile against. Say so and point at `/components` (or `/analyze` in brownfield) instead of delegating.
 

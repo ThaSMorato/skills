@@ -1,5 +1,167 @@
 # Changelog
 
+## 0.6.0
+
+Nineteen epics, landed one per PR onto a single v0.6 branch. Epics 1 to 17 (#29 to #45)
+come from a second reading of the suite's main model, `mattpocock/skills`, 212 commits after
+the July baseline; epics 18 and 19 from the first session retros run on 0.5.0, across three
+repositories. Everything taken was rewritten inside the suite; nothing points outside it.
+New stages: `/guardrails`, `/pr`, `/walkthrough`, `/prototype`, `/questionnaire`, `/teach`,
+`/wait-what`, `/handoff`, `/writing-fragments`, `/writing-beats`, `/writing-shape`, `/flow-report`,
+`/acceptance`. New reference skill: `visuals`. Seven new test files (44 to 85 tests).
+
+### Writing for agents (epic 1)
+- `skill-anatomy` gains: a completion criterion on every step (clarity and demand), write
+  the positive, the no-op test, the environment as source of truth, one trigger per branch,
+  disclose by branch and co-locate, leading words, typography, and an **Invocation** section
+  (context load against cognitive load).
+- Skills and agents are reached by naming the tool: "Call the Skill tool with `x`", "Call
+  the Agent tool with `x`", across every skill, agent and command.
+  `scripts/skill-invocation.test.mjs` fails on a softer phrasing, an unknown name, or an
+  agent that calls the Skill tool without having it.
+
+### `/diagnose`, tighter (epic 2)
+- Secrets are redacted in everything shown. Step 1 ends on **one command, already run, red
+  on the owner's exact symptom**, deterministic, fast and unattended; intermittent bugs
+  raise the reproduction rate; a human-only step uses `hitl-loop.template.sh`.
+- Hypotheses state a prediction and are shown ranked; debug logs carry a unique prefix;
+  performance regressions are measured against a baseline; a level with no seam that
+  carries the bug is a **seam gap** (an architecture finding); a cleanup step; the
+  hypothesis that held goes in the commit.
+- `plan` and `plan-validate` re-run the diagnosis `loop` in final verification.
+
+### `/retro` reads the environment, on two tracks (epic 3)
+- `retro/environment.md`: tactical cost and strategic change for each finding; navigation,
+  automated checks, guardrail, coding standards, steering files, tool economy, information
+  access. A **mechanical** standard becomes a check (lint, hook, CI), a **judgement** one a
+  line the review reads. A repo with no guardrail is a finding.
+- `/session-analyze` reports environment signals from tool-call names.
+
+### `/guardrails` (epic 4)
+- Inventories the repo's own check commands, hook manager, CI and Claude Code hooks;
+  proposes only what is missing; installs; **proves each item fires both ways**; writes
+  `docs/guardrails.md`.
+- `git-guard.sh`: a PreToolUse hook that blocks destructive git commands, ignores quoted
+  text, and works with jq, python3, node, or only bash and sed (20 tests).
+
+### Interview rounds, `/questionnaire`, gates as briefs (epic 5)
+- The interview asks the **frontier** of open decisions in numbered rounds, each with its aim
+  and a recommendation; facts are found, never asked.
+- `asking`: rounds as the general rule; a gate is a brief, pushed as late as possible.
+- `/questionnaire` writes questions for someone outside the conversation and folds the
+  answers back as `Decided` markers.
+
+### Visual reporting (epic 6)
+- New reference skill `visuals`: the smallest view (pseudocode, call/component/file tree,
+  Mermaid, diff sketch), gains in project terms, a strength per proposal (Strong, Worth
+  exploring, Speculative), and a self-contained HTML report with before/after cards.
+- Offered by `/tidy <path>` and `/analyze`; `/tidy` and `/trim` rate every proposal.
+
+### `/pr` (epic 7)
+- The PR body from the artifacts: a summary drawn as the smallest view, before/after
+  evidence (and everything not verified), and the merge danger (one-way or two-way door,
+  blast radius). Opens the PR only when asked.
+
+### Deep modules (epic 8)
+- `architecture/rules/deep-modules.md`: module, interface, depth, seam, adapter, leverage,
+  locality; the deletion test; one adapter is a hypothetical seam, two make it real; the
+  interface is the test surface. Used by `/trim` (footprint), `tdd` and `visuals`.
+
+### Declined proposals are remembered (epic 9)
+- `docs/declined.md` (append-only): a proposal the owner turned down for a lasting reason
+  is not proposed again by `/tidy`, `/trim` or any review lens until its "revisit when"
+  happens.
+- `scripts/references.test.mjs`: every `${CLAUDE_PLUGIN_ROOT}` path exists and every
+  template is indexed (five were not).
+
+### `/prototype` (epic 10)
+- One design question answered with throwaway code: a clickable HTML demo of a state model,
+  or structurally different UI variants on the real page. The answer becomes a `Decided`
+  marker; the code never merges.
+
+### Grounding (epic 11)
+- `doc-validate/grounding.md`: no concept is used before the reader has it. The PRD, HLD and
+  FDD writers follow it, and `/doc-validate` reports `UG-N`.
+
+### `/teach` (epic 12)
+- A teaching workspace (mission, trusted sources, learning records, glossary) and short
+  HTML lessons with recall practice, in the zone of proximal development.
+
+### `/walkthrough` (epic 13)
+- Before a change merges, an HTML lesson over its diff with a recall quiz; what stays
+  unclear after a re-explanation is a finding about the code. `/retro` sums the results.
+
+### `/wait-what` and `/handoff` (epic 14)
+- Re-pitch the last answer in simplified technical English; write what only the
+  conversation knows into a handoff for a fresh session.
+
+### Writing (epic 15)
+- `/writing-fragments` (explore), `/writing-beats` and `/writing-shape` (exploit), the last
+  two on the same grounding rule.
+- **Fix:** `/guardrails`, `/pr` and `/walkthrough` had an unquoted `: ` in their description,
+  so a strict YAML parser did not load them. `scripts/frontmatter.test.mjs` now checks
+  every skill, command and agent.
+
+### The flow reports on itself (epic 17)
+- **`/session-analyze` owns the environment lens** (navigation, tool economy, missing
+  information, instructions that did not hold): the conversation is where they show.
+  `/retro` keeps only what its artifacts prove (the guardrail, mechanical standards the review
+  kept catching) and cites the meta-retros for the rest.
+- **Every measured artifact records `plugin_version`** (node map, plan, progress, the three
+  validations, review, trim, tidy, diagnosis, walkthrough, meta-retro);
+  `scripts/plugin-version.test.mjs` keeps it so. `/retro` measures per version.
+- **`/retro` tags every process change `flow` or `project`**, as `/session-analyze` already did,
+  and gains frontmatter (`kind: retro`, `plugin_versions`, finding counts).
+- **New `/flow-report`**: reads several projects' retros and meta-retros, groups the `flow`
+  findings by the plugin file they would change (repeated across projects first), and puts
+  the flow measurements side by side per plugin version: the input for the next version.
+- `/retro`'s negative rules rewritten in the positive.
+
+### No em dash (epic 16)
+- 1,378 em dashes became a comma, colon, semicolon, parentheses or full stop by meaning.
+  The separator inside a marker with a value (`> Decided: <value> — <who>, <date>`) stays.
+  `scripts/no-em-dash.test.mjs` keeps it that way.
+
+### Coarse slicing, and the owner's slicing stays decided (epic 18)
+From the first session retros run on 0.5.0 (three repositories): the owner merged the
+proposed SIs 16 times, and `/plan-validate` re-flagged the merge.
+- `/plan` starts coarse: SIs on the same file, function, node or screen, verified by the
+  same check, or with a single consumer are merged before presenting; 1 to 3 SIs at small
+  gear; every SI changes production code. The coarsest slicing is the recommended answer,
+  and combinable merges are a multi-select.
+- The approved slicing is recorded in the plan's `## Slicing` as a `> Decided:` marker.
+  `/plan-validate` writes what `SZ` and `DS` would say against it under `## Notes`, without
+  blocking; `DS` does not run at small gear.
+- A clean plan revised after the owner's approval shows what changed before the hand-off,
+  and inside `/flow` starting `/implement` is asked, with "stop here" as an option.
+
+### What the session retros asked for (epic 19)
+- **`/acceptance`**: after the last change to production code, every AC and every part of
+  the request is checked in the running software (browser, with a screenshot), by a named
+  test, or named as not verified. It searches for a browser tool and the dev server before
+  concluding there is none, retries a failed navigation once and then asks the owner to
+  start the server, and uses real data before mocks. The record is valid at its
+  `verified_at`; `/pr` and `/flow` call it stale after a production change.
+- **The request trace**: `/tickets` (and the Small gear) write `request-trace.md`, each part
+  of the owner's request quoted with the ticket and AC covering it. Dropping, deferring or
+  widening a part needs the owner's `> Decided:`; owner-supplied copy is `Decided`, never
+  `Assumed`. `tickets-validate` gains `RQ`, and `review-spec` reads the request first.
+- **Tickets**: a ticket is not a test point; a sibling feature's grouping is the default;
+  follow-ups go to `follow-ups.md`, outside the set; the gate shows the count in words and
+  the estimated SIs.
+- **Questions** (`asking`): finding ids turned into options carry their words; copy and
+  screenshots go inline or by absolute path; the cause before the consequence; multi-select
+  when options combine; an "Other" that is a question gets an answer and a stop; premises
+  checked before asking, each option says what it rests on, and an absence offers
+  "investigate further"; a gate says exactly what its approval covers. `/fdd`, `/prd` and
+  `/hld` now load `asking`.
+- **`/review` closes with a severity cut**: critical, high and medium, docs included, as the
+  recommended answer; lows separate.
+- **A test that is green only alone is not green**: it stops the run and goes to `/diagnose`.
+- **The session extractor** keeps the slash commands the owner ran, with their arguments,
+  and the options each structured question offered, so an overruled recommendation is read
+  rather than inferred.
+
 ## 0.5.0
 
 Eleven epics, landed one per PR (#17–#28) onto a single v0.5 branch. The owner's

@@ -4,20 +4,20 @@
 
 ## What lives in `commands/`
 
-**User entrypoints** — thin by design: a command orchestrates, delegates heavy generation to agents, composes skills, and makes sure the inputs are on disk before handing off to an isolated context.
+**User entrypoints**: thin by design: a command orchestrates, delegates heavy generation to agents, composes skills, and makes sure the inputs are on disk before handing off to an isolated context.
 
 Each stage command carries a **preflight** (does the input exist? if not, name the command that produces it) and a **postflight** (what came out, what needs attention, what to run next). That pair is what makes stages composable outside `/flow`.
 
 `/flow` is the coordinator. It reads state from the artifacts on disk rather than from a status file, so every other command runs standalone and none of them owes `/flow` an update.
 
-**Every `.md` in this directory becomes a command.** There is no ignore convention, so a stray file ships as a real `/name` entry — and under a host that treats commands as description-matched skills, it competes for auto-invocation with a description that describes nothing. Prose about the directory belongs here in `docs/`, not beside the commands.
+**Every `.md` in this directory becomes a command.** There is no ignore convention, so a stray file ships as a real `/name` entry, and under a host that treats commands as description-matched skills, it competes for auto-invocation with a description that describes nothing. Prose about the directory belongs here in `docs/`, not beside the commands.
 
 ## Format
 
 ```markdown
 ---
-description: <what the command does — shown in the /command list>
-argument-hint: "<e.g. [feature], or (none) — runs once>"   # optional, always quoted
+description: <what the command does (shown in the /command list)>
+argument-hint: "<e.g. [feature], or (none), runs once>"   # optional, always quoted
 allowed-tools: Read, Edit, Bash(git*)                       # optional (restricts)
 model: sonnet                                               # optional
 ---
@@ -27,21 +27,21 @@ model: sonnet                                               # optional
 
 File: `commands/<name>.md`. Auto-discovered (no need to list it in `plugin.json`).
 
-**The frontmatter is strict YAML.** Hosts differ in how forgiving their parser is, so a file that loads fine in one silently fails to load in another — and a command that fails to parse is simply absent, with no error at the point of use. Two plain-scalar traps, both of which look like ordinary prose:
+**The frontmatter is strict YAML.** Hosts differ in how forgiving their parser is, so a file that loads fine in one silently fails to load in another, and a command that fails to parse is simply absent, with no error at the point of use. Two plain-scalar traps, both of which look like ordinary prose:
 
-- A **colon followed by a space** inside an unquoted value — `(default: current directory)` — reads as a nested mapping and aborts the parse.
-- A value that **starts with `[` or `{`** — `[feature or project name]` — parses as a list, not a string, so the field is rejected as the wrong type.
+- A **colon followed by a space** inside an unquoted value, `(default: current directory)`, reads as a nested mapping and aborts the parse.
+- A value that **starts with `[` or `{`**, `[feature or project name]`, parses as a list, not a string, so the field is rejected as the wrong type.
 
-Quote `argument-hint` always; it is the field that attracts both. Use single quotes when the text itself contains double quotes.
+Quote `argument-hint` always; it is the field that attracts both. Quote `description` whenever it holds a colon followed by a space, which a summary with a colon usually does. Use single quotes when the text itself contains double quotes. `scripts/frontmatter.test.mjs` fails on every one of these, across skills, commands and agents.
 
 ## Golden rules
 
 1. **Thin.** A command is an entrypoint, not the implementation. It orchestrates and **delegates the heavy work to agents** (isolated context, parallelizable). E.g. `/adr-generate` fires the `adr-generator` agent.
-2. **Deterministic entry.** It's an explicit user trigger — name it after the action (`/prd`, `/interview`). Use `argument-hint` to make the input clear.
+2. **Deterministic entry.** It's an explicit user trigger: name it after the action (`/prd`, `/interview`). Use `argument-hint` to make the input clear.
 3. **Runs in main → can be interactive.** Unlike an agent, a command sees the conversation and talks to the user. Good for HITL flows that also need a named trigger.
-4. **Composes skills.** A command can "run skill X" (e.g. `/interview` runs `interview` + `domain-model`) — reuse instead of rewriting the logic.
+4. **Composes skills.** A command loads skills instead of rewriting their logic (e.g. `/interview` runs `interview` + `domain-model`), and names the tool that loads them: "Call the Skill tool with `interview` for: $ARGUMENTS", and "Call the Agent tool with `prd-writer`" for an agent (see the skill anatomy, rule 4).
 5. **Handoff via files.** If it delegates to an agent (isolated context), the command ensures the **inputs are on disk** (brief, template) and points the agent at them.
-6. **Preflight and postflight.** On the way in, check the inputs exist — and when one is missing, name the command that produces it, so the failure teaches the user the chain. On the way out, summarize what was produced, what needs their attention, and what to run next. That pair is what makes a stage usable on its own, outside `/flow`.
+6. **Preflight and postflight.** On the way in, check the inputs exist, and when one is missing, name the command that produces it, so the failure teaches the user the chain. On the way out, summarize what was produced, what needs their attention, and what to run next. That pair is what makes a stage usable on its own, outside `/flow`.
 
 ## Checklist
 - [ ] `description` clear (shows in the command menu).

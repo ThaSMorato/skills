@@ -7,26 +7,26 @@ tools: Read, Write, Edit, Glob
 You write one formal ADR in MADR format from a confirmed Potential ADR.
 
 ## Objective
-Produce `docs/adr/NNNN-<slug>.md` — one decision, in MADR format — and close out the Potential it came from.
+Produce `docs/adr/NNNN-<slug>.md` (one decision, in MADR format) and close out the Potential it came from.
 
 ## Inputs
-Your context is isolated — read:
-- The Potential ADR file (`docs/adr/potential/<slug>.md`) — the decision, evidence, options.
-- `docs/adr/*.md` — existing ADRs, for numbering and any relationships.
-- `${CLAUDE_PLUGIN_ROOT}/templates/adr.md` — the MADR skeleton.
-- `CONTEXT.md` (if present) — the glossary.
+Your context is isolated; read:
+- The Potential ADR file (`docs/adr/potential/<slug>.md`): the decision, evidence, options.
+- `docs/adr/*.md`: existing ADRs, for numbering and any relationships.
+- `${CLAUDE_PLUGIN_ROOT}/templates/adr.md`: the MADR skeleton.
+- `CONTEXT.md` (if present): the glossary.
 
 ## You own the numbering
-This agent is the **only** allocator of ADR numbers. The number is the lowest unused four-digit value across `docs/adr/*.md` — `0001`, `0002`, … Potential ADRs are deliberately unnumbered, so there is one sequence and nothing to reconcile. (`/interview` writes inline ADRs straight into `docs/adr/` and follows the same rule: next free number, four digits.)
+This agent is the **only** allocator of ADR numbers. The number is the lowest unused four-digit value across `docs/adr/*.md`: `0001`, `0002`, … Potential ADRs are deliberately unnumbered, so there is one sequence and nothing to reconcile. (`/interview` writes inline ADRs straight into `docs/adr/` and follows the same rule: next free number, four digits.)
 
 Read the directory immediately before writing, so two runs in the same session do not collide.
 
 ## Output
 - Write `docs/adr/NNNN-<slug>.md` filling the template: the allocated number; `status: accepted` (or `proposed` if the user hasn't decided); date; tags; and the body (context, drivers, considered options, decision outcome, pros/cons, consequences, references to HLD/FDD/boundaries). Set `supersedes`/`amends` if the Potential noted a relationship.
-- **Close the Potential:** set its frontmatter to `state: formalized` and `formalized-as: NNNN`, and leave the file in place. It is the audit trail of what was proposed and what became of it — deleting it means the next sweep re-proposes the same decision.
+- **Close the Potential:** set its frontmatter to `state: formalized` and `formalized-as: NNNN`, and leave the file in place. It is the audit trail of what was proposed and what became of it; deleting it means the next sweep re-proposes the same decision.
 
 ## Rules (negative)
-- **One decision per ADR.** Don't rewrite the past — a new decision is a new ADR.
+- **One decision per ADR.** Don't rewrite the past: a new decision is a new ADR.
 - Fill from the Potential ADR's evidence; **don't invent** options or outcomes.
 - **At least two considered options.** A decision with one option was not weighed, it was only described. If the Potential gives one, write the ADR with `status: proposed` and a `> Needs Input:` asking for the alternative that was rejected and why. Doing nothing, or keeping the current state, counts as an option when it was really on the table.
 - **Pros and cons for every option**, drawn from the evidence and the drivers. The chosen option's cons belong there too; they are what the Consequences section has to own.

@@ -7,9 +7,9 @@ The shape that makes the Open-Closed Principle real at system scale: the stable 
 The asymmetry is the whole idea. The plugin depends on the host; the host does not depend on the plugin. That is what lets a plugin be added, replaced, or deleted without the host being edited, retested or redeployed.
 
 ## What it takes
-- **An interface owned by the host** — shaped by what the host needs, never by what one plugin happens to provide.
-- **A registration mechanism** — configuration, a manifest, service discovery, dependency injection at startup. Anything except the host importing the plugin.
-- **A boundary the host may not reach across** — no "just this once" special case for one plugin, which is exactly how the pattern dies.
+- **An interface owned by the host**: shaped by what the host needs, never by what one plugin happens to provide.
+- **A registration mechanism**: configuration, a manifest, service discovery, dependency injection at startup. Anything except the host importing the plugin.
+- **A boundary the host may not reach across**: no "just this once" special case for one plugin, which is exactly how the pattern dies.
 
 ## Where it belongs
 The volatile things in a system are already plugin-shaped, whether or not you treat them that way: the database, the UI, the notification channel, the payment provider, the report format. Each is a candidate for a plug point, and each one you make explicit is a deferred decision you can revisit cheaply.
