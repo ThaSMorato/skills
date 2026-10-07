@@ -40,6 +40,7 @@
     "./skills/testing",
     "./skills/implement",
     "./skills/trim",
+    "./skills/acceptance",
     "./skills/walkthrough",
     "./skills/pr",
     "./skills/visuals",

@@ -13,10 +13,12 @@ Your context is isolated; you receive:
 - **The originating ticket**, named in the plan's `ticket:` frontmatter: its numbered acceptance criteria and its **exclusions**.
 - The **node map** at the plan's `design:` path: the interfaces the code was supposed to build.
 - `docs/fdd/<feature>.md`: the feature this ticket came from.
+- `.scratch/<feature-slug>/request-trace.md`, when it exists: the owner's request, part by part, with the ticket and AC covering each.
 
 ## Precedence, when they disagree
 Acceptance criteria exist in three places and they will not always agree. Apply this order and **report the disagreement itself** rather than silently choosing:
 
+0. **The owner's request** (the request trace) is what was asked. A part covered by this ticket must be in the diff; anything narrower or wider than it needs the owner's `> Decided:` in the trace.
 1. **The FDD** is the authority for the feature's behavior.
 2. **The ticket** refines the FDD for this slice; it may narrow, never contradict.
 3. **The plan's SIs** decompose the ticket; they may not add scope.
@@ -34,7 +36,7 @@ Report findings, most-severe first:
 
 | Severity | Means |
 |---|---|
-| **critical** | an acceptance criterion not implemented, or an exclusion violated |
+| **critical** | an acceptance criterion or a covered request part not implemented, or an exclusion violated |
 | **high** | design divergence from the node map; behavior changed by a structural ticket |
 | **medium** | scope drift with no criterion behind it; contradiction between spec levels |
 | **low** | a criterion implemented in a way that technically satisfies it but misses the intent |

@@ -15,6 +15,7 @@ It exists because the ticket set was the one artifact in the flow with no valida
 - **The tickets**, all of them, together.
 - **The FDD** named in their `Source`: its acceptance criteria and its declared **test seams**.
 - `docs/features.md`, this feature's row: the `Depends on` column holds the cross-feature blockers.
+- `.scratch/<feature-slug>/request-trace.md`, when it exists: the owner's request, part by part.
 
 A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)`) has no FDD to check coverage against. Skip `SC` for it, and run everything else, since its seam is in its own `Test seam` field.
 
@@ -29,6 +30,7 @@ A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)
 | `SM-N` | Same seam | Two or more tickets on the same seam: they are slicing inside it, which is the job of SIs |
 | `DG-N` | Dependency graph | A cycle in the `Blocked by` edges, a blocker that names no existing ticket, or a cross-feature blocker from `features.md` that no ticket carries |
 | `DS-N` | Dispersion | The ticket with the most ACs has more than **3×** as many as the one with the fewest |
+| `RQ-N` | Request | A part of the request trace with no ticket and no owner `> Decided:` for leaving it out; an AC wider than the part it covers; or copy the owner supplied written as `> Assumed:` |
 | `AS-N` | Unmarked assumption | A scope decision (an `Exclusion`, an in/out call) that the FDD does not give, with no `> Assumed:` marker, per the `asking` skill §6 |
 
 ## The anchor: tickets ≈ seams
@@ -42,6 +44,9 @@ A ticket is too small (`UZ`) when **either** test fails:
 2. **Trace.** At least one of its ACs traces to an FDD acceptance criterion. "Change the timeout to 30s" fails this unless an FDD criterion asks for it.
 
 **Structural tickets** (prefactoring, expand/migrate/contract) add no behavior by definition. For them the first test becomes: *existing tests stay green, and at least one behavioral ticket is blocked by this one*. A prefactoring ticket that nothing depends on is refactoring for its own sake. A wide-refactor's batches share a seam legitimately, so do not report them as `SM`.
+
+## Only the set is counted
+`tickets`, `seams` and `dispersion` count the files under `issues/`. Follow-ups live in `follow-ups.md` and are not tickets; a placeholder ticket inside `issues/` that no request part or FDD criterion needs is `IV`.
 
 ## Calibration
 `DS`'s 3× threshold is a starting value, not a law: record the ratio in every verdict so it can be recalibrated from real sets. A set with one ticket has no dispersion to measure.

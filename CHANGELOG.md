@@ -2,12 +2,13 @@
 
 ## 0.6.0
 
-Seventeen epics, landed one per PR (#29 to #45) onto a single v0.6 branch, from a second
-reading of the suite's main model, `mattpocock/skills`, 212 commits after the July
-baseline. Everything taken was rewritten inside the suite; nothing points outside it.
+Nineteen epics, landed one per PR onto a single v0.6 branch. Epics 1 to 17 (#29 to #45)
+come from a second reading of the suite's main model, `mattpocock/skills`, 212 commits after
+the July baseline; epics 18 and 19 from the first session retros run on 0.5.0, across three
+repositories. Everything taken was rewritten inside the suite; nothing points outside it.
 New stages: `/guardrails`, `/pr`, `/walkthrough`, `/prototype`, `/questionnaire`, `/teach`,
-`/wait-what`, `/handoff`, `/writing-fragments`, `/writing-beats`, `/writing-shape`, `/flow-report`.
-New reference skill: `visuals`. Seven new test files (44 to 81 tests).
+`/wait-what`, `/handoff`, `/writing-fragments`, `/writing-beats`, `/writing-shape`, `/flow-report`,
+`/acceptance`. New reference skill: `visuals`. Seven new test files (44 to 85 tests).
 
 ### Writing for agents (epic 1)
 - `skill-anatomy` gains: a completion criterion on every step (clarity and demand), write
@@ -133,6 +134,33 @@ proposed SIs 16 times, and `/plan-validate` re-flagged the merge.
   blocking; `DS` does not run at small gear.
 - A clean plan revised after the owner's approval shows what changed before the hand-off,
   and inside `/flow` starting `/implement` is asked, with "stop here" as an option.
+
+### What the session retros asked for (epic 19)
+- **`/acceptance`**: after the last change to production code, every AC and every part of
+  the request is checked in the running software (browser, with a screenshot), by a named
+  test, or named as not verified. It searches for a browser tool and the dev server before
+  concluding there is none, retries a failed navigation once and then asks the owner to
+  start the server, and uses real data before mocks. The record is valid at its
+  `verified_at`; `/pr` and `/flow` call it stale after a production change.
+- **The request trace**: `/tickets` (and the Small gear) write `request-trace.md`, each part
+  of the owner's request quoted with the ticket and AC covering it. Dropping, deferring or
+  widening a part needs the owner's `> Decided:`; owner-supplied copy is `Decided`, never
+  `Assumed`. `tickets-validate` gains `RQ`, and `review-spec` reads the request first.
+- **Tickets**: a ticket is not a test point; a sibling feature's grouping is the default;
+  follow-ups go to `follow-ups.md`, outside the set; the gate shows the count in words and
+  the estimated SIs.
+- **Questions** (`asking`): finding ids turned into options carry their words; copy and
+  screenshots go inline or by absolute path; the cause before the consequence; multi-select
+  when options combine; an "Other" that is a question gets an answer and a stop; premises
+  checked before asking, each option says what it rests on, and an absence offers
+  "investigate further"; a gate says exactly what its approval covers. `/fdd`, `/prd` and
+  `/hld` now load `asking`.
+- **`/review` closes with a severity cut**: critical, high and medium, docs included, as the
+  recommended answer; lows separate.
+- **A test that is green only alone is not green**: it stops the run and goes to `/diagnose`.
+- **The session extractor** keeps the slash commands the owner ran, with their arguments,
+  and the options each structured question offered, so an overruled recommendation is read
+  rather than inferred.
 
 ## 0.5.0
 
