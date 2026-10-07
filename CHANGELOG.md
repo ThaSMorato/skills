@@ -121,6 +121,19 @@ New reference skill: `visuals`. Seven new test files (44 to 81 tests).
   The separator inside a marker with a value (`> Decided: <value> — <who>, <date>`) stays.
   `scripts/no-em-dash.test.mjs` keeps it that way.
 
+### Coarse slicing, and the owner's slicing stays decided (epic 18)
+From the first session retros run on 0.5.0 (three repositories): the owner merged the
+proposed SIs 16 times, and `/plan-validate` re-flagged the merge.
+- `/plan` starts coarse: SIs on the same file, function, node or screen, verified by the
+  same check, or with a single consumer are merged before presenting; 1 to 3 SIs at small
+  gear; every SI changes production code. The coarsest slicing is the recommended answer,
+  and combinable merges are a multi-select.
+- The approved slicing is recorded in the plan's `## Slicing` as a `> Decided:` marker.
+  `/plan-validate` writes what `SZ` and `DS` would say against it under `## Notes`, without
+  blocking; `DS` does not run at small gear.
+- A clean plan revised after the owner's approval shows what changed before the hand-off,
+  and inside `/flow` starting `/implement` is asked, with "stop here" as an option.
+
 ## 0.5.0
 
 Eleven epics, landed one per PR (#17–#28) onto a single v0.5 branch. The owner's
