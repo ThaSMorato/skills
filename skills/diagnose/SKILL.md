@@ -77,6 +77,7 @@ Write `.scratch/<feature-slug>/diagnoses/<slug>.md`, or `.scratch/standalone/dia
 ```markdown
 ---
 kind: diagnosis
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <slug>
 status: cause-found | unresolved | no-loop
 loop: <the one command that goes red, or `none`>

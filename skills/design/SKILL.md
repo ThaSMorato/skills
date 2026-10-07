@@ -48,6 +48,7 @@ Then write it to `.scratch/<feature-slug>/design/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: node-map
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 ---

@@ -57,6 +57,7 @@ Write `.scratch/<feature-slug>/plans/<NN>-<slug>/validation.md`:
 ```markdown
 ---
 kind: validation
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 status: clean | dirty
 open_issues: <count of open issues>

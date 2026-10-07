@@ -2,12 +2,12 @@
 
 ## 0.6.0
 
-Sixteen epics, landed one per PR (#29 to #44) onto a single v0.6 branch, from a second
+Seventeen epics, landed one per PR (#29 to #45) onto a single v0.6 branch, from a second
 reading of the suite's main model, `mattpocock/skills`, 212 commits after the July
 baseline. Everything taken was rewritten inside the suite; nothing points outside it.
 New stages: `/guardrails`, `/pr`, `/walkthrough`, `/prototype`, `/questionnaire`, `/teach`,
-`/wait-what`, `/handoff`, `/writing-fragments`, `/writing-beats`, `/writing-shape`. New
-reference skill: `visuals`. Six new tests (44 to 69).
+`/wait-what`, `/handoff`, `/writing-fragments`, `/writing-beats`, `/writing-shape`, `/flow-report`.
+New reference skill: `visuals`. Seven new test files (44 to 81 tests).
 
 ### Writing for agents (epic 1)
 - `skill-anatomy` gains: a completion criterion on every step (clarity and demand), write
@@ -100,6 +100,21 @@ reference skill: `visuals`. Six new tests (44 to 69).
 - **Fix:** `/guardrails`, `/pr` and `/walkthrough` had an unquoted `: ` in their description,
   so a strict YAML parser did not load them. `scripts/frontmatter.test.mjs` now checks
   every skill, command and agent.
+
+### The flow reports on itself (epic 17)
+- **`/session-analyze` owns the environment lens** (navigation, tool economy, missing
+  information, instructions that did not hold): the conversation is where they show.
+  `/retro` keeps only what its artifacts prove (the guardrail, mechanical standards the review
+  kept catching) and cites the meta-retros for the rest.
+- **Every measured artifact records `plugin_version`** (node map, plan, progress, the three
+  validations, review, trim, tidy, diagnosis, walkthrough, meta-retro);
+  `scripts/plugin-version.test.mjs` keeps it so. `/retro` measures per version.
+- **`/retro` tags every process change `flow` or `project`**, as `/session-analyze` already did,
+  and gains frontmatter (`kind: retro`, `plugin_versions`, finding counts).
+- **New `/flow-report`**: reads several projects' retros and meta-retros, groups the `flow`
+  findings by the plugin file they would change (repeated across projects first), and puts
+  the flow measurements side by side per plugin version: the input for the next version.
+- `/retro`'s negative rules rewritten in the positive.
 
 ### No em dash (epic 16)
 - 1,378 em dashes became a comma, colon, semicolon, parentheses or full stop by meaning.

@@ -32,12 +32,18 @@ Concretely: you may not write that something was hard, that a decision was debat
 ## Measure from frontmatter, never from prose
 The counts come from fields each stage writes for exactly this purpose: the ticket's `Gear`, `plan.md`'s `sis_planned` and `revision`, `progress.md`'s `sis_done`/`sis_total`, `escalations` and `unverified`, `validation.md`'s `run` and `fired`, the review's `findings`, `by_severity`, `by_lens`, `verdicts` and `refuted_by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams`, `dispersion` and `fired`, each `trim/*.md`'s `before`, `after`, `proposed`, `applied`, `reverted` and `unrequested`, each `tidy/*.md`'s `proposed`, `applied`, `reverted` and `review_findings`, each `walkthrough/*.md`'s `questions`, `missed` and `unclear_after`, and each `diagnoses/*.md`'s `status`, `hypotheses`, `probes` and `levels`. Sum them; do not re-derive them from the body. A ticket whose artifacts lack the fields predates them; report it as not measured instead of reading a count out of a sentence, because a number reconstructed from prose looks exactly like a measured one and is not.
 
-Then read the **Measurements** section of the most recent earlier `docs/retro/*.md` and put its totals beside this one's. One retro is a snapshot; the comparison is what shows whether a change to the flow did anything.
+**Group the measurements by `plugin_version`**, the field every measured artifact records. Work done on two versions of the plugin is two populations: summing them hides exactly the change a new version was meant to make. An artifact without the field predates it; group it as `unknown`.
+
+Then read the **Measurements** section of the most recent earlier `docs/retro/*.md` and put its totals beside this one's, version by version. One retro is a snapshot; the comparison, on the same version or across versions, is what shows whether a change to the flow did anything.
 
 ## Two outputs, two subjects
 Sort every finding by **what it is about**, and never mix them:
 
-**About the process** → `docs/retro/<scope>.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/retro.md`. Slices planned versus done, which gate categories fired, where the loop escalated, findings that repeat across tickets, and what should change, each naming the file it would change.
+**About the process** → `docs/retro/<scope>.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/retro.md`. Slices planned versus done, which gate categories fired, where the loop escalated, findings that repeat across tickets, and what should change, each naming the file it would change. **Tag every process finding** by whose file it would change:
+- **`flow`**: the plugin's own process would do this wrong on any project (a stage's instructions, a gate, a template, an agent). It is an improvement to the plugin, and `/flow-report` gathers these across projects.
+- **`project`**: specific to this repository (its stack guide, its guidelines, a rule or a check here).
+
+When unsure, it is `project`: a flow change affects every user of the plugin, so it needs the stronger case, the same rule `/session-analyze` uses.
 
 **About the product** → append to `docs/evolutions.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/evolutions.md`. This is where the out-of-scope notes accumulated in every `progress.md` finally land instead of being reported into a chat window. Each entry cites the progress file it came from.
 
@@ -58,26 +64,29 @@ A review finding with the verdict `pre-existing` is real, but in code the diff d
 
 Nothing is created here. The owner decides; a chosen proposal becomes a `Type: structural` ticket whose Source is this retro (`retro: docs/retro/<scope>.md`).
 
-## The environment the work ran in
-Read the scope a second time, through `environment.md`: on two tracks, what each finding cost this work and what change to the environment (a check, a pointer, a standard, an access) would make the next ticket go right. It covers navigation, automated checks, the guardrail, coding standards, the steering files, tool economy and information access, and it classifies every standard as **mechanical** (it becomes a check) or **judgement** (it becomes a line the review reads). Inspect the repository itself for its checks and guardrail; for the categories only a session shows, use the `docs/meta-retro/` reports in scope, and without them name the gap.
+## The environment, as far as the artifacts show it
+The environment lens belongs to `/session-analyze`, which reads the conversation where navigation, tool economy and missing information show up. Here, take only the part the artifacts and the repository prove, through `environment.md`:
+- **The guardrail**: `docs/guardrails.md`, or the repository's hooks and CI. None is a finding.
+- **Mechanical standards the review kept catching**: a repeated review finding a linter, a hook or a CI job could catch becomes a proposed check, not a rule.
+- **What the sessions found**: the `Environment` sections of the `docs/meta-retro/` reports in scope, cited, not re-derived. With no meta-retro in scope, say that the session side of the environment was not read.
 
 ## This is a log, not a state file
 `/flow` derives state from artifacts and refuses documents that must be maintained. These two outputs do not compete with that: they are **append-only history**, nothing derives current state from them, and a stale entry is still a true record of what was observed then. Never edit or remove an earlier entry; if something changed, add an entry that says so.
 
-## Rules (negative)
-- **Don't fix anything.** This stage reads and records. A change it recommends is made by the stage that owns the file.
-- **Don't grade people.** The artifacts record work, not performance, and nothing on disk supports a claim about who.
-- **Don't rewrite the decomposition.** If the work showed a feature was cut wrong, record it here and in `evolutions.md`; `/decompose` amends `features.md` on its own next run.
-- **Don't infer intent from a diff.** That a slice shipped differently than planned says what happened, not why. Where the reason is not written down, say it is not written down.
+## The boundaries of this stage
+- **It reads and records.** Every change it recommends names the stage that owns the file, and that stage makes it.
+- **It describes the work.** The artifacts record what was done, not how well anyone did it; findings are about steps, gates and files.
+- **A wrong decomposition is recorded**, here and in `evolutions.md`; `/decompose` amends `features.md` on its next run.
+- **What happened is stated; why, only when written down.** That a slice shipped differently than planned is a fact on disk; its reason is quoted from where it was written, or named as not written down.
 
 ## Workflow
 1. Resolve the scope to its completed tickets; abort if none finished.
 2. Read the artifacts above across the whole scope, `validation.md`'s `Resolved` sections included.
-3. Fill **Measurements** from frontmatter, per ticket and by gear, and compare with the previous retro's.
+3. Fill **Measurements** from frontmatter, per ticket, by gear and by `plugin_version`, and compare with the previous retro's.
 4. Explain the planned-versus-done divergences and the gate categories that fired, citing the files.
 5. Collect escalations, failed deliverables, and repeated review findings, with their instances.
 6. Group the `pre-existing` findings by area; name the hotspots; propose at most 3 structural tickets.
-7. Run the environment lens (`environment.md`): check the repo's guardrail, classify each standard as mechanical or judgement, and give each finding its strategic change.
-8. Sort every finding: process, product, or defect.
+7. Take the environment as far as the artifacts show it: the guardrail, the mechanical standards the review kept catching, and the meta-retros' Environment sections.
+8. Sort every finding: process (tagged `flow` or `project`), product, or defect.
 9. Write `docs/retro/<scope>.md`; append the product findings to `docs/evolutions.md`.
 10. Self-review: every claim points at a file, nothing describes how the work felt, and the gaps are named.

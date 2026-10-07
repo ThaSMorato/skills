@@ -8,7 +8,16 @@ progress.md and the review files, not by recalling how the work felt. A sentence
 measurement and isn't is worse than no sentence, because it reads as verified.
 Where the artifacts cannot answer something, say so under "What the artifacts couldn't tell me".
 PRUNE optional sections that don't apply; (required) sections always stay.
+The written file STARTS with the frontmatter below; this comment is not copied.
 -->
+
+---
+kind: retro
+scope: <epic / feature / cycle>
+date: <YYYY-MM-DD>
+plugin_versions: [<each plugin_version the measured artifacts record; `unknown` for those without it>]
+findings: {flow: <n>, project: <n>, product: <n>, defect: <n>}
+---
 
 # Retro: <epic / feature / cycle>
 
@@ -27,8 +36,10 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 > This section is the series. Keep its shape identical between retros, so the next one can put its
 > numbers beside this one's.
 
-| Ticket | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Unverified | Review findings |
-|---|---|---|---|---|---|---|---|---|---|
+| Ticket | Plugin version | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Unverified | Review findings |
+|---|---|---|---|---|---|---|---|---|---|---|
+
+**Totals by plugin version:** <per `plugin_version`: tickets, median SIs per AC, escalations, validation runs to `clean`, review findings, lens precision; two versions in one scope are two populations, never one sum>
 
 **Totals by gear:** <per gear: tickets, median ACs, median SIs, SIs per AC, median review findings>
 
@@ -85,23 +96,26 @@ by side, or `first measured retro` when none has a Measurements section>
 |---|---|---|---|---|
 
 ## The environment (required)
-> From the environment lens (`skills/retro/environment.md`). Two tracks per finding: what it cost this
-> work (tactical, cited) and what change to the environment makes the next ticket go right (strategic).
-> A standard is classified **mechanical** (it becomes a check: lint rule, hook, CI job) or **judgement**
-> (it becomes a line in the stack guide or the review standard). Skip a category with no evidence in scope.
+> As far as the artifacts and the repository show it (`skills/retro/environment.md`); the session side
+> belongs to `/session-analyze`. A mechanical standard is proposed as a check, a judgement one as a line
+> the review reads.
 
-**Guardrail:** <the repo's pre-commit hook and CI job, and which of lint / type check / tests each runs; or `none`, which is itself a finding>
+**Guardrail:** <`docs/guardrails.md`, or the repo's pre-commit hook and CI job and which of lint / type check / tests each runs; or `none`, which is itself a finding>
 
-| Category | Finding (cited) | Tactical cost | Strategic change | Mechanical / judgement | Where it lands |
-|---|---|---|---|---|---|
+**Mechanical standards the review kept catching:** <repeated review findings a lint rule, hook or CI job could catch, each with the check that would>
+
+**From the sessions:** <the Environment sections of the `docs/meta-retro/` reports in scope, cited; or `no meta-retro in scope: the session side was not read`>
 
 ## What to change in the process (required)
 > The actionable part. Each item names the artifact that motivates it and the file it would change:
 > a stack guide, a template, a stage's instructions. An item with no source is an opinion; put it in
 > Open questions instead.
 
-| Change | Motivated by | Where it lands |
-|---|---|---|
+> Tag each change: `flow` (the plugin's own stages, gates, templates or agents would do this wrong on any
+> project; `/flow-report` gathers these) or `project` (this repo's guides, rules or checks). When unsure, `project`.
+
+| Change | Tag | Motivated by | Where it lands |
+|---|---|---|---|
 
 ## What the artifacts couldn't tell me (required)
 > The honest boundary. Anything a reader might expect this document to cover that the files on disk

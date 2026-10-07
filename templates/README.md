@@ -23,6 +23,7 @@
 | `retro.md` | `/retro` | `docs/retro/<scope>.md` |
 | `evolutions.md` | `/retro`, `decomposer` (append-only) | `docs/evolutions.md` |
 | `meta-retro.md` | `/session-analyze` | `docs/meta-retro/<date>-<session>.md` |
+| `flow-report.md` | `/flow-report` | `docs/flow-reports/<date>.md` |
 
 Triple duty: (a) generation **scaffold**, (b) **handoff anchor** between isolated agents (known sections), (c) **gate/review checklist**.
 

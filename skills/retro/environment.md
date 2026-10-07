@@ -1,4 +1,4 @@
-> Part of the `retro` skill (see `SKILL.md`). Also read by `/session-analyze`.
+> Read by `/session-analyze`, which owns this lens: the conversation is where navigation, tool economy and missing information show up. `/retro` applies only the part its artifacts prove (the guardrail, mechanical standards the review kept catching) and cites the meta-retros for the rest. Kept in the `retro` folder beside `promotion-filter.md`, its sibling reference.
 
 # The environment lens: what would make the next run better
 

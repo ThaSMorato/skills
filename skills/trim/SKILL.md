@@ -59,6 +59,7 @@ Write `.scratch/<feature-slug>/trim/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: trim
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 fixed_point: <ref>
 before: {files_created: <n>, files_modified: <n>, added: <n>, removed: <n>}

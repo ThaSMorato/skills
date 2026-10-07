@@ -31,6 +31,7 @@ Before the first SI, create one task per SI (in Dependency-Map order) so the use
 ```markdown
 ---
 kind: progress
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 status: in_progress | completed
 sis_done: <X>

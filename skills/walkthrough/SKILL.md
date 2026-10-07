@@ -36,6 +36,7 @@ Beside the lesson, write `.scratch/<feature-slug>/walkthrough/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: walkthrough
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 fixed_point: <ref>
 questions: <n>

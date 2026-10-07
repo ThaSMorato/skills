@@ -71,6 +71,7 @@ Write `.scratch/<feature-slug>/tidy/<NN>-<slug>.md` (in path mode, `.scratch/sta
 ```markdown
 ---
 kind: tidy
+plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 slug: <NN>-<slug>
 fixed_point: <ref>
 proposed: {expression: <n>, duplication: <n>, size: <n>}
