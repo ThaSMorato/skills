@@ -21,7 +21,7 @@ The standard a change is held to when the repo's own `docs/guidelines.md` is sil
 - Comment the **why**, never the **what**. Delete commented-out code; version control remembers it.
 
 ## Errors
-- Use exceptions, not error codes; put context in the message.
+- Use exceptions, not error codes; put context in the message. A message a person will read answers *what happened* and *what can I do now*, in the product's terms, and is written at the edge where the user's intent is known (`code-smells` → `unactionable-error`).
 - Never swallow an error; fail fast (the shapes it takes, and the question to ask of every catch: `code-smells` → `swallowed-error`). Don't return or accept `null`; use an empty collection, an optional, or a special-case object.
 
 ## Design

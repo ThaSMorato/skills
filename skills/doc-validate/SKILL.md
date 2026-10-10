@@ -35,6 +35,7 @@ If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` firs
 | `CV-N` | Coverage (omission) | An element of the source that nothing in the target carries forward |
 | `SC-N` | Set coverage | In a 1:N pair, a source item no member of the target set owns |
 | `PC-N` | Partial credit | A source item the target marks as covered but only partly delivers, ticked where it should be listed as `partial` |
+| `SN-N` | Scenario coverage | A guiding-scenario step that needs the product and has no requirement; a requirement on no step; a first milestone whose `M1` requirements do not complete its scenario; an RNF that protects no step; in `prd → features`, an `M1` requirement no `M1` feature delivers |
 | `DG-N` | Dependency graph | A cycle in `docs/features.md`'s epic or feature graph, or a feature depending on one that no longer exists |
 | `IV-N` | Invention | An element of the target that traces to nothing in the source |
 | `RN-N` | Unanswered driver | An `RNF` in the PRD with no architectural response in the HLD |
@@ -47,6 +48,8 @@ If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` firs
 | `AS-N` | Unmarked assumption | A value in one of the `asking` skill's assumption classes (§6) that the source does not give, that carries no `> Assumed:` or `> Decided:` marker, and that would change the target if it were different |
 
 `CV` is the direction that matters most and the one nothing else asks for. Documents are routinely checked for invention ("does everything trace back?") and almost never for omission. Walk the **source** item by item and account for each in the target; anything unaccounted for is a `CV`, including items deliberately dropped whose reason was never written down.
+
+`SN` is `CV` and `IV` walked along the story instead of the list. Walk each guiding scenario step by step: a step with no requirement is an omission a requirement-by-requirement check cannot see, because nothing on the list is missing; the list just never had it.
 
 `AS` is `IV`'s sibling, and the difference matters. An invention is an element the source never asked for; an unmarked assumption is a value the source **needed and did not give**, filled in as if it had. Both trace to nothing; but an invention should usually be removed, while an assumption usually has to stay and only needs to say what it is. A marked `> Assumed:` is not a finding: it is the writer doing its job, and it goes to the gate. An `Assumed` that survived an approved gate is `MD`. Fire `AS` only above the ceiling: if a different value would change nothing in the target, it is noise.
 

@@ -16,9 +16,14 @@ Recommended: <your answer, and why>
 
 **The answer is with someone else.** When a decision belongs to a person who is not in the conversation (a PM, another team, legal), record it in `Open questions` with who holds it, and offer `/questionnaire` to send them the questions instead of guessing.
 
-Cover the minimum a PRD needs: the problem (not the solution), users and jobs-to-be-done, goals and value, success metrics (metric + target), scope and non-goals, constraints, and the open decisions/trade-offs.
+Cover the minimum a PRD needs: the problem (not the solution), users and jobs-to-be-done, the guiding scenarios, the antithesis, goals and value, success metrics (metric + target), scope and non-goals, constraints, and the open decisions/trade-offs.
 
-**Inherit rather than re-ask.** When a PRD or HLD already covers this ground (a feature inside an existing product), take the problem, users and goals from there, show the user what you inherited, and spend the interview on what is genuinely new. A brief that re-derives what the document above it already said will contradict it.
+## Guiding scenarios
+Once the problem and the users are drafted, elicit **one to three guiding scenarios**: a specific persona, their motivation at that moment, and the simulated steps until their goal is met. Read [`scenarios.md`](scenarios.md) for the format, then **shoe-shift** each one with the owner, step by step, and check its persona against the strawman users. The holes it finds become steps, edge cases, or open questions. Name the nonpersonas in the same pass.
+
+**Done when** each scenario passes the shoe-shift (every step has a step before it that makes it possible; the last step is the persona's goal) and no persona is a strawman.
+
+**Inherit rather than re-ask.** When a PRD or HLD already covers this ground (a feature inside an existing product), take the problem, users, goals, guiding scenarios and antithesis from there, show the user what you inherited, and spend the interview on what is genuinely new. A brief that re-derives what the document above it already said will contradict it.
 
 **In brownfield, ask what cannot change.** Every question above asks what is wanted. The more expensive input in an existing system is the immovable: published contracts, persisted schemas, public events, runtime floors. Start from `docs/analysis/system-profile.md`'s inherited constraints, confirm each, and record them in the brief's own inherited-constraints section.
 
@@ -29,8 +34,8 @@ Each question names **which required section of the brief is weakest right now**
 The interview converges when the **words stop moving**. After each round, look at what its answers did to `CONTEXT.md` (the `domain-model` skill is updating it as you go): how many terms were **created**, and how many **renamed or redefined**. While terms still change, the domain has not settled and a PRD written now would encode a vocabulary that will shift. Report the count as you go (*"glossary: 2 new, 1 renamed"*). Two rounds in a row with no load-bearing term created or changed, together with the gate below, is the signal that the understanding is shared.
 
 ## Two challenges, once each
-- **Contrarian**, once the problem and the goals are drafted: *what if the opposite were true, or if we built nothing?* It is how an unexamined premise surfaces while it is still one sentence.
-- **Simplifier**, before scope is settled: *what is the smallest version that would still be worth having?* The answer feeds the gear `/flow` will choose, and becomes the first candidate for Out / non-goals.
+- **Contrarian**, once the problem and the goals are drafted: *what if the opposite were true, or if we built nothing?* It is how an unexamined premise surfaces while it is still one sentence. Ask too *what does the persona use today?*: the product's value is what it adds **over that replacement**, and a useful product can add nothing. The answers are the brief's **Antithesis**.
+- **Simplifier**, before scope is settled: *what is the smallest version that would still be worth having?* The answer feeds the gear `/flow` will choose, and becomes the first candidate for Out / non-goals. A general, extensible version earns its place only with **three** distinct, concrete, near-term scenarios behind it; with fewer, scope the specific one the scenarios need.
 
 If two rounds in a row move **no** required section forward, the interview is circling. Ask the **ontological** question instead of another detail: *what is this, really?* A stuck interview is usually stuck on a noun.
 

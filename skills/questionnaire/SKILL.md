@@ -46,6 +46,13 @@ What we did not ask and should know.
 
 Order the questions most important first, since an async answer may be the only pass; group them under a `##` per theme once there are more than a handful. Each question resolves its ids as the `asking` skill says: the recipient has none of the owner's context.
 
+### When the recipient is a user
+When the questionnaire goes to a user or a customer to learn what they need (not to a person who holds a decision), the questions change shape, because **the less you steer, the more reliable the answer**:
+- Ask for **concrete past situations**, not opinions or forecasts: "Tell me about the last time you...". A story stays on what they did, surfaces details a direct question misses, and becomes a guiding scenario later.
+- Keep every question **neutral**: no expectation in the wording, no option list that names your idea first.
+- Open with their world (one or two questions), then connect it to the problem, and only at the end show the idea, mock or prototype for a reaction.
+- Close by asking how much the problem costs them today, so the answers can be weighed by **signal strength**, not only collected.
+
 ## Read-back mode
 `/questionnaire <path>` on a file with answers filled in:
 1. For each question, find its answer and the source it was asked for (`asks`).

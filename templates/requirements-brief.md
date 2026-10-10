@@ -24,6 +24,25 @@ An unmarked one is a validation finding (AS-N).
 
 ## Users and jobs-to-be-done (required)
 > Who uses it and what they need to accomplish. Relevant personas/actors.
+- **Not for (nonpersonas):** who this deliberately does not serve, at least for now.
+
+## Guiding scenarios (required)
+> One to three stories, each a specific persona with a motivation, simulated step by step until their
+> goal is met, in the format of `${CLAUDE_PLUGIN_ROOT}/skills/interview/scenarios.md`. Every later stage
+> carries these forward: the PRD slices them into requirements and picks one as the first milestone.
+
+### GS-1: <the outcome, in the persona's words>
+- **Persona:**
+- **Motivation:**
+- **Simulation:**
+  1.
+- **Edge cases met on the way:**
+
+## Antithesis (required)
+> Why this might be wrong, written by the Contrarian challenge. A brief that only argues for the idea is a
+> pitch. For a feature inside an existing product, inherit it from the brief above and say so.
+- **Why it might fail:** <the audience does not care, the cost does not close, the premise is false>
+- **What the persona uses today:** <the replacement, and what this adds over it>
 
 ## Goals and value (required)
 > Expected, observable outcome: the product/business value, not just "it works".

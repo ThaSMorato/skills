@@ -32,6 +32,16 @@ Scenario: Withdraw within balance
 
 Keep each scenario to one behavior: the "and" in `Then` describes one outcome, not a second `When`. Multiple `When` steps are the single-act smell in Gherkin form; split the scenario.
 
+## Scenario tests: the one declared exception to single-act
+
+A **scenario test** tells a whole guiding scenario from the PRD (`${CLAUDE_PLUGIN_ROOT}/skills/interview/scenarios.md`): the persona, chaining the actions they would take in the real product, from the first step to their goal. Every other test checks a piece; this one checks that the pieces make a path a user can walk.
+
+- **One per guiding scenario**, at the top of the pyramid, few on purpose. Name it by the outcome: `GS-1: Ana closes the monthly expense report`.
+- **It is multi-act by design.** It is the one test allowed to chain Acts, because the sequence is what it verifies. Assert at each step the persona would check before moving on (they saw the filtered list, the total matches), so a red run still names the step that broke.
+- **Through the public interface only**, with the persona's data, not the team's: the ids, names and order a real user would have.
+- **Write it when the scenario's last requirement lands**, the same moment `/acceptance` walks the scenario in the browser; this test keeps that walk from regressing.
+- Everything else stays single-act. A test that chains Acts and is not one of these is still the multi-act smell.
+
 ## Test DSLs at the acceptance level
 
 A **test DSL** (intention-revealing helpers that make a test read like a spec) is a fundamental of clean tests, treated in full in `fundamentals.md` (it is the main refactor move after green, at every level, and it is where Object Mother + Builder, composed assertions, and composed results are defined). At the acceptance level the DSL becomes *business-readable*: the Given/When/Then above is itself a DSL a stakeholder can read, and the same emergent refactoring applies: push request-building, wiring, and response-casting noise into helpers named in the domain's language so the scenario states behavior, not mechanics.

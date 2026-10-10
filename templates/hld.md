@@ -56,7 +56,8 @@ An unmarked one is a validation finding (AS-N).
 - **Security:**
 - **Scalability:**
 - **Availability:**
-- **Observability:**
+- **Observability:** <including how each protected scenario step is observed from the user's side>
+- **Consistency, as the user sees it:** <per flow with shared writes: the guarantees the user gets, and which layer provides each>
 
 ## Non-functional response (required)
 > Every `RNF-NNN` in the PRD, and the architectural answer to it. The PRD's non-functional
@@ -64,8 +65,8 @@ An unmarked one is a validation finding (AS-N).
 > the most expensive omission this document can make, and the one a reader is least likely to notice.
 > An RNF that is deliberately not answered yet still gets a row, saying so.
 
-| RNF | Requirement | Architectural response | Where it lives |
-|---|---|---|---|
+| RNF | Requirement | Protects | Architectural response | Where it lives | Observed from the user's side by |
+|---|---|---|---|---|---|
 
 ## Architectural decisions (optional)
 > Decisions taken at this level and their trade-offs. Link ADRs where they exist; flag real trade-offs as ADR candidates.

@@ -49,6 +49,7 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 | Smell | Tell | Rule |
 |---|---|---|
 | Swallowed Error | a failure happens and nothing downstream can tell | `rules/swallowed-error.md` |
+| Unactionable Error | an error reaches a person in the implementation's words, or with no next step | `rules/unactionable-error.md` |
 | Unenforced Invariant | a rule the domain relies on, which the type lets be broken | `rules/unenforced-invariant.md` |
 
 ## Cross-cutting / well-known

@@ -54,12 +54,16 @@ An unmarked one is a validation finding (AS-N).
 > reasonably assume is inside and isn't. It is a scope decision, knowable now, and it is what stops
 > `/fdd` inferring the bound and inferring it differently each run.
 >
+> **`Milestone`** is the PRD's: a feature is `M1` when it delivers an `M1` requirement. The `M1`
+> features together must let the persona of the first milestone's scenario reach their goal end to
+> end; a missing link is a coverage gap below, not a later epic's problem.
+>
 > **`Constrained by`** lists the ADRs binding this feature. Where the formal ADRs don't exist yet,
 > cite the **ADR candidates the HLD flagged**. Leave it empty rather than inventing an id.
 
-| Feature | Epic | Covers (RF/RNF) | Depends on | Components touched | Not delivering | Constrained by | FDD |
-|---|---|---|---|---|---|---|---|
-| **F1**: <slug> | E1 | RF-001, RF-003 | <feature ids, or none> | | <the neighbouring scope it excludes> | <ADR ids, or none> | `docs/fdd/<slug>.md` |
+| Feature | Epic | Covers (RF/RNF) | Milestone | Depends on | Components touched | Not delivering | Constrained by | FDD |
+|---|---|---|---|---|---|---|---|---|
+| **F1**: <slug> | E1 | RF-001, RF-003 | M1 | <feature ids, or none> | | <the neighbouring scope it excludes> | <ADR ids, or none> | `docs/fdd/<slug>.md` |
 
 ## Requirement coverage (required)
 > The omission direction: every RF/RNF in the PRD scope is owned by at least one feature. List here

@@ -20,7 +20,7 @@ Call the Skill tool with `testing`.
 ## The bar
 1. **Coverage of criteria.** Every acceptance criterion in the plan's SIs is made observable by at least one test in the diff. Walk them by id; a criterion with no test is the highest-value finding this lens produces.
 2. **Seam adherence.** Tests attach at the seams the plan and FDD named. A test at a different seam is either a design divergence or a test that will break on the next refactor.
-3. **Quality, per test.** Implementation coupling (mocked internal collaborators, asserting on privates), tautological assertions (expected value recomputed the way the code does), multiple Acts in one test, non-determinism (clock, randomness, ordering, shared state, network), and weakened assertions.
+3. **Quality, per test.** Implementation coupling (mocked internal collaborators, asserting on privates), tautological assertions (expected value recomputed the way the code does), multiple Acts in one test (unless it is the scenario test of a guiding scenario, `testing` → acceptance-bdd), non-determinism (clock, randomness, ordering, shared state, network), and weakened assertions.
 4. **Error paths.** Every error-handling branch the diff adds or changes (a catch, a `Left`/`Err` return, an error response, a retry that gives up) is driven by at least one test. An untested catch is where a swallowed error (`code-smells` → `swallowed-error`) hides, since the happy-path tests pass either way.
 5. **The test DSL.** Did the refactor step grow the builders, matchers and mother objects, or did it copy setup? Tests that do not read like a spec are the ones that rot.
 
