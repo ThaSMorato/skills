@@ -53,7 +53,7 @@ The SUT is the specific unit being exercised; everything else is a dependency. N
 Each test verifies **one behavior**, so its name alone tells you what broke.
 
 - **Single logical assertion, not single line.** One test asserts one logical fact. If verifying that fact needs six assertions (e.g. six indicator lights that together represent one state), that is fine; they affirm one thing. When the result is that complex, compose it into a readable form (see **Test DSL** below).
-- **Single Act is the rule that actually matters.** Test one action at a time. Avoid `arrange → act → assert → act → assert`. Each action is tested individually so a downstream assertion is never corrupted by an upstream action, and each test stands alone (this is the "Isolated" of F.I.R.S.T. in practice).
+- **Single Act is the rule that actually matters.** Test one action at a time. Avoid `arrange → act → assert → act → assert`. Each action is tested individually so a downstream assertion is never corrupted by an upstream action, and each test stands alone (this is the "Isolated" of F.I.R.S.T. in practice). The one declared exception is the **scenario test**, one per guiding scenario (`acceptance-bdd.md`).
 - **The "and" smell.** A test name with "and" (saves **and** sends **and** returns) hides multiple Acts → split into multiple tests. A multi-Act test fails without telling you which action broke; one Act per test gives a precise diagnosis: the red test's name points at the exact behavior that regressed.
 
 ## Deterministic tests

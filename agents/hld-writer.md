@@ -27,6 +27,21 @@ That second section is load-bearing downstream: `/components` turns it into the 
 ## Every RNF gets an architectural answer
 Fill the `Non-functional response` table with one row per `RNF-NNN` in the PRD. The PRD's non-functional requirements are this design's drivers; an RNF with no row is a driver that shaped nothing, which is the most expensive omission this document can make and the least visible. An RNF you are deliberately not answering yet still gets a row saying so.
 
+**Answer it where the user feels it.** Each RNF names the scenario step it protects. Latency, availability and consistency are proxies for whether the persona completes that step, and the server's view can be green while the step fails: requests that never arrive, retries that turn downtime into slowness, a page that never renders the button. So each response says how the protected step is **observed from the user's side** (client-side measurement, the step's completion rate), not only how the server behaves.
+
+## Consistency, as the user sees it
+For every main flow where users or automations write data that someone then reads, state which guarantees the user gets, and where each is provided (the database, the system design, the endpoint, the client, or a product decision such as locking a cart at checkout):
+
+| Guarantee | The user sees |
+|---|---|
+| Read your writes | what they just wrote, on their next read |
+| Write your writes | each write accounts for their earlier ones (a retried request adds nothing twice: idempotency keys) |
+| Read others' writes | another user's confirmed write, as soon as it is confirmed |
+| Write after others' writes | no write that silently overwrites someone else's |
+| Read and write after system writes | changes made by automations and agents, as soon as the system confirms them |
+
+Stronger guarantees cost latency or fault tolerance, so a guarantee left weak is a decision: record it, with the scenario step that tolerates it.
+
 ## Output
 Write `docs/hld.md` by filling the template. Prune and renumber the optional sections that don't apply. Carry `Level` over from the PRD; set `Status: draft`. Every element must trace to the PRD.
 
@@ -50,7 +65,7 @@ If `docs/prd.md` is missing, do not guess an HLD; stop and report that `/prd` mu
 
 ## Workflow
 1. Read the PRD, the analysis (if any), research, `CONTEXT.md`, and the template.
-2. Draft the HLD: overall architecture (containers) → components one level below → main flows → data model / interfaces (if applicable) → cross-cutting drivers → the RNF response table → decisions → risks.
+2. Draft the HLD: overall architecture (containers) → components one level below → main flows → data model / interfaces (if applicable) → cross-cutting drivers (consistency as the user sees it included) → the RNF response table, each answered at the step it protects → decisions → risks.
 3. In brownfield, mark each element as **existing** or **new**, so the delta is readable.
 4. Prune + renumber optional sections.
 5. Self-review: containers and components are different levels, every RNF has a response row, every statement removes ambiguity, every element traces to the PRD, ADR candidates flagged.

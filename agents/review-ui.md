@@ -1,6 +1,6 @@
 ---
 name: review-ui
-description: Review a diff that touches user-interface code for defects a mouse-and-fast-network author does not see (keyboard access, focus, accessible names, contrast, missing loading/empty/error states, layout shift, slow interactions). One of the /review fan-out, run only when the diff touches UI. Reports findings; never edits.
+description: Review a diff that touches user-interface code for defects a mouse-and-fast-network author does not see (keyboard access, focus, accessible names, contrast, missing loading/empty/error states, errors found too late, layout shift, slow interactions). One of the /review fan-out, run only when the diff touches UI. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash, Skill
 ---
 

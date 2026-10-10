@@ -11,7 +11,8 @@ Read, and number every item:
 - the owner's request, from `.scratch/<feature-slug>/request-trace.md` when it exists (every row marked `covered`), or else the request itself (`task.md`, the brief, the message that started the work);
 - every acceptance criterion of the ticket, by id;
 - the plan's **Not verified** list in `progress.md`;
-- when the ticket builds a screen with a spec in `docs/ui/<screen>.md`: each state and each width it lists, checked against its capture.
+- when the ticket builds a screen with a spec in `docs/ui/<screen>.md`: each state and each width it lists, checked against its capture;
+- when this ticket delivers the last requirement a **guiding scenario** in `docs/prd.md` was waiting on (every requirement on its steps is now built): **the whole scenario**, as one item, walked from its first step to the persona's goal (`${CLAUDE_PLUGIN_ROOT}/skills/interview/scenarios.md`). Separate checks can each pass on a path no user can walk.
 
 An item in the request and in an AC is one item: write it once, with both references.
 
@@ -31,6 +32,8 @@ For each item, one verdict:
 - **test**: no screen shows it (a rule deep in a service, an error path the UI cannot reach), and a test covers it: name the test, `file:line`.
 - **not verified**: neither was possible. Say why, and what would verify it.
 
+Walk a whole-scenario item **as its persona**: with only what they would know, through the way they would find the feature, never by typing a URL only the team knows. Write down every point where you hesitated, searched, read a message twice or took a step the scenario did not have: that is **friction**. Friction is not a failure (the persona got there) and goes in its own section, with a screenshot and the step it happened on, for the owner to judge.
+
 A visual item (layout, copy, a state the user sees) is **browser** or **not verified**; a test does not see the screen. An item that fails is a defect: report it and stop, and the fix goes back through `/implement`'s loop before this stage runs again.
 
 **Done when** every item has a verdict, every browser verdict has its screenshot, and every failure is reported.
@@ -47,6 +50,7 @@ verified_at: <the commit checked, git rev-parse HEAD>
 items: <count>
 by_verdict: {browser: <n>, test: <n>, not_verified: <n>}
 failed: <count>
+friction: <count of friction notes>
 mocked: <true | false>
 ---
 
@@ -55,9 +59,15 @@ mocked: <true | false>
 | # | Item (quoted) | Source | Verdict | Evidence |
 |---|---|---|---|---|
 | 1 | "<words>" | request · AC-2 | browser | `<item>.png`: <what it shows> |
+| 2 | GS-1: "<the outcome>" | prd · GS-1 | browser | `gs-1-<step>.png` per step |
+
+## Friction
+| Scenario step | What happened | Evidence |
+|---|---|---|
+| GS-1.3 | looked for the export under Reports; it is under Settings | `gs-1-3.png` |
 ```
 
 **The record is valid at `verified_at` only.** Any later change to production code (a review fix, a tidying) makes it stale: `/pr` and `/flow` compare `verified_at` with `HEAD` and ask for a re-run when non-test files changed in between.
 
 ## Gate
-Report the counts, every failure and every **not verified** item resolved to its words. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/walkthrough` or `/pr`.
+Report the counts, every failure, every **not verified** item resolved to its words, and the friction notes. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/walkthrough` or `/pr`.

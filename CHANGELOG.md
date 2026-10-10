@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.6.2 (beta)
+
+The flow wrote requirements but not the story they came from, so a requirement could reach the PRD
+tied to no user's path and nothing noticed. From Drew Hoskins, *The Product-Minded Engineer*: one set
+of **guiding scenarios** now runs through every stage, renamed at each one. Beta: kept off 0.7.0
+until it has been used on real work.
+
+- **Brief**: `/interview` elicits one to three guiding scenarios (`GS-N`: a specific persona, their
+  motivation, the simulated steps), shoe-shifts each step with the owner and checks the persona
+  against five strawman users (`skills/interview/scenarios.md`, shared with the stages below). Two
+  new required sections, **Guiding scenarios** and **Antithesis** (why it might fail, and what the
+  persona uses today), the latter inheritable for a feature inside a product; nonpersonas under
+  Users. The Simplifier generalizes only on three scenarios. `scripts/brief-gate.test.mjs` fails
+  when `/interview`'s gate and the template's required sections disagree.
+- **PRD**: Design principles and the guiding scenarios at the top; each RF written from the user's
+  side with its "so that" and tagged with the step it slices (`GS-1.3`), `edge` and its milestone;
+  each RNF names the step it protects; a required **First milestone** that completes one scenario end
+  to end; the links in the JSON contract. `/doc-validate` gains `SN-N` (a step with no requirement, a
+  requirement on no step, a milestone that does not complete its scenario, an RNF that protects
+  nothing).
+- **Decompose**: a Milestone column; the `M1` features must carry the persona from the first step to
+  the goal; the walking skeleton as the natural falsifying epic. Risk still orders the epics.
+- **HLD**: each RNF answered at the step it protects and observed from the user's side; consistency
+  as the user sees it (read your writes, others' writes, system writes) per flow with shared writes.
+- **Acceptance**: when a ticket completes a scenario, the whole scenario is one item, walked as its
+  persona; hesitations go to a new **Friction** section (`friction` in the frontmatter, counted by
+  `/retro`).
+- **Testing**: the scenario test, one per guiding scenario, the declared exception to single-act
+  (`review-tests` knows it).
+- **Errors**: `code-smells` → `unactionable-error` (what happened and what to do, in the product's
+  terms; five categories; raised at the edge) and `ui` → `late-error` (shift the error left:
+  static, early, let them try, confirm).
+- **Design**: affordances sorted green, yellow, red, with green the default; generalize on three
+  scenarios. **Questionnaire**: when the recipient is a user, ask for concrete past situations and
+  steer as little as possible.
+
 ## 0.6.1
 
 The flow could copy a design (a capture, a site, a Figma file) but had nothing for creating or

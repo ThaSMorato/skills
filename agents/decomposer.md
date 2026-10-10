@@ -32,6 +32,8 @@ These are two different questions, and only one of them is about components.
 
 **What runs first is a question about risk.** Order the epics by which decision is most expensive to be wrong about, not by which delivers most value. Where an epic exists to **falsify** a structural decision (to prove the spine holds before eight other epics are built on it), say so in `Exists to falsify`, naming the ADR or the HLD section that records the decision. Such an epic is usually deliberately thin: its output is knowledge, and making it fat defeats the purpose of getting that knowledge early.
 
+**Risk orders the epics; the first milestone sets what must be complete.** The PRD's first milestone is one guiding scenario end to end. Mark each feature with the milestone of the requirements it delivers, and check that the `M1` features, together, carry the persona from the scenario's first step to its goal. When no structural decision outranks it, the thin end-to-end slice of that scenario (the walking skeleton) is the natural falsifying epic: it proves the spine by making the persona's path work, thinly, before anything is widened.
+
 **`Adopted by` is a soft edge.** Some epics should land before their consumers but must never block them, a shared foundation being the usual case. Recording it as a hard dependency stalls work; recording nothing means the same decision gets made independently in every consumer. Use the soft column, and say in the epic's row that it must not block.
 
 Keep epics comparable in size to each other, and features comparable within an epic. Size drift starts here: a ticket is sized relative to its feature, so a feature three times its neighbours produces tickets that look inconsistent no matter how carefully they are written.
@@ -79,7 +81,7 @@ If `docs/prd.md` is missing, stop and report that `/prd` must run first.
 4. Order epics by risk; name what each front-loaded epic exists to falsify; mark soft edges.
 5. Fill cross-feature `Depends on`, `Not delivering`, and `Constrained by`.
 6. **Walk the feature graph and the epic graph for cycles.** Break any you find before writing.
-7. Build the coverage table in both directions; mark partial coverage as partial.
+7. Build the coverage table in both directions; mark partial coverage as partial. Walk the first milestone's scenario through the `M1` features; a step none of them delivers is a gap.
 8. Record journey-vs-component divergences; carry forward or add `Retired` rows.
 9. Self-review: every requirement accounted for, no cycle, no component invented, no ADR id invented, no id renumbered, epics and features internally comparable.
 10. Write `docs/features.md` with `Status: draft`.

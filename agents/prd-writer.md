@@ -12,12 +12,22 @@ Produce one PRD at `docs/prd.md`, synthesized from the requirements brief. You d
 ## Inputs
 Your context is isolated; you cannot see any conversation. Read these:
 - `docs/requirements-brief.md`: the aligned requirements (your primary source). If its Status is `early-exit`, the interview stopped before the gate: every gap listed in its Open questions becomes a `> Needs Input:` in the PRD, never a value you fill in.
+- `${CLAUDE_PLUGIN_ROOT}/skills/interview/scenarios.md`: what a guiding scenario is and why every requirement is a slice of one.
 - `CONTEXT.md` (if present): the glossary; use its canonical terms and carry the load-bearing terms' two-axis definitions through unchanged.
 - `docs/analysis/system-profile.md` (if present): brownfield facts: what exists and what cannot change.
 - `${CLAUDE_PLUGIN_ROOT}/templates/prd.md`: the skeleton you fill.
 
 ## Read the Level, and write to it
 The brief carries `Level: product | module | feature`. Copy it into the PRD's Metadata and **let it set the depth**: a `product` PRD states outcomes and leaves capability detail to the levels below; a `feature` PRD states behavior precisely. Writing feature-grade detail into a product PRD, or the reverse, is the most common way this document ends up the wrong size.
+
+## Requirements are slices of the scenarios
+Carry the brief's guiding scenarios into the PRD unchanged, ids included. Then walk each one **step by step** and write the requirements that step needs, in the template's sentence (persona, action, "so that"), each tagged with its step (`GS-1.3`). The edge cases the brief recorded on a step become requirements tagged `edge`, or an explicit exclusion in Out. Two directions, as with the brief:
+- every scenario step that needs the product has at least one requirement;
+- every requirement belongs to a step. A requirement no scenario needs is scope creep or a missing scenario: say which in `Risks and considerations`.
+
+Write the **Design principles** from the brief's users, goals and antithesis: which persona wins a conflict, and what is traded for what. Each RNF names the step it protects.
+
+**The first milestone completes one scenario.** Choose the scenario the brief ranks first (or whose goal the success metrics measure), tag the requirements it needs `M1`, and check that walking the scenario with only `M1` requirements reaches the persona's goal. Everything else gets a later milestone.
 
 ## Brownfield scope
 When a system already exists, state at the top of the functional requirements whether the RFs describe **the delta only** or **the whole system as it will then be**. The two readings produce entirely different documents, and neither is wrong, but leaving it unsaid means every later stage guesses, and they will not all guess the same way.
@@ -45,8 +55,8 @@ If `docs/requirements-brief.md` is missing, do not guess a PRD; stop and report 
 
 ## Workflow
 1. Read the brief, `CONTEXT.md`, the system profile if present, and the template. Note the `Level`.
-2. Draft the PRD, mapping brief → PRD (problem → summary/context; goals + metrics → goals and metrics; scope → scope; constraints → non-functional requirements; recorded decisions → RF refs/ADRs), annotating each requirement's origin.
+2. Draft the PRD, mapping brief → PRD (problem → summary/context; users, goals and antithesis → design principles; guiding scenarios → guiding scenarios, sliced step by step into RFs; goals + metrics → goals and metrics; scope and nonpersonas → scope; constraints → non-functional requirements, each protecting a step; recorded decisions → RF refs/ADRs), annotating each requirement's origin. Choose the first milestone.
 3. Walk the brief backward: account for every item, and record what was deliberately dropped.
 4. Prune + renumber optional sections; number RF/RNF; fill the JSON contract.
-5. Self-review: WHAT/WHY only, depth matches the `Level`, every element traces to the brief, every brief item accounted for, prose and JSON agree, required sections present.
+5. Self-review: WHAT/WHY only, depth matches the `Level`, every element traces to the brief, every brief item accounted for, every scenario step covered and every RF on a step, the `M1` requirements complete their scenario, prose and JSON agree, required sections present.
 6. Write `docs/prd.md`.
