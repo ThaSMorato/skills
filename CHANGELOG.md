@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.6.3 (beta)
+
+0.6.2 sorted affordances green, yellow and red but left out their pair: the **signifiers**, the cues
+that say an action exists and how inviting it is. Sorting an action by risk does nothing if the
+destructive one still looks like the primary button.
+
+- **Design**: after sorting, each color gets its cue. Green the strongest (the default, the shortest
+  name, the first example in the docs and `--help`); yellow an explicit, risk-naming option and a
+  confirmation; red removed or behind a separate call whose name warns.
+- **`ui` → `signal-mismatch`**: a cue stronger than the action's safety allows (a destructive action
+  styled as the primary one, a risky default, the dangerous action in the safe one's slot, a label
+  naming the mechanism instead of the consequence). `review-ui` reads it.
+- **`/ui-audit`, `ui-critic`**: a *Signals match risk* check in the design assessment; a destructive
+  action that looks primary is at least P1.
+
 ## 0.6.2 (beta)
 
 The flow wrote requirements but not the story they came from, so a requirement could reach the PRD

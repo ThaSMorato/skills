@@ -36,7 +36,12 @@ Then, for each capability the ticket needs, **search before you assume it must b
 - Design **deep modules**: a lot of behavior behind a **small interface**, placed at a clean **seam** (a place where you can change behavior without editing in place, and test through the interface). Avoid **shallow** modules (interface nearly as complex as the implementation).
 - The **interface** is everything a caller must know: signature, invariants, ordering, error modes, required config, performance, not just the type.
 - **Discover existing primitives and patterns first**: reuse before adding.
-- **Sort what the interface affords** when it is one people call (an API, a CLI, a component, a screen). Every way it can be used, on purpose or not, is green (safe, the intended path), yellow (legitimate, needs care) or red (harmful or unintended). Make green the **default and the path of least resistance**; make yellow ask for intent (an explicit option, a confirmation); remove red, or put it behind a separate, clearly named call. Choose safe, predictable defaults, or no default when no value is safe.
+- **Sort what the interface affords, then signal it** when it is one people call (an API, a CLI, a component, a screen). Every way it can be used, on purpose or not, is green (safe, the intended path), yellow (legitimate, needs care) or red (harmful or unintended). The **signifiers** (the cues that say an action exists and how to use it) then follow the color:
+  - **green** gets the strongest cue: the default, the shortest name, the first example in the docs and the `--help`, the primary button;
+  - **yellow** asks for intent: an explicit option whose name states the risk (`--force`, `allowPartial`), a secondary style, a confirmation;
+  - **red** is removed, or put behind a separate call whose name warns (`dangerouslySetInnerHTML`), never offered on the main path.
+
+  Choose safe, predictable defaults, or no default when no value is safe. On a screen, the mismatches are `ui` → `signal-mismatch`.
 - **Generalize on three scenarios.** Build the extensible version only when three distinct, concrete, near-term scenarios need it, and write a test for each. With fewer, build the specific one the ticket's scenario needs, and leave the seam where the general one would go.
 - Place each node in a **component**, and check that every dependency it introduces is an allowed edge in the boundary contract. An illegal edge found here costs a rethink; found in review it costs a rewrite.
 
