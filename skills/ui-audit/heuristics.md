@@ -43,6 +43,9 @@ Zero or one failure is low load, two or three moderate, four or more critical. T
 
 **Common violations:** the wall of options; the memory bridge (copy this from the other screen); hidden navigation; jargon; a visual noise floor (everything emphasized, so nothing is); inconsistent patterns for the same action; one screen demanding several tasks at once; a context switch in the middle of a task.
 
+## Signals match risk
+List the screen's actions and sort each by risk: safe and intended, needs care, harmful. Then check the cue each one gets (weight, color, position, label, being the default): the strongest cue on the safe path, a weaker one plus a confirmation or undo on the careful one, none on the main path for the harmful one. Every action whose cue is stronger than its safety allows is a finding (`ui` → `signal-mismatch`); a destructive action that looks like the primary one is at least P1.
+
 ## Personas
 Walk the task as two or three of these, chosen by the screen. A project persona is used only when real audience data supports it; never invent one.
 

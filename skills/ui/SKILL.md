@@ -1,6 +1,6 @@
 ---
 name: ui
-description: 'A self-contained catalog of user-interface defects you can see in a diff: keyboard access, focus, accessible names, contrast, the loading / empty / error states, errors found too late, layout shift and slow interactions, each with its tell, its failure scenario and its fix. Use when reviewing a change that touches UI code, or when building a component or a page and asking "is this usable and accessible". Not for visual design taste, and not for how to test UI (the testing skill has that).'
+description: 'A self-contained catalog of user-interface defects you can see in a diff: keyboard access, focus, accessible names, contrast, the loading / empty / error states, errors found too late, signals that contradict the risk of an action, layout shift and slow interactions, each with its tell, its failure scenario and its fix. Use when reviewing a change that touches UI code, or when building a component or a page and asking "is this usable and accessible". Not for visual design taste, and not for how to test UI (the testing skill has that).'
 ---
 
 # UI
@@ -16,6 +16,11 @@ Read a rule file **only when its row matches**. Every finding carries **the rule
 | Focus lost or trapped | a modal, route change or removed element leaves focus nowhere, or nowhere to leave | `rules/focus-management.md` |
 | No accessible name | an icon button, input or image with nothing a screen reader can announce | `rules/accessible-names.md` |
 | Insufficient contrast | text or a control indicator below the contrast ratios; meaning carried by color alone | `rules/color-contrast.md` |
+
+## Signals what each action risks
+| Defect | Tell | Rule |
+|---|---|---|
+| Signal contradicts risk | a destructive or irreversible action styled like the primary one; a risky option as the default or the first example; a dangerous action indistinguishable from its safe neighbour | `rules/signal-mismatch.md` |
 
 ## Always says what is happening
 | Defect | Tell | Rule |

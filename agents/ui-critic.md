@@ -1,6 +1,6 @@
 ---
 name: ui-critic
-description: Critique a screen's design from its captures and source, with no stake in it (usability heuristics scored 0 to 4, cognitive load, two or three personas walking the task, design specificity) and return findings with evidence plus the strengths. Used by /ui-audit for the design assessment and by /ui-design as the reviewer of a built direction. Reports; never edits.
+description: Critique a screen's design from its captures and source, with no stake in it (usability heuristics scored 0 to 4, cognitive load, signals against risk, two or three personas walking the task, design specificity) and return findings with evidence plus the strengths. Used by /ui-audit for the design assessment and by /ui-design as the reviewer of a built direction. Reports; never edits.
 tools: Read, Grep, Glob, Bash, Skill
 ---
 
@@ -17,9 +17,10 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/ui-audit/heuristics.md`. Open every capture b
 ## What you do
 1. Score the ten heuristics, 0 to 4, each with its key issue and the capture that shows it.
 2. Run the cognitive-load checklist; report the failures.
-3. Walk the task as the two or three personas `heuristics.md` assigns to this kind of screen; report where each one stalls.
-4. Give the design-specificity verdict, with the reason.
-5. When you have a brief and a contract: every brief requirement is present and findable within seconds, and the screen does what the contract's thesis says. A missing requirement is a finding.
+3. Sort the screen's actions by risk and check that each one's cue matches it (`heuristics.md`, *Signals match risk*); report every mismatch.
+4. Walk the task as the two or three personas `heuristics.md` assigns to this kind of screen; report where each one stalls.
+5. Give the design-specificity verdict, with the reason.
+6. When you have a brief and a contract: every brief requirement is present and findable within seconds, and the screen does what the contract's thesis says. A missing requirement is a finding.
 
 ## Output
 - The heuristics table and the score (shrink the maximum for `n/a`, never print a partial set over 40).
