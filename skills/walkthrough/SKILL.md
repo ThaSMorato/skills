@@ -1,7 +1,6 @@
 ---
 name: walkthrough
 description: 'Teach the owner the change the AI built, before it merges: a short HTML lesson over the ticket''s diff (what it does in domain words, where it lives, the path through the code for each acceptance criterion, what can go wrong) with a recall quiz, so nobody approves code they do not understand. Use after /review or /tidy and before /pr, or on "walk me through this change / explain what you built".'
-disable-model-invocation: true
 ---
 
 The risk this suite cannot test away is an owner who approves code they do not understand: the tests are green, the review is clean, and nobody who will maintain it knows how it works. This stage turns the ticket's diff into a short lesson for the owner, and checks the understanding with a quiz before the change merges.

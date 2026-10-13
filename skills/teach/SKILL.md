@@ -1,7 +1,6 @@
 ---
 name: teach
 description: 'Teach the user a topic over several sessions, in a teaching workspace that keeps the mission, the trusted sources, what has been learned, and short HTML lessons with practice. Use on "teach me / I want to learn / explain X so I really get it" when the goal is to learn, not to get one answer.'
-disable-model-invocation: true
 argument-hint: "<what you want to learn>"
 ---
 

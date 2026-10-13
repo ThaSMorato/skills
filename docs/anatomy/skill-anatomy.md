@@ -8,7 +8,7 @@
 ---
 name: <kebab-case>             # = folder name
 description: '<WHAT it does + WHEN to use / trigger phrases>'
-disable-model-invocation: true # optional: user-invoked only (wrapper), never auto-fires
+disable-model-invocation: true # optional: user-invoked only, never auto-fires; never on a skill a command calls
 ---
 
 <imperative, short instructions, addressed to the model>
@@ -54,6 +54,7 @@ Two choices, trading two costs. **Context load** is what always-loaded text cost
 
 - **Model-invoked** (no `disable-model-invocation`): the description stays loaded so the agent, and other skills, can reach it. Pay this only when the agent must fire it on its own or another skill must load it. A **primitive** lives here: it concentrates a technique several skills reuse. A model-invoked skill that is all reference is also the home for reference several skills share.
 - **User-invoked** (`disable-model-invocation: true`): zero context load; only the human typing its name reaches it, and no other skill can. The description becomes a one-line summary for the human, with no trigger list. A **wrapper**, the user's front door that composes primitives, lives here (e.g. `grill-with-docs` = `grilling` + `domain-modeling`).
+- **A skill a command calls is model-invoked.** The flag refuses every Skill tool call, a command's included, so a command that says "Call the Skill tool with `<name>`" over a flagged skill can never reach it, and typing the shared name reaches the command, not the skill. `scripts/skill-invocation.test.mjs` fails the build on that pair. The command is the user's front door; the skill behind it pays the context load.
 - Reference that two user-invoked skills both need can live in neither: neither can load the other. Put it in a plain file both point at.
 
 ## Checklist

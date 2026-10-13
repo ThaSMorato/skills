@@ -1,7 +1,6 @@
 ---
 name: prototype
 description: 'Answer one design question with throwaway code before it is designed for real: a clickable HTML demo for a state model or business logic, or switchable variants of a UI on its real page. Use when a decision in /design, /fdd or an interview cannot be settled on paper ("does this state machine hold up", "what should this screen look like"), or on "prototype / spike / try it out". Not for building the feature: that is /design → /plan → /implement, test-first.'
-disable-model-invocation: true
 ---
 
 A prototype is **throwaway code that answers one question**. Some decisions look fine on paper and only feel wrong once someone pushes them through a real case or sees them on the screen; a prototype gets that reaction before the design is written, when changing it costs a conversation instead of a rewrite. The question decides the shape, and the answer, not the code, is what the flow keeps.

@@ -1,7 +1,6 @@
 ---
 name: plan-validate
 description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates /implement. Use after /plan, on "validate the plan / is this plan ready".
-disable-model-invocation: true
 ---
 
 Read the plan and decide whether it is safe to implement. This skill **finds problems**; it does not fix them and it does not write code.
