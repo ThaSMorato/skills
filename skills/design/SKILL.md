@@ -1,7 +1,6 @@
 ---
 name: design
 description: Design the node map for a piece of work before coding (deep modules behind small interfaces at clean seams) and persist it as the design contract. Use before implementing a ticket, or when designing/improving a module's interface.
-disable-model-invocation: true
 ---
 
 Before writing code, build the **node map** (the design contract) and write it down.

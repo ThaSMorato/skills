@@ -1,7 +1,6 @@
 ---
 name: flow-report
 description: 'Gather what several projects learned about the plugin itself: read their /retro and /session-analyze reports, keep the findings tagged flow, group them by the stage they would change, put the flow measurements side by side per plugin version, and rank what the next version should change. Use when planning the next version of the plugin, on "/flow-report" or "what should the next version fix".'
-disable-model-invocation: true
 argument-hint: "<project paths, or a file listing them one per line>"
 ---
 

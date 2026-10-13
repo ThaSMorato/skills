@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.4 (beta)
+
+Every command that hands off to a skill of its own name (`/design`, `/plan`, `/implement`,
+`/acceptance` and 21 more) was unreachable. Each skill carried `disable-model-invocation: true`, which
+refuses every Skill tool call, the command's included, and typing the shared name reaches the command,
+not the skill. So the command could not run its skill, and the user could not run it either.
+
+- **The 25 skills a command calls drop `disable-model-invocation`.** Their descriptions now load in
+  every session (about 8.6k characters), the price of a skill a command has to reach.
+- **`scripts/skill-invocation.test.mjs`**: a skill called through the Skill tool must not carry the
+  flag, so a new wrapper over a flagged skill fails the build.
+- **Skill anatomy**: the flag is never on a skill a command calls.
+
 ## 0.6.3 (beta)
 
 0.6.2 sorted affordances green, yellow and red but left out their pair: the **signifiers**, the cues

@@ -35,6 +35,15 @@ test('every skill called through the Skill tool exists', () => {
   assert.deepEqual(unknown, [])
 })
 
+// `disable-model-invocation: true` refuses every Skill tool call, a command's included, so a skill
+// that something calls through the tool and that carries the flag can never be reached.
+test('no skill called through the Skill tool is closed to model invocation', () => {
+  const called = new Set(sources.flatMap((path) => [...read(path).matchAll(SKILL_CALL)].map(([, name]) => name)))
+  const unreachable = [...called].filter((name) => /^disable-model-invocation: true$/m.test(read(join('skills', name, 'SKILL.md'))))
+
+  assert.deepEqual(unreachable.sort(), [])
+})
+
 test('every agent called through the Agent tool exists', () => {
   const unknown = sources.flatMap((path) =>
     [...read(path).matchAll(AGENT_CALL)].map(([, name]) => name).filter((name) => !agentNames.includes(name)).map((name) => `${path}: ${name}`),

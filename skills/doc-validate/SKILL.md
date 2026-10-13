@@ -1,7 +1,6 @@
 ---
 name: doc-validate
 description: Validate one design document against the one it came from before the human gate (coverage in both directions, contradictions, glossary drift, unanswered non-functional requirements, unfilled required sections) and emit a clean/dirty verdict. Use after /prd, /hld, /decompose or /fdd, on "validate the docs / is the PRD ready / check the HLD against the PRD".
-disable-model-invocation: true
 ---
 
 Read a source document and the document derived from it, and decide whether the derivation holds. This skill **finds problems**; it does not fix them and it does not write documents.

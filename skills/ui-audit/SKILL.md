@@ -1,7 +1,6 @@
 ---
 name: ui-audit
 description: 'Evaluate an existing screen in the running software and list its problems, numbered, with evidence and a severity: a design critique by an isolated agent (usability heuristics scored 0 to 4, cognitive load, personas), a technical pass (design-system drift, responsiveness, integrity, missing states), and the screen under worst-case real data. Reports; never edits. Use before a redesign, or on "audit / critique this screen".'
-disable-model-invocation: true
 ---
 
 A redesign that starts from taste replaces one set of problems with another. This stage names what is wrong with a screen as it runs today, with the evidence for each problem, so `/ui-design` has numbered problems to solve and the owner can judge each proposal by the problem it closes. It **finds**; it changes no product code.

@@ -1,7 +1,6 @@
 ---
 name: implement
 description: Execute a validated plan one Step Implementation at a time, test-first (red → green → refactor), run the SI's tests, then STOP and wait before the next SI. Use on "implement / build / execute the plan", "implement SI-N", or after /plan-validate reports clean.
-disable-model-invocation: true
 ---
 
 Execute a plan **SI by SI**. The plan is the contract; this skill follows the technical decisions, it does not make them. An SI is done only when its code exists **and** (if it has a Tests section) its tests pass. The next SI never starts until the current one is done and the user says go.

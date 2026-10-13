@@ -1,7 +1,6 @@
 ---
 name: writing-fragments
 description: 'Writing, explore phase: interview the author about what they want to write and collect raw fragments into one file, with no structure yet. Use at the start of an article, a post or a long note, on "/writing-fragments" or "help me find what to write about X".'
-disable-model-invocation: true
 argument-hint: "[path to the fragments file] [topic]"
 ---
 
