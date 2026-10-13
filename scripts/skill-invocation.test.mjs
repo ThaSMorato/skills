@@ -44,6 +44,17 @@ test('no skill called through the Skill tool is closed to model invocation', () 
   assert.deepEqual(unreachable.sort(), [])
 })
 
+// A bare name in "Call the Skill tool with `x`" resolves to a Claude Code built-in before a plugin
+// skill, so a skill named like one is never reached: `design` hit the built-in, which refuses model
+// invocation. Add a name here when Claude Code ships a built-in skill under it.
+const CLAUDE_CODE_BUILT_INS = ['design', 'init', 'loop', 'schedule', 'simplify', 'run', 'code-review', 'security-review']
+
+test('no skill is named like a Claude Code built-in skill', () => {
+  const shadowed = skillNames.filter((name) => CLAUDE_CODE_BUILT_INS.includes(name))
+
+  assert.deepEqual(shadowed, [])
+})
+
 test('every agent called through the Agent tool exists', () => {
   const unknown = sources.flatMap((path) =>
     [...read(path).matchAll(AGENT_CALL)].map(([, name]) => name).filter((name) => !agentNames.includes(name)).map((name) => `${path}: ${name}`),
