@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.5 (beta)
+
+0.6.4 made the wrapped skills invocable, but `/design` still could not run its skill. The command calls
+the Skill tool with the bare name `design`, and a bare name resolves to Claude Code's own built-in
+`design` skill first, which refuses model invocation. The namespaced name is no way out: it is the
+command's own name.
+
+- **The `design` skill is now `ticket-design`.** The `/design` command keeps its name and calls
+  `ticket-design`; the node map it writes is unchanged.
+- **`scripts/skill-invocation.test.mjs`**: no skill may be named like a Claude Code built-in skill
+  (`design`, `init`, `loop`, `schedule`, `simplify`, `run`, `code-review`, `security-review`). Add a
+  name there when Claude Code ships a new built-in.
+
 ## 0.6.4 (beta)
 
 Every command that hands off to a skill of its own name (`/design`, `/plan`, `/implement`,

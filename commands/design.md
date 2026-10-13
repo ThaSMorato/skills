@@ -3,7 +3,7 @@ description: Build and persist the node map for one ticket (deep modules behind 
 argument-hint: "<ticket file/number, or the work to design>"
 ---
 
-Call the Skill tool with `design` to build the node map for: $ARGUMENTS
+Call the Skill tool with `ticket-design` to build the node map for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
