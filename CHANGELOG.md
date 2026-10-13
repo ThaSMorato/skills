@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.6 (beta)
+
+The same collision as 0.6.5, for `/plan`: its command calls the Skill tool with the bare name `plan`,
+which resolves to Claude Code's built-in `/plan` command, so the skill was never reached.
+
+- **The `plan` skill is now `ticket-plan`.** The `/plan` command keeps its name and calls
+  `ticket-plan`; the plan it writes is unchanged.
+- **`scripts/skill-invocation.test.mjs`**: the built-in list now covers Claude Code's built-in commands
+  too (`plan`, `review`, `context`, `memory` and others), not only its skills. No other skill collides.
+
 ## 0.6.5 (beta)
 
 0.6.4 made the wrapped skills invocable, but `/design` still could not run its skill. The command calls

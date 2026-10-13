@@ -1,5 +1,5 @@
 ---
-name: plan
+name: ticket-plan
 description: Break one ticket into a validated implementation plan, vertical Step Implementations (SIs) with tests, dependencies, and acceptance criteria, ready for the SI-by-SI implement loop. Use before implementing a ticket, on "plan this ticket / break this into steps", or right after /design.
 ---
 
