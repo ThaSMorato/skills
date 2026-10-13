@@ -11,7 +11,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
 const producers = {
   'node-map': 'skills/ticket-design/SKILL.md',
-  plan: 'skills/plan/PLAN-FORMAT.md',
+  plan: 'skills/ticket-plan/PLAN-FORMAT.md',
   progress: 'skills/implement/SKILL.md',
   validation: 'skills/plan-validate/SKILL.md',
   'tickets-validation': 'skills/tickets-validate/SKILL.md',

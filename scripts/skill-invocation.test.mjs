@@ -44,10 +44,16 @@ test('no skill called through the Skill tool is closed to model invocation', () 
   assert.deepEqual(unreachable.sort(), [])
 })
 
-// A bare name in "Call the Skill tool with `x`" resolves to a Claude Code built-in before a plugin
-// skill, so a skill named like one is never reached: `design` hit the built-in, which refuses model
-// invocation. Add a name here when Claude Code ships a built-in skill under it.
-const CLAUDE_CODE_BUILT_INS = ['design', 'init', 'loop', 'schedule', 'simplify', 'run', 'code-review', 'security-review']
+// A bare name in "Call the Skill tool with `x`" resolves to a Claude Code built-in skill or command
+// before a plugin skill, so a skill named like one is never reached: `design` hit a built-in skill that
+// refuses model invocation, `plan` hit the built-in /plan command. Add a name here when Claude Code
+// ships a built-in under it.
+const CLAUDE_CODE_BUILT_INS = [
+  'design', 'init', 'loop', 'schedule', 'simplify', 'run', 'code-review', 'security-review',
+  'plan', 'review', 'agents', 'clear', 'compact', 'config', 'context', 'cost', 'doctor', 'export',
+  'help', 'hooks', 'ide', 'memory', 'model', 'permissions', 'plugin', 'resume', 'rewind', 'skills',
+  'status', 'tasks', 'usage',
+]
 
 test('no skill is named like a Claude Code built-in skill', () => {
   const shadowed = skillNames.filter((name) => CLAUDE_CODE_BUILT_INS.includes(name))

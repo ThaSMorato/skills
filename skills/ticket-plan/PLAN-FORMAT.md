@@ -1,4 +1,4 @@
-> Part of the `plan` skill (see `SKILL.md`). The exact shape of a plan document.
+> Part of the `ticket-plan` skill (see `SKILL.md`). The exact shape of a plan document.
 
 # Plan document format
 

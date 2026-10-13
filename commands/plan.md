@@ -3,7 +3,7 @@ description: Break one ticket into a validated implementation plan, vertical SIs
 argument-hint: "<ticket file/number, or the work to plan>"
 ---
 
-Call the Skill tool with `plan` to turn this into an implementation plan: $ARGUMENTS
+Call the Skill tool with `ticket-plan` to turn this into an implementation plan: $ARGUMENTS
 
 Read the ticket (or the work the user points to) plus the node map, the FDD, the boundary contract, ADRs, guidelines, and `CONTEXT.md`.
 
