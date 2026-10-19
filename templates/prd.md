@@ -21,7 +21,7 @@ An unmarked one is a validation finding (AS-N).
 > **Level** and **Status** are read by other stages, not decoration. **Level** sets the depth of this
 > document (`product` states outcomes, `feature` states behavior) and it propagates from the brief.
 > **Status** is the gate record: it starts `draft`, and only whoever runs the gate moves it to
-> `approved` or `changes-requested`. `/flow` reads it to answer "what is waiting on me?", so a Status
+> `approved` or `changes-requested`. `/tm-flow` reads it to answer "what is waiting on me?", so a Status
 > nobody writes makes the scan lie.
 
 ## Summary and problem context (required)
@@ -63,7 +63,7 @@ An unmarked one is a validation finding (AS-N).
 ## Non-functional requirements (optional)
 > Quality/operational constraints (latency, availability, security, limits). Numbered, each with its
 > origin. These become the HLD's architectural **drivers**: every one of them must get an
-> architectural answer, and `/doc-validate` checks exactly that.
+> architectural answer, and `/tm-doc-validate` checks exactly that.
 > Each names the scenario step it **protects** (where the user would feel it break): latency that
 > matters is on an operation the persona actively waits for. An RNF that protects no scenario is
 > optimizing where it is easy to look, not where the user is; keep it only with the reason in Risks.
@@ -83,9 +83,8 @@ An unmarked one is a validation finding (AS-N).
 ## Dependencies (optional)
 > Systems/modules/services/prior decisions it relies on. Avoids planning as if standalone.
 
-## Acceptance criteria (required)
-> Checklist that defines "done" in verifiable conditions (not subjective judgment).
-- [ ]
+## Rules and verification
+> Present-tense rules with requirement IDs and test evidence. Delivery ACs belong to the ticket.
 
 ## Risks and considerations (optional)
 > Execution uncertainties + notes that don't fit the other sections.
@@ -95,14 +94,17 @@ An unmarked one is a validation finding (AS-N).
 > validation. It is a **serialization**, and that is its value: it catches structural omission: a
 > requirement present in prose and absent here, or the reverse. It does **not** catch a wrong meaning,
 > because the same wrong meaning serializes cleanly; that is what the two-axis definitions in
-> `CONTEXT.md` are for. `/doc-validate` compares prose against this block.
+> `docs/produto/glossario.md` are for. `/tm-doc-validate` compares prose against this block.
 >
 > Give each load-bearing element the formal shape the prose cannot carry: **type**, **cardinality**,
 > **allowed values**, **required or not**. Restating the sentence in JSON adds cost and detects nothing.
 >
 > The scenario links are structure, so they belong here: each requirement's `scenarioStep` (`GS-1.3`),
 > `edge` and `milestone`; each RNF's `protects`; the first milestone's `completes` and its requirement
-> ids. That is what lets `/doc-validate` walk scenario coverage mechanically.
+> ids. That is what lets `/tm-doc-validate` walk scenario coverage mechanically.
 ```json
 {}
 ```
+
+## Living requirements
+> Describe current product rules in the present tense. Delivery ACs live in stories; link test evidence from rules. Amend existing IDs instead of regenerating the product document.

@@ -1,0 +1,3 @@
+interface:
+  display_name: "plan-validate"
+  short_description: "Validate an implementation plan before coding; check the SIs aga"

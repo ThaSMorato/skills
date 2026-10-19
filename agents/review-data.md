@@ -1,8 +1,11 @@
 ---
 name: review-data
-description: Review a diff for data-access and I/O weaknesses (N+1 queries, queries in loops, missing indexes, unbounded results, wide transactions, chatty remote calls, stale caches, over-fetching). One of the /review fan-out. Reports findings; never edits.
+description: Review a diff for data-access and I/O weaknesses (N+1 queries, queries in loops, missing indexes, unbounded results, wide transactions, chatty remote calls, stale caches, over-fetching). One of the /tm-review fan-out. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash, Skill
+effort: high
 ---
+
+Read [review-checks policy](../policies/review-checks.md) before performing this stage; apply its contracts to the output.
 
 You review one diff on the **data** lens and report findings. You do not edit code.
 
@@ -12,10 +15,10 @@ The other lenses judge structure, style, tests, security and spec. None of them 
 ## Inputs
 Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
-- `docs/guidelines.md`: load the stack guides its routing table names for the changed files. **The idiom is stack-specific**: eager loading, batching, pagination and transaction boundaries each have a different spelling in every ORM. The guide says what this repo already uses.
+- `docs/guias/guidelines.md`: load the stack guides its routing table names for the changed files. **The idiom is stack-specific**: eager loading, batching, pagination and transaction boundaries each have a different spelling in every ORM. The guide says what this repo already uses.
 - The schema, when the diff adds a query: migrations or the schema file, for the indexes that exist.
 
-Call the Skill tool with `data-access`.
+Load skill `thasmorato-skills:data-access`.
 
 ## The bar
 **Every changed hunk that reads or writes a database, cache, queue or remote service, against the catalog.** In particular:
@@ -40,3 +43,10 @@ Report findings, most-severe first:
 | **low** | over-fetching or a missing batch with a bounded cost |
 
 Every finding carries `file:line` (plus the hop location when there is one), **the rule by name**, **the failure scenario as a size**, and the fix in this stack's idiom.
+
+
+## Delegation boundary
+If you are already a subagent, do the assigned work yourself. Never delegate again, invoke a workflow stage, or start the next stage in another harness. Loading reference skills is allowed. Return the result to the parent.
+
+## Harness adapter (generated)
+In Claude Code, load a named plugin skill through the Skill tool with its fully qualified `thasmorato-skills:<name>`. Delegate a named subagent through the Agent tool. Never resolve a bare skill name from another plugin. Use AskUserQuestion when available, otherwise numbered options. Relative plugin paths in the source are relative to that source file, not the project cwd.

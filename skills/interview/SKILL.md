@@ -1,6 +1,7 @@
 ---
 name: interview
 description: Relentlessly interview the user, in rounds of questions, to elicit requirements before documenting. Use at the start of a feature or project, or on any "interview / grill / gather requirements" trigger. Composes with the domain-model skill, which sharpens the vocabulary while this one drives the conversation.
+user-invocable: false
 ---
 
 Interview the user relentlessly until you reach a shared understanding rich enough to write a PRD. Walk the decision tree in **rounds**, as the `asking` skill describes: each round asks the **frontier**, every open decision whose prerequisites are already settled, and holds back any question whose answer depends on another one still open. The answers move the frontier outward; recompute it and ask the next round.
@@ -12,9 +13,9 @@ Interview the user relentlessly until you reach a shared understanding rich enou
 Recommended: <your answer, and why>
 ```
 
-**Facts are found, never asked.** Before a round, look the answers up in the environment: the code, the project docs (`docs/`, `CONTEXT.md`, `docs/analysis/system-profile.md`), and the tools available. When a fact needs real digging, call the Agent tool with an exploration agent to find it and keep going: only the questions that depend on that fact wait for it, and they join the round after it reports. Only *decisions* go to the user.
+**Facts are found, never asked.** Before a round, look the answers up in the environment: the code, the project docs (`docs/`, `docs/produto/glossario.md`, `docs/analysis/system-profile.md`), and the tools available. When a fact needs real digging, delegate to subagents with an exploration agent to find it and keep going: only the questions that depend on that fact wait for it, and they join the round after it reports. Only *decisions* go to the user.
 
-**The answer is with someone else.** When a decision belongs to a person who is not in the conversation (a PM, another team, legal), record it in `Open questions` with who holds it, and offer `/questionnaire` to send them the questions instead of guessing.
+**The answer is with someone else.** When a decision belongs to a person who is not in the conversation (a PM, another team, legal), record it in `Open questions` with who holds it, and offer `/tm-questionnaire` to send them the questions instead of guessing.
 
 Cover the minimum a PRD needs: the problem (not the solution), users and jobs-to-be-done, the guiding scenarios, the antithesis, goals and value, success metrics (metric + target), scope and non-goals, constraints, and the open decisions/trade-offs.
 
@@ -31,11 +32,11 @@ Once the problem and the users are drafted, elicit **one to three guiding scenar
 Each question names **which required section of the brief is weakest right now** and why the question is aimed at it: *"Targeting: Success metrics; there is a goal but no target to confirm it by."* A question that serves no weak section is a question the interview can skip. This keeps every round pointed at the gate instead of at whatever was said last.
 
 ## Convergence is counted in the glossary
-The interview converges when the **words stop moving**. After each round, look at what its answers did to `CONTEXT.md` (the `domain-model` skill is updating it as you go): how many terms were **created**, and how many **renamed or redefined**. While terms still change, the domain has not settled and a PRD written now would encode a vocabulary that will shift. Report the count as you go (*"glossary: 2 new, 1 renamed"*). Two rounds in a row with no load-bearing term created or changed, together with the gate below, is the signal that the understanding is shared.
+The interview converges when the **words stop moving**. After each round, look at what its answers did to `docs/produto/glossario.md` (the `domain-model` skill is updating it as you go): how many terms were **created**, and how many **renamed or redefined**. While terms still change, the domain has not settled and a PRD written now would encode a vocabulary that will shift. Report the count as you go (*"glossary: 2 new, 1 renamed"*). Two rounds in a row with no load-bearing term created or changed, together with the gate below, is the signal that the understanding is shared.
 
 ## Two challenges, once each
 - **Contrarian**, once the problem and the goals are drafted: *what if the opposite were true, or if we built nothing?* It is how an unexamined premise surfaces while it is still one sentence. Ask too *what does the persona use today?*: the product's value is what it adds **over that replacement**, and a useful product can add nothing. The answers are the brief's **Antithesis**.
-- **Simplifier**, before scope is settled: *what is the smallest version that would still be worth having?* The answer feeds the gear `/flow` will choose, and becomes the first candidate for Out / non-goals. A general, extensible version earns its place only with **three** distinct, concrete, near-term scenarios behind it; with fewer, scope the specific one the scenarios need.
+- **Simplifier**, before scope is settled: *what is the smallest version that would still be worth having?* The answer feeds the gear `/tm-flow` will choose, and becomes the first candidate for Out / non-goals. A general, extensible version earns its place only with **three** distinct, concrete, near-term scenarios behind it; with fewer, scope the specific one the scenarios need.
 
 If two rounds in a row move **no** required section forward, the interview is circling. Ask the **ontological** question instead of another detail: *what is this, really?* A stuck interview is usually stuck on a noun.
 
@@ -44,4 +45,7 @@ Record each challenge and its answer in the brief's **Assumptions challenged** t
 ## The ambiguity gate
 The gate is countable, not a judgement call: **every `(required)` section of the requirements-brief template is filled**, and everything still unsettled is written into `Open questions`. Nothing generates until that holds and the user confirms the shared understanding has been reached.
 
-**Early exit.** The user may stop before the gate. Then write the brief anyway with `Status: early-exit`, every unfilled required section named under `Open questions`, and say what the PRD will be missing. `/prd` sees the status and carries those gaps forward as `> Needs Input:` instead of filling them.
+**Early exit.** The user may stop before the gate. Then write the brief anyway with `Status: early-exit`, every unfilled required section named under `Open questions`, and say what the PRD will be missing. `/tm-prd` sees the status and carries those gaps forward as `> Needs Input:` instead of filling them.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

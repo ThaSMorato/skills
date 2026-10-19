@@ -1,7 +1,10 @@
 ---
 name: generate-test-guide
 description: Analyze a project's stack and generate a project-specific testing-guide skill (what to test, at which layer, and how, per artifact type, including acceptance-test flows). Use on "generate a test guide / testing skill for <project>". User-invoked.
+user-invocable: false
 ---
+
+Read [stack-guides policy](../../policies/stack-guides.md) before performing this stage; apply its contracts to the output.
 
 Produce a **concrete, project-specific testing skill** at `.claude/skills/testing-guide-<project>/`. The generic principles live in the `testing` skill; this generator specializes them to one codebase's stack, artifacts, and external systems.
 
@@ -53,3 +56,6 @@ Rules for the generated skill:
 ## Constraints
 - Only write inside `.claude/skills/testing-guide-<project>/`. Don't create test files. Don't modify other skills or rules.
 - If the path has no recognizable project, say so and stop.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

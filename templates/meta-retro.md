@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: meta-retro (what one working session taught about the flow and the project)
-Filled by /session-analyze from a session transcript, across every compaction segment.
+Filled by /tm-session-analyze from a session transcript, across every compaction segment.
 EVERY FINDING RESTS ON AN OWNER TURN: uuid, timestamp, the owner's own words. The assistant
 criticizing itself is not evidence. Where the conversation cannot answer something, say so.
 The written file STARTS with the frontmatter below; this comment is not copied.
@@ -8,13 +8,14 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 
 ---
 kind: meta-retro
-plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+plugin_version: <the "version" in ../plugin-source.json>
+harness: claude | codex | unknown
 session: <session id>
 analyzed_at: <YYYY-MM-DD>
 segments: <n>
 owner_turns: <n read>
-findings: {flow: <n>, project: <n>}
-promotable: <n project findings that passed the promotion filter>
+findings: {flow: <n>, repo-skill: <n>, repo-code: <n>}
+promotable: <n repo-skill findings that passed the promotion filter>
 repeated: <n findings seen in more than one segment>
 ---
 
@@ -33,12 +34,18 @@ repeated: <n findings seen in more than one segment>
 | Pattern | Owner turn | Stage | Change |
 |---|---|---|---|
 
-## Project findings (required)
+## Repository skill findings (required)
 > Specific to this codebase or this owner. Same columns, plus the promotion filter (`skills/retro/promotion-filter.md`):
 > `passes`, or the question it failed. Only a finding that passes is proposed as a skill or a guide in this project.
 
 | Pattern | Owner turn | Stage | Change | Filter |
 |---|---|---|---|---|
+
+## Repository code findings (required)
+> Defects in repository code or configuration, with owner evidence and the owning stage.
+
+| Pattern | Owner turn | Stage | Change |
+|---|---|---|---|
 
 ## Environment (required when any signal or repeated correction exists)
 > From `skills/retro/environment.md`: navigation, tool economy and information access, which only a
@@ -52,3 +59,11 @@ repeated: <n findings seen in more than one segment>
 ## What the conversation couldn't tell me (required)
 > Segments too thin to judge, tool results that were dropped by design, anything a reader might
 > expect this report to cover that the transcript does not show.
+
+## Findings by level
+
+| Level | Count | Target / owning stage | Evidence |
+|---|---|---|---|
+| flow | | | |
+| repo-skill | | | |
+| repo-code | | | |

@@ -1,0 +1,53 @@
+---
+description: Read a whole working session (every compaction segment) and report where the owner had to correct, reject or repeat something and what in the environment got in the way, each tagged as a problem of the flow or of this project, with the repeats across segments first.
+argument-hint: "(optional) session id, default: the most recent session of this directory"
+---
+
+Read [reporting policy](../policies/reporting.md) before performing this stage; apply its contracts to the output.
+
+Analyze the working session: $ARGUMENTS
+
+> Load skill `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
+`/tm-retro` reads what the work left on disk. This reads what only the conversation holds: the owner correcting a proposal, rejecting a question, asking for the same thing twice. `/compact` shrinks the context window but deletes nothing from the transcript, so the whole session, every segment, is still there to read.
+
+## 1. Extract
+Check that Node is available (`node --version`). If it is not, say so and stop: the extractor needs it, and a 200 MB transcript cannot be filtered by reading it.
+
+Run:
+
+```
+node "../scripts/session-extract.mjs" --harness <claude|codex> [--session <id>]
+```
+
+With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected, the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the **names** of the tools it called. It drops file snapshots, tool results and the other tools' arguments (where file contents and secrets live), thinking, subagent turns and the compaction summaries.
+
+## 2. Fan out, one agent per segment
+Delegate to subagent `session-segment-analyst` for **every** segment **in a single message**, so they run in parallel, each with its segment's path and the index path. A segment fits one agent whole, so there is no chunking and no summarizing, and each agent reads the original conversation rather than a summary of a summary.
+
+## 3. Synthesize: repetition is the signal
+- **Merge** findings that are the same problem seen twice.
+- **Put repetition first.** A finding whose owner turns appear in two or more segments is the strongest evidence this suite can get that a stage is wrong: the owner said it once, the flow did not learn, and they had to say it again.
+- **Drop any finding without an owner turn** (uuid, timestamp, quote). This is the rule that keeps the report from becoming narrative. The one exception is the **Environment** section below, whose evidence can be the segment and the tool-call names the extract kept.
+- Keep each finding's `flow` / `repo-skill` / `repo-code` tag. When agents disagree, inspect the target file and choose the narrowest level that resolves it; use flow only when evidence generalizes beyond this repository.
+- **Filter what gets promoted.** Before a `repo-skill` finding's change says "make it a skill" or "add it to a guide", run it through `../skills/retro/promotion-filter.md`: not findable in five minutes, specific to this codebase, cost real effort, and a trigger the task will actually contain. One that fails stays a finding, marked with the question it failed; it is not proposed as a skill or guide.
+
+## 3b. The environment: this stage owns it
+A session shows what no artifact records, so this is where the environment lens (`../skills/retro/environment.md`) runs in full, on its two tracks: what each problem cost this session, and what change to the environment prevents it next time.
+- **From the segment analysts' environment signals** (tool-call names, the one exception to the owner-turn rule): navigation (a run of searches before the file was found), tool economy (a costly call repeated), information access (something the agent could not see).
+- **From owner turns**: a correction the owner had to make twice about the same convention is a standard; classify it **mechanical** (propose the lint rule, hook or CI job that would catch it) or **judgement** (a line in the stack guide or the review standard). A `CLAUDE.md` instruction the owner had to repeat is not working where it is: say what should replace it (a check, a pointer, a skill).
+- Tag each environment finding `flow`, `repo-skill` or `repo-code` like every other finding: a gap in the plugin's own stages is `flow`.
+- Order the environment findings most severe first, as the lens says.
+
+`/tm-retro` reads these sections for the session side of its environment, so write them even when they are short.
+
+## 4. Write
+Write `docs/meta-retro/<YYYY-MM-DD>-<session-id>.md`, filling `../templates/meta-retro.md`. It lives in the project: a finding can be specific to it.
+
+Then show the repeated findings first, then the counts by level, and stop. This stage records; it changes nothing. A `flow` finding is an improvement to propose to the plugin, and a `repo-skill` finding is a skill or guide for this project, each made by whoever owns that file.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.
+
+## Harness adapter (generated)
+In Claude Code, load a named plugin skill through the Skill tool with its fully qualified `thasmorato-skills:<name>`. Delegate a named subagent through the Agent tool. Never resolve a bare skill name from another plugin. Use AskUserQuestion when available, otherwise numbered options. Relative plugin paths in the source are relative to that source file, not the project cwd.

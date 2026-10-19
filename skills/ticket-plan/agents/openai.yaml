@@ -1,0 +1,3 @@
+interface:
+  display_name: "ticket-plan"
+  short_description: "Break one ticket into a validated implementation plan, vertical "

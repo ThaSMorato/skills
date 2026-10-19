@@ -4,28 +4,28 @@
 
 | Template | Filled by | Produces |
 |---|---|---|
-| `requirements-brief.md` | `/interview` | `docs/requirements-brief.md` |
-| `context.md` | `domain-model` skill | `CONTEXT.md` |
+| `requirements-brief.md` | `/tm-interview` | `docs/requirements-brief.md` |
+| `context.md` | `domain-model` skill | `docs/produto/glossario.md` |
 | `research-report.md` | `researcher` | `docs/research/<slug>.md` |
-| `prd.md` | `prd-writer` | `docs/prd.md` |
-| `hld.md` | `hld-writer` | `docs/hld.md` |
-| `components.md` | `component-mapper` | `docs/components.md` |
-| `features.md` | `decomposer` | `docs/features.md` |
-| `fdd.md` | `fdd-writer` | `docs/fdd/<feature>.md` |
-| `boundaries.md` | `boundary-architect` | `docs/boundaries.md` |
+| `prd.md` | `prd-writer` | `docs/produto/prd.md` |
+| `hld.md` | `hld-writer` | `docs/arquitetura/hld.md` |
+| `components.md` | `component-mapper` | `docs/arquitetura/components.md` |
+| `features.md` | `decomposer` | `docs/features/README.md` |
+| `fdd.md` | `fdd-writer` | `docs/features/<feature>/fdd.md` |
+| `boundaries.md` | `boundary-architect` | `docs/arquitetura/boundaries.md` |
 | `adr.md` | `adr-generator` | `docs/adr/NNNN-<slug>.md` |
-| `guidelines.md` | `guideline-generator` | `docs/guidelines.md` (a **router**, ≤150 lines) |
-| `ui-spec.md` | `/ui-design` | `docs/ui/<screen>.md` |
-| `design-system.md` | `/ui-design` (only when the project has a design system) | `docs/design-system.md` |
-| `ticket.md` | `/tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
+| `guidelines.md` | `guideline-generator` | `docs/guias/guidelines.md` (a **router**, ≤150 lines) |
+| `ui-spec.md` | `/tm-ui-design` | `docs/ui/<screen>.md` |
+| `design-system.md` | `/tm-ui-design` (only when the project has a design system) | `docs/design-system.md` |
+| `ticket.md` | `/tm-tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
 | `system-profile.md` | `architectural-analyzer` | `docs/analysis/system-profile.md` |
-| `declined.md` | `/tidy`, `/trim`, `/review` (append-only) | `docs/declined.md` |
+| `declined.md` | `/tm-tidy`, `/tm-trim`, `/tm-review` (append-only) | `docs/declined.md` |
 | `component-analysis.md` | `component-analyzer` | `docs/analysis/components/<component>.md` |
 | `dependency-graph.md` | `architectural-analyzer` (read by `reconciler`) | `docs/analysis/dependency-graph.md` |
-| `retro.md` | `/retro` | `docs/retro/<scope>.md` |
-| `evolutions.md` | `/retro`, `decomposer` (append-only) | `docs/evolutions.md` |
-| `meta-retro.md` | `/session-analyze` | `docs/meta-retro/<date>-<session>.md` |
-| `flow-report.md` | `/flow-report` | `docs/flow-reports/<date>.md` |
+| `retro.md` | `/tm-retro` | `docs/retro/<scope>.md` |
+| `evolutions.md` | `/tm-retro`, `decomposer` (append-only) | `docs/evolutions.md` |
+| `meta-retro.md` | `/tm-session-analyze` | `docs/meta-retro/<date>-<session>.md` |
+| `flow-report.md` | `/tm-flow-report` | `docs/flow-reports/<date>.md` |
 
 Triple duty: (a) generation **scaffold**, (b) **handoff anchor** between isolated agents (known sections), (c) **gate/review checklist**.
 
@@ -33,6 +33,6 @@ Rules: **self-contained** (no external links); sections marked **required × opt
 
 Three fields are read by other stages, so they are contracts rather than decoration:
 
-- **`Status: draft | in review | approved | changes-requested`**: the gate record. Whoever runs the gate writes it; `/flow` reads it to report what is waiting on the user. Nobody else may set it to `approved`.
+- **`Status: draft | in review | approved | changes-requested`**: the gate record. Whoever runs the gate writes it; `/tm-flow` reads it to report what is waiting on the user. Nobody else may set it to `approved`.
 - **`Level: product | module (EPIC) | feature`**: sets the depth of the document, and propagates brief → PRD → HLD → FDD.
 - **Numbered ids** (`RF-001`, `AC-1`, `SI-1`): what makes coverage checks mechanical instead of textual.

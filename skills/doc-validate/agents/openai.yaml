@@ -1,0 +1,3 @@
+interface:
+  display_name: "doc-validate"
+  short_description: "Validate one design document against the one it came from before"

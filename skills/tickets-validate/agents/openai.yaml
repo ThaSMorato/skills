@@ -1,0 +1,3 @@
+interface:
+  display_name: "tickets-validate"
+  short_description: "Validate a feature's set of tickets before the human gate (cover"

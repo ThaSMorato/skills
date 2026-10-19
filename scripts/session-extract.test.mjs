@@ -358,7 +358,7 @@ describe('renderSegment', () => {
 
     const result = renderSegment(segment, { sessionId: 'abc', index: 2, total: 3 })
 
-    assert.match(result, /^---\nkind: session-segment\nsession: abc\nsegment: 2\nof: 3\n/)
+    assert.match(result, /^---\nkind: session-segment\nharness: claude\nsession: abc\nsegment: 2\nof: 3\n/)
     assert.match(result, /compaction_trigger: auto\npre_tokens: 995454\n/)
     assert.match(result, /owner_turns: 1\nassistant_turns: 1\n---/)
     assert.match(result, /### owner · said · 2026-06-12T13:05:00.000Z · u-1\ntoo big/)
@@ -397,7 +397,7 @@ describe('extractSession', () => {
     const result = await extractSession({ transcript, outDir })
 
     assert.deepEqual(readdirSync(outDir).sort(), ['index.md', 'seg-01.md', 'seg-02.md'])
-    assert.deepEqual(result, { sessionId: 'session-1', segments: 2, ownerTurns: 2, skippedLines: 1 })
+    assert.deepEqual(result, { sessionId: 'session-1', harness: 'claude', segments: 2, ownerTurns: 2, skippedLines: 1 })
     assert.match(readFileSync(join(outDir, 'seg-02.md'), 'utf8'), /u-2/)
     assert.match(readFileSync(join(outDir, 'index.md'), 'utf8'), /segments: 2\n/)
   })

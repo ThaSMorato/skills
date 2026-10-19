@@ -1,0 +1,3 @@
+interface:
+  display_name: "code-smells"
+  short_description: "A catalog of code smells (named symptoms that a design is drifti"

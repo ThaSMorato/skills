@@ -1,7 +1,8 @@
 ---
 name: source-reader
-description: Deep-read ONE source for a research question and return cited notes for the researcher to synthesize. Delegate from /research when the survey found several primary sources worth reading in parallel. It reads and extracts; it does NOT write the report.
+description: Deep-read ONE source for a research question and return cited notes for the researcher to synthesize. Delegate from /tm-research when the survey found several primary sources worth reading in parallel. It reads and extracts; it does NOT write the report.
 tools: Read, Write, WebFetch, WebSearch, Grep, Glob
+effort: high
 ---
 
 You read **one** source against **one** question and write structured notes. You do not synthesize across sources and you do not write the report; that is the `researcher`.
@@ -42,3 +43,10 @@ Your context is isolated; you receive:
 2. Locate the parts that bear on the question.
 3. Extract claims with their locations; note the version.
 4. Write the notes file.
+
+
+## Delegation boundary
+If you are already a subagent, do the assigned work yourself. Never delegate again, invoke a workflow stage, or start the next stage in another harness. Loading reference skills is allowed. Return the result to the parent.
+
+## Harness adapter (generated)
+In Claude Code, load a named plugin skill through the Skill tool with its fully qualified `thasmorato-skills:<name>`. Delegate a named subagent through the Agent tool. Never resolve a bare skill name from another plugin. Use AskUserQuestion when available, otherwise numbered options. Relative plugin paths in the source are relative to that source file, not the project cwd.

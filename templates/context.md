@@ -1,8 +1,8 @@
 <!--
-TEMPLATE: context (CONTEXT.md: the glossary / ubiquitous language)
+TEMPLATE: context (docs/produto/glossario.md: the glossary / ubiquitous language)
 Maintained inline by the domain-model skill as terms resolve. A PURE glossary: canonical terms and
 their definitions, NO implementation detail, NO decisions (those are ADRs). Add terms lazily.
-CONTEXT.md is the single owner of definitions: other docs USE the terms, they do not redefine them.
+docs/produto/glossario.md is the single owner of definitions: other docs USE the terms, they do not redefine them.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
 An unmarked one is a validation finding (AS-N).
@@ -27,7 +27,7 @@ An unmarked one is a validation finding (AS-N).
 > **(a)** by properties × by a concrete example · **(b)** what it is × what it is explicitly not ·
 > **(c)** prose × a formal shape (fields, types, cardinality, allowed states).
 >
-> `/doc-validate` compares the two and reports only the pairs that disagree.
+> `/tm-doc-validate` compares the two and reports only the pairs that disagree.
 
 ### <Term>
 - **Axis:** <a | b | c>

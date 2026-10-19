@@ -1,7 +1,8 @@
 ---
 name: writing-fragments
-description: 'Writing, explore phase: interview the author about what they want to write and collect raw fragments into one file, with no structure yet. Use at the start of an article, a post or a long note, on "/writing-fragments" or "help me find what to write about X".'
+description: 'Writing, explore phase: interview the author about what they want to write and collect raw fragments into one file, with no structure yet. Use at the start of an article, a post or a long note, on "/tm-writing-fragments" or "help me find what to write about X".'
 argument-hint: "[path to the fragments file] [topic]"
+user-invocable: false
 ---
 
 This is **explore**: widen what could be written, without committing to a structure. Committing is **exploit**, the job of `writing-beats` and `writing-shape`. Imposing an outline here closes doors before the material is in.
@@ -50,3 +51,6 @@ One `# ` working title at the top and nothing else above the fragments: no metad
 - **Re-read the file from disk before every write.** The author may have edited, reordered or deleted between turns; their changes win. Append only, never overwrite. "Cut the last one", "make that sharper", "merge those two" are instructions to act on in place.
 
 **Done when** the author says the pile is enough; then point at `writing-beats` (a journey through the material, beat by beat) or `writing-shape` (an argued article, paragraph by paragraph).
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

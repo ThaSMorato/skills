@@ -1,6 +1,7 @@
 ---
 name: visuals
 description: 'How to show a design or a change as a picture instead of prose: pick the smallest view (pseudocode, call tree, component tree, file tree, Mermaid, diff sketch), rate a proposal by strength, and render an HTML report with before/after diagrams. Use when a stage presents a refactor or design proposal, a PR summary, a walkthrough of a change, or a report a human will decide from.'
+user-invocable: false
 ---
 
 A reader decides faster from a picture of the shape than from a paragraph about it. This is the reference every stage that **shows** something uses: the views, the rules that keep them honest, and the HTML report for when a page of cards beats a markdown list.
@@ -31,7 +32,7 @@ Keep only the calls, files, props, states and boundaries the current question ne
 ## Rules
 - **Place each view next to the sentence it supports.** A diagram in an appendix is a diagram nobody connects to the claim.
 - **If a diagram needs a paragraph to be understood, redraw it.** The paragraph is the sign that the view is the wrong one or carries too much.
-- **Name the gain in the project's own terms**: the glossary (`CONTEXT.md`) for the domain, and the architecture vocabulary for structure (module, interface, depth, seam, adapter, leverage, locality, in the `architecture` skill's `rules/deep-modules.md`; plus coupling, cohesion and duplication). "Pricing stops leaking into the order handler", never "cleaner" or "easier to maintain": those name no property anyone can check.
+- **Name the gain in the project's own terms**: the glossary (`docs/produto/glossario.md`) for the domain, and the architecture vocabulary for structure (module, interface, depth, seam, adapter, leverage, locality, in the `architecture` skill's `rules/deep-modules.md`; plus coupling, cohesion and duplication). "Pricing stops leaking into the order handler", never "cleaner" or "easier to maintain": those name no property anyone can check.
 - **Rate every proposal by strength**, so the reader knows where to spend attention:
   - **Strong**: the evidence is direct (`file:line`, a measured number, a repeated finding) and the gain is clear.
   - **Worth exploring**: the evidence is real, but the gain depends on something not yet known (a usage pattern, a future change); say what.
@@ -39,4 +40,7 @@ Keep only the calls, files, props, states and boundaries the current question ne
 - **A proposal that contradicts an ADR** carries a one-line callout naming the ADR and why reopening it may be worth it. List it only when the friction is real enough to reopen the decision.
 
 ## The HTML report
-When a stage offers a report of several proposals or findings with before/after shapes (`/tidy <path>`, `/analyze`), render it with [`html-report.md`](html-report.md): one self-contained file, a card per item, diagrams carrying the weight. The markdown output stays the record; the HTML is the view a human decides from.
+When a stage offers a report of several proposals or findings with before/after shapes (`/tm-tidy <path>`, `/tm-analyze`), render it with [`html-report.md`](html-report.md): one self-contained file, a card per item, diagrams carrying the weight. The markdown output stays the record; the HTML is the view a human decides from.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

@@ -9,10 +9,15 @@
 **Failure scenario: weak randomness.** A password-reset token from a non-cryptographic PRNG seeded by the clock. An attacker who knows roughly when the reset happened enumerates the small space and takes the account.
 
 **The fix.**
-- **Passwords:** a memory-hard, tuned KDF (Argon2id, scrypt, or bcrypt) with per-password salt, never a general-purpose hash.
+- **Passwords:** a memory-hard, tuned KDF (Argon2id or scrypt) with per-password salt, never a general-purpose hash.
 - **Tokens, salts, ids:** the platform's cryptographically secure generator, always.
 - **Encryption:** an authenticated mode (AES-GCM, ChaCha20-Poly1305) through a maintained library, with a unique nonce per message. Never design the construction yourself.
 - **Transport:** TLS with certificate verification on; a disabled verification flag is a finding regardless of the surrounding comment.
 - **Key management:** keys from a secret store, rotatable, never alongside the data they protect.
 
 **Watch for.** Encryption used where authentication was needed (encrypted-but-malleable data), comparison of MACs with `==`, and "we hash it twice" as a substitute for a KDF.
+
+
+Bcrypt is CPU-hard, not memory-hard; Argon2id and scrypt are memory-hard. OWASP baseline: Argon2id m=19 MiB, t=2, p=1; scrypt N=2^17, r=8, p=1. For legacy bcrypt use cost >=10 and respect the 72-byte input limit without silently truncating passwords. Verify current guidance before changing production parameters.
+
+Source: [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html).

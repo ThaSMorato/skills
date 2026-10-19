@@ -1,5 +1,5 @@
 <!--
-TEMPLATE: system-profile (the machine-facing half of /analyze)
+TEMPLATE: system-profile (the machine-facing half of /tm-analyze)
 Filled by the architectural-analyzer alongside the human-facing docs/analysis/architecture.md.
 This file is FACTS, not narrative: what the repo IS, in a shape later stages can consume without
 reading a thousand-line report. Every downstream stage reads this one and reaches for the prose
@@ -22,7 +22,7 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 |---|---|---|---|
 
 ## Components (required)
-> The structural units discovered, by evidence. This is the raw material `/components` reconciles with
+> The structural units discovered, by evidence. This is the raw material `/tm-components` reconciles with
 > the HLD; names here are the code's names, not the design's.
 
 | Component | Path | Entrypoint | Ca | Ce |
@@ -30,13 +30,13 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 
 ## Dependency graph (required)
 > The measured graph lives in `docs/analysis/dependency-graph.md` (measured by the architecture skill's
-> `import-graph.md`, with its `measured_commit`), where `/reconcile` can re-measure it without rewriting
+> `import-graph.md`, with its `measured_commit`), where `/tm-reconcile` can re-measure it without rewriting
 > this profile. Here, only the summary: component count, edge count, the method per language, and every
-> cycle as its full path, or `none`. Consumed by `/components` (metrics), `/boundaries` (divergence),
-> and `/decompose` (which epics are parallel-safe).
+> cycle as its full path, or `none`. Consumed by `/tm-components` (metrics), `/tm-boundaries` (divergence),
+> and `/tm-decompose` (which epics are parallel-safe).
 
 ## Conventions observed (required)
-> The repo's real conventions, each with a file that demonstrates it. This is what `/guidelines` mines
+> The repo's real conventions, each with a file that demonstrates it. This is what `/tm-guidelines` mines
 > instead of emitting language defaults.
 
 | Area | Convention in use | Evidence |
@@ -47,7 +47,7 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 | Async / concurrency | | |
 
 ## Test setup (required)
-> What `/generate-test-guide` and `/plan` need and would otherwise rediscover: the runner, the layout,
+> What `/tm-generate-test-guide` and `/tm-plan` need and would otherwise rediscover: the runner, the layout,
 > the factories and DSL that already exist, and the real commands.
 
 - **Runner + config:**
@@ -63,5 +63,5 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 
 ## Inherited constraints (required)
 > What cannot change without breaking something outside this repo: published contracts, persisted
-> schemas, public events, hard runtime floors. `/interview` reads this so brownfield elicitation asks
+> schemas, public events, hard runtime floors. `/tm-interview` reads this so brownfield elicitation asks
 > about the immovable, not only about the desired.

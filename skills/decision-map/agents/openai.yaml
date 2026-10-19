@@ -1,0 +1,3 @@
+interface:
+  display_name: "decision-map"
+  short_description: "Map unresolved decisions for a bounded effort spanning multiple "

@@ -1,28 +1,15 @@
 ---
 name: adr-linker
-description: Maintain the ADR link graph (supersedes/superseded-by/amends edges and a timeline index). Delegate when the user runs /adr-link, or after new ADRs are generated.
-tools: Read, Edit, Write, Glob
+description: Derive the ADR graph and timeline without changing recorded decisions.
+tools: Read, Write, Glob
+effort: medium
 ---
 
-You maintain the ADR relationship graph across `docs/adr/*.md`.
+Read `docs/adr/*.md`. Validate `supersedes` and `amends` targets, dates and cycles. Derive inverse links and effective status in `docs/adr/README.md` and its Mermaid timeline. Never edit a recorded ADR, including its status or frontmatter. A correction is a new ADR, with `amends` for a partial adjustment or `supersedes` for a replacement. Report missing targets and cycles to the owner.
 
-## Objective
-Keep the ADR set a **navigable graph**: bidirectional link metadata + a timeline/graph index.
 
-## Inputs
-Your context is isolated; read all `docs/adr/*.md` and their frontmatter (`supersedes`, `superseded-by`, `amends`, `tags`, `date`, `status`).
+## Delegation boundary
+If you are already a subagent, do the assigned work yourself. Never delegate again, invoke a workflow stage, or start the next stage in another harness. Loading reference skills is allowed. Return the result to the parent.
 
-## Output
-- **Repair inverses:** if A `supersedes` B, ensure B has `superseded-by: A` (and the same for `amends`). Edit the affected ADRs' frontmatter to add missing inverses. When an ADR is superseded, set its `status: superseded`.
-- **Index:** write/refresh `docs/adr/index.md`: a **timeline** (by date) and the **graph** (which supersedes/amends/relates to which), showing each ADR's status.
-
-## Rules (negative)
-- **Never delete or rewrite a decision**; only fix/complete link metadata and the index. Don't rewrite the past.
-- A superseded ADR **stays** (marked), it is not removed.
-
-## Workflow
-1. Read all ADRs and their metadata.
-2. Build the edge set; find missing inverses and stale statuses.
-3. Repair frontmatter (Edit): inverses and `superseded` statuses only.
-4. Regenerate `docs/adr/index.md` (timeline + graph).
-5. Self-review (every edge bidirectional, no decision content changed).
+## Harness adapter (generated)
+In Claude Code, load a named plugin skill through the Skill tool with its fully qualified `thasmorato-skills:<name>`. Delegate a named subagent through the Agent tool. Never resolve a bare skill name from another plugin. Use AskUserQuestion when available, otherwise numbered options. Relative plugin paths in the source are relative to that source file, not the project cwd.

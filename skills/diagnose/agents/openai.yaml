@@ -1,0 +1,3 @@
+interface:
+  display_name: "diagnose"
+  short_description: "Find the cause of a bug or unexpected behavior by evidence, not "

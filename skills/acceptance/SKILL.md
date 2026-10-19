@@ -1,7 +1,12 @@
 ---
 name: acceptance
-description: 'Check every acceptance criterion and every part of the owner''s request against the running software before the work is called done: each one verified in the browser (with a screenshot), by a named test only, or not verified with the reason, recorded in one index the pull request reads. Use after the last /review fix and /tidy, before /walkthrough and /pr, or on "test it in the browser / were all the ACs checked".'
+description: 'Check every acceptance criterion and every part of the owner''s request against the running software before the work is called done: each one verified in the browser (with a screenshot), by a named test only, or not verified with the reason, recorded in one index the pull request reads. Use after the last /tm-review fix and /tm-tidy, before /tm-walkthrough and /tm-pr, or on "test it in the browser / were all the ACs checked".'
+user-invocable: false
 ---
+
+Read [acceptance policy](../../policies/acceptance.md) before performing this stage; apply its contracts to the output.
+
+Read [living-docs policy](../../policies/living-docs.md) before performing this stage; apply its contracts to the output.
 
 Green tests say the code does what the tests ask. The owner asks something else: does the feature do what was requested, on screen, with real data. This stage answers that, item by item, after the last change to production code, and leaves a record nobody has to take on trust.
 
@@ -11,7 +16,7 @@ Read, and number every item:
 - every acceptance criterion of the ticket, by id;
 - the plan's **Not verified** list in `progress.md`;
 - when the ticket builds a screen with a spec in `docs/ui/<screen>.md`: each state and each width it lists, checked against its capture;
-- when this ticket delivers the last requirement a **guiding scenario** in `docs/prd.md` was waiting on (every requirement on its steps is now built): **the whole scenario**, as one item, walked from its first step to the persona's goal (`${CLAUDE_PLUGIN_ROOT}/skills/interview/scenarios.md`). Separate checks can each pass on a path no user can walk.
+- when this ticket delivers the last requirement a **guiding scenario** in `docs/produto/prd.md` was waiting on (every requirement on its steps is now built): **the whole scenario**, as one item, walked from its first step to the persona's goal (`../../skills/interview/scenarios.md`). Separate checks can each pass on a path no user can walk.
 
 An item in the request and in an AC is one item: write it once, with both references.
 
@@ -20,7 +25,7 @@ An item in the request and in an AC is one item: write it once, with both refere
 ## 2. Find the means
 A check needs a way to see the software run. Find it before concluding there is none:
 - **A browser tool.** Search the available tools for one (`ToolSearch` with "playwright" or "browser", or the MCP servers listed). A missing tool is a reason only after this search.
-- **A running server.** Read the dev command and port from `docs/guidelines.md`, the stack guide or the scripts (`package.json`, `Procfile`, `bin/`), and check the port. When a navigation fails, try once more before deciding the server is down. When it is down, ask the owner to start it with the command you found and wait; starting a long watcher yourself competes with theirs.
+- **A running server.** Read the dev command and port from `docs/guias/guidelines.md`, the stack guide or the scripts (`package.json`, `Procfile`, `bin/`), and check the port. When a navigation fails, try once more before deciding the server is down. When it is down, ask the owner to start it with the command you found and wait; starting a long watcher yourself competes with theirs.
 - **Real data.** Use the data the environment already has (the local database, the seeds, a fixture the project's testing guide names) before mocking an integration. When nothing real exists for an item, ask the owner for a sample; a mock is the last resort, and the index says so at the top.
 
 **Done when** the browser tool, the server and the data source are named, or each missing one is named with what was searched.
@@ -28,12 +33,14 @@ A check needs a way to see the software run. Find it before concluding there is 
 ## 3. Check each item
 For each item, one verdict:
 - **browser**: performed in the running software. Save a screenshot to `.scratch/<feature-slug>/acceptance/<NN>-<slug>/<item>.png` and say what it shows.
+- **http**: execute a backend request from a saved `.http` block; cite the block, status and redacted response. Writing a request without executing it is not verification.
+- **blocked**: a named prerequisite failed or is unavailable; do not count this as a failed execution.
 - **test**: no screen shows it (a rule deep in a service, an error path the UI cannot reach), and a test covers it: name the test, `file:line`.
 - **not verified**: neither was possible. Say why, and what would verify it.
 
 Walk a whole-scenario item **as its persona**: with only what they would know, through the way they would find the feature, never by typing a URL only the team knows. Write down every point where you hesitated, searched, read a message twice or took a step the scenario did not have: that is **friction**. Friction is not a failure (the persona got there) and goes in its own section, with a screenshot and the step it happened on, for the owner to judge.
 
-A visual item (layout, copy, a state the user sees) is **browser** or **not verified**; a test does not see the screen. An item that fails is a defect: report it and stop, and the fix goes back through `/implement`'s loop before this stage runs again.
+A visual item (layout, copy, a state the user sees) is **browser** or **not verified**; a test does not see the screen. An item that fails is a defect: report it, mark dependent flows blocked, check independent flows, and recommend the owner return through `/tm-implement`'s loop before this stage runs again.
 
 **Done when** every item has a verdict, every browser verdict has its screenshot, and every failure is reported.
 
@@ -43,11 +50,12 @@ Write `.scratch/<feature-slug>/acceptance/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: acceptance
-plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+plugin_version: <the "version" in ../../plugin-source.json>
 slug: <NN>-<slug>
 verified_at: <the commit checked, git rev-parse HEAD>
 items: <count>
-by_verdict: {browser: <n>, test: <n>, not_verified: <n>}
+by_verdict: {browser: <n>, http: <n>, test: <n>, blocked: <n>, not_verified: <n>}
+blocked: <count>
 failed: <count>
 friction: <count of friction notes>
 mocked: <true | false>
@@ -66,7 +74,10 @@ mocked: <true | false>
 | GS-1.3 | looked for the export under Reports; it is under Settings | `gs-1-3.png` |
 ```
 
-**The record is valid at `verified_at` only.** Any later change to production code (a review fix, a tidying) makes it stale: `/pr` and `/flow` compare `verified_at` with `HEAD` and ask for a re-run when non-test files changed in between.
+**The record is valid at `verified_at` only.** Any later change to production code (a review fix, a tidying) makes it stale: `/tm-pr` and `/tm-flow` compare `verified_at` with `HEAD` and ask for a re-run when non-test files changed in between.
 
 ## Gate
-Report the counts, every failure, every **not verified** item resolved to its words, and the friction notes. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/walkthrough` or `/pr`.
+Report the counts, every failure, every **not verified** item resolved to its words, and the friction notes. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/tm-walkthrough` or `/tm-pr`.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

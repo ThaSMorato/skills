@@ -1,0 +1,3 @@
+interface:
+  display_name: "generate-stack-guide"
+  short_description: "Generate a per-technology engineering guide skill (conventions, "

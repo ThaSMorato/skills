@@ -1,14 +1,15 @@
 ---
 name: writing-shape
-description: 'Writing, exploit phase: shape a pile of raw material into an argued article, paragraph by paragraph, from a chosen opening, pushing back on every block that does not earn its place. Use with a fragments file, notes or a transcript, on "/writing-shape" or "make this into an article".'
+description: 'Writing, exploit phase: shape a pile of raw material into an argued article, paragraph by paragraph, from a chosen opening, pushing back on every block that does not earn its place. Use with a fragments file, notes or a transcript, on "/tm-writing-shape" or "make this into an article".'
 argument-hint: "<path to the raw material> [path to the article]"
+user-invocable: false
 ---
 
 This is **exploit**: the pile is fixed; commit to a structure and mine the pile to fill it. The pile can be anything (tidy fragments, a wall of prose, a transcript); read it end to end before doing anything else. It is read-only here; the article goes to its own file. If no article path was given, ask once and keep it.
 
 ## The loop
 1. **Read the pile** in full, and say back what is in it.
-2. **Settle the prerequisites**: what the reader knows walking in. From there, every concept must be grounded before a block leans on it, by `${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/grounding.md`; keep the running list. **Done when** the starting list is written down.
+2. **Settle the prerequisites**: what the reader knows walking in. From there, every concept must be grounded before a block leans on it, by `../../skills/doc-validate/grounding.md`; keep the running list. **Done when** the starting list is written down.
 3. **Draft 2 or 3 openings**, each implying a different thesis. Show them all; the author picks one or composes a hybrid. The opening is a promise: it decides what the rest must do.
 4. **Grow block by block.** Ask, every time: *given what is on the page, what does the reader need next?* Pull the answer from the pile. An ungrounded concept the next move needs is itself the answer: ground it first. Argue the form of each block before writing it (below).
 5. **Append each agreed block** to the article as soon as it is agreed, so the author watches it take shape.
@@ -32,3 +33,6 @@ When the pile lacks what the article needs, say so: *"We need an example here an
 
 ## Rhythm
 Re-read the article from disk before every write; the author's edits win. A rewrite of one paragraph is done in place, leaving the rest alone. Publishing, platform formatting and frontmatter the author did not ask for are out of scope.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

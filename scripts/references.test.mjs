@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url'
 // when the stage runs, and a template missing from templates/README.md is one nobody knows to fill.
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const PLUGIN_PATH = /\$\{CLAUDE_PLUGIN_ROOT\}\/([A-Za-z0-9_./-]+\.[a-z]+)/g
+const PLUGIN_PATH = /`((?:\.\.\/)+(?:(?:skills|templates|policies|scripts)\/[A-Za-z0-9_./-]+\.[a-z]+|plugin-source\.json))`/g
 
 function markdownFiles(dir) {
   return readdirSync(join(root, dir), { recursive: true })
@@ -16,13 +16,13 @@ function markdownFiles(dir) {
     .map((path) => join(dir, path))
 }
 
-const sources = ['skills', 'agents', 'commands', 'templates', 'docs'].flatMap(markdownFiles)
+const sources = ['skills', 'agents', 'commands', 'templates', 'docs', 'workflows', 'agent-specs', 'policies'].flatMap(markdownFiles)
 
-test('every ${CLAUDE_PLUGIN_ROOT} path a stage cites exists', () => {
+test('every source-relative plugin resource a stage cites exists', () => {
   const missing = sources.flatMap((path) =>
     [...readFileSync(join(root, path), 'utf8').matchAll(PLUGIN_PATH)]
       .map(([, cited]) => cited.replace(/[.,;:)]+$/, ''))
-      .filter((cited) => !existsSync(join(root, cited)))
+      .filter((cited) => !existsSync(join(root, dirname(path), cited)))
       .map((cited) => `${path}: ${cited}`),
   )
 

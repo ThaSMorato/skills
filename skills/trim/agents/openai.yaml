@@ -1,0 +1,3 @@
+interface:
+  display_name: "trim"
+  short_description: "After a ticket is implemented and before it is reviewed, make it"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "asking"
+  short_description: "How to put a question, a finding, or a gate to the user; resolve"

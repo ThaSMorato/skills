@@ -20,7 +20,7 @@ An unmarked one is a validation finding (AS-N).
 
 > **Level** carries over from the PRD unchanged: the design of a feature is not the design of a
 > product, and the chain breaks if it stops here. **Status** starts `draft`; only whoever runs the gate
-> moves it, and `/flow` reads it to report what is awaiting approval.
+> moves it, and `/tm-flow` reads it to report what is awaiting approval.
 
 ## Objective (required)
 > The technical framing of what the PRD asked for: the scope this design covers.
@@ -33,7 +33,7 @@ An unmarked one is a validation finding (AS-N).
 > here is a structural unit **inside** a container, the C4 component level, at system scale. If a row
 > here repeats a container from the previous section, the section is being filled wrong.
 >
-> This is the source `/components` turns into the system component map, and the vocabulary every FDD
+> This is the source `/tm-components` turns into the system component map, and the vocabulary every FDD
 > then maps its feature onto. Name each component, its container, and the one thing it is responsible
 > for.
 

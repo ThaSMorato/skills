@@ -16,7 +16,7 @@ const producers = {
   validation: 'skills/plan-validate/SKILL.md',
   'tickets-validation': 'skills/tickets-validate/SKILL.md',
   'doc-validation': 'skills/doc-validate/SKILL.md',
-  review: 'commands/review.md',
+  review: 'commands/tm-review.md',
   trim: 'skills/trim/SKILL.md',
   tidy: 'skills/tidy/SKILL.md',
   diagnosis: 'skills/diagnose/SKILL.md',

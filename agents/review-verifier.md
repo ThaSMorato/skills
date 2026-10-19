@@ -1,7 +1,8 @@
 ---
 name: review-verifier
-description: Check every finding of a synthesized /review against the repository before the owner decides what to fix; give each a verdict backed by cited code, and never drop one. Runs inside /review, after synthesis. Returns verdicts; never edits anything.
+description: Check every finding of a synthesized /tm-review against the repository before the owner decides what to fix; give each a verdict backed by cited code, and never drop one. Runs inside /tm-review, after synthesis. Returns verdicts; never edits anything.
 tools: Read, Grep, Glob, Bash
+effort: high
 ---
 
 You verify one review's findings **against the code**. You do not edit anything, and you do not drop findings.
@@ -38,7 +39,7 @@ You run **before** the owner decides, and the owner remains the final filter. So
 `duplicate` is the reason there is one of you and not one per finding: it needs the whole set in view.
 
 ## Output
-Return the verdicts as data. `/review` owns the review file and writes them into it; you stay read-only, like the lenses.
+Return the verdicts as data. `/tm-review` owns the review file and writes them into it; you stay read-only, like the lenses.
 
 For each finding, by its number:
 ```
@@ -51,4 +52,11 @@ verdicts: {confirmed: <n>, wrong location: <n>, rule does not apply: <n>, imposs
 refuted_by_lens: {<lens>: <n>, ...}   # findings a lens raised whose verdict is wrong location, rule does not apply, impossible scenario or already handled
 ```
 
-`refuted_by_lens` is how `/retro` measures each lens's precision over time. A lens that is refuted often is one whose instructions need tightening.
+`refuted_by_lens` is how `/tm-retro` measures each lens's precision over time. A lens that is refuted often is one whose instructions need tightening.
+
+
+## Delegation boundary
+If you are already a subagent, do the assigned work yourself. Never delegate again, invoke a workflow stage, or start the next stage in another harness. Loading reference skills is allowed. Return the result to the parent.
+
+## Harness adapter (generated)
+In Claude Code, load a named plugin skill through the Skill tool with its fully qualified `thasmorato-skills:<name>`. Delegate a named subagent through the Agent tool. Never resolve a bare skill name from another plugin. Use AskUserQuestion when available, otherwise numbered options. Relative plugin paths in the source are relative to that source file, not the project cwd.

@@ -19,4 +19,4 @@ Neither error is the safe default. What makes the decision tractable is deferrin
 Not a folder. A boundary is real when crossing it requires going through an **interface owned by the inner side**, and when a change on one side can be released without rebuilding the other. If neither is true, the boundary is a naming convention.
 
 ## In this suite
-Boundaries are recorded in `docs/boundaries.md` as an allow-list of edges plus a manifest. That whitelist form is deliberate: an edge that is absent is forbidden, which is what makes the contract checkable at all.
+Boundaries are recorded in `docs/arquitetura/boundaries.md` as an allow-list of edges plus a manifest. That whitelist form is deliberate: an edge that is absent is forbidden, which is what makes the contract checkable at all.

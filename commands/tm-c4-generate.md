@@ -1,0 +1,19 @@
+---
+description: Generate C4 diagrams (PlantUML); C1/C2 from the HLD, the system C3 from the component map, C3/C4 per feature from the FDD.
+argument-hint: "(optional) feature name for the feature-level diagrams; omit for the system levels"
+---
+
+Delegate to subagent `c4-generator` to generate C4 PlantUML diagrams into `docs/c4/`:
+
+- **System levels** from `docs/arquitetura/hld.md` (C1, C2) and `docs/arquitetura/components.md` (C3).
+- **Feature levels** for $ARGUMENTS from `docs/features/<feature>/fdd.md` (C3, and C4 where code-level detail exists).
+
+If neither the HLD nor an FDD exists, tell the user to run `/tm-hld` or `/tm-fdd` first. If the HLD exists but `docs/arquitetura/components.md` does not, note that the system C3 will be skipped and that `/tm-components` produces its source.
+
+After the agent returns, show which C4 levels were generated and which were skipped (with the reason), and the output paths.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.
+
+## Harness adapter (generated)
+In Claude Code, load a named plugin skill through the Skill tool with its fully qualified `thasmorato-skills:<name>`. Delegate a named subagent through the Agent tool. Never resolve a bare skill name from another plugin. Use AskUserQuestion when available, otherwise numbered options. Relative plugin paths in the source are relative to that source file, not the project cwd.

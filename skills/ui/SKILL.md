@@ -3,6 +3,8 @@ name: ui
 description: 'A self-contained catalog of user-interface defects you can see in a diff: keyboard access, focus, accessible names, contrast, the loading / empty / error states, errors found too late, signals that contradict the risk of an action, layout shift and slow interactions, each with its tell, its failure scenario and its fix. Use when reviewing a change that touches UI code, or when building a component or a page and asking "is this usable and accessible". Not for visual design taste, and not for how to test UI (the testing skill has that).'
 ---
 
+Read [ui policy](../../policies/ui.md) before performing this stage; apply its contracts to the output.
+
 # UI
 
 A UI works when **every user can operate it and always knows what is happening**. Most UI defects are invisible to the author, who uses a mouse, a fast machine and a fast network, and already knows what the screen means. This catalog is the view from the other side: the keyboard user, the screen-reader user, the person on a slow connection or a small screen.

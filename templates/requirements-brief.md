@@ -28,7 +28,7 @@ An unmarked one is a validation finding (AS-N).
 
 ## Guiding scenarios (required)
 > One to three stories, each a specific persona with a motivation, simulated step by step until their
-> goal is met, in the format of `${CLAUDE_PLUGIN_ROOT}/skills/interview/scenarios.md`. Every later stage
+> goal is met, in the format of `../skills/interview/scenarios.md`. Every later stage
 > carries these forward: the PRD slices them into requirements and picks one as the first milestone.
 
 ### GS-1: <the outcome, in the persona's words>
@@ -80,6 +80,6 @@ An unmarked one is a validation finding (AS-N).
 > What is still undefined. The ambiguity gate only passes when nothing critical remains here.
 
 ## Glossary (optional)
-> Key terms and their canonical definition (or point to `CONTEXT.md`, which owns them). Terms that a
+> Key terms and their canonical definition (or point to `docs/produto/glossario.md`, which owns them). Terms that a
 > later stage will act on are **load-bearing** and get two descriptions on different axes; see the
-> `Load-bearing terms` section of `CONTEXT.md`.
+> `Load-bearing terms` section of `docs/produto/glossario.md`.

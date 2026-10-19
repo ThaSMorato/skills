@@ -13,3 +13,6 @@
 - **Keep secrets out of URLs**, including query strings on redirects.
 
 **Watch for.** Debug or verbose logging enabled in production configuration; third-party error reporters capturing request bodies by default; and a difference in response or timing that reveals whether a record exists.
+
+## Single-use links
+Email security scanners may follow GET links. Never consume a one-use credential as a GET side effect; use explicit confirmation and a state-changing request. A fragment #token= can keep the token out of the request URL, but client code must exchange it securely and avoid leaking it into logs or third-party scripts.

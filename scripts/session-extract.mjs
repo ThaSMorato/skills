@@ -163,11 +163,12 @@ function cleanOwnerText(text) {
   return text.replace(SYSTEM_REMINDER, '').replace(/[ \t]{2,}/g, ' ').trim()
 }
 
-export function renderSegment(segment, { sessionId, index, total }) {
+export function renderSegment(segment, { sessionId, index, total, harness = 'claude' }) {
   const ownerTurns = segment.turns.filter((turn) => turn.role === 'owner').length
   const frontmatter = [
     '---',
     'kind: session-segment',
+    `harness: ${harness}`,
     `session: ${sessionId}`,
     `segment: ${index}`,
     `of: ${total}`,
@@ -198,6 +199,7 @@ function renderIndex({ sessionId, transcript, segments }) {
   return [
     '---',
     'kind: session-index',
+    'harness: claude',
     `session: ${sessionId}`,
     `transcript: ${transcript}`,
     `segments: ${segments.length}`,
@@ -236,7 +238,7 @@ export async function extractSession({ transcript, outDir }) {
   writeFileSync(join(outDir, 'index.md'), renderIndex({ sessionId, transcript, segments }))
 
   const ownerTurns = segments.flatMap((segment) => segment.turns).filter((turn) => turn.role === 'owner').length
-  return { sessionId, segments: segments.length, ownerTurns, skippedLines }
+  return { sessionId, harness: 'claude', segments: segments.length, ownerTurns, skippedLines }
 }
 
 function parseLine(line) {
@@ -255,6 +257,9 @@ function parseArgs(argv) {
     else if (flag === '--session') args.sessionId = value
     else if (flag === '--out') args.outRoot = value
     else if (flag === '--projects-root') args.projectsRoot = value
+    else if (flag === '--harness') args.harness = value
+    else if (flag === '--sessions-root') args.sessionsRoot = value
+    else if (flag === '--transcript') args.transcript = value
     else throw new Error(`Unknown argument ${flag}. Usage: session-extract.mjs [--cwd <dir>] [--session <id>] [--out <dir>]`)
   }
   return args
@@ -262,10 +267,12 @@ function parseArgs(argv) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2))
-  const transcript = resolveTranscript(args)
+  if (args.harness && !['claude', 'codex'].includes(args.harness)) throw new Error('Unknown harness')
+  const codex = args.harness === 'codex' ? await import('./session-extract-codex.mjs') : null
+  const transcript = args.transcript ?? (codex ? codex.resolveCodexTranscript(args) : resolveTranscript(args))
   const sessionId = basename(transcript, '.jsonl')
   const outDir = join(args.outRoot ?? join(args.cwd, '.scratch', 'session-analyze'), sessionId)
-  const result = await extractSession({ transcript, outDir })
+  const result = await (codex ? codex.extractCodexSession : extractSession)({ transcript, outDir })
   process.stdout.write(`${JSON.stringify({ ...result, transcript, outDir })}\n`)
 }
 

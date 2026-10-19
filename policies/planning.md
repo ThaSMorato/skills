@@ -1,0 +1,10 @@
+# Planning and evidence contracts
+Read the installed dependency version from the lockfile, relevant ADRs and existing local library references before choosing an API. Consult local package docs or version-matched official docs (Context7 when available); record version, example, source URL and the decision served in `library-references.md` beside the plan. Reuse still-valid references. If multiple plausible approaches remain with materially different consequences, report a research question and recommend `/tm-research` to the owner; stop rather than selecting silently.
+
+Declare `features` and their living doc paths in plan frontmatter and the documentation deliverable. Add a requirement-consequences check: derived-value collisions, UNIQUE violations, concurrent requests, atomicity, retries and partial failure. Every relevant consequence needs an SI action and observable evidence. Write long plans incrementally by coherent sections, then check the whole dependency graph.
+
+On explicit amendment of an executing plan, append or amend one pending SI with a revision increment; preserve completed SIs, IDs, progress and evidence. Never renumber or erase completed work. Changes touching completed behavior require owner resolution. Every amendment invalidates validation.
+
+Emit `e2e-spec.md` beside the plan: one scenario per ticket AC with ID, prerequisites/blockers, steps, expected result and evidence target. Keep generated scenarios separate from manual additions. On replanning reconcile as new, preserved, manual, updated, deleted; retain manual cases and record removed generated cases with their former AC and reason. Do not erase manual cases or claim these specifications are executable tests.
+
+Validation writes `plan_sha256` computed from the exact bytes of plan.md, using `scripts/plan-digest.mjs`. Implementation recomputes it and refuses missing, dirty or stale validation before any code write. A clean verdict applies to those bytes only. Report changes and stop; never automatically launch the author or validator again.

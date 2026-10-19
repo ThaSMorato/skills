@@ -16,3 +16,8 @@
 - **Stateless tokens need a revocation story**: short expiry plus a refresh token that is checked against server state, or a deny-list. "It expires in a week" is not a revocation story.
 
 **Watch for.** Session ids in URLs (they leak through referrers and logs), tokens stored in `localStorage` where any XSS reads them, and refresh tokens with no rotation or reuse detection.
+
+## Stateless cookies and refresh races
+A sealed stateless cookie (Iron Session or Rails/Express cookie session) still needs an explicit revocation story: per-session state, bounded lifetime or key rotation with its global consequences. Refresh rotation must atomically consume the previous token and issue the next; define concurrent-refresh behavior (single-flight or bounded grace with reuse detection), including BFF requests. See [race conditions](race-conditions.md).
+
+Unknown-user login should verify against a dummy hash at comparable cost before returning the same generic response; early returns can reveal account existence by timing.

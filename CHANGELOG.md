@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.0-beta.1
+
+This prerelease implements the v0.7 backlog contracts across the documentation and development flow. Stable release still requires real-use evidence and the live cross-model evaluation in `docs/evaluation.md`.
+
+- **Breaking command migration:** all 48 existing commands now use `tm-` (for example `/tm-plan`, `/tm-implement`, `/tm-review`). Add `/tm-decision-map` and `/tm-steering-validate`. Command dispatch loads fully qualified `thasmorato-skills:<skill>` names. Wrapped skills have `user-invocable: false`, not `disable-model-invocation`; the nine reference skills remain visible.
+- **Living feature docs:** current-state product/architecture docs and `docs/features/<feature>/` replace task-named FDD outputs. Writers amend existing docs; tickets keep delivery ACs. Passing ACs become present-tense feature rules with test evidence. ADRs, including metadata, stay immutable; inverse relationships are derived in the index. Legacy layouts are read and migrated with an explicit reviewed mapping.
+- **Stage boundaries:** deliver an artifact and stop. Dirty validation never starts an author/validator loop; cross-harness transitions go through the owner. Retro and session analysis only report, with `flow`, `repo-skill`, `repo-code` counts. Legacy `project` tags are classified by target without automatically promoting them to flow.
+- **Measured evidence:** exact-byte plan SHA-256 gates implementation; an atomic metadata registry discovers reports and marks missing paths. Independent Claude/Codex extractors preserve owner evidence across compaction while dropping tool arguments/results. Reports separate harness/version populations.
+- **Shared sources:** edit `workflows/`, `agent-specs/`, core `skills/`, `policies/` and `plugin-source.json`. `scripts/build-adapters.py` generates Claude commands/agents/manifest and Codex tm skills/TOML/metadata/manifest; `--check` fails drift. TOML agents require explicit client registration or passing shared instructions to the spawn tool.
+- **Planning and verification:** pending-SI amendments preserve completed work, per-AC E2E specs reconcile manual cases, installed-version library evidence is cached per plan, and implementation checks dependencies and built runtime artifacts. Acceptance adds executed HTTP evidence and blocked flow dependencies. Testing adds suite-audit modes and incremental mutation findings.
+- **Specialized guidance:** authorization matrix, ADR scope and retroactive metadata, scoped steering, host/container commands, UI token/mode contracts, Figma comparison, API/status checks, Nest runtime assets, migration conventions, security corrections and execution-aware error handling.
+
+Validation: adapter drift checks, both Claude manifests, TOML parsing, relative document links and the Node test suite. Live model discovery, review spike, product/signifier/UI outcomes and cost/latency comparisons remain unmeasured; static tests do not stand in for those results. See `docs/v0.7.0-coverage.md` for the backlog-to-implementation map.
+
 ## 0.6.6 (beta)
 
 The same collision as 0.6.5, for `/plan`: its command calls the Skill tool with the bare name `plan`,

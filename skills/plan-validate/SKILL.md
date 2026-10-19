@@ -1,12 +1,15 @@
 ---
 name: plan-validate
-description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates /implement. Use after /plan, on "validate the plan / is this plan ready".
+description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates /tm-implement. Use after /tm-plan, on "validate the plan / is this plan ready".
+user-invocable: false
 ---
+
+Read [planning policy](../../policies/planning.md) before performing this stage; apply its contracts to the output.
 
 Read the plan and decide whether it is safe to implement. This skill **finds problems**; it does not fix them and it does not write code.
 
 ## Input
-`/plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`. If it does not exist, abort: *"No plan at <path>. Run /plan <ticket> first."*
+`/tm-plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`. If it does not exist, abort: *"No plan at <path>. Owner next: /tm-plan <ticket> first."*
 
 ## Sources
 Read the plan, and everything it is accountable to:
@@ -31,6 +34,7 @@ Read the plan, and everything it is accountable to:
 | `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, attaches tests at a seam the map and FDD don't name, or has a `Mirror:` that is not a row of the map's Conventions to mirror |
 | `GR-N` | Grounding | A node the map calls `new` with no recorded search, or with a search a grep contradicts, because the thing already exists |
 | `DL-N` | Deliverables | Deliverables missing the repo's real test / type-check / build commands |
+| `RC-N` | Requirement consequences | Derived-value collisions, UNIQUE violations, races, atomicity and partial failure implied by a requirement but unhandled by SI actions/tests |
 | `PM-N` | Pre-mortem | A concrete failure scenario inside the ticket's scope that no SI handles, found by assuming the plan shipped exactly as written and failed (see below) |
 | `AS-N` | Unmarked assumption | A decision in one of the `asking` skill's assumption classes (§6: a threshold, a failure behavior, a visibility rule) that the ticket, node map and FDD do not give, written into an SI with no `> Assumed:` marker, and that would change what the SI builds if it were different |
 
@@ -46,7 +50,7 @@ For a plan with `type: structural`, also check that no SI modifies an existing t
 
 `CV` and `SZ` are the two the author cannot reliably catch alone: coverage because omission is invisible from inside, and size because the author who wrote the slice believes it is one thing. `DM` exists because the plan claims to encode the node map and nothing used to check that claim.
 
-**`GR` is the only check in this suite that leaves the documents.** Every other category (here and in `/doc-validate`) compares one artifact against another, which means a wrong assumption made early passes every gate, because it is internally consistent all the way down. Run the map's searches yourself: take each node marked `new`, grep the terms it says it searched for, and see whether the repository agrees. A node that turns out to already exist is the highest-value finding this stage can produce, because everything below it was about to be built twice.
+**`GR` is the only check in this suite that leaves the documents.** Every other category (here and in `/tm-doc-validate`) compares one artifact against another, which means a wrong assumption made early passes every gate, because it is internally consistent all the way down. Run the map's searches yourself: take each node marked `new`, grep the terms it says it searched for, and see whether the repository agrees. A node that turns out to already exist is the highest-value finding this stage can produce, because everything below it was about to be built twice.
 
 **`PM` is the one check that reads the plan from the outside.** Every other category asks whether the plan is well-formed; this one asks whether it would survive. Assume the plan was implemented exactly as written, shipped, and failed. Then name the failure: a concrete input, state or sequence (an empty list, a retry after a partial write, two requests at once, the row that is not there, the dependency that times out) that no SI's actions or tests handle. Keep it inside the ticket's scope: a scenario only matters if an AC, the FDD or the node map implies the system must survive it; one outside that is a new requirement, which is scope, not a finding. **At most 3 per run, ranked by consequence.** A pre-mortem asked for failures will always produce some, and past three it is inventing them. A scenario an SI already handles is not a finding; name the SI and drop it.
 
@@ -58,8 +62,9 @@ Write `.scratch/<feature-slug>/plans/<NN>-<slug>/validation.md`:
 ```markdown
 ---
 kind: validation
-plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+plugin_version: <the "version" in ../../plugin-source.json>
 slug: <NN>-<slug>
+plan_sha256: <SHA-256 of the exact plan.md bytes>
 status: clean | dirty
 open_issues: <count of open issues>
 run: <1 on the first validation; +1 on every re-run>
@@ -86,7 +91,10 @@ fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by 
 **Every id uses a prefix from the Checks table**, never a generic numbering (`PV-1`, `F-3`). The prefix is the finding's category, and `fired` is the per-project record of which mistakes this flow actually catches; a finding with no category is invisible to it. `fired` is cumulative: a re-run adds its new ids and never drops resolved ones.
 
 ## Gate
-- **dirty** → tell the user exactly what to fix: *"validation.md has N open issues. Revise the plan (edit it or re-run /plan <slug>), then re-run /plan-validate <slug>."* Never auto-fix; never partially proceed.
-- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Run /implement <slug> to build it SI by SI."* Starting `/implement` is the owner's call. When this stage runs inside `/flow`, ask it as a structured choice (start, pausing after each SI; start, continuous; stop here, I will run `/implement`) and say that the first two begin writing code.
+- **dirty** → report each open issue and the owning stage to the owner. Deliver the report and stop. Do not revise, retry validation, or start implementation.
+- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Owner next: /tm-implement <slug> to build it SI by SI."* Starting `/tm-implement` is the owner's call. The owner selects the next stage separately.
 
 `implement` reads this verdict and refuses to start on a `dirty` (or missing) validation. That refusal is the whole point of this stage.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

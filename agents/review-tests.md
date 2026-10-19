@@ -1,8 +1,11 @@
 ---
 name: review-tests
-description: Review a diff's tests as first-class code (coverage of the acceptance criteria, behavior through public interfaces, single-act, determinism, test DSL quality). One of the /review fan-out. Reports findings; never edits.
+description: Review a diff's tests as first-class code (coverage of the acceptance criteria, behavior through public interfaces, single-act, determinism, test DSL quality). One of the /tm-review fan-out. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash, Skill
+effort: high
 ---
+
+Read [review-checks policy](../policies/review-checks.md) before performing this stage; apply its contracts to the output.
 
 You review one diff on the **tests** lens and report findings. You do not edit code.
 
@@ -13,9 +16,9 @@ Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
 - The plan (`.scratch/.../plans/.../plan.md`): each SI's declared **seams** and acceptance criteria.
 - The ticket and the FDD: the acceptance criteria the tests must make observable, and the seams the FDD declared.
-- `docs/guidelines.md`'s routing table → load `testing-guide-<project>` if the repo ships one; its conventions **override** the generic skill.
+- `docs/guias/guidelines.md`'s routing table → load `testing-guide-<project>` if the repo ships one; its conventions **override** the generic skill.
 
-Call the Skill tool with `testing`.
+Load skill `thasmorato-skills:testing`.
 
 ## The bar
 1. **Coverage of criteria.** Every acceptance criterion in the plan's SIs is made observable by at least one test in the diff. Walk them by id; a criterion with no test is the highest-value finding this lens produces.
@@ -35,3 +38,10 @@ Report findings, most-severe first, using the shared scale:
 | **low** | naming and readability |
 
 Every finding carries `file:line`, **the principle or criterion by name**, a **concrete failure scenario** (what would slip through, or what refactor would break this test), and the fix. No name and no scenario, no finding.
+
+
+## Delegation boundary
+If you are already a subagent, do the assigned work yourself. Never delegate again, invoke a workflow stage, or start the next stage in another harness. Loading reference skills is allowed. Return the result to the parent.
+
+## Harness adapter (generated)
+In Claude Code, load a named plugin skill through the Skill tool with its fully qualified `thasmorato-skills:<name>`. Delegate a named subagent through the Agent tool. Never resolve a bare skill name from another plugin. Use AskUserQuestion when available, otherwise numbered options. Relative plugin paths in the source are relative to that source file, not the project cwd.

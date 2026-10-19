@@ -126,3 +126,6 @@ assertResponseContains("welcome")
 ```
 
 It applies at **every level**: unit (builders + custom matchers), integration (setup helpers), and acceptance, where Given/When/Then is itself a business-readable DSL (see `acceptance-bdd.md`). Invest in it: the DSL is what lets the suite double as living documentation.
+
+## Mutation testing
+Mutation asks whether the suite would catch a defect; line coverage only says code ran. A surviving mutant calls for investigation: missing assertion, missing boundary input, dead code, or an equivalent mutation. Record a reason for equivalent mutants. Use survivors to improve meaningful checks, never as a percentage target. Stack-specific tools and commands live in the stack guide.

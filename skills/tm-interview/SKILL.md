@@ -1,0 +1,34 @@
+---
+name: tm-interview
+description: Open the Doc-Dev flow with the requirements interview, producing the brief, glossary, and ADRs.
+argument-hint: "[feature or project name]"
+user-invocable: false
+---
+
+Load skill `thasmorato-skills:interview` (the elicitation discipline: rounds of questions, the PRD checklist, the gate), then with `domain-model` (the glossary and the inline ADRs). They compose: `interview` drives the conversation, `domain-model` sharpens the vocabulary as it goes. Loading only one silently drops half the stage.
+
+Elicit requirements for: the owner's supplied arguments
+
+> Load skill `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+
+## Before the first question
+- Read `docs/analysis/system-profile.md` if it exists. Its **Inherited constraints** section is the input a greenfield interview never needs and a brownfield one cannot do without: the immovable, as opposed to the desired. Confirm each with the user rather than assuming it still binds.
+- Read `docs/produto/prd.md` and `docs/arquitetura/hld.md` if they exist. When the argument names a **feature inside an existing product**, the problem, the users and the goals are already settled upstream: **inherit them and say so**, then elicit only what is new. Re-eliciting produces a brief that contradicts the document above it.
+
+## The gate
+The template marks eight sections `(required)`: Problem, Users and jobs-to-be-done, Guiding scenarios, Antithesis, Goals and value, Success metrics, Scope, Open questions. The gate is **countable**: every required section filled, and everything still unsettled written down in Open questions. Then the user confirms the shared understanding. Along the way, each question names the weakest required section it targets, and each round reports what it did to the glossary (terms created / renamed); two rounds in a row that change no load-bearing term is the convergence signal. A decision held by someone outside the conversation goes to `Open questions` with its holder, and `/tm-questionnaire` can send it. If the user stops early, persist anyway with `Status: early-exit`.
+
+## Persist
+Once the gate passes, write the artifacts the `/tm-prd` agent will consume (its isolated context cannot see this conversation):
+
+- `docs/requirements-brief.md`: fill `../../templates/requirements-brief.md`, pruning and renumbering the optional sections that don't apply. Set `Status: aligned`, or `early-exit` when the user stopped before the gate.
+- `docs/produto/glossario.md`: the glossary, including the two-axis definitions for load-bearing terms.
+- `docs/adr/NNNN-*.md`: any ADRs emitted inline during the interview. Allocate numbers per the rule in `/tm-adr-generate`: the next free number across both `docs/adr/*.md` and `docs/adr/potential/`, four digits.
+
+Do NOT write the PRD here; that is the `/tm-prd` step.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.
+
+## Codex adapter (generated)
+Load core skills by opening their SKILL.md from this plugin, stripping `thasmorato-skills:` from the logical name. For delegation use the available spawn tool with the named agent's instructions from `../../agent-specs/<name>.md`; if the client has registered the generated TOML agents, use those. Parallelize independent read-only lenses within the host concurrency limit, queueing remaining lenses. A subagent never delegates again. If delegation is unavailable, disclose that and execute each requested lens serially, preserving separate evidence. Never silently drop a lens. Use numbered choices if the host has no wizard.

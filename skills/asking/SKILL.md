@@ -1,6 +1,7 @@
 ---
 name: asking
 description: How to put a question, a finding, or a gate to the user; resolve every id to what it means, offer a structured choice when the answer is a closed set, and ask only what is genuinely a decision. Use whenever a stage reports findings, hits a gate, needs input, or writes a Needs Input or Assumed marker.
+user-invocable: false
 ---
 
 The user is not holding your context. They have not just read the document you are quoting, they do not remember which finding `CV-3` was, and every second they spend reconstructing that is a second the stage cost them instead of saving.
@@ -43,7 +44,7 @@ When you know the options, present them as **options** rather than asking an ope
 
 ## 3. Ask only what is a decision
 
-Look it up before you ask. The code, the docs, `CONTEXT.md`, the config, the tool output: anything you can discover is a **fact**, and facts are yours to find. Only **decisions** go to the user: trade-offs, preferences, priorities, things the environment genuinely does not record.
+Look it up before you ask. The code, the docs, `docs/produto/glossario.md`, the config, the tool output: anything you can discover is a **fact**, and facts are yours to find. Only **decisions** go to the user: trade-offs, preferences, priorities, things the environment genuinely does not record.
 
 A question whose answer is in a file you could have read is a question that teaches the user their attention is cheap to you.
 
@@ -95,3 +96,6 @@ Deriving a value and completing one read the same: same fluency, same confidence
 These are the other half of §3. A **fact** (does this already exist, what does this function return) is yours to find, and not finding it is a grounding failure (`GR-N`), never an assumption to mark. A **decision** in one of these classes is what gets marked.
 
 **The ceiling matters as much as the floor.** Mark a value only when a different answer would change the artifact: a contract, a schema, a boundary, a slice. A detector that fires on everything becomes an interrogation, and a user who is asked about everything stops reading the questions. If swapping the assumption changes nothing downstream, write the value and move on.
+
+## Harness fallback
+When the host has no structured wizard, render numbered options with the recommendation identified, accept a number or free text, and wait for the owner. Silence is not a choice. Do not call an unavailable Claude-specific tool.

@@ -1,20 +1,21 @@
 ---
 name: walkthrough
-description: 'Teach the owner the change the AI built, before it merges: a short HTML lesson over the ticket''s diff (what it does in domain words, where it lives, the path through the code for each acceptance criterion, what can go wrong) with a recall quiz, so nobody approves code they do not understand. Use after /review or /tidy and before /pr, or on "walk me through this change / explain what you built".'
+description: 'Teach the owner the change the AI built, before it merges: a short HTML lesson over the ticket''s diff (what it does in domain words, where it lives, the path through the code for each acceptance criterion, what can go wrong) with a recall quiz, so nobody approves code they do not understand. Use after /tm-review or /tm-tidy and before /tm-pr, or on "walk me through this change / explain what you built".'
+user-invocable: false
 ---
 
 The risk this suite cannot test away is an owner who approves code they do not understand: the tests are green, the review is clean, and nobody who will maintain it knows how it works. This stage turns the ticket's diff into a short lesson for the owner, and checks the understanding with a quiz before the change merges.
 
 ## Sources
-- the diff: `git diff <fixed-point>...HEAD`, the fixed point `/review` used;
+- the diff: `git diff <fixed-point>...HEAD`, the fixed point `/tm-review` used;
 - the ticket's acceptance criteria, the node map (its nodes, Open decisions, Analogues), the plan, and `progress.md` (the **Not verified** list);
 - the review file (findings accepted rather than fixed), the `trim/` and `tidy/` files;
-- the glossary (`CONTEXT.md`) and the ADRs the node map cites.
+- the glossary (`docs/produto/glossario.md`) and the ADRs the node map cites.
 
 Teach the code **as it is now**, read from the files, not from what the plan intended.
 
 ## The lesson
-One self-contained HTML file. Call the Skill tool with `visuals` for the views and the HTML conventions, and follow the lesson shape and quiz rules of `${CLAUDE_PLUGIN_ROOT}/skills/teach/lessons.md`. Sections, in order:
+One self-contained HTML file. Load skill `thasmorato-skills:visuals` for the views and the HTML conventions, and follow the lesson shape and quiz rules of `../../skills/teach/lessons.md`. Sections, in order:
 
 1. **What it does**, in two or three sentences of domain words: the behavior a user now gets, by acceptance criterion.
 2. **Where it lives**: a file or component tree diff sketch of what was added and changed, and the main flow as a call tree. One picture, the whole change.
@@ -27,7 +28,7 @@ One self-contained HTML file. Call the Skill tool with `visuals` for the views a
 Save it to `.scratch/<feature-slug>/walkthrough/<NN>-<slug>.html`, open it for the owner, and print the path.
 
 ## After the quiz
-Ask the owner, as a structured choice, which questions they missed or were unsure of. For each, explain that part again from the code, with the excerpt, until they can answer it. A part that stays unclear after that is a finding about the code, not about the owner: code its own owner cannot follow is a candidate for `/tidy` (rule 2, expression) or a design question, and the owner decides which before the merge.
+Ask the owner, as a structured choice, which questions they missed or were unsure of. For each, explain that part again from the code, with the excerpt, until they can answer it. A part that stays unclear after that is a finding about the code, not about the owner: code its own owner cannot follow is a candidate for `/tm-tidy` (rule 2, expression) or a design question, and the owner decides which before the merge.
 
 ## Output
 Beside the lesson, write `.scratch/<feature-slug>/walkthrough/<NN>-<slug>.md`:
@@ -35,7 +36,7 @@ Beside the lesson, write `.scratch/<feature-slug>/walkthrough/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: walkthrough
-plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+plugin_version: <the "version" in ../../plugin-source.json>
 slug: <NN>-<slug>
 fixed_point: <ref>
 questions: <n>
@@ -44,4 +45,7 @@ unclear_after: <n still unclear after the re-explanation>
 ---
 ```
 
-Then each missed question, what was re-explained, and each `unclear_after` with what the owner chose. `/retro` reads the counts: many misses across tickets point at code, or a flow, that produces changes their owners cannot follow.
+Then each missed question, what was re-explained, and each `unclear_after` with what the owner chose. `/tm-retro` reads the counts: many misses across tickets point at code, or a flow, that produces changes their owners cannot follow.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

@@ -1,12 +1,15 @@
 ---
 name: retro
 description: Look back over a finished epic, feature or cycle by reading what the work left on disk (plans, validations, progress notes, review findings) and record what it taught about the process and about the product. Use after a set of tickets completes, at the end of a cycle, or on "retro / look back / what did we learn".
+user-invocable: false
 ---
+
+Read [reporting policy](../../policies/reporting.md) before performing this stage; apply its contracts to the output.
 
 Every stage in this flow writes forward. Nothing writes back: the documents freeze at approval, and what the work taught lives in progress notes nobody reopens and in a conversation that is gone after `/compact`. This stage closes that loop: once, over a finished chunk, from the artifacts.
 
 ## Input
-`/retro <epic | feature | cycle>`: a set of **completed** tickets. Resolve them to their `.scratch/<feature-slug>/` directories.
+`/tm-retro <epic | feature | cycle>`: a set of **completed** tickets. Resolve them to their `.scratch/<feature-slug>/` directories.
 
 If nothing in scope has a `progress.md` with `status: completed` (or, in one that predates the frontmatter, `**Status:** completed` in the body), abort: *"Nothing finished in `<scope>` yet. A retro over unfinished work reads the plan, not the outcome."*
 
@@ -40,13 +43,14 @@ Then read the **Measurements** section of the most recent earlier `docs/retro/*.
 ## Two outputs, two subjects
 Sort every finding by **what it is about**, and never mix them:
 
-**About the process** → `docs/retro/<scope>.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/retro.md`. Slices planned versus done, which gate categories fired, where the loop escalated, findings that repeat across tickets, and what should change, each naming the file it would change. **Tag every process finding** by whose file it would change:
-- **`flow`**: the plugin's own process would do this wrong on any project (a stage's instructions, a gate, a template, an agent). It is an improvement to the plugin, and `/flow-report` gathers these across projects.
-- **`project`**: specific to this repository (its stack guide, its guidelines, a rule or a check here).
+**About the process** → `docs/retro/<scope>.md`, filling `../../templates/retro.md`. Slices planned versus done, which gate categories fired, where the loop escalated, findings that repeat across tickets, and what should change, each naming the file it would change. **Tag every process finding** by whose file it would change:
+- **`flow`**: the plugin's own process would do this wrong on any project (a stage's instructions, a gate, a template, an agent). It is an improvement to the plugin, and `/tm-flow-report` gathers these across projects.
+- **`repo-skill`**: repository skills, rules, stack/testing guides, CLAUDE.md or AGENTS.md.
+- **`repo-code`**: repository code and configuration.
 
-When unsure, it is `project`: a flow change affects every user of the plugin, so it needs the stronger case, the same rule `/session-analyze` uses.
+When unsure, it is `repo-skill`: a flow change affects every user of the plugin, so it needs the stronger case, the same rule `/tm-session-analyze` uses.
 
-**About the product** → append to `docs/evolutions.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/evolutions.md`. This is where the out-of-scope notes accumulated in every `progress.md` finally land instead of being reported into a chat window. Each entry cites the progress file it came from.
+**About the product** → append to `docs/evolutions.md`, filling `../../templates/evolutions.md`. This is where the out-of-scope notes accumulated in every `progress.md` finally land instead of being reported into a chat window. Each entry cites the progress file it came from.
 
 A finding that is really a **defect** is neither: it belongs in a ticket. Say so and let the user decide, rather than filing a bug as a reflection.
 
@@ -59,25 +63,25 @@ Before proposing that a pattern move into a stack guide, a rule, a check or a sk
 A review finding with the verdict `pre-existing` is real, but in code the diff did not change, so it is nobody's work and it vanishes after the review. Across an epic, those are the most honest map of technical debt the project has: found by the lenses, confirmed by the verifier, and located to `file:line`.
 
 1. **Collect** every `pre-existing` finding in the scope's review files.
-2. **Group them by area**: the component that owns the path (`docs/components.md`), or the directory when there is no component map.
+2. **Group them by area**: the component that owns the path (`docs/arquitetura/components.md`), or the directory when there is no component map.
 3. **An area is a hotspot** when its findings come from **two or more tickets**. The repetition rule applies here as everywhere: one ticket's `pre-existing` finding is an incident. Where `docs/analysis/components/<c>.md` lists debt for the same area, cite it as corroboration. Where `docs/declined.md` has a `declined` entry covering the area, list the hotspot with that entry instead of proposing it, unless the entry's **Revisit when** has happened; then propose it and cite the entry.
 4. **Propose at most 3 structural tickets**, ranked by **benefit against cost**. Benefit is the severity of the findings times the number of tickets that ran into them; cost is how much the fix touches (files, and whether the use is encapsulated or spread). Each proposal cites the findings it would close (review file and finding) and says why it is structural. The rest of the hotspots are listed, not proposed.
 
 Nothing is created here. The owner decides; a chosen proposal becomes a `Type: structural` ticket whose Source is this retro (`retro: docs/retro/<scope>.md`).
 
 ## The environment, as far as the artifacts show it
-The environment lens belongs to `/session-analyze`, which reads the conversation where navigation, tool economy and missing information show up. Here, take only the part the artifacts and the repository prove, through `environment.md`:
+The environment lens belongs to `/tm-session-analyze`, which reads the conversation where navigation, tool economy and missing information show up. Here, take only the part the artifacts and the repository prove, through `environment.md`:
 - **The guardrail**: `docs/guardrails.md`, or the repository's hooks and CI. None is a finding.
 - **Mechanical standards the review kept catching**: a repeated review finding a linter, a hook or a CI job could catch becomes a proposed check, not a rule.
 - **What the sessions found**: the `Environment` sections of the `docs/meta-retro/` reports in scope, cited, not re-derived. With no meta-retro in scope, say that the session side of the environment was not read.
 
 ## This is a log, not a state file
-`/flow` derives state from artifacts and refuses documents that must be maintained. These two outputs do not compete with that: they are **append-only history**, nothing derives current state from them, and a stale entry is still a true record of what was observed then. Never edit or remove an earlier entry; if something changed, add an entry that says so.
+`/tm-flow` derives state from artifacts and refuses documents that must be maintained. These two outputs do not compete with that: they are **append-only history**, nothing derives current state from them, and a stale entry is still a true record of what was observed then. Never edit or remove an earlier entry; if something changed, add an entry that says so.
 
 ## The boundaries of this stage
 - **It reads and records.** Every change it recommends names the stage that owns the file, and that stage makes it.
 - **It describes the work.** The artifacts record what was done, not how well anyone did it; findings are about steps, gates and files.
-- **A wrong decomposition is recorded**, here and in `evolutions.md`; `/decompose` amends `features.md` on its next run.
+- **A wrong decomposition is recorded**, here and in `evolutions.md`; `/tm-decompose` amends `features.md` on its next run.
 - **What happened is stated; why, only when written down.** That a slice shipped differently than planned is a fact on disk; its reason is quoted from where it was written, or named as not written down.
 
 ## Workflow
@@ -88,6 +92,9 @@ The environment lens belongs to `/session-analyze`, which reads the conversation
 5. Collect escalations, failed deliverables, and repeated review findings, with their instances.
 6. Group the `pre-existing` findings by area; name the hotspots; propose at most 3 structural tickets.
 7. Take the environment as far as the artifacts show it: the guardrail, the mechanical standards the review kept catching, and the meta-retros' Environment sections.
-8. Sort every finding: process (tagged `flow` or `project`), product, or defect.
+8. Sort every finding: process (tagged `flow`, `repo-skill` or `repo-code`), product, or defect.
 9. Write `docs/retro/<scope>.md`; append the product findings to `docs/evolutions.md`.
 10. Self-review: every claim points at a file, nothing describes how the work felt, and the gaps are named.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

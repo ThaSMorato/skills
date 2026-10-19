@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: flow-report (what several projects taught about the plugin's own process)
-Filled by /flow-report from the projects' docs/retro/ and docs/meta-retro/ reports. Only findings
+Filled by /tm-flow-report from the projects' docs/retro/ and docs/meta-retro/ reports. Only findings
 tagged `flow` (or untagged ones judged flow here, marked as such) and the flow measurements.
 EVERY ITEM CITES ITS INSTANCES: project, report, row. Never copy code or data from a project.
 The written file STARTS with the frontmatter below; this comment is not copied.

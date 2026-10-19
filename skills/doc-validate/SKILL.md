@@ -1,23 +1,26 @@
 ---
 name: doc-validate
-description: Validate one design document against the one it came from before the human gate (coverage in both directions, contradictions, glossary drift, unanswered non-functional requirements, unfilled required sections) and emit a clean/dirty verdict. Use after /prd, /hld, /decompose or /fdd, on "validate the docs / is the PRD ready / check the HLD against the PRD".
+description: Validate one design document against the one it came from before the human gate (coverage in both directions, contradictions, glossary drift, unanswered non-functional requirements, unfilled required sections) and emit a clean/dirty verdict. Use after /tm-prd, /tm-hld, /tm-decompose or /tm-fdd, on "validate the docs / is the PRD ready / check the HLD against the PRD".
+user-invocable: false
 ---
+
+Read [living-docs policy](../../policies/living-docs.md) before performing this stage; apply its contracts to the output.
 
 Read a source document and the document derived from it, and decide whether the derivation holds. This skill **finds problems**; it does not fix them and it does not write documents.
 
 The code phase already works this way: `plan` writes, `plan-validate` judges, `implement` refuses to start on a dirty verdict. The doc phase had authoring and a human gate and nothing in between, so the person at the gate reads four pages looking for what is missing, which is the hardest thing for a reader to see. This stage turns *"read this and approve"* into *"resolve these three conflicts"*.
 
 ## Input
-`/doc-validate <from> <to>`: the pair to check. Recognised pairs:
+`/tm-doc-validate <from> <to>`: the pair to check. Recognised pairs:
 
 | From → To | Files | Coverage shape |
 |---|---|---|
-| `brief → prd` | `docs/requirements-brief.md` → `docs/prd.md` | 1:1 |
-| `prd → hld` | `docs/prd.md` → `docs/hld.md` | 1:1 |
-| `prd → features` | `docs/prd.md` → `docs/features.md` | 1:N |
-| `hld → components` | `docs/hld.md` → `docs/components.md` | 1:1 |
-| `features → fdd` | `docs/features.md` → `docs/fdd/*.md` | 1:N |
-| `hld → fdd` | `docs/hld.md` → `docs/fdd/*.md` | 1:N |
+| `brief → prd` | `docs/requirements-brief.md` → `docs/produto/prd.md` | 1:1 |
+| `prd → hld` | `docs/produto/prd.md` → `docs/arquitetura/hld.md` | 1:1 |
+| `prd → features` | `docs/produto/prd.md` → `docs/features/README.md` | 1:N |
+| `hld → components` | `docs/arquitetura/hld.md` → `docs/arquitetura/components.md` | 1:1 |
+| `features → fdd` | `docs/features/README.md` → `docs/features/*/fdd.md` | 1:N |
+| `hld → fdd` | `docs/arquitetura/hld.md` → `docs/features/*/fdd.md` | 1:N |
 
 With no argument, validate every pair whose two sides both exist.
 
@@ -29,13 +32,16 @@ If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` firs
 
 ## Checks
 
+Compare the document diff with its previous git revision and the affected-feature index. Run `node ../../scripts/check-links.mjs <documents>` on concrete generated docs; report broken files/anchors and lost rules. ADR features/requirements must resolve in both directions.
+
+
 | ID prefix | Category | The problem it catches |
 |---|---|---|
 | `CV-N` | Coverage (omission) | An element of the source that nothing in the target carries forward |
 | `SC-N` | Set coverage | In a 1:N pair, a source item no member of the target set owns |
 | `PC-N` | Partial credit | A source item the target marks as covered but only partly delivers, ticked where it should be listed as `partial` |
 | `SN-N` | Scenario coverage | A guiding-scenario step that needs the product and has no requirement; a requirement on no step; a first milestone whose `M1` requirements do not complete its scenario; an RNF that protects no step; in `prd → features`, an `M1` requirement no `M1` feature delivers |
-| `DG-N` | Dependency graph | A cycle in `docs/features.md`'s epic or feature graph, or a feature depending on one that no longer exists |
+| `DG-N` | Dependency graph | A cycle in `docs/features/README.md`'s epic or feature graph, or a feature depending on one that no longer exists |
 | `IV-N` | Invention | An element of the target that traces to nothing in the source |
 | `RN-N` | Unanswered driver | An `RNF` in the PRD with no architectural response in the HLD |
 | `IC-N` | Inconsistency | Two documents contradict, including two FDDs specifying conflicting contracts for a component they both list as touched |
@@ -60,7 +66,7 @@ Write `docs/validation/<from>-to-<to>.md`:
 ```markdown
 ---
 kind: doc-validation
-plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+plugin_version: <the "version" in ../../plugin-source.json>
 pair: <from> → <to>
 status: clean | dirty
 open_issues: <count of open issues>
@@ -81,10 +87,13 @@ open_issues: <count of open issues>
 `status: clean` only when every finding is resolved. Otherwise `status: dirty`.
 
 ## Gate
-- **dirty** → report exactly what to fix: *"`<path>` has N open issues. Fix the document (edit it or re-run `/<stage>`), then re-run `/doc-validate <from> <to>`."* **Never auto-fix**, and never partially proceed: a validator that edits the thing it judges has stopped being a second opinion.
+- **dirty** → report each conflict and its owning stage, deliver validation and stop. The owner chooses corrections and a later validation invocation. Never auto-fix or retry.
 - **clean** → *"`<from> → <to>` is clean. The gate is now: approve `<to>` and set `Status: approved`."*
 
 The human gate reads this verdict first. A `dirty` verdict is not a veto over the user's judgement (they may approve anyway), but it means they are approving something with named, listed problems rather than approving in the dark.
 
 ## Who fixes
 Whoever authored: the stage's agent, re-run, or the user editing directly. This skill never edits either document.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

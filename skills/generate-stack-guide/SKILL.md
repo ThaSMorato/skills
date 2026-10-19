@@ -1,7 +1,10 @@
 ---
 name: generate-stack-guide
 description: Generate a per-technology engineering guide skill (conventions, patterns and gotchas for one language or framework) as a router with lazy-loaded rules. Use on "generate a stack guide / guide for <tech>", or when the guidelines router marks a technology as missing. User-invoked.
+user-invocable: false
 ---
+
+Read [stack-guides policy](../../policies/stack-guides.md) before performing this stage; apply its contracts to the output.
 
 Produce a **concrete, per-technology guide** at `.claude/skills/<tech>-guide/`. The generic standard lives in the `clean-code`, `code-smells` and `architecture` skills; this generator specializes it to one language or framework.
 
@@ -56,9 +59,12 @@ Rules for the generated guide:
 - **Reference only**: no workflow or orchestration sections. The process stays in the plugin's stages; this plugs into them.
 
 ## Phase 5: Register
-Add or update the technology's row in `docs/guidelines.md`'s routing table, with the file patterns that should load this guide. A guide nothing routes to will not be found.
+Add or update the technology's row in `docs/guias/guidelines.md`'s routing table, with the file patterns that should load this guide. A guide nothing routes to will not be found.
 
 ## Constraints
-- Only write inside `.claude/skills/<tech>-guide/` and the routing row in `docs/guidelines.md`.
+- Only write inside `.claude/skills/<tech>-guide/` and the routing row in `docs/guias/guidelines.md`.
 - Don't modify other skills or rules.
 - If the technology isn't actually used in this repo, say so and confirm before generating.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

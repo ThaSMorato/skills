@@ -12,7 +12,13 @@ status: proposed | accepted | rejected | deprecated | superseded
 date: <YYYY-MM-DD>
 tags: []
 supersedes: []        # ADR ids this decision replaces
-superseded-by: []     # inverse (set when a later ADR replaces this one)
+scope: repo-wide | backend | frontend | cross-layer
+subprojects: []
+features: []
+requirements: []      # relative links to requirement headings
+retroactive: false
+discovered_at: <YYYY-MM-DD or null>
+formalized_at: <YYYY-MM-DD>
 amends: []            # ADR ids this partially adjusts
 ---
 

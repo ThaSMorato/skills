@@ -1,17 +1,18 @@
 ---
 name: guardrails
-description: 'Install the barriers that make a repository catch mistakes on its own: a pre-commit hook and a CI job that run the checks the repo already has, a Claude Code hook that stops destructive git commands, and optionally a dependency linter that enforces docs/boundaries.md. Use when /retro reports a missing guardrail, on a new repository, or on "set up pre-commit / CI checks / block git push / guardrails".'
+description: 'Install the barriers that make a repository catch mistakes on its own: a pre-commit hook and a CI job that run the checks the repo already has, a Claude Code hook that stops destructive git commands, and optionally a dependency linter that enforces docs/arquitetura/boundaries.md. Use when /tm-retro reports a missing guardrail, on a new repository, or on "set up pre-commit / CI checks / block git push / guardrails".'
+user-invocable: false
 ---
 
 A mistake a check can catch should never reach a review. This stage installs the checks the repository is missing, using the commands it **already** has: it wires them in, it does not invent a toolchain. Every step is shown to the owner before it is written, because hooks and CI change how everyone on the repository works.
 
 ## 1. Inventory
 Read, never assume:
-- **The check commands**: `package.json` scripts, `Makefile`, `pyproject.toml` / `tox.ini`, `go.mod` (with `go vet`, `go test`), `Gemfile` / `Rakefile`, `docs/guidelines.md`'s commands table. Name each one as **format**, **lint**, **type check**, **test**, or **build**.
+- **The check commands**: `package.json` scripts, `Makefile`, `pyproject.toml` / `tox.ini`, `go.mod` (with `go vet`, `go test`), `Gemfile` / `Rakefile`, `docs/guias/guidelines.md`'s commands table. Name each one as **format**, **lint**, **type check**, **test**, or **build**.
 - **The hook manager** already present: `.husky/`, `.pre-commit-config.yaml`, `lefthook.yml`, `.git/hooks/` scripts, `simple-git-hooks` in `package.json`.
 - **The CI**: `.github/workflows/*.yml`, `.gitlab-ci.yml`, or another, and which of the check commands each job runs.
 - **Claude Code hooks** in `.claude/settings.json` and `.claude/settings.local.json`.
-- **`docs/boundaries.md`**, if `/boundaries` wrote one.
+- **`docs/arquitetura/boundaries.md`**, if `/tm-boundaries` wrote one.
 
 Run each check command once and record whether it passes today: a hook that wires in a failing command blocks every commit from the first one.
 
@@ -22,7 +23,7 @@ From the table, propose only what is missing, as a structured choice the owner p
 - **Pre-commit hook**: format and lint on the **staged files only**, plus the type check. Tests go in the hook only when they run in seconds; otherwise they belong to CI. Use the hook manager the repo already has; when it has none, propose the one its ecosystem uses (`husky` + `lint-staged` for Node, the `pre-commit` framework for Python, `lefthook` as the language-neutral choice) and say why.
 - **CI job**: lint, type check and tests on every pull request, on the CI platform the repo already uses, with the same commands the table names.
 - **Git guard for Claude Code**: `git-guard.sh` as a `PreToolUse` hook on `Bash`, blocking `push`, `reset --hard`, `clean -f`, `branch -D`, `checkout --`, `restore <path>` and `stash drop`/`clear`. The owner picks which rules stay (they are named at the top of the script) and whether it goes in the project (`.claude/settings.json`, shared with the team) or only on this machine (`.claude/settings.local.json`).
-- **Dependency linter** (only when `docs/boundaries.md` exists): the rules of `boundaries.md` as forbidden imports, with the tool the stack uses (`dependency-cruiser` for TypeScript and JavaScript, `import-linter` for Python, `depguard` in `golangci-lint` for Go, `packwerk` for Ruby). Propose the config; each rule cites the boundary it enforces.
+- **Dependency linter** (only when `docs/arquitetura/boundaries.md` exists): the rules of `boundaries.md` as forbidden imports, with the tool the stack uses (`dependency-cruiser` for TypeScript and JavaScript, `import-linter` for Python, `depguard` in `golangci-lint` for Go, `packwerk` for Ruby). Propose the config; each rule cites the boundary it enforces.
 
 A check command that fails today is proposed with a choice: fix it first, or wire it in non-blocking (a CI job that reports without failing) until it is fixed. Never wire a failing command in as blocking.
 
@@ -58,4 +59,7 @@ A guardrail that never fired is not known to work. For each item installed:
 **Done when** every installed item has shown both outcomes: what it lets through and what it stops.
 
 ## Output
-Write `docs/guardrails.md`: the inventory table, what was installed and where, the git guard's rules and scope, the commands left non-blocking and why, and how each was proven. `/retro`'s environment lens reads it to tell an absent guardrail from one that is installed but never fired.
+Write `docs/guardrails.md`: the inventory table, what was installed and where, the git guard's rules and scope, the commands left non-blocking and why, and how each was proven. `/tm-retro`'s environment lens reads it to tell an absent guardrail from one that is installed but never fired.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

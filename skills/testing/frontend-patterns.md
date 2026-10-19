@@ -102,3 +102,6 @@ Run an automated checker (axe or equivalent) in component tests and on key pages
 | **Snapshot-only tests** | large diffs nobody reads, and a false sense of coverage | pair a snapshot with behavioral assertions, or drop it |
 | **Mocking everything** | the test proves nothing about real behavior | mock at the network boundary, not your own modules |
 | **Manual `act()` wrappers** | the testing library already wraps its interactions; extra wrappers hide real warnings | remove them |
+
+## Runtime E2E mocks
+When the project deliberately uses MSW for E2E, initialize server-side interception in the app runtime (for example the supported Next.js instrumentation.ts lifecycle for the installed version). Keep it behind an explicit test-only flag, never production defaults. Browser interception does not cover BFF requests.

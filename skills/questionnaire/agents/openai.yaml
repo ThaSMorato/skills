@@ -1,0 +1,3 @@
+interface:
+  display_name: "questionnaire"
+  short_description: "Turn decisions the owner cannot answer alone into a questionnair"

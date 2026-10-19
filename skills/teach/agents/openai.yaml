@@ -1,0 +1,3 @@
+interface:
+  display_name: "teach"
+  short_description: "Teach the user a topic over several sessions, in a teaching work"

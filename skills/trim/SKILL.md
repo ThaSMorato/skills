@@ -1,14 +1,15 @@
 ---
 name: trim
-description: 'After a ticket is implemented and before it is reviewed, make its change smaller without changing behavior; read every file the diff created or modified against the plan and the acceptance criteria, and propose structural cuts with evidence: incidental hunks nothing asked for, code that re-implements what the repo already has, new files or layers the change did not need, a behavior spread over more files than it needs. Applies only the cuts the user picks, one at a time, with the tests untouched and green. Use after /implement and before /review, on "trim / shrink / make this diff smaller / more targeted".'
+description: 'After a ticket is implemented and before it is reviewed, make its change smaller without changing behavior; read every file the diff created or modified against the plan and the acceptance criteria, and propose structural cuts with evidence: incidental hunks nothing asked for, code that re-implements what the repo already has, new files or layers the change did not need, a behavior spread over more files than it needs. Applies only the cuts the user picks, one at a time, with the tests untouched and green. Use after /tm-implement and before /tm-review, on "trim / shrink / make this diff smaller / more targeted".'
+user-invocable: false
 ---
 
-`/implement` made the ticket work. Before anyone reviews it, this stage asks: **did the change need to be this big?** A diff that works often carries more than the ticket needed: a drive-by rename, a helper the repo already had, a new file where an edit would do, one behavior threaded through five files. The unit here is the **delta against the fixed point**, not the resulting code, and the goal is fewer and smaller files touched **with the behavior identical**.
+`/tm-implement` made the ticket work. Before anyone reviews it, this stage asks: **did the change need to be this big?** A diff that works often carries more than the ticket needed: a drive-by rename, a helper the repo already had, a new file where an edit would do, one behavior threaded through five files. The unit here is the **delta against the fixed point**, not the resulting code, and the goal is fewer and smaller files touched **with the behavior identical**.
 
-It runs before `/review` so the review reads the smaller diff and spends no lens on code that was about to go. `/tidy` still runs after the review, and shapes what is left by the rules of Simple Design.
+It runs before `/tm-review` so the review reads the smaller diff and spends no lens on code that was about to go. `/tm-tidy` still runs after the review, and shapes what is left by the rules of Simple Design.
 
 ## Scope and sources
-- **The diff:** `git diff <fixed-point>...HEAD`, with `--name-status` for the files created and modified. Use the fixed point `/review` will use next: where the ticket's branch started.
+- **The diff:** `git diff <fixed-point>...HEAD`, with `--name-status` for the files created and modified. Use the fixed point `/tm-review` will use next: where the ticket's branch started.
 - **The trace:** the ticket's acceptance criteria and the plan's SIs, each with the AC it serves. They decide which hunks the ticket asked for. When there is no plan, the ticket's ACs alone are the trace. When there is neither, stop: without a trace, "incidental" is an opinion.
 - **The repository outside the diff** is read, never edited: that is where the reuse criterion looks.
 
@@ -17,7 +18,7 @@ Every cut is **structural**: the behavior after it is identical, and **existing 
 
 It may rewrite code in the diff to make it smaller (fold a new file into one the ticket already touches, inline a layer, call an existing primitive), but it **never adds an abstraction**: every applied cut leaves the diff smaller than it found it.
 
-What it finds but cannot cut, it reports. A behavior no AC asked for (a parameter nobody passes, an option, an endpoint or a field no AC needs, a branch for a state the code cannot reach) is **scope**, and removing it changes behavior. List it as an **unrequested behavior** note, with the evidence; `/review` hands the notes to its spec lens, which judges the diff against the plan and the ticket, all of it and only it.
+What it finds but cannot cut, it reports. A behavior no AC asked for (a parameter nobody passes, an option, an endpoint or a field no AC needs, a branch for a state the code cannot reach) is **scope**, and removing it changes behavior. List it as an **unrequested behavior** note, with the evidence; `/tm-review` hands the notes to its spec lens, which judges the diff against the plan and the ticket, all of it and only it.
 
 ## The four criteria, in order
 Each criterion shrinks what the next one has to look at, so walk them in this order.
@@ -28,7 +29,7 @@ Each criterion shrinks what the next one has to look at, so walk them in this or
 4. **Locality: one behavior spread over more files than it needs.** The *Shotgun Surgery* smell (`code-smells` skill), measured on this diff: which files each behavior touches now, and the smaller set that would hold it.
 
 ## 1. Propose
-**Read `docs/declined.md` first**, when it exists (`${CLAUDE_PLUGIN_ROOT}/templates/declined.md` has its format). A proposal that matches a `declined` entry (the same kind of move, over a scope the entry covers) is not proposed again unless its **Revisit when** has happened; say which entries suppressed what (*"skipped 2, per D-004 and D-011"*), so a suppression is never silent.
+**Read `docs/declined.md` first**, when it exists (`../../templates/declined.md` has its format). A proposal that matches a `declined` entry (the same kind of move, over a scope the entry covers) is not proposed again unless its **Revisit when** has happened; say which entries suppressed what (*"skipped 2, per D-004 and D-011"*), so a suppression is never silent.
 
 Measure the diff first (files created, files modified, lines added and removed), then walk the criteria. Each proposal carries:
 - **the criterion**;
@@ -41,7 +42,7 @@ A proposal without evidence, one that changes behavior, or one that grows the di
 
 Present the proposals grouped by criterion, in order, as a structured choice. **The user picks which to apply.** None is applied by default.
 
-**When the owner declines a proposal with a reason that will still hold next time**, offer to record it in `docs/declined.md`, so no later run proposes it again. A passing reason ("not now") or a self-evident one is not recorded; a reason that is really an architectural decision is an ADR instead (`/adr-generate`).
+**When the owner declines a proposal with a reason that will still hold next time**, offer to record it in `docs/declined.md`, so no later run proposes it again. A passing reason ("not now") or a self-evident one is not recorded; a reason that is really an architectural decision is an ADR instead (`/tm-adr-generate`).
 
 ## 2. Apply, one at a time
 For each chosen cut, in criterion order:
@@ -58,7 +59,7 @@ Write `.scratch/<feature-slug>/trim/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: trim
-plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+plugin_version: <the "version" in ../../plugin-source.json>
 slug: <NN>-<slug>
 fixed_point: <ref>
 before: {files_created: <n>, files_modified: <n>, added: <n>, removed: <n>}
@@ -70,6 +71,9 @@ unrequested: <n (behavior notes handed to the review)>
 ---
 ```
 
-Then each proposal with its criterion, evidence and outcome (`applied`, `declined`, `reverted` and why), and an **Unrequested behavior** section with every note. `/retro` reads the frontmatter: `before` against `after` is what trimming saved, and many trace proposals or unrequested notes point at where scope creeps in upstream, at `/plan` or `/implement`.
+Then each proposal with its criterion, evidence and outcome (`applied`, `declined`, `reverted` and why), and an **Unrequested behavior** section with every note. `/tm-retro` reads the frontmatter: `before` against `after` is what trimming saved, and many trace proposals or unrequested notes point at where scope creeps in upstream, at `/tm-plan` or `/tm-implement`.
 
-Then hand off to `/review` with the same fixed point.
+Then hand off to `/tm-review` with the same fixed point.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

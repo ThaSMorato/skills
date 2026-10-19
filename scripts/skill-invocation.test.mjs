@@ -10,13 +10,13 @@ import { fileURLToPath } from 'node:url'
 // without the Skill tool, fails only at the moment of use.
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const SKILL_CALL = /[Cc]all the Skill tool with (?:each of: )?`([a-z0-9-]+)`/g
-const AGENT_CALL = /[Cc]all the Agent tool with `([a-z0-9-]+)`/g
+const SKILL_CALL = /[Ll]oad skill `thasmorato-skills:([a-z0-9-]+)`/g
+const AGENT_CALL = /[Dd]elegate to subagent `([a-z0-9-]+)`/g
 const SOFT_DISPATCH = /\b[Dd]ispatch (?:one |a |an |two )?`[a-z0-9-]+`/g
 const SOFT_LOAD = /\b(?:Load|load|Use|use|Run|run|Dispatch|dispatch) (?:\*\*both\*\* |both )?the `[a-z0-9-]+` (?:skill|agent)\b(?!')/g
 
 const skillNames = readdirSync(join(root, 'skills')).filter((name) => existsSync(join(root, 'skills', name, 'SKILL.md')))
-const agentNames = readdirSync(join(root, 'agents')).map((file) => file.replace(/\.md$/, ''))
+const agentNames = readdirSync(join(root, 'agents')).filter(file => file.endsWith('.md')).map((file) => file.replace(/\.md$/, ''))
 
 function markdownFiles(dir) {
   return readdirSync(join(root, dir), { recursive: true })
@@ -24,7 +24,7 @@ function markdownFiles(dir) {
     .map((path) => join(dir, path))
 }
 
-const sources = [...markdownFiles('skills'), ...markdownFiles('agents'), ...markdownFiles('commands')]
+const sources = [...markdownFiles('skills'), ...markdownFiles('agents'), ...markdownFiles('commands'), ...markdownFiles('workflows'), ...markdownFiles('agent-specs')]
 const read = (path) => readFileSync(join(root, path), 'utf8')
 
 test('every skill called through the Skill tool exists', () => {

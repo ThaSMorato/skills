@@ -1,0 +1,3 @@
+interface:
+  display_name: "generate-test-guide"
+  short_description: "Analyze a project's stack and generate a project-specific testin"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "pr"
+  short_description: "Write the body of a pull request from what the work left on disk"

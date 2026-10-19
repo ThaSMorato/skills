@@ -1,0 +1,3 @@
+interface:
+  display_name: "steering-validate"
+  short_description: "Check repository instructions, scoped rules, stack guides and lo"

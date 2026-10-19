@@ -1,0 +1,16 @@
+# Living feature documentation
+Resolve affected features through `docs/features/README.md`, the glossary and existing feature READMEs before choosing output paths. The index maps feature ID, user-facing name, scope, components and relative links to docs. A feature folder is justified by density of product decisions; ordinary capabilities stay in the macro PRD.
+
+Current state: `docs/produto/` (PRD, glossary, personas, scenarios), `docs/arquitetura/` (HLD, C1/C2, components, boundaries), `docs/features/<feature>/` (README, optional prd.md, fdd.md, diagramas/ C3/C4), `docs/guias/` (Diataxis), `docs/runbooks/`. Temporary delivery plans and ACs stay in `.scratch/<ticket>/`. Living docs never depend on scratch files. Feature README links state, documents, ADRs and tests.
+
+Read before editing; amend affected sections in place, preserving unrelated requirements and stable IDs. Macro PRD/HLD are amended too when their scope changes. Never put a change history or delivery checklist in a living doc. Changed decisions require a new ADR with `features`, `scope`, `subprojects`, requirement links and `amends`/`supersedes`; recorded ADRs are immutable. References for APIs, schemas and env are generated from code with the repo's generator, not duplicated by hand. Diagrams are source beside the docs. Keep only information someone will maintain; split oversized FDDs by capability, not ticket.
+
+Planning declares affected features and their doc paths, and a documentation deliverable. Tickets and designs read those living docs and derive delivery ACs from their rules. Review maps changed contracts to those paths, raising a finding when code makes a doc false. Doc validation compares the working docs with the previous git revision: lost rules, changed decisions without ADRs, broken links and requirements/ADR coverage in both directions.
+
+After successful acceptance, absorb delivered ACs into the owning feature's present-tense rules, flows or contracts; omit duplicates of existing flows and link tests as proof. Failed or blocked ACs are not absorbed. Report the documentation diff. Do not add an acceptance checklist to PRD/FDD.
+
+Legacy migration is explicit: inventory task FDDs, group by glossary capability, compare contradictions against delivered code and recorded decisions, propose the merge mapping to the owner, preserve IDs or record aliases, move current rules to feature docs, and keep historical evidence in git/ADRs. Never delete originals until links and coverage pass. A legacy layout can be read during migration; do not silently generate a second competing doc set.
+
+Use relative Markdown links with heading anchors by default, interoperable with GitHub and Obsidian. Preserve a project's explicit wikilink preference. Add frontmatter `status`, `feature`, `version` to living documents where applicable. Keep machine-readable `> Needs Input:`, `> Assumed:` and `> Decided:` markers intact inside optional Obsidian callouts. Validate links against actual headings, not guessed anchors.
+
+For a legacy project, read CONTEXT.md, docs/prd.md, docs/hld.md and docs/fdd/ as migration inputs when canonical paths are absent. Do not treat absence of the new paths as absence of existing decisions. Propose a migration mapping before moving documents.

@@ -32,7 +32,7 @@
 - Every data-driven region: loading, empty, error, partial, success. Skeletons that mirror the final content for content areas; a spinner only inside a control.
 - Every control: default, hover, focus, active, disabled, and loading when it triggers work. Read-only looks different from disabled.
 - Empty states are of five kinds, each different: first use, no results, cleared filters, no permission, failure. Each says what will be here, why it matters and how to start.
-- Edge content is designed, not discovered: the longest value, zero, one, a thousand (`${CLAUDE_PLUGIN_ROOT}/skills/ui-audit/worst-case.md`).
+- Edge content is designed, not discovered: the longest value, zero, one, a thousand (`../../skills/ui-audit/worst-case.md`).
 
 ## Copy
 - Words in the user's language, named by what users understand, not by the system's internals.

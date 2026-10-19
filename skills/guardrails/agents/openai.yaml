@@ -1,0 +1,3 @@
+interface:
+  display_name: "guardrails"
+  short_description: "Install the barriers that make a repository catch mistakes on it"

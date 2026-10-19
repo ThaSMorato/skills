@@ -140,3 +140,6 @@ npx playwright show-trace trace.zip
 - **Inspector** (`npx playwright test --debug` or `await page.pause()`): pause, step, live-locator picker.
 - **Practical flow**: download `trace.zip` from the CI artifact → `show-trace` → find the action that failed and inspect the DOM snapshot *before* it (did the element exist? was it covered?) → reproduce locally in UI Mode → fix the locator or the wait.
 - `console.log` is useless in E2E: test code runs in Node, the page in the browser. Trace/UI Mode are how you see what happened *on the page*.
+
+## External servers and BFFs
+An app already running in a container, or launched with a required mode flag, may use an explicit baseURL without Playwright webServer. Record how readiness is checked. page.route intercepts browser traffic; server-side BFF calls require a server-side seam or a real upstream.

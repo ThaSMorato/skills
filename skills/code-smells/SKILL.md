@@ -80,3 +80,6 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 | Vague Name | generic name (`data`, `tmp`, `result`) reveals nothing | `rules/vague-name.md` |
 | Hard to Pick Name | can't find a good name; design is confused | `rules/hard-to-pick-name.md` |
 | Hard to Describe | needs a long, caveat-heavy description | `rules/hard-to-describe.md` |
+
+## Apparent modularization
+Folders or interfaces alone are not modularity: report cycles, shared internals and mandatory lockstep changes with concrete dependency evidence. Recommend the smallest boundary correction.

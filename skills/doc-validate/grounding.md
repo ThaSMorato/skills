@@ -6,7 +6,7 @@ A document loses its reader at the first place it leans on an idea the reader do
 
 ## Grounded, two ways
 - **Prerequisite**: the reader brings it. For a design document that is
-  - a term the glossary (`CONTEXT.md`) defines;
+  - a term the glossary (`docs/produto/glossario.md`) defines;
   - a concept the documents above it in the chain already introduced (brief → PRD → HLD → FDD), which its reader is expected to have read;
   - the general technical vocabulary of its audience (a transaction, an HTTP status, a queue), which needs no definition.
 - **Introduced**: an earlier part of the same document establishes it, in a definition, an example, or the section that explains it. From that point on it is grounded for every later part.

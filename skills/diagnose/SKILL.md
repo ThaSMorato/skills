@@ -1,6 +1,7 @@
 ---
 name: diagnose
-description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, on "debug / why does this fail / find the bug / this broke", for a performance regression, and inside /implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
+description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, on "debug / why does this fail / find the bug / this broke", for a performance regression, and inside /tm-implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
+user-invocable: false
 ---
 
 A bug whose cause is unknown is not fixed by trying things. Each try that fails teaches almost nothing, because it tested the guess you already believed. This stage replaces guessing with a small loop that can only end in evidence: a cause at `file:line`, and tests that prove it.
@@ -68,7 +69,7 @@ With the cause at `file:line`:
 ## 6. Clean up
 **Done when** a search for the debug prefix finds nothing, the throwaway scripts and prototypes are deleted (or kept on purpose under a clearly named debug path), and the loop command is written in the output so the fix step can re-run it. After the fix, the loop runs again against the original, un-reduced scenario, and **the hypothesis that held goes in the commit or PR message**, so the next person debugging this area learns from it.
 
-## When fix attempts are running (inside `/implement`)
+## When fix attempts are running (inside `/tm-implement`)
 Each attempt **names the hypothesis it tests and its kind** (code, environment/data, measurement). **Three attempts in a row of the same kind stop the loop**: go back to step 2 and look at the other kinds. That is what keeps three tries from being spent on one guess (three timeout tweaks, three variations of one conditional).
 
 ## Output
@@ -77,7 +78,7 @@ Write `.scratch/<feature-slug>/diagnoses/<slug>.md`, or `.scratch/standalone/dia
 ```markdown
 ---
 kind: diagnosis
-plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+plugin_version: <the "version" in ../../plugin-source.json>
 slug: <slug>
 status: cause-found | unresolved | no-loop
 loop: <the one command that goes red, or `none`>
@@ -90,3 +91,9 @@ cause: <path:line, or `unknown`>
 ```
 
 Then: **Observation** (what was seen, before interpretation), **Loop** (the command and its red output, redacted), **Hypotheses** (each with its kind, its prediction, and the evidence for and against with strength), **Probes** (each with what it could distinguish and what it showed), **Cause**, **Tests** (the pinned and flipped tests per level, by path, and each seam gap with what it would need), and, when `unresolved` or `no-loop`, the **critical unknown**: the one fact that would decide it, and the probe or access that would get it.
+
+## Related-defect sweep
+Once a correction has been verified, search the repository for the same defect mechanism and report related occurrences with evidence. Stay within the authorized fix scope; do not fix unrelated occurrences or start the next stage automatically.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

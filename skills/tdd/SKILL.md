@@ -5,7 +5,7 @@ description: Test-driven development, the red-green loop that produces tests wor
 
 TDD is the red → green loop. Consult these before and during every cycle.
 
-Read `CONTEXT.md` (if present) so test names and interface vocabulary match the domain; respect the ADRs and the guidelines in the area you're touching.
+Read `docs/produto/glossario.md` (if present) so test names and interface vocabulary match the domain; respect the ADRs and the guidelines in the area you're touching.
 
 ## What a good test is
 Verifies **behavior through public interfaces**, not implementation details. It reads like a specification ("user can checkout with valid cart") and survives refactors because it doesn't care about internal structure.
@@ -32,4 +32,4 @@ If a proposed fix arrives without its pinned and flipped tests, write them befor
 ## Rules of the loop
 - **Red before green.** Write the failing test first, then only enough code to pass it. No speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactor only on green.** Once the test passes, clean production and test code with the suite still green; never refactor on red. (`/implement` runs this step for every SI; the review judges the result, it does not do the refactoring.)
+- **Refactor only on green.** Once the test passes, clean production and test code with the suite still green; never refactor on red. (`/tm-implement` runs this step for every SI; the review judges the result, it does not do the refactoring.)

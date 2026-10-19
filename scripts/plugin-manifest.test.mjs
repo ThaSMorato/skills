@@ -11,7 +11,7 @@ const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const manifest = JSON.parse(readFileSync(join(repoRoot, '.claude-plugin', 'plugin.json'), 'utf8'))
 const listedSkills = manifest.skills.map((path) => path.replace(/^\.\/skills\//, ''))
 const skillsOnDisk = readdirSync(join(repoRoot, 'skills')).filter((name) =>
-  existsSync(join(repoRoot, 'skills', name, 'SKILL.md')),
+  !name.startsWith('tm-') && existsSync(join(repoRoot, 'skills', name, 'SKILL.md')),
 )
 
 test('every skill folder on disk is listed in plugin.json', () => {

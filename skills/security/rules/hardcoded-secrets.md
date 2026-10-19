@@ -13,3 +13,6 @@
 **Watch for.** A default value that is a real secret used as a fallback; secrets passed as build arguments and baked into image layers; and long-lived personal tokens in CI where a scoped, short-lived credential would do.
 
 **Not a finding when.** The value is an obvious placeholder or a public identifier: a publishable key, a client id. Say which, so the next reader does not re-flag it.
+
+## Shell history
+Secrets passed as shell literals can persist in history and process arguments. Prefer the project secret provider or secure input; redact command evidence.

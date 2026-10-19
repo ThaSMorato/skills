@@ -2,9 +2,10 @@
 name: handoff
 description: 'Write what only this conversation knows into a handoff file, so a fresh session can continue the work without re-asking: the direction, the decisions said only in chat, what is in flight, and the next step, pointing at the artifacts for everything else. Use before ending a long session, on "handoff / continue in a new session / pass this to another agent".'
 argument-hint: "[what the next session will do]"
+user-invocable: false
 ---
 
-A new session starts with the files and nothing else. The flow's artifacts already carry most of the state: `/flow` derives where each feature stands from them, and `/implement` resumes from `progress.md`. What they do not carry is what was said only here. That is what a handoff is for, and all it is for.
+A new session starts with the files and nothing else. The flow's artifacts already carry most of the state: `/tm-flow` derives where each feature stands from them, and `/tm-implement` resumes from `progress.md`. What they do not carry is what was said only here. That is what a handoff is for, and all it is for.
 
 ## What goes in
 - **The goal of the next session**: the argument, when one was given, or the obvious next step.
@@ -15,7 +16,7 @@ A new session starts with the files and nothing else. The flow's artifacts alrea
   - what is in flight: the hypothesis being tested, the half-made change, the command that was about to run;
   - what was tried and failed, so it is not tried again;
   - open questions waiting on the owner.
-- **Suggested skills**: which skills the next session should call the Skill tool with first, and why.
+- **Suggested skills**: which skills the next session should call the skill loader with first, and why.
 - **The first command** to run in the new session.
 
 Leave out the narrative of how the session went, and anything an artifact or `git log` already says.
@@ -28,3 +29,6 @@ Save it to the system temp directory, resolved the same way every run: `$TMPDIR`
 A decision that belongs in an artifact should go there, not only into the handoff: offer to write it to its artifact now (a `> Decided:` marker, a progress note), so the handoff can point at it.
 
 **Done when** every decision and preference said only in chat is either in an artifact or in the handoff, and the file's path is printed.
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

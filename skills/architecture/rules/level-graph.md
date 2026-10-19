@@ -13,7 +13,7 @@ The fix is not to move the code but to flip the arrows: the policy declares what
 Draw the flow of data; that is *not* the dependency graph. Then check whether the source-code dependencies follow the flow or oppose it. Where they follow it, high-level policy is chained to low-level detail. Where they oppose it, an interface has been inserted and the policy is protected.
 
 ## Why it matters here
-"Which component is higher level?" is the question `docs/boundaries.md` answers with its `level` field, and the answer is what makes the allow-list checkable: an edge from a lower level to a higher one is legal, the reverse is not.
+"Which component is higher level?" is the question `docs/arquitetura/boundaries.md` answers with its `level` field, and the answer is what makes the allow-list checkable: an edge from a lower level to a higher one is legal, the reverse is not.
 
 ## The tell
 - A top-level orchestrator importing a driver, a client, a formatter.

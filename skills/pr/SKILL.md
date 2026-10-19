@@ -1,21 +1,22 @@
 ---
 name: pr
-description: 'Write the body of a pull request from what the work left on disk: a summary drawn as the smallest view that explains the change, evidence that it works (before and after), and how dangerous the merge is (one-way or two-way door, blast radius). Use after /tidy (or /review) when a ticket is ready to merge, and on "write the PR / PR description / open a PR".'
+description: 'Write the body of a pull request from what the work left on disk: a summary drawn as the smallest view that explains the change, evidence that it works (before and after), and how dangerous the merge is (one-way or two-way door, blast radius). Use after /tm-tidy (or /tm-review) when a ticket is ready to merge, and on "write the PR / PR description / open a PR".'
+user-invocable: false
 ---
 
 A reviewer decides in minutes whether to trust a change. A PR body that retells the commits spends those minutes on what the diff already says. This one answers three questions instead: **what changed** (as a picture), **how do we know it works** (as evidence), and **what happens if it is wrong** (as danger). Skip any preamble; every sentence answers one of the three.
 
 ## Sources
 Read, do not recall:
-- the diff: `git diff <fixed-point>...HEAD`, the same fixed point `/review` used;
+- the diff: `git diff <fixed-point>...HEAD`, the same fixed point `/tm-review` used;
 - the ticket (acceptance criteria, `Type`), the plan and its `progress.md` (the test results per SI, the **Not verified** list);
-- the acceptance record, `.scratch/<feature-slug>/acceptance/<NN>-<slug>.md`: its screenshots are the evidence, and when production code changed after its `verified_at`, say it is stale and offer `/acceptance` again;
+- the acceptance record, `.scratch/<feature-slug>/acceptance/<NN>-<slug>.md`: its screenshots are the evidence, and when production code changed after its `verified_at`, say it is stale and offer `/tm-acceptance` again;
 - the review file under `.scratch/<feature-slug>/reviews/`: lenses run, findings and their verdicts;
 - the `trim/` and `tidy/` files, when they exist: which commits are structural;
 - for `Type: bugfix`, the diagnosis: its `loop`, the hypothesis that held, the seam gaps;
-- for consumers of what changed: `docs/components.md`, the review's contract-compatibility findings, and, when dependencies changed, the blast radius in `docs/analysis/dependencies.md`.
+- for consumers of what changed: `docs/arquitetura/components.md`, the review's contract-compatibility findings, and, when dependencies changed, the blast radius in `docs/analysis/dependencies.md`.
 
-Use the glossary's terms (`CONTEXT.md`), and resolve every id as the `asking` skill says: a reviewer does not have the ticket open.
+Use the glossary's terms (`docs/produto/glossario.md`), and resolve every id as the `asking` skill says: a reviewer does not have the ticket open.
 
 ## The body
 
@@ -42,7 +43,7 @@ Closes <ticket id: title>
 ```
 
 ### Summary
-Call the Skill tool with `visuals` and pick the smallest view: a diff sketch of the call tree, the component tree or the file tree when the point is what moved; pseudocode when it is logic; a sequence diagram when it is an interaction. One view usually; two when one cannot carry it. Name the structural commits (from `trim/` and `tidy/`) apart from the behavioral ones, so the reviewer can read them separately.
+Load skill `thasmorato-skills:visuals` and pick the smallest view: a diff sketch of the call tree, the component tree or the file tree when the point is what moved; pseudocode when it is logic; a sequence diagram when it is an interaction. One view usually; two when one cannot carry it. Name the structural commits (from `trim/` and `tidy/`) apart from the behavioral ones, so the reviewer can read them separately.
 
 **Done when** someone who has not read the ticket can say what the change does from the summary alone.
 
@@ -64,3 +65,6 @@ Everything in the plan's **Not verified** list, and every diagnosis seam gap, go
 
 ## Output
 Write the body to `.scratch/<feature-slug>/pr.md`. Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/pr.md`).
+
+## Stage boundary
+Deliver this stage's artifact, name the next command as a recommendation to the owner, and stop the turn. Never invoke another stage, repeat this stage, or ask another agent/harness to perform the next stage. A dirty verdict is a report, never an automatic fix/revalidate loop. Only `/tm-flow` may coordinate transitions, each after an explicit owner gate. A subagent does its assigned work itself and never delegates again.

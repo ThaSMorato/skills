@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: design-system (the project's visual system, inventoried from its code)
-Filled by /ui-design, and only when the project already has a design system: tokens, a theme or a
+Filled by /tm-ui-design, and only when the project already has a design system: tokens, a theme or a
 component library. A project with none gets no file. Every value cites where it is defined
 (`file:line`); a component is listed only if it exists. The prose says how to apply the values;
 the values come from the code. PRUNE optional sections that don't apply.
@@ -9,7 +9,7 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 
 ---
 kind: design-system
-plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+plugin_version: <the "version" in ../plugin-source.json>
 inventoried_at: <git rev-parse HEAD>
 sources: [<the files the values were read from>]
 ---
@@ -42,3 +42,7 @@ sources: [<the files the values were read from>]
 
 ## Rules (optional)
 > The team's rules, one line each, named: "One primary action per screen", "One radius family".
+
+## Token layers and modes
+| Primitive | Semantic role | Component token | Light | Dark | Other modes |
+|---|---|---|---|---|---|

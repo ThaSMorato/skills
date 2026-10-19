@@ -6,8 +6,8 @@ has no denominator, and feature size drifts because "feature" is whatever gets n
 PRUNE + RENUMBER optional sections that don't apply; (required) sections always stay.
 
 IDS ARE PERMANENT ADDRESSES. On a re-run, never renumber: other artifacts are keyed on these ids and
-slugs (docs/fdd/<slug>.md, .scratch/<slug>/issues/). Insert with a suffix (E1b, F3a); a retired id is
-never reused. A removed or merged row is struck through in "Retired", not deleted.
+slugs (docs/features/<slug>/fdd.md, .scratch/<slug>/issues/). Insert with a suffix (E1b, F3a); a retired id is
+never reused. A removed ID is kept only as a redirect; rationale belongs to ADRs/git.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
 An unmarked one is a validation finding (AS-N).
@@ -41,18 +41,18 @@ An unmarked one is a validation finding (AS-N).
 | **E1**: <name> | <the outcome, one line> | <from components.md> | <epic ids, or none> | <epic ids> | <epic ids, or none> | <ADR id / HLD section, or none> |
 
 ## Features (required)
-> The unit an FDD specs and `/tickets` breaks down. Every feature belongs to exactly one epic and
+> The unit an FDD specs and `/tm-tickets` breaks down. Every feature belongs to exactly one epic and
 > traces to at least one PRD requirement: that trace is what makes the 1:N coverage check computable.
 > Keep features comparable in size within an epic.
 >
 > **`Depends on`** records cross-feature blocking: F4 cannot start until F2's schema lands. These
-> edges are **coarse and advisory**: `/tickets` owns the authoritative blocking graph at ticket
+> edges are **coarse and advisory**: `/tm-tickets` owns the authoritative blocking graph at ticket
 > level. What they exist for is the product-wide view, which ticket edges cannot give because
-> `/tickets` reads one FDD at a time and can never see across features.
+> `/tm-tickets` reads one FDD at a time and can never see across features.
 >
 > **`Not delivering`** is the boundary between this feature and its neighbours: what a reader might
 > reasonably assume is inside and isn't. It is a scope decision, knowable now, and it is what stops
-> `/fdd` inferring the bound and inferring it differently each run.
+> `/tm-fdd` inferring the bound and inferring it differently each run.
 >
 > **`Milestone`** is the PRD's: a feature is `M1` when it delivers an `M1` requirement. The `M1`
 > features together must let the persona of the first milestone's scenario reach their goal end to
@@ -61,9 +61,9 @@ An unmarked one is a validation finding (AS-N).
 > **`Constrained by`** lists the ADRs binding this feature. Where the formal ADRs don't exist yet,
 > cite the **ADR candidates the HLD flagged**. Leave it empty rather than inventing an id.
 
-| Feature | Epic | Covers (RF/RNF) | Milestone | Depends on | Components touched | Not delivering | Constrained by | FDD |
+| Feature | Epic | Covers (RF/RNF) | Milestone | Depends on | Components touched | Not delivering | Constrained by | Living docs |
 |---|---|---|---|---|---|---|---|---|
-| **F1**: <slug> | E1 | RF-001, RF-003 | M1 | <feature ids, or none> | | <the neighbouring scope it excludes> | <ADR ids, or none> | `docs/fdd/<slug>.md` |
+| **F1**: <slug> | E1 | RF-001, RF-003 | M1 | <feature ids, or none> | | <the neighbouring scope it excludes> | <ADR ids, or none> | [Feature](<slug>/README.md) |
 
 ## Requirement coverage (required)
 > The omission direction: every RF/RNF in the PRD scope is owned by at least one feature. List here
@@ -82,13 +82,10 @@ An unmarked one is a validation finding (AS-N).
 > boundary (a feature must deliver user-visible value), and the disagreement is recorded here because
 > it predicts where features will contend for the same component.
 
-## Retired (optional)
-> Features and epics removed, merged, or split on a re-run: **struck through, never deleted**, each
-> with the reason and where its scope went. The previous cut is part of the record: without it, the
-> next reader cannot tell a deliberate removal from an oversight, and a re-run looks like a first run.
+## Redirects (optional)
+> Stable old ID to current owner only. No change history; rationale stays in ADRs/git.
 
-| ~~Id~~ | Was | What happened |
-|---|---|---|
-| ~~F7~~ | <name> | merged into F3, the two shared a single seam |
+| Alias | Current feature |
+|---|---|
 
 ## Open questions / Needs Input (optional)
