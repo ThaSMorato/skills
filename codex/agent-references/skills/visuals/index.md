@@ -39,4 +39,4 @@ Keep only the calls, files, props, states and boundaries the current question ne
 - **A proposal that contradicts an ADR** carries a one-line callout naming the ADR and why reopening it may be worth it. List it only when the friction is real enough to reopen the decision.
 
 ## The HTML report
-When a stage offers a report of several proposals or findings with before/after shapes (`$thasmorato-skills:tm-tidy <path>`, `$thasmorato-skills:tm-analyze`), render it with [`<TM_ROOT>/agent-references/skills/visuals/html-report.md`](html-report.md): one self-contained file, a card per item, diagrams carrying the weight. The markdown output stays the record; the HTML is the view a human decides from.
+When a stage offers a report of several proposals or findings with before/after shapes (`$thasmorato-skills:tm-tidy <path>`, `$thasmorato-skills:tm-analyze`), render it with [`<plugin root>/agent-references/skills/visuals/html-report.md`](html-report.md): one self-contained file, a card per item, diagrams carrying the weight. The markdown output stays the record; the HTML is the view a human decides from.

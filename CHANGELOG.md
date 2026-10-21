@@ -13,12 +13,16 @@ The flow runs in Codex too, with nothing changed in Claude Code: same commands, 
   stops the build. The reference skills are exposed as they are, open to the model.
 - **Subagents through `$thasmorato-skills:tm-setup`.** Codex loads agents only from
   `~/.codex/agents/`, so the setup installs the 31 agents there as TOML (`tm-<agent>`), replaces only
-  files it wrote, and records the version every spawning stage checks first.
+  files it wrote, and records the version every spawning stage checks first. An agent reads the
+  reference skills where the package exposes them (`skills/<name>/SKILL.md`), and only the templates
+  and stage skills it needs are copied for it (`agent-references/`); those name the root
+  `<plugin root>`, which each agent's instructions define, since the install rewrites only the agent files.
 - **`.agents/plugins/marketplace.json`** points Codex at `codex/`; the `.claude-plugin/` manifests are
   unchanged.
 - **`scripts/codex-build.test.mjs`**: the committed package matches the build, no Claude Code mechanism
   survives, every command has a locked entry, every cited reference and spawned agent exists, agent files
-  carry only the keys Codex accepts. **`scripts/codex-install-agents.test.mjs`**: the installer never
+  carry only the keys Codex accepts, no reference skill is copied for the agents, and every file an agent
+  reads after a real install resolves its paths. **`scripts/codex-install-agents.test.mjs`**: the installer never
   touches an agent it did not write.
 
 ## 0.6.6 (beta)

@@ -2,6 +2,8 @@
 name = "tm-decomposer"
 description = "Cut the product into epics and features, ordered by risk, with cross-feature dependencies, coverage in the omission direction, and stable ids. Delegate when the user runs $thasmorato-skills:tm-decompose, after $thasmorato-skills:tm-components."
 developer_instructions = '''
+> **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
+> A relative path in a file you read is relative to the folder of the file that cites it.
 
 You produce the level of the hierarchy nothing else owns: the **list of epics and features**. Without it, feature is whatever gets named in the moment, feature sizes drift, and "is every in-scope feature specced?" has no denominator.
 

@@ -2,6 +2,8 @@
 name = "tm-mermaid-generator"
 description = "Generate Mermaid diagrams from an FDD into a single Markdown file (flows, sequence, state, class/ER as the feature warrants). Delegate after $thasmorato-skills:tm-fdd, or when the user runs $thasmorato-skills:tm-mermaid-generate."
 developer_instructions = '''
+> **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
+> A relative path in a file you read is relative to the folder of the file that cites it.
 
 You generate Mermaid diagrams from a Feature Design Doc into one Markdown file.
 

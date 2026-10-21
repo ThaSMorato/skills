@@ -37,6 +37,14 @@ const ENTRY_PREAMBLE = [
   '> of this plugin: tell the owner to run it, never run it yourself.',
 ].join('\n')
 
+// The install rewrites `<TM_ROOT>` only in the agent files, so the package files an agent reads name the root
+// by a marker the agent's own instructions define; the knowledge skills they read cite their files from their folder.
+const COPY_ROOT_MARKER = '<plugin root>'
+const AGENT_PREAMBLE = [
+  `> **Codex.** \`${COPY_ROOT_MARKER}\` in a file you read is \`${ROOT_MARKER}\`, the folder this plugin is installed in.`,
+  '> A relative path in a file you read is relative to the folder of the file that cites it.',
+].join('\n')
+
 const SETUP_CHECK = [
   '> **Codex setup.** This stage spawns plugin subagents. Before anything else, read',
   '> `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`',
@@ -105,17 +113,24 @@ function spellOutChainedCalls(text) {
 /**
  * Rewrites Claude Code mechanisms into their Codex equivalents. `context.prefix` is where copied
  * plugin files live for the reader (`references/` in a skill, `<TM_ROOT>/agent-references/` in an
- * agent); `context.siblings` are the files of the skill the text belongs to, when it is a copy.
+ * agent); `context.siblings` are the files of the skill the text belongs to, when it is a copy;
+ * `context.exposed` names skills read where the package exposes them (`{ root, skills }`), not from a copy.
  */
 export function translate(text, context) {
-  const { file, prefix = 'references/', version = '', commands = [], siblings } = context
+  const { file, prefix = 'references/', version = '', commands = [], siblings, exposed } = context
+  const skillPath = (name, rest = 'SKILL.md') =>
+    exposed?.skills.includes(name) ? `${exposed.root}skills/${name}/${rest}` : `${prefix}skills/${name}/${copiedName(rest)}`
+  const pluginPath = (path) => {
+    const [, name, rest] = path.match(/^skills\/([a-z0-9-]+)\/(.+)$/) ?? []
+    return name ? skillPath(name, rest) : `${prefix}${path}`
+  }
   const capital = (letter, word) => (letter === letter.toUpperCase() ? word[0].toUpperCase() : word[0]) + word.slice(1)
   let out = spellOutChainedCalls(text)
     .replace(/<the "version" in \$\{CLAUDE_PLUGIN_ROOT\}\/\.claude-plugin\/plugin\.json>/g, version)
-    .replace(/\$\{CLAUDE_PLUGIN_ROOT\}\/((?:templates|skills|scripts)\/[A-Za-z0-9_./-]+)/g, (_, path) => `${prefix}${copiedName(path)}`)
+    .replace(/\$\{CLAUDE_PLUGIN_ROOT\}\/((?:templates|skills|scripts)\/[A-Za-z0-9_./-]+)/g, (_, path) => pluginPath(path))
     .replace(/should call the Skill tool with first/g, 'should load first')
     .replace(/([Cc])all the Skill tool with each of:/g, (_, c) => `${capital(c, 'read')} each of these skills, at \`${prefix}skills/<name>/${COPIED_SKILL_FILE}\`:`)
-    .replace(/([Cc])all the Skill tool with `([a-z0-9-]+)`/g, (_, c, name) => `${capital(c, 'read')} the \`${name}\` skill (\`${prefix}skills/${name}/${COPIED_SKILL_FILE}\`)`)
+    .replace(/([Cc])all the Skill tool with `([a-z0-9-]+)`/g, (_, c, name) => `${capital(c, 'read')} the \`${name}\` skill (\`${skillPath(name)}\`)`)
     .replace(/([Cc])all the Agent tool with `([a-z0-9-]+)`/g, (_, c, name) => `${c}all the \`spawn_agent\` tool with \`agent_type = "tm-${name}"\``)
     .replace(/([Cc])all the Agent tool with an exploration agent/g, (_, c) => `${c}all the \`spawn_agent\` tool with \`agent_type = "explorer"\``)
     .replace(/([Cc])all the Agent tool once per/g, (_, c) => `${c}all the \`spawn_agent\` tool once per`)
@@ -152,8 +167,11 @@ function dependenciesOf(text, skills) {
   }
 }
 
-/** Every file reachable from `texts`, following skills into their own files. */
-function closure(source, texts, ownSkill) {
+/**
+ * Every file reachable from `texts`, following skills into their own files. `own` is the skill the
+ * texts belong to and `exposed` the skills read where they ship: neither is copied.
+ */
+function closure(source, texts, { own, exposed = [] } = {}) {
   const skills = new Set()
   const files = new Set()
   const pending = [...texts]
@@ -166,7 +184,7 @@ function closure(source, texts, ownSkill) {
       if (path.endsWith('.md')) pending.push(source.read(path))
     }
     for (const skill of deps.skills) {
-      if (skills.has(skill) || skill === ownSkill) continue
+      if (skills.has(skill) || skill === own || exposed.includes(skill)) continue
       skills.add(skill)
       pending.push(...filesIn(source.root, `skills/${skill}`).filter((path) => path.endsWith('.md')).map(source.read))
     }
@@ -183,10 +201,10 @@ function skillFrontmatter(name, description) {
 const LOCK = 'policy:\n  allow_implicit_invocation: false\n'
 
 /** Copies a closure under `base`, translating Markdown with paths that resolve from `prefix`. */
-function emitReferences(source, out, { base, prefix, deps, file }) {
+function emitReferences(source, out, { base, prefix, deps, file, exposed }) {
   const translateCopy = (path, siblings) =>
     path.endsWith('.md')
-      ? translate(source.read(path), { file: `${file} > ${path}`, prefix, version: source.version, commands: source.commands, siblings })
+      ? translate(source.read(path), { file: `${file} > ${path}`, prefix, version: source.version, commands: source.commands, siblings, exposed })
       : source.read(path)
   for (const skill of deps.skills) {
     const own = filesIn(source.root, `skills/${skill}`)
@@ -218,7 +236,7 @@ function emitEntry(source, out, command) {
 function emitKnowledge(source, out, skill) {
   const dir = `skills/${skill}`
   const own = filesIn(source.root, dir)
-  const deps = closure(source, own.filter((path) => path.endsWith('.md')).map(source.read), skill)
+  const deps = closure(source, own.filter((path) => path.endsWith('.md')).map(source.read), { own: skill })
   emitReferences(source, out, { base: `${dir}/references`, prefix: 'references/', deps, file: dir })
   for (const path of own) {
     const text = source.read(path)
@@ -231,13 +249,14 @@ function tomlBasic(value) {
 }
 
 function emitAgents(source, out) {
-  const prefix = `${ROOT_MARKER}/${AGENT_REFERENCES}/`
+  const located = (root) => ({ prefix: `${root}/${AGENT_REFERENCES}/`, exposed: { root: `${root}/`, skills: KNOWLEDGE_SKILLS } })
+  const { prefix, exposed } = located(ROOT_MARKER)
   const bodies = source.agents.map((agent) => [agent, parseFrontmatter(source.read(`agents/${agent}.md`))])
-  const deps = closure(source, bodies.map(([, { body }]) => body))
-  emitReferences(source, out, { base: AGENT_REFERENCES, prefix, deps, file: 'agents' })
+  const deps = closure(source, bodies.map(([, { body }]) => body), { exposed: KNOWLEDGE_SKILLS })
+  emitReferences(source, out, { base: AGENT_REFERENCES, deps, file: 'agents', ...located(COPY_ROOT_MARKER) })
   for (const [agent, { fields, body }] of bodies) {
     const file = `agents/${agent}.md`
-    const instructions = translate(body, { file, prefix, version: source.version, commands: source.commands })
+    const instructions = `${AGENT_PREAMBLE}\n\n${translate(body, { file, prefix, version: source.version, commands: source.commands, exposed }).trimStart()}`
     if (instructions.includes("'''")) throw new Error(`${file}: contains ''' and cannot be a TOML literal string`)
     out.set(
       `agents/tm-${agent}.toml`,

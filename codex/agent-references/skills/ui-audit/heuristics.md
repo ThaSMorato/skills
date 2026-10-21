@@ -1,4 +1,4 @@
-> Part of the `ui-audit` skill (see `<TM_ROOT>/agent-references/skills/ui-audit/index.md`). Read by `ui-critic` for the design assessment and by `ui-design` for its self-critique.
+> Part of the `ui-audit` skill (see `<plugin root>/agent-references/skills/ui-audit/index.md`). Read by `ui-critic` for the design assessment and by `ui-design` for its self-critique.
 
 # Heuristics, cognitive load, personas, severity
 
@@ -53,7 +53,7 @@ Walk the task as two or three of these, chosen by the screen. A project persona 
 |---|---|---|
 | **Power user** | daily, fast, keyboard, bulk | no shortcuts, no bulk action, Esc does nothing, the core task takes over a minute |
 | **First-timer** | first visit, no context | the first action is not obvious within seconds, icons have no labels, no way back |
-| **Stress tester** | 0 items, 1,000 items, the longest name, refresh mid-flow, two tabs | the layout breaks, state is lost (`<TM_ROOT>/agent-references/skills/ui-audit/worst-case.md` is this persona, run with data) |
+| **Stress tester** | 0 items, 1,000 items, the longest name, refresh mid-flow, two tabs | the layout breaks, state is lost (`<plugin root>/agent-references/skills/ui-audit/worst-case.md` is this persona, run with data) |
 | **Distracted mobile** | one thumb, interruptions, slow network | targets out of thumb reach, state lost on interruption, nothing loads on 3G |
 
 The keyboard-only and screen-reader user is the `ui` catalog's subject; run it there.

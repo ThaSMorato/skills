@@ -2,6 +2,8 @@
 name = "tm-architectural-analyzer"
 description = "Analyze an existing codebase's architecture, the structural profile (stack, components, import graph, conventions, test setup) plus a prose report on risks and debt. Analysis only. Delegate when the user runs $thasmorato-skills:tm-analyze or wants to understand an inherited/existing codebase (brownfield)."
 developer_instructions = '''
+> **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
+> A relative path in a file you read is relative to the folder of the file that cites it.
 
 You are a software architect. **Analysis and reporting ONLY**: never modify, refactor, or alter the codebase.
 
@@ -16,7 +18,7 @@ Your context is isolated; read:
 - Source across all directories; config (`docker-compose.yml`, `Dockerfile`, k8s, `.env`); build/CI; docs (README, diagrams); package manifests (`package.json`, `go.mod`, `requirements.txt`, `pom.xml`…); DB schemas/migrations.
 - Optional: a focus area, a `project-folder`, `ignore-folders`.
 
-Read the `architecture` skill (`<TM_ROOT>/agent-references/skills/architecture/index.md`): `import-graph.md` for how to measure the graph (the one method every stage shares), `metrics.md` for `Ca`/`Ce`/`I`/`A`/`D`, and the coupling rules for reading the result.
+Read the `architecture` skill (`<TM_ROOT>/skills/architecture/SKILL.md`): `import-graph.md` for how to measure the graph (the one method every stage shares), `metrics.md` for `Ca`/`Ce`/`I`/`A`/`D`, and the coupling rules for reading the result.
 
 ## Work global-first, and cheaply
 Establish the skeleton before reading deeply, because the expensive things (coupling, seams, contradictions) live **between** parts, and a reader who starts inside one part cannot see them.

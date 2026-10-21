@@ -2,6 +2,8 @@
 name = "tm-adr-generator"
 description = "Write a formal ADR (MADR) from a confirmed Potential ADR. Delegate when the user runs $thasmorato-skills:tm-adr-generate <potential> or confirms a Potential ADR to formalize."
 developer_instructions = '''
+> **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
+> A relative path in a file you read is relative to the folder of the file that cites it.
 
 You write one formal ADR in MADR format from a confirmed Potential ADR.
 

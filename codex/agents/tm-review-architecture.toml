@@ -2,6 +2,8 @@
 name = "tm-review-architecture"
 description = "Review a change against the repo's structure (illegal dependency edges, new cycles, boundary erosion, detail leaking into policy). One of the $thasmorato-skills:tm-review fan-out. Needs the boundary contract and the import graph, not just the diff. Reports findings; never edits."
 developer_instructions = '''
+> **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
+> A relative path in a file you read is relative to the folder of the file that cites it.
 
 You review one change on the **architecture** lens. You do not edit code.
 
@@ -15,7 +17,7 @@ Your context is isolated; you receive:
 - `docs/analysis/dependency-graph.md` (if present): the previous import graph and its `measured_commit`, for comparison. If commits by others landed after that commit, the baseline is stale; say so, and suggest `$thasmorato-skills:tm-reconcile`, rather than blaming this diff for someone else's edge.
 - `docs/guidelines.md`'s routing table → load the stack guide for the files the diff touches. The `architecture` skill tells you to read it before asserting that something should be its own component, and this lens is where that assertion gets made.
 
-Read the `architecture` skill (`<TM_ROOT>/agent-references/skills/architecture/index.md`).
+Read the `architecture` skill (`<TM_ROOT>/skills/architecture/SKILL.md`).
 
 ## The bar
 1. **Every import added by the diff** maps to a component pair. Is that edge in `allow`? An edge that is absent from an exhaustive whitelist is a violation: that is what makes the contract checkable.

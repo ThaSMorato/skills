@@ -1,9 +1,11 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readdirSync, readFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildCodexPackage, translate, KNOWLEDGE_SKILLS, PACKAGE_DIR } from './build-codex.mjs'
+import { installAgents } from './codex-install-agents.mjs'
 
 // The Codex package is generated from the Claude Code source, never edited by hand. Codex reads only
 // what is inside the package (its plugin cache copies the package root and refuses `..`), has no
@@ -96,12 +98,63 @@ test('every reference a skill cites exists inside that skill', () => {
 })
 
 test('every path an agent cites exists in the package', () => {
-  const CITED = /<TM_ROOT>\/([A-Za-z0-9_./-]+\.[a-z]+)/g
+  const CITED = /(?:<TM_ROOT>|<plugin root>)\/([A-Za-z0-9_./-]+\.[a-z]+)/g
   const missing = paths
-    .filter((path) => path.startsWith('agents/'))
+    .filter((path) => path.startsWith('agents/') || path.startsWith('agent-references/'))
     .flatMap((path) => [...read(path).matchAll(CITED)].map(([, cited]) => cited).filter((cited) => !built.has(cited)))
 
   assert.deepEqual(missing, [])
+})
+
+// The install rewrites `<TM_ROOT>` in the agent files it writes, and nowhere else: the package itself sits in
+// Codex's plugin cache. A file an agent reads from the package must name the root in a way it can resolve.
+function unresolvedAfterInstall() {
+  const packageRoot = mkdtempSync(join(tmpdir(), 'tm-built-'))
+  for (const [path, content] of built) {
+    mkdirSync(dirname(join(packageRoot, path)), { recursive: true })
+    writeFileSync(join(packageRoot, path), content)
+  }
+  const codexHome = mkdtempSync(join(tmpdir(), 'tm-codex-home-'))
+  installAgents({ packageRoot, codexHome })
+
+  const reached = new Set()
+  const pending = readdirSync(join(codexHome, 'agents')).map((name) => join(codexHome, 'agents', name))
+  while (pending.length) {
+    const text = readFileSync(pending.pop(), 'utf8')
+    for (const [, relativePath] of text.matchAll(new RegExp(`(?:${packageRoot}|<plugin root>)/([A-Za-z0-9_./-]+\\.md)`, 'g'))) {
+      const cited = join(packageRoot, relativePath)
+      if (reached.has(cited)) continue
+      reached.add(cited)
+      pending.push(cited)
+    }
+  }
+  return [...reached].filter((path) => readFileSync(path, 'utf8').includes('<TM_ROOT>')).map((path) => path.slice(packageRoot.length + 1))
+}
+
+test('every file an agent reads after the install names the plugin root it can resolve', () => {
+  assert.deepEqual(unresolvedAfterInstall(), [])
+})
+
+// A knowledge skill already ships at `skills/<name>/`, and the agents know the package root: a second
+// copy for them is the same text twice.
+test('agents read the knowledge skills where Codex exposes them, not a copy', () => {
+  const copied = KNOWLEDGE_SKILLS.filter((name) => paths.some((path) => path.startsWith(`agent-references/skills/${name}/`)))
+  const reviewQuality = read('agents/tm-review-quality.toml')
+
+  assert.deepEqual(
+    { copied, readsCleanCode: reviewQuality.includes('`<TM_ROOT>/skills/clean-code/SKILL.md`') },
+    { copied: [], readsCleanCode: true },
+  )
+})
+
+// A knowledge skill cites its own files relative to its folder (`references/…`, `naming.md`), as Codex
+// expects of a skill; an agent reading one by absolute path has to be told where those start.
+test('an agent is told that paths inside a file it reads start at that file\'s folder', () => {
+  const untold = paths
+    .filter((path) => path.startsWith('agents/'))
+    .filter((path) => !/relative to the folder of the file that cites it/.test(read(path)))
+
+  assert.deepEqual(untold, [])
 })
 
 test('every agent is generated, and every spawned agent exists', () => {

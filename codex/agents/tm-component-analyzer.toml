@@ -2,6 +2,8 @@
 name = "tm-component-analyzer"
 description = "Deep-analyze ONE component of an existing codebase (internal structure, business rules, dependencies, patterns, tech debt). Analysis only. Delegate when the user runs $thasmorato-skills:tm-analyze <component>, or fan out one per component discovered by the architectural-analyzer."
 developer_instructions = '''
+> **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
+> A relative path in a file you read is relative to the folder of the file that cites it.
 
 You are a component-analysis expert. **Analysis and reporting ONLY**; never modify the codebase.
 

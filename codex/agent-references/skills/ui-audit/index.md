@@ -17,14 +17,14 @@ Read the context that says what the screen is for: the PRD or FDD and the ticket
 **Done when** the screen, the task, the users, the device classes and the mode are named, and the owner has confirmed the scope.
 
 ## 2. See it run
-Find a browser tool and the running server the way `$thasmorato-skills:tm-acceptance` does (`<TM_ROOT>/agent-references/skills/acceptance/index.md`, step 2): search for the tool, read the dev command and port, retry a failed navigation once, then ask the owner to start the server. Walk the task once **without judging**, to learn it. Capture the screen at the widths the project supports (at least a phone width and a desktop width) and in each state you can reach: default, loading, empty, error, and the screen with real data. Save the captures under `.scratch/ui-audit/<screen-slug>/`.
+Find a browser tool and the running server the way `$thasmorato-skills:tm-acceptance` does (`<plugin root>/agent-references/skills/acceptance/index.md`, step 2): search for the tool, read the dev command and port, retry a failed navigation once, then ask the owner to start the server. Walk the task once **without judging**, to learn it. Capture the screen at the widths the project supports (at least a phone width and a desktop width) and in each state you can reach: default, loading, empty, error, and the screen with real data. Save the captures under `.scratch/ui-audit/<screen-slug>/`.
 
 **Done when** each reachable state has a capture at each width, and each unreachable state is named with the reason.
 
 ## 3. Two assessments, in isolation
 Run both before reading either, so neither biases the other:
-- **A. Design.** Call the `spawn_agent` tool with `agent_type = "tm-ui-critic"`, passing the captures, the scope from step 1 and the source paths of the screen. It scores the heuristics and the cognitive-load checklist in `<TM_ROOT>/agent-references/skills/ui-audit/heuristics.md`, walks the task as two or three personas chosen there, and judges design specificity. It returns findings with evidence, plus the strengths.
-- **B. Technical and data.** Yourself, in the browser and the code: the checks in `<TM_ROOT>/agent-references/skills/ui-audit/technical.md` (design-system drift, responsiveness, integrity, missing states and omissions), then the worst-case run in `<TM_ROOT>/agent-references/skills/ui-audit/worst-case.md`. For accessibility, read the `ui` skill (`<TM_ROOT>/agent-references/skills/ui/index.md`) and apply its catalog; a finding there cites its rule.
+- **A. Design.** Call the `spawn_agent` tool with `agent_type = "tm-ui-critic"`, passing the captures, the scope from step 1 and the source paths of the screen. It scores the heuristics and the cognitive-load checklist in `<plugin root>/agent-references/skills/ui-audit/heuristics.md`, walks the task as two or three personas chosen there, and judges design specificity. It returns findings with evidence, plus the strengths.
+- **B. Technical and data.** Yourself, in the browser and the code: the checks in `<plugin root>/agent-references/skills/ui-audit/technical.md` (design-system drift, responsiveness, integrity, missing states and omissions), then the worst-case run in `<plugin root>/agent-references/skills/ui-audit/worst-case.md`. For accessibility, read the `ui` skill (`<plugin root>/skills/ui/SKILL.md`) and apply its catalog; a finding there cites its rule.
 
 **Done when** both assessments are complete, each finding has its evidence (a capture, a `file:line`, a measured value), and B was written before A's result was read.
 
@@ -32,7 +32,7 @@ Run both before reading either, so neither biases the other:
 Merge the two lists, then:
 - **Group duplicates**: the same problem seen as a heuristic and as a missing state is one finding with both evidences.
 - **Drop** a finding with no evidence and no concrete user who is hurt.
-- **Rate severity after the evaluation, not during it** (`<TM_ROOT>/agent-references/skills/ui-audit/heuristics.md`, Severity): P0 blocks the task, P1 is major, P2 is minor with a workaround, P3 is polish.
+- **Rate severity after the evaluation, not during it** (`<plugin root>/agent-references/skills/ui-audit/heuristics.md`, Severity): P0 blocks the task, P1 is major, P2 is minor with a workaround, P3 is polish.
 - **Name the systemic patterns**: "hardcoded colors in 15 components" is one finding about the system, not fifteen.
 
 **Done when** every finding has an id, a severity, evidence and the user it hurts, and the patterns are named.
@@ -69,7 +69,7 @@ by_severity: {P0: <n>, P1: <n>, P2: <n>, P3: <n>}
 ## Not covered
 ```
 
-Also produce the HTML version for reading: read the `visuals` skill (`<TM_ROOT>/agent-references/skills/visuals/index.md`) and follow its `html-report.md`, with the captures beside each finding.
+Also produce the HTML version for reading: read the `visuals` skill (`<plugin root>/agent-references/skills/visuals/index.md`) and follow its `html-report.md`, with the captures beside each finding.
 
 ## Gate
 Report the score, the counts by severity, the P0 and P1 findings resolved to their words, the strengths, and what was not covered. Close with two to four questions that change what comes next (priority, what must not change, scope), each with options. Next: `$thasmorato-skills:tm-ui-design <screen>` with this audit as its input, or the fixes, one ticket each.

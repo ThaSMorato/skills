@@ -1,4 +1,4 @@
-> Part of the `ui-audit` skill (see `<TM_ROOT>/agent-references/skills/ui-audit/index.md`). Assessment B, with `<TM_ROOT>/agent-references/skills/ui-audit/worst-case.md`; accessibility is the `ui` catalog's.
+> Part of the `ui-audit` skill (see `<plugin root>/agent-references/skills/ui-audit/index.md`). Assessment B, with `<plugin root>/agent-references/skills/ui-audit/worst-case.md`; accessibility is the `ui` catalog's.
 
 # Technical checks
 

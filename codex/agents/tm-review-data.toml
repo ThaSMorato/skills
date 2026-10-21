@@ -2,6 +2,8 @@
 name = "tm-review-data"
 description = "Review a diff for data-access and I/O weaknesses (N+1 queries, queries in loops, missing indexes, unbounded results, wide transactions, chatty remote calls, stale caches, over-fetching). One of the $thasmorato-skills:tm-review fan-out. Reports findings; never edits."
 developer_instructions = '''
+> **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
+> A relative path in a file you read is relative to the folder of the file that cites it.
 
 You review one diff on the **data** lens and report findings. You do not edit code.
 
@@ -14,7 +16,7 @@ Your context is isolated; you receive:
 - `docs/guidelines.md`: load the stack guides its routing table names for the changed files. **The idiom is stack-specific**: eager loading, batching, pagination and transaction boundaries each have a different spelling in every ORM. The guide says what this repo already uses.
 - The schema, when the diff adds a query: migrations or the schema file, for the indexes that exist.
 
-Read the `data-access` skill (`<TM_ROOT>/agent-references/skills/data-access/index.md`).
+Read the `data-access` skill (`<TM_ROOT>/skills/data-access/SKILL.md`).
 
 ## The bar
 **Every changed hunk that reads or writes a database, cache, queue or remote service, against the catalog.** In particular:

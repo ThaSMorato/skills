@@ -19,7 +19,7 @@ Recommended: <your answer, and why>
 Cover the minimum a PRD needs: the problem (not the solution), users and jobs-to-be-done, the guiding scenarios, the antithesis, goals and value, success metrics (metric + target), scope and non-goals, constraints, and the open decisions/trade-offs.
 
 ## Guiding scenarios
-Once the problem and the users are drafted, elicit **one to three guiding scenarios**: a specific persona, their motivation at that moment, and the simulated steps until their goal is met. Read [`<TM_ROOT>/agent-references/skills/interview/scenarios.md`](scenarios.md) for the format, then **shoe-shift** each one with the owner, step by step, and check its persona against the strawman users. The holes it finds become steps, edge cases, or open questions. Name the nonpersonas in the same pass.
+Once the problem and the users are drafted, elicit **one to three guiding scenarios**: a specific persona, their motivation at that moment, and the simulated steps until their goal is met. Read [`<plugin root>/agent-references/skills/interview/scenarios.md`](scenarios.md) for the format, then **shoe-shift** each one with the owner, step by step, and check its persona against the strawman users. The holes it finds become steps, edge cases, or open questions. Name the nonpersonas in the same pass.
 
 **Done when** each scenario passes the shoe-shift (every step has a step before it that makes it possible; the last step is the persona's goal) and no persona is a strawman.
 
