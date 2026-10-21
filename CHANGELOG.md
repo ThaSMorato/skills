@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.6.7 (beta)
+
+The flow runs in Codex too, with nothing changed in Claude Code: same commands, same documents.
+
+- **`codex/`: the Codex package, generated.** `scripts/build-codex.mjs` translates the source. Each
+  command becomes a skill `tm-<command>` (`$thasmorato-skills:tm-plan`), closed to implicit invocation.
+  What it loads through the Skill tool, and every template and script it cites, is copied under its
+  `references/`, because Codex copies only the package and resolves no `${CLAUDE_PLUGIN_ROOT}`. The
+  Agent tool becomes `spawn_agent` (at most six running together), `$ARGUMENTS` the text after the
+  skill name, `/<command>` its `$thasmorato-skills:tm-<command>`. A phrase the table does not know
+  stops the build. The reference skills are exposed as they are, open to the model.
+- **Subagents through `$thasmorato-skills:tm-setup`.** Codex loads agents only from
+  `~/.codex/agents/`, so the setup installs the 31 agents there as TOML (`tm-<agent>`), replaces only
+  files it wrote, and records the version every spawning stage checks first.
+- **`.agents/plugins/marketplace.json`** points Codex at `codex/`; the `.claude-plugin/` manifests are
+  unchanged.
+- **`scripts/codex-build.test.mjs`**: the committed package matches the build, no Claude Code mechanism
+  survives, every command has a locked entry, every cited reference and spawned agent exists, agent files
+  carry only the keys Codex accepts. **`scripts/codex-install-agents.test.mjs`**: the installer never
+  touches an agent it did not write.
+
 ## 0.6.6 (beta)
 
 The same collision as 0.6.5, for `/plan`: its command calls the Skill tool with the bare name `plan`,

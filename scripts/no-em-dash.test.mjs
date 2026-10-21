@@ -21,7 +21,7 @@ function filesUnder(path) {
     .filter((entry) => /\.(md|mjs|json|sh)$/.test(entry) && statSync(join(root, entry)).isFile())
 }
 
-const files = ['skills', 'agents', 'commands', 'docs', 'templates', 'scripts', 'README.md'].flatMap(filesUnder)
+const files = ['skills', 'agents', 'commands', 'docs', 'templates', 'scripts', 'adapters', 'README.md'].flatMap(filesUnder)
 
 test('no em dash outside the marker separator', () => {
   const found = files.flatMap((path) =>
