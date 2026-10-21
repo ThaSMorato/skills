@@ -31,6 +31,12 @@ documents.
   reference skills where the package exposes them (`skills/<name>/SKILL.md`), and only the templates
   and stage skills it needs are copied for it (`agent-references/`); those name the root
   `<plugin root>`, which each agent's instructions define, since the install rewrites only the agent files.
+- **`/session-analyze` reads Codex sessions.** `scripts/session-extract.mjs --harness codex` finds the
+  most recent Codex rollout of the directory (in `sessions/` and `archived_sessions/`, through
+  symlinks, skipping subagent sessions) and writes the same segment files. It keeps what the owner
+  typed, the `$thasmorato-skills:tm-*` stages they invoked, the assistant's text and its tool names,
+  and drops the context Codex injects as user messages. Not yet: denied approvals and structured
+  answers. The Codex package passes the flag, and the build now ships a script's local imports.
 - **`.agents/plugins/marketplace.json`** points Codex at `codex/`; the `.claude-plugin/` manifests are
   unchanged.
 - **`scripts/codex-build.test.mjs`**: the committed package matches the build, no Claude Code mechanism
