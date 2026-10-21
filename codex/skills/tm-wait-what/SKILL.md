@@ -8,4 +8,4 @@ description: "The last answer did not land; re-pitch it with a little context, i
 > of this plugin: tell the owner to run it, never run it yourself.
 
 
-Read the `wait-what` skill (`references/skills/wait-what/index.md`), applied to your previous message.
+Read `references/skills/wait-what/index.md` and follow it, applied to your previous message.

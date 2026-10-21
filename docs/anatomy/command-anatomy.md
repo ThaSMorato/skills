@@ -8,7 +8,9 @@
 
 Each stage command carries a **preflight** (does the input exist? if not, name the command that produces it) and a **postflight** (what came out, what needs attention, what to run next). That pair is what makes stages composable outside `/flow`.
 
-`/flow` is the coordinator. It reads state from the artifacts on disk rather than from a status file, so every other command runs standalone and none of them owes `/flow` an update.
+**A stage ends at its postflight and stops.** It names the next command for the user to type; it never runs it, never re-runs itself until a check passes, and never asks an agent to run the next one. A dirty verdict is a report, not a trigger. Text alone did not hold this (an agent ran `/plan` and `/plan-validate` in a loop until the plan passed), so it is also enforced: every command carries `disable-model-invocation: true`, and `scripts/skill-invocation.test.mjs` fails on a sentence that runs a stage instead of naming it for the user.
+
+`/flow` is the coordinator. It reads state from the artifacts on disk rather than from a status file, so every other command runs standalone and none of them owes `/flow` an update. It proposes the next stage; it never runs one.
 
 **Every `.md` in this directory becomes a command.** There is no ignore convention, so a stray file ships as a real `/name` entry, and under a host that treats commands as description-matched skills, it competes for auto-invocation with a description that describes nothing. Prose about the directory belongs here in `docs/`, not beside the commands.
 
@@ -20,9 +22,11 @@ description: <what the command does (shown in the /command list)>
 argument-hint: "<e.g. [feature], or (none), runs once>"   # optional, always quoted
 allowed-tools: Read, Edit, Bash(git*)                       # optional (restricts)
 model: sonnet                                               # optional
+disable-model-invocation: true                              # required: only the user starts a stage
 ---
 
 <the prompt; use $ARGUMENTS, $1, $2 for the user's arguments>
+<a stage skill is read, not called: Read `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` and follow it>
 ```
 
 File: `commands/<name>.md`. Auto-discovered (no need to list it in `plugin.json`).

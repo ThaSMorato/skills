@@ -1,7 +1,10 @@
 ---
 name: trim
 description: 'After a ticket is implemented and before it is reviewed, make its change smaller without changing behavior; read every file the diff created or modified against the plan and the acceptance criteria, and propose structural cuts with evidence: incidental hunks nothing asked for, code that re-implements what the repo already has, new files or layers the change did not need, a behavior spread over more files than it needs. Applies only the cuts the user picks, one at a time, with the tests untouched and green. Use after /implement and before /review, on "trim / shrink / make this diff smaller / more targeted".'
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 `/implement` made the ticket work. Before anyone reviews it, this stage asks: **did the change need to be this big?** A diff that works often carries more than the ticket needed: a drive-by rename, a helper the repo already had, a new file where an edit would do, one behavior threaded through five files. The unit here is the **delta against the fixed point**, not the resulting code, and the goal is fewer and smaller files touched **with the behavior identical**.
 
@@ -72,4 +75,4 @@ unrequested: <n (behavior notes handed to the review)>
 
 Then each proposal with its criterion, evidence and outcome (`applied`, `declined`, `reverted` and why), and an **Unrequested behavior** section with every note. `/retro` reads the frontmatter: `before` against `after` is what trimming saved, and many trace proposals or unrequested notes point at where scope creeps in upstream, at `/plan` or `/implement`.
 
-Then hand off to `/review` with the same fixed point.
+Then tell the owner to run `/review` with the same fixed point, and stop.

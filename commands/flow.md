@@ -1,6 +1,7 @@
 ---
-description: Drive the Doc-Dev flow; scan where the project stands, report what's waiting, and run the next stage with human gates.
+description: Drive the Doc-Dev flow; scan where the project stands, report what's waiting, and name the next stage for you to run.
 argument-hint: "(none): whole project · or <feature/ticket/goal> to scope to one thing"
+disable-model-invocation: true
 ---
 
 You are the **coordinator**. Scope: $ARGUMENTS
@@ -63,7 +64,9 @@ The **frontier** is the tickets whose blockers are all `done`, crossed with wher
 ### Then report
 Before reporting a ticket done, its request-trace parts all have a ticket or an owner decision, and its acceptance record's `verified_at` is current (no production change since); say which is missing otherwise.
 
-Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, then ask before running it.
+Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop.
+
+**This command never runs a stage.** Every command and every stage skill is closed to model invocation, so only the owner starts a stage, and each stage ends at its own postflight. A coordinator that ran the next stage itself is how a plan got validated in a loop until it passed, with nobody reading it in between.
 
 ## Then size the work, and pick the shortest path that fits
 **Before proposing any stage, decide how big this is.** The full chain exists for work whose shape is genuinely unknown. Run it on a two-hour change and it does not merely cost more; it *manufactures* scope, because every template below is a completeness contract, and a completeness contract applied to a small task gets filled with invented content. The machine that makes omission detectable is the same machine that produces bulk.
@@ -109,13 +112,13 @@ Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first
 2. `/interview` → brief + glossary + inline ADRs. **GATE (ambiguity):** every required section filled, and the user confirms the shared understanding.
 3. Optional `/research` for open technical questions.
 4. `/prd` → `/doc-validate brief prd`. **GATE (strong):** a wrong PRD contaminates everything below.
-5. `/hld` (+ `/c4-generate` for C1/C2) → `/doc-validate prd hld`. **GATE (strong).** In greenfield, this is where the stack is decided: run `/guidelines` + `/generate-stack-guide <tech>` now, before `/components`.
+5. `/hld` (+ `/c4-generate` for C1/C2) → `/doc-validate prd hld`. **GATE (strong).** In greenfield, this is where the stack is decided: propose `/guidelines` + `/generate-stack-guide <tech>` now, before `/components`.
 6. `/components` → `/doc-validate hld components` (+ `/c4-generate` for the system C3). **GATE (strong):** every FDD below uses these names.
 7. `/decompose` → `/doc-validate prd features`. **GATE (medium):** look at uncovered requirements first.
 8. `/fdd <feature>` per feature (+ `/mermaid-generate`) → `/doc-validate features fdd`. **GATE (per feature, medium).** Independent features can be specced in parallel.
 9. `/boundaries`. **GATE (strong):** every ticket below is sliced against this. Then `/guardrails` (its dependency-linter item) can turn the contract into forbidden imports that fail the build.
 10. `/adr-identify` → confirm → `/adr-generate` → `/adr-link`.
-11. Re-run `/guidelines` only if the FDDs or ADRs brought in a technology its stack table does not list.
+11. Propose `/guidelines` again only if the FDDs or ADRs brought in a technology its stack table does not list.
 
 **Two architecture beats, deliberately apart.** `/components` runs **before** the FDDs so every feature spec shares one vocabulary; `/boundaries` runs **after** them, because the axes of change a boundary separates are only knowable once the features are specced. Reversing the first would make the map a reconciliation of N contradictory carve-ups; moving the second earlier would make it a guess.
 
@@ -124,7 +127,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first
 ## Phase 2: Development (per frontier ticket)
 12. `/tickets <feature>` → vertical slices with blocking edges, validated as a set by `/tickets-validate` before the gate. **GATE:** the set must be `clean`, and the tickets-to-seams count is the first thing to read.
 13. Per frontier ticket: `/design` → **GATE** → `/plan` → `/plan-validate` (**GATE:** must be `clean`) → `/implement` (SI by SI, STOP between SIs) → optional `/trim <slug> <fixed-point>`: make the change smaller with the behavior identical, so the review reads less → `/review <fixed-point>` → **GATE** → optional `/tidy <slug> <fixed-point>`: the four rules of Simple Design over what is left → `/acceptance <slug>`: every AC and request part checked in the running software, after the last change to production code → optional `/walkthrough <slug> <fixed-point>`: a lesson over the change with a recall quiz, so the owner understands what merges → `/pr <slug> <fixed-point>`: the PR body (summary as a picture, before/after evidence, merge danger), opened only when the user says so. Both are structural, apply only what the user chooses, and run in every gear that has a review.
-    - **Back-edge:** if implementation surfaces a real architectural decision, run `/adr-identify` and update the FDD, and if it revealed a new axis of change, revisit `/boundaries`. Keep the docs live.
+    - **Back-edge:** if implementation surfaces a real architectural decision, propose `/adr-identify` and an FDD update, and if it revealed a new axis of change, revisit `/boundaries`. Keep the docs live.
     - **Screens:** a ticket that builds a new screen with nothing to copy (no Figma, prototype, image or existing page) runs `/ui-design <screen>` before `/design`; a redesign runs `/ui-audit <screen>` first, then `/ui-design`. A screen with a spec in `docs/ui/` goes straight to `/design`.
     - **Bugs:** a bug whose cause is not known starts at `/diagnose`, never at a fix. It ends with the cause and the pinned and flipped tests; an obvious fix is then made test-first (Direct), anything larger becomes a `Type: bugfix` ticket whose Source is the diagnosis, through `/design` → `/plan` in the Small gear.
 14. When an epic or a cycle finishes: `/retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught: process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
@@ -136,4 +139,4 @@ Brownfield is a **modifier on every stage**, not a prefix. `/analyze` runs first
 - ❌ **Implementation is serial in the main context.** Writes conflict, and the code deserves supervision.
 - 🔀 **Real parallelism happens per epic, in worktrees.** `docs/features.md` carries each epic's parallel-safe set, derived from component overlap, so "can these two run at once" is a lookup, not a guess.
 
-Report progress after each stage. The user can stop, redirect, or jump stages at any gate.
+Each stage reports when it ends, and `/flow` again shows where the project stands and what comes next; the user can stop, redirect, or jump stages at any gate.

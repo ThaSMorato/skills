@@ -1,9 +1,10 @@
 ---
 description: 'Write a ticket''s pull request body from what the work left on disk: a summary drawn as the smallest view, before-and-after evidence, and the merge danger (one-way or two-way door, blast radius).'
 argument-hint: "<ticket slug> <fixed point, the one /review used>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `pr` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/pr/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

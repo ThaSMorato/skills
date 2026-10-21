@@ -1,9 +1,10 @@
 ---
 description: Write the questions the owner cannot answer alone into a questionnaire for the person who can, or fold a filled questionnaire's answers back into the documents waiting on them.
 argument-hint: "<who it goes to and about what>, or <path to a filled questionnaire>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `questionnaire` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/questionnaire/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

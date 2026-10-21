@@ -1,6 +1,7 @@
 ---
 description: Investigate a technical question against primary sources, producing a cited report that feeds the HLD/FDD.
 argument-hint: "<the research question>"
+disable-model-invocation: true
 ---
 
 Investigate: $ARGUMENTS

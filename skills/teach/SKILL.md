@@ -2,7 +2,10 @@
 name: teach
 description: 'Teach the user a topic over several sessions, in a teaching workspace that keeps the mission, the trusted sources, what has been learned, and short HTML lessons with practice. Use on "teach me / I want to learn / explain X so I really get it" when the goal is to learn, not to get one answer.'
 argument-hint: "<what you want to learn>"
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 Learning a topic is a project over many sessions, not one answer. This stage treats the current directory as a **teaching workspace** whose files carry the learner's state between sessions, and teaches through short lessons, each tied to why the learner wants the topic and pitched just past what they already know.
 

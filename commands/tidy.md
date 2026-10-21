@@ -1,9 +1,10 @@
 ---
 description: Make working code simple, Beck's four rules of Simple Design in order (expression, then duplication, then size), as structural changes with the tests untouched and green. After /review on a ticket's diff, or on any path that has tests covering it.
 argument-hint: "<ticket slug> <fixed point (the same one /review used)>  |  <path>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `tidy` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/tidy/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

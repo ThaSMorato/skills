@@ -1,9 +1,10 @@
 ---
 description: Answer one design question with throwaway code (a clickable HTML demo of a state model, or switchable UI variants on the real page), record the answer where the design was waiting for it, and keep the code off the working branch.
 argument-hint: "<the question, e.g. can an order be partly cancelled after a shipment left?>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `prototype` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/prototype/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

@@ -14,11 +14,10 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { KNOWLEDGE_SKILLS, STAGE_ROOT_NOTE } from './skill-kinds.mjs'
 
 export const PACKAGE_DIR = 'codex'
-export const KNOWLEDGE_SKILLS = [
-  'architecture', 'asking', 'clean-code', 'code-smells', 'data-access', 'domain-model', 'security', 'tdd', 'testing', 'ui',
-]
+export { KNOWLEDGE_SKILLS }
 
 const PLUGIN = 'thasmorato-skills'
 const ROOT_MARKER = '<TM_ROOT>'
@@ -126,6 +125,7 @@ export function translate(text, context) {
   }
   const capital = (letter, word) => (letter === letter.toUpperCase() ? word[0].toUpperCase() : word[0]) + word.slice(1)
   let out = spellOutChainedCalls(text)
+    .replace(`${STAGE_ROOT_NOTE}\n\n`, '')
     .replace(/<the "version" in \$\{CLAUDE_PLUGIN_ROOT\}\/\.claude-plugin\/plugin\.json>/g, version)
     .replace(/\$\{CLAUDE_PLUGIN_ROOT\}\/((?:templates|skills|scripts)\/[A-Za-z0-9_./-]+)/g, (_, path) => pluginPath(path))
     .replace(/should call the Skill tool with first/g, 'should load first')

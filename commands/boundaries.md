@@ -1,6 +1,7 @@
 ---
 description: Write the boundary contract from the component map and the FDDs (allowed dependency edges, policy vs detail, plug points), as a machine-checkable manifest.
 argument-hint: "(none): runs once per project, revisited when a large epic changes the structure"
+disable-model-invocation: true
 ---
 
 Call the Agent tool with `boundary-architect` to write `docs/boundaries.md`.
@@ -15,4 +16,4 @@ After the agent returns, show: the layering, the allowed-edge count, every **inv
 
 **GATE (strong).** A wrong boundary contaminates every ticket downstream: `/tickets` slices against it, `/design` places nodes in it, `/implement` treats an edge outside it as illegal, and `review-architecture` judges by it. On approval, set `Status: approved`.
 
-Then run `/adr-identify` so the inversions become recorded decisions, and `/tickets <feature>` to start the code phase.
+Then tell the user the next stages, and stop: `/adr-identify`, so the inversions become recorded decisions, and `/tickets <feature>` to start the code phase.

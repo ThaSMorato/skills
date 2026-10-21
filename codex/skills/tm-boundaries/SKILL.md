@@ -27,4 +27,4 @@ After the agent returns, show: the layering, the allowed-edge count, every **inv
 
 **GATE (strong).** A wrong boundary contaminates every ticket downstream: `$thasmorato-skills:tm-tickets` slices against it, `$thasmorato-skills:tm-design` places nodes in it, `$thasmorato-skills:tm-implement` treats an edge outside it as illegal, and `review-architecture` judges by it. On approval, set `Status: approved`.
 
-Then run `$thasmorato-skills:tm-adr-identify` so the inversions become recorded decisions, and `$thasmorato-skills:tm-tickets <feature>` to start the code phase.
+Then tell the user the next stages, and stop: `$thasmorato-skills:tm-adr-identify`, so the inversions become recorded decisions, and `$thasmorato-skills:tm-tickets <feature>` to start the code phase.

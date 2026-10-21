@@ -1,9 +1,10 @@
 ---
 description: 'Evaluate an existing screen in the running software and list its problems with evidence and severity: an isolated design critique, a technical pass and a worst-case data run. Reports; never edits.'
 argument-hint: "<screen: a route, URL or name>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `ui-audit` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/ui-audit/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

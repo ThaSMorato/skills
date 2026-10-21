@@ -1,6 +1,7 @@
 ---
 name: ui-audit
 description: 'Evaluate an existing screen in the running software and list its problems, numbered, with evidence and a severity: a design critique by an isolated agent (usability heuristics scored 0 to 4, cognitive load, personas), a technical pass (design-system drift, responsiveness, integrity, missing states), and the screen under worst-case real data. Reports; never edits. Use before a redesign, or on "audit / critique this screen".'
+disable-model-invocation: true
 ---
 
 A redesign that starts from taste replaces one set of problems with another. This stage names what is wrong with a screen as it runs today, with the evidence for each problem, so `$thasmorato-skills:tm-ui-design` has numbered problems to solve and the owner can judge each proposal by the problem it closes. It **finds**; it changes no product code.
@@ -69,7 +70,7 @@ by_severity: {P0: <n>, P1: <n>, P2: <n>, P3: <n>}
 ## Not covered
 ```
 
-Also produce the HTML version for reading: read the `visuals` skill (`<plugin root>/agent-references/skills/visuals/index.md`) and follow its `html-report.md`, with the captures beside each finding.
+Also produce the HTML version for reading: read the `visuals` skill (`<plugin root>/skills/visuals/SKILL.md`) and follow its `html-report.md`, with the captures beside each finding.
 
 ## Gate
 Report the score, the counts by severity, the P0 and P1 findings resolved to their words, the strengths, and what was not covered. Close with two to four questions that change what comes next (priority, what must not change, scope), each with options. Next: `$thasmorato-skills:tm-ui-design <screen>` with this audit as its input, or the fixes, one ticket each.

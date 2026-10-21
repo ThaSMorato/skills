@@ -1,6 +1,7 @@
 ---
 description: Read a whole working session (every compaction segment) and report where the owner had to correct, reject or repeat something and what in the environment got in the way, each tagged as a problem of the flow or of this project, with the repeats across segments first.
 argument-hint: "(optional) session id, default: the most recent session of this directory"
+disable-model-invocation: true
 ---
 
 Analyze the working session: $ARGUMENTS

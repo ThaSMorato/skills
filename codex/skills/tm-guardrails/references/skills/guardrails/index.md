@@ -1,6 +1,7 @@
 ---
 name: guardrails
 description: 'Install the barriers that make a repository catch mistakes on its own: a pre-commit hook and a CI job that run the checks the repo already has, a Claude Code hook that stops destructive git commands, and optionally a dependency linter that enforces docs/boundaries.md. Use when $thasmorato-skills:tm-retro reports a missing guardrail, on a new repository, or on "set up pre-commit / CI checks / block git push / guardrails".'
+disable-model-invocation: true
 ---
 
 A mistake a check can catch should never reach a review. This stage installs the checks the repository is missing, using the commands it **already** has: it wires them in, it does not invent a toolchain. Every step is shown to the owner before it is written, because hooks and CI change how everyone on the repository works.

@@ -1,9 +1,10 @@
 ---
 description: 'Check every acceptance criterion and every part of the owner''s request in the running software (browser and screenshot, a named test, or not verified with the reason) after the last change, and record it for /pr.'
 argument-hint: "<ticket slug>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `acceptance` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/acceptance/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

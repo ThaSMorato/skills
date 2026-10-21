@@ -1,7 +1,10 @@
 ---
 name: ticket-plan
 description: Break one ticket into a validated implementation plan, vertical Step Implementations (SIs) with tests, dependencies, and acceptance criteria, ready for the SI-by-SI implement loop. Use before implementing a ticket, on "plan this ticket / break this into steps", or right after /design.
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 Turn one ticket into a **plan** the `implement` loop can execute SI by SI. This skill decides *how* the work is sliced; it does not write production code and it does not make the design decisions.
 
