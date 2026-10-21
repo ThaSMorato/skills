@@ -167,3 +167,25 @@ test('the Codex manifests carry the plugin version and point at the package', ()
 test('a phrase the translation table does not know stops the build', () => {
   assert.throws(() => translate('Ask the Skill tool nicely.', { file: 'commands/x.md', mode: 'entry' }), /commands\/x\.md/)
 })
+
+test('the Codex session analysis reads Codex sessions, with the module that does it', () => {
+  const entry = read('skills/tm-session-analyze/SKILL.md')
+
+  assert.deepEqual(
+    { harness: /session-extract\.mjs" --harness codex/.test(entry), shipped: built.has('skills/tm-session-analyze/references/scripts/session-extract-codex.mjs') },
+    { harness: true, shipped: true },
+  )
+})
+
+test('every script in the package ships with the local modules it imports', () => {
+  const missing = paths
+    .filter((path) => path.endsWith('.mjs'))
+    .flatMap((path) =>
+      [...read(path).matchAll(/from '\.\/([^']+)'/g)]
+        .map(([, imported]) => join(dirname(path), imported))
+        .filter((imported) => !built.has(imported))
+        .map((imported) => `${path}: ${imported}`),
+    )
+
+  assert.deepEqual(missing, [])
+})

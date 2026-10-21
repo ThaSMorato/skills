@@ -28,6 +28,12 @@ documents.
 - **Subagents through `$thasmorato-skills:tm-setup`.** Codex loads agents only from
   `~/.codex/agents/`, so the setup installs the 31 agents there as TOML (`tm-<agent>`), replaces only
   files it wrote, and records the version every spawning stage checks first.
+- **`/session-analyze` reads Codex sessions.** `scripts/session-extract.mjs --harness codex` finds the
+  most recent Codex rollout of the directory (in `sessions/` and `archived_sessions/`, through
+  symlinks, skipping subagent sessions) and writes the same segment files. It keeps what the owner
+  typed, the `$thasmorato-skills:tm-*` stages they invoked, the assistant's text and its tool names,
+  and drops the context Codex injects as user messages. Not yet: denied approvals and structured
+  answers. The Codex package passes the flag, and the build now ships a script's local imports.
 - **`.agents/plugins/marketplace.json`** points Codex at `codex/`; the `.claude-plugin/` manifests are
   unchanged.
 - **`scripts/codex-build.test.mjs`**: the committed package matches the build, no Claude Code mechanism
