@@ -1,7 +1,10 @@
 ---
 name: acceptance
 description: 'Check every acceptance criterion and every part of the owner''s request against the running software before the work is called done: each one verified in the browser (with a screenshot), by a named test only, or not verified with the reason, recorded in one index the pull request reads. Use after the last /review fix and /tidy, before /walkthrough and /pr, or on "test it in the browser / were all the ACs checked".'
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 Green tests say the code does what the tests ask. The owner asks something else: does the feature do what was requested, on screen, with real data. This stage answers that, item by item, after the last change to production code, and leaves a record nobody has to take on trust.
 

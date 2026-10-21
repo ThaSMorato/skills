@@ -17,6 +17,6 @@
 
 The reference skills are **routers**: a short index plus `rules/` or sibling files, read only when a row matches. That shape is the point: a stage that needs one rule shouldn't pay for the catalog.
 
-The verification skills carry `disable-model-invocation: true`, as do `plan`, `implement`, `design`, `ui-audit`, `ui-design`, `prototype`, `acceptance`, `guardrails`, `teach`, `walkthrough`, `wait-what`, `handoff`, `retro`, `flow-report`, the writing skills and the generators: they are consequential enough that firing them by accident is worse than the user typing the command.
+Every stage skill carries `disable-model-invocation: true`, and so does every command: only the owner typing a command starts a stage, and a stage never starts another (the stop rule, 0.6.7). A command reaches its closed skill by reading the file, not through the Skill tool, which the flag refuses. The reference skills stay open: any stage, agent or the model itself loads them.
 
 When it's skill × command × agent: see [`docs/anatomy/plugin-anatomy.md`](../docs/anatomy/plugin-anatomy.md). How to write one: [`docs/anatomy/skill-anatomy.md`](../docs/anatomy/skill-anatomy.md).

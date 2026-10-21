@@ -1,0 +1,67 @@
+<!--
+TEMPLATE: system-profile (the machine-facing half of $thasmorato-skills:tm-analyze)
+Filled by the architectural-analyzer alongside the human-facing docs/analysis/architecture.md.
+This file is FACTS, not narrative: what the repo IS, in a shape later stages can consume without
+reading a thousand-line report. Every downstream stage reads this one and reaches for the prose
+report only when a human is in the loop.
+Keep the headings and table columns STABLE; stages anchor on them.
+PRUNE optional sections that don't apply; (required) sections always stay.
+-->
+
+# System profile: <repo>
+
+## Metadata (required)
+- **Generated:** <YYYY-MM-DD>
+- **Coverage:** full | partial
+- **Not covered:** <paths sampled, skipped, or truncated, or `none`. Never leave a gap silent.>
+
+## Stack (required)
+> One row per ecosystem actually present, with the manifest that proves it.
+
+| Ecosystem | Version | Manifest | Package manager |
+|---|---|---|---|
+
+## Components (required)
+> The structural units discovered, by evidence. This is the raw material `$thasmorato-skills:tm-components` reconciles with
+> the HLD; names here are the code's names, not the design's.
+
+| Component | Path | Entrypoint | Ca | Ce |
+|---|---|---|---|---|
+
+## Dependency graph (required)
+> The measured graph lives in `docs/analysis/dependency-graph.md` (measured by the architecture skill's
+> `import-graph.md`, with its `measured_commit`), where `$thasmorato-skills:tm-reconcile` can re-measure it without rewriting
+> this profile. Here, only the summary: component count, edge count, the method per language, and every
+> cycle as its full path, or `none`. Consumed by `$thasmorato-skills:tm-components` (metrics), `$thasmorato-skills:tm-boundaries` (divergence),
+> and `$thasmorato-skills:tm-decompose` (which epics are parallel-safe).
+
+## Conventions observed (required)
+> The repo's real conventions, each with a file that demonstrates it. This is what `$thasmorato-skills:tm-guidelines` mines
+> instead of emitting language defaults.
+
+| Area | Convention in use | Evidence |
+|---|---|---|
+| Naming | | |
+| Error handling | | |
+| Module layout | | |
+| Async / concurrency | | |
+
+## Test setup (required)
+> What `$thasmorato-skills:tm-generate-test-guide` and `$thasmorato-skills:tm-plan` need and would otherwise rediscover: the runner, the layout,
+> the factories and DSL that already exist, and the real commands.
+
+- **Runner + config:**
+- **Test layout:**
+- **Existing factories / builders / DSL:**
+- **Commands:** test · type-check · lint · build
+
+## Integration points (required)
+> Everything the system talks to across a process boundary.
+
+| System | Kind (db \| cache \| queue \| http \| storage \| other) | Reached from | Config source |
+|---|---|---|---|
+
+## Inherited constraints (required)
+> What cannot change without breaking something outside this repo: published contracts, persisted
+> schemas, public events, hard runtime floors. `$thasmorato-skills:tm-interview` reads this so brownfield elicitation asks
+> about the immovable, not only about the desired.

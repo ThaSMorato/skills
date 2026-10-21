@@ -1,6 +1,7 @@
 ---
 description: Sweep the design docs (HLD/FDD/boundaries) for architectural decisions that merit an ADR, proposing Potential ADRs.
 argument-hint: "(optional) modules/paths to focus on, or --brownfield to analyze the codebase and git history"
+disable-model-invocation: true
 ---
 
 Call the Agent tool with `adr-analyzer` to sweep the design docs for ADR-worthy decisions and write Potential ADRs under `docs/adr/potential/`. Focus: $ARGUMENTS

@@ -1,6 +1,7 @@
 ---
 description: Review the diff since a fixed point across narrow lenses in parallel (quality, tests, security, spec, standards, architecture, data, docs, and UI when the diff touches it), then synthesize, and verify every finding against the code before you decide.
 argument-hint: "<fixed point: commit/branch/tag, e.g. main or HEAD~5>"
+disable-model-invocation: true
 ---
 
 Review the diff between `HEAD` and the fixed point: $ARGUMENTS

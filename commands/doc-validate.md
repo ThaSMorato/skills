@@ -1,9 +1,10 @@
 ---
 description: Validate a design document against the one it came from before the human gate (coverage both ways, contradictions, glossary drift, unanswered RNFs) with a clean/dirty verdict.
 argument-hint: '<from> <to> (e.g. "prd hld"), or omit to validate every available pair'
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `doc-validate` to check: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/SKILL.md` and follow it to check: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

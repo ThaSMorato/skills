@@ -4,7 +4,7 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
 
 ## The flow
 
-`/flow` drives the whole thing. It **scans the disk first** and tells you where the project stands and what is waiting for your approval, then runs the next stage, stopping at human gates, because the AI drafts and the human validates.
+`/flow` drives the whole thing. It **scans the disk first** and tells you where the project stands and what is waiting for your approval, then names the next stage for you to run. It never runs one itself, and no stage runs another: every stage ends at its postflight and waits for you, because the AI drafts and the human validates.
 
 ```
 /flow  (coordinator: scans state from artifacts, never from a status file)
@@ -36,6 +36,23 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
 
 Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 
+### Codex
+
+```bash
+codex plugin marketplace add ThaSMorato/skills
+codex plugin add thasmorato-skills@thasmorato
+```
+
+Then, in a new Codex session, run `$thasmorato-skills:tm-setup` once per plugin version: Codex does not load subagents from a plugin, so the setup installs them into `~/.codex/agents/` as `tm-<agent>`. Differences from Claude Code:
+
+- **Stages are skills, not slash commands.** Each command is `$thasmorato-skills:tm-<command>` (`/plan` is `$thasmorato-skills:tm-plan`). Codex has its own `/review`, `/plan` and `/init`; those are not this plugin.
+- **Stages never fire on their own.** Every `tm-*` skill is closed to implicit invocation; only the owner typing its name runs it. The reference skills (`testing`, `tdd`, `security`, `code-smells`, `clean-code`, `architecture`, `data-access`, `domain-model`, `ui`, `asking`) stay open, as in Claude Code.
+- **"Never edits" is an instruction, not a sandbox.** Codex ignores a subagent's `sandbox_mode`, so the review lenses are read-only only because they are told to be. Run the session read-only when that has to hold.
+- **At most six subagents run together** (Codex's default `agents.max_concurrent_threads_per_session`); `tm-review` runs its lenses in batches.
+- **Codex reads `AGENTS.md`, not `CLAUDE.md`.** A project that keeps its instructions in `CLAUDE.md` can add `project_doc_fallback_filenames = ["CLAUDE.md"]` to its Codex config.
+
+The Codex package in `codex/` is generated: edit the source, then run `node scripts/build-codex.mjs`.
+
 ## Commands
 
 | Stage | Commands |
@@ -58,11 +75,13 @@ Or, from a local checkout: `/plugin marketplace add <path-to-this-repo>`.
 
 | Folder | Role |
 |---|---|
-| `skills/` | Skills (model-invoked / interactive): run in the main context. Doc/design (`interview`, `domain-model`, `design`), the dev loop (`plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui`) |
+| `skills/` | Skills (model-invoked / interactive): run in the main context. Doc/design (`interview`, `domain-model`, `ticket-design`), the dev loop (`ticket-plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui`) |
 | `commands/` | User entrypoints (`/flow`, `/interview`, `/prd`…) |
 | `agents/` | Heavy generation and review subagents (isolated context, parallelizable) |
 | `templates/` | Canonical skeleton per artifact (generation scaffold + handoff anchor + gate checklist) |
-| `scripts/` | The few things that have to be code: the session-transcript extractor behind `/session-analyze`, and the plugin's own consistency tests. Node standard library only, no dependencies; run the tests with `node --test scripts/*.test.mjs` |
+| `codex/` | The Codex package, **generated** from the folders above by `scripts/build-codex.mjs`; never edited by hand. `.agents/plugins/marketplace.json` points Codex at it |
+| `adapters/codex/` | The little that exists only in Codex: the `tm-setup` skill |
+| `scripts/` | The few things that have to be code: the session-transcript extractor behind `/session-analyze`, the Codex build and its agent installer, and the plugin's own consistency tests. Node standard library only, no dependencies; run the tests with `node --test scripts/*.test.mjs` |
 | `docs/anatomy/` | Authoring standards (skill/command/agent/plugin anatomy) |
 
 ## Design principles

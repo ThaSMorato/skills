@@ -8,7 +8,7 @@
 ---
 name: <kebab-case>             # = folder name
 description: '<WHAT it does + WHEN to use / trigger phrases>'
-disable-model-invocation: true # optional: user-invoked only, never auto-fires; never on a skill a command calls
+disable-model-invocation: true # on every stage skill; never on a reference skill
 ---
 
 <imperative, short instructions, addressed to the model>
@@ -54,7 +54,8 @@ Two choices, trading two costs. **Context load** is what always-loaded text cost
 
 - **Model-invoked** (no `disable-model-invocation`): the description stays loaded so the agent, and other skills, can reach it. Pay this only when the agent must fire it on its own or another skill must load it. A **primitive** lives here: it concentrates a technique several skills reuse. A model-invoked skill that is all reference is also the home for reference several skills share.
 - **User-invoked** (`disable-model-invocation: true`): zero context load; only the human typing its name reaches it, and no other skill can. The description becomes a one-line summary for the human, with no trigger list. A **wrapper**, the user's front door that composes primitives, lives here (e.g. `grill-with-docs` = `grilling` + `domain-modeling`).
-- **A skill a command calls is model-invoked.** The flag refuses every Skill tool call, a command's included, so a command that says "Call the Skill tool with `<name>`" over a flagged skill can never reach it, and typing the shared name reaches the command, not the skill. `scripts/skill-invocation.test.mjs` fails the build on that pair. The command is the user's front door; the skill behind it pays the context load.
+- **A stage skill is closed, and its command reads it.** Every skill a command exists for (`ticket-plan`, `plan-validate`, `implement`...) carries the flag, so the model cannot start a stage on its own. The flag refuses every Skill tool call, a command's included (0.6.4), so the command does not call the skill: it reads the file, *"Read `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` and follow it"*. A file read that way gets no `${CLAUDE_PLUGIN_ROOT}` substitution, so the skill opens with the line in `scripts/skill-kinds.mjs` (`STAGE_ROOT_NOTE`) that says where its paths start. A stage skill another stage needs (`implement` on `diagnose`) is read the same way.
+- **A reference skill stays open.** The skills in `KNOWLEDGE_SKILLS` (`scripts/skill-kinds.mjs`: `testing`, `tdd`, `security`, `asking`...) carry no flag and are called through the Skill tool. A new skill is one or the other, and `scripts/skill-invocation.test.mjs` fails on a skill that is neither listed nor closed.
 - Reference that two user-invoked skills both need can live in neither: neither can load the other. Put it in a plain file both point at.
 
 ## Checklist

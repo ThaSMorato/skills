@@ -1,0 +1,83 @@
+> Part of the `ticket-plan` skill (see `references/skills/ticket-plan/index.md`). The exact shape of a plan document.
+
+# Plan document format
+
+Location: `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`.
+
+The work for one ticket leaves four sibling artifacts, and together they are the state the `$thasmorato-skills:tm-flow` scan reads:
+
+| File | Written by | Means |
+|---|---|---|
+| `.scratch/<feature-slug>/design/<NN>-<slug>.md` | `design` | the node map exists |
+| `plans/<NN>-<slug>/plan.md` | `plan` | the work is sliced |
+| `plans/<NN>-<slug>/validation.md` | `plan-validate` | the verdict, `clean` or `dirty` |
+| `plans/<NN>-<slug>/progress.md` | `implement` | how many SIs are done |
+
+```markdown
+---
+kind: plan
+plugin_version: 0.6.7
+slug: <NN>-<slug>
+ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
+design: .scratch/<feature-slug>/design/<NN>-<slug>.md
+type: behavioral | structural | bugfix
+gear: full | feature | small
+sis_planned: <number of SIs below>
+revision: <1 when first written; +1 every time the plan is revised after a dirty validation>
+---
+
+# Plan: <NN> <Ticket title>
+
+## Objective
+<One or two sentences: the end-to-end behavior this ticket makes work, from the user's perspective.>
+
+## Step Implementations
+
+### SI-1: <name>
+- **Description:** <what this vertical slice delivers>
+- **Technical actions:** <ordered steps; intent-level, not stale full paths>
+- **Tests:** <seam(s) + layer(s) to cover, per the `testing` skill, or `none (<reason>)`>
+- **Mirror:** <optional: `path:line` rows from the node map's Conventions to mirror that this SI's code should look like>
+- **Dependencies:** <SI ids that must complete first, or `none`>
+- **Acceptance criteria:** <observable outcome(s), each naming the ticket AC id it serves, e.g. "(AC-2)">
+
+### SI-2: <name>
+- ...
+
+## Dependency Map
+<The order SIs execute in. A simple list when linear; an explicit DAG when SIs fan out.
+ e.g. SI-1 → SI-2 → SI-3, with SI-4 blocked by SI-2.>
+
+## Slicing
+> Decided: <the SI count and the merges or splits the owner chose, e.g. "3 SIs; validations merged into SI-2"> — owner, <YYYY-MM-DD>
+
+## AC coverage
+| Ticket AC | Owned by |
+|---|---|
+| AC-1 | SI-1, SI-3 |
+
+## Deliverables
+- [ ] Every SI's tests are green
+- [ ] <type-check command> passes
+- [ ] <lint command> passes (if the repo has one)
+- [ ] <build command> passes (if the repo has one)
+- [ ] <each ticket acceptance criterion, restated as a checkable line>
+```
+
+## The frontmatter is what gets counted
+`gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose; `$thasmorato-skills:tm-retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
+
+## Rules for a good plan
+- **Coarse by default.** Propose the fewest SIs that clear the floor below and the ceiling in this rule list; merge what touches the same file, function, node or screen, what one check verifies, and what has only one consumer (`references/skills/ticket-plan/index.md` §2). At `gear: small`, 1 to 3 SIs.
+- **One SI = one red → green → refactor cycle** that fits a fresh context window. **If an SI needs two Acts to describe, split it**: the single-act rule, at plan scale. Work verified by the same check at the same seam is one Act, however many ACs it closes.
+- **Vertical, not horizontal.** Each SI cuts through every layer it needs; never "all schema, then all API".
+- **Seams are named up front.** The `implement` loop writes the failing test at the seam the SI declares; no test seam, no test-first.
+- **Every AC is owned, by id.** The coverage table is what makes that mechanical rather than a reading exercise.
+- **The plan encodes the node map.** Modules, interfaces and seams come from the map; a plan that invents one has diverged from the design contract.
+- **Prefactoring SIs lead.** Reshape first, then build on the easy shape. A prefactoring SI names the AC it makes easy (`enables AC-2`) in place of an AC it owns.
+- **An SI has a floor.** It changes production code, changes something observable at its seam, and owns at least one AC. "Write the test for X" and "change the value" are steps of an SI, not SIs. If the plan has more SIs than the ticket has ACs, check that each one clears the floor before you present it.
+- **A bugfix plan starts from the diagnosis.** For `type: bugfix`: the ticket's Source is a `$thasmorato-skills:tm-diagnose` file with `status: cause-found`. The first SI writes the pinned and flipped tests at **every level** the diagnosis lists (`levels`), and the flipped tests are its red step; the fix is the green. The flipped tests are sealed: no later SI edits them. A level in the diagnosis's `seam_gaps` has no test SI; the plan names it as a known gap instead. The final verification also runs the diagnosis's `loop` command against the original scenario, and it must go green; the commit or PR message names the hypothesis that held.
+- **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
+- **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them; the final verification runs exactly these.
+- **Mark the decisions the sources do not give.** A threshold, a failure behavior or a visibility rule that the ticket, node map and FDD are silent on is written with `> Assumed:` under the SI that depends on it (the `asking` skill §4 and §6). Facts are not assumptions: if the repo can answer it, look it up.
+- **No stale detail.** Prefer intent over hard-coded file paths and code snippets; the exception is a decision-encoding snippet trimmed to the decision. A `Mirror:` pointer is not stale detail: it names existing code to imitate, copied from the node map, and carries no snippet.

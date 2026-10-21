@@ -1,6 +1,7 @@
 ---
 description: Generate the project's engineering guidelines router, an index of stack guides, documents, conventions and real commands (≤150 lines, lazy-loaded).
 argument-hint: "(none): detected from the repo; re-run when the stack changes"
+disable-model-invocation: true
 ---
 
 Call the Agent tool with `guideline-generator` to generate `docs/guidelines.md` for this project.

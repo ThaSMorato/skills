@@ -1,6 +1,7 @@
 ---
 description: Analyze an existing codebase (brownfield), the structural profile and architecture report, then optional per-component deep dives.
 argument-hint: "(optional) component name to deep-analyze; omit for the whole system"
+disable-model-invocation: true
 ---
 
 ## One component named

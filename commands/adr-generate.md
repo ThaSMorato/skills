@@ -1,6 +1,7 @@
 ---
 description: Write a formal ADR (MADR) from a confirmed Potential ADR.
 argument-hint: "<potential ADR file or slug>"
+disable-model-invocation: true
 ---
 
 Call the Agent tool with `adr-generator` to write a formal ADR into `docs/adr/` from the confirmed Potential ADR: $ARGUMENTS
