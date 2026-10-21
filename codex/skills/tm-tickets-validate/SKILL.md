@@ -10,7 +10,7 @@ description: "Validate a feature's ticket set before the human gate (coverage, i
 **Argument** (the text after the skill name): <feature name or slug>
 
 
-Read the `tickets-validate` skill (`references/skills/tickets-validate/index.md`) to validate the tickets for: the text after the skill name
+Read `references/skills/tickets-validate/index.md` and follow it to validate the tickets for: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

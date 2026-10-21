@@ -10,7 +10,7 @@ description: "Install the checks a repository is missing, using the commands it 
 **Argument** (the text after the skill name): [what to set up: pre-commit, ci, git-guard, deps; empty for all]
 
 
-Read the `guardrails` skill (`references/skills/guardrails/index.md`) for: the text after the skill name
+Read `references/skills/guardrails/index.md` and follow it for: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

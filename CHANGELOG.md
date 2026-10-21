@@ -2,7 +2,21 @@
 
 ## 0.6.7 (beta)
 
-The flow runs in Codex too, with nothing changed in Claude Code: same commands, same documents.
+The flow runs in Codex too, and a stage never starts another, in either harness. Same commands, same
+documents.
+
+- **The stop rule.** A stage ends at its postflight and names the next command for the owner; it never
+  runs it. Text alone did not hold (an agent ran `/plan` and `/plan-validate` in a loop until the plan
+  passed), so it is enforced: all 48 commands and the 28 stage skills carry
+  `disable-model-invocation: true`. A command reads its stage skill by path
+  (`Read ${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md and follow it`), since the flag refuses the
+  Skill tool, and each stage skill opens with a line saying where its paths start. The reference skills
+  (`KNOWLEDGE_SKILLS` in `scripts/skill-kinds.mjs`) stay open. `/flow` proposes the next stage and no
+  longer runs it; `/plan-validate` names both `/implement` modes and stops. A side effect: the stage
+  skills' descriptions no longer load into every session.
+- **`scripts/skill-invocation.test.mjs`**: every command and every stage skill is closed, every closed
+  skill is read by path somewhere and anchors its paths, and no sentence runs a stage instead of naming
+  it for the owner. A chained "then with `x`" must still follow a tool call.
 
 - **`codex/`: the Codex package, generated.** `scripts/build-codex.mjs` translates the source. Each
   command becomes a skill `tm-<command>` (`$thasmorato-skills:tm-plan`), closed to implicit invocation.

@@ -1,7 +1,10 @@
 ---
 name: pr
 description: 'Write the body of a pull request from what the work left on disk: a summary drawn as the smallest view that explains the change, evidence that it works (before and after), and how dangerous the merge is (one-way or two-way door, blast radius). Use after /tidy (or /review) when a ticket is ready to merge, and on "write the PR / PR description / open a PR".'
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 A reviewer decides in minutes whether to trust a change. A PR body that retells the commits spends those minutes on what the diff already says. This one answers three questions instead: **what changed** (as a picture), **how do we know it works** (as evidence), and **what happens if it is wrong** (as danger). Skip any preamble; every sentence answers one of the three.
 

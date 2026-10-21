@@ -10,4 +10,4 @@ description: "Writing, exploit phase: shape raw material into an argued article,
 **Argument** (the text after the skill name): <path to the raw material> [path to the article]
 
 
-Read the `writing-shape` skill (`references/skills/writing-shape/index.md`) for: the text after the skill name
+Read `references/skills/writing-shape/index.md` and follow it for: the text after the skill name

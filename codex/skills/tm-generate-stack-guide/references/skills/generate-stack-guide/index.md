@@ -1,6 +1,7 @@
 ---
 name: generate-stack-guide
 description: Generate a per-technology engineering guide skill (conventions, patterns and gotchas for one language or framework) as a router with lazy-loaded rules. Use on "generate a stack guide / guide for <tech>", or when the guidelines router marks a technology as missing. User-invoked.
+disable-model-invocation: true
 ---
 
 Produce a **concrete, per-technology guide** at `.claude/skills/<tech>-guide/`. The generic standard lives in the `clean-code`, `code-smells` and `architecture` skills; this generator specializes it to one language or framework.

@@ -15,7 +15,7 @@ description: "Teach the owner the change the AI built before it merges: an HTML 
 **Argument** (the text after the skill name): <ticket slug> <fixed point, the one $thasmorato-skills:tm-review used>
 
 
-Read the `walkthrough` skill (`references/skills/walkthrough/index.md`) for: the text after the skill name
+Read `references/skills/walkthrough/index.md` and follow it for: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

@@ -1,6 +1,6 @@
 ---
 name: tm-flow
-description: "Drive the Doc-Dev flow; scan where the project stands, report what's waiting, and run the next stage with human gates."
+description: "Drive the Doc-Dev flow; scan where the project stands, report what's waiting, and name the next stage for you to run."
 ---
 
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
@@ -70,7 +70,9 @@ The **frontier** is the tickets whose blockers are all `done`, crossed with wher
 ### Then report
 Before reporting a ticket done, its request-trace parts all have a ticket or an owner decision, and its acceptance record's `verified_at` is current (no production change since); say which is missing otherwise.
 
-Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, then ask before running it.
+Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop.
+
+**This command never runs a stage.** Every command and every stage skill is closed to model invocation, so only the owner starts a stage, and each stage ends at its own postflight. A coordinator that ran the next stage itself is how a plan got validated in a loop until it passed, with nobody reading it in between.
 
 ## Then size the work, and pick the shortest path that fits
 **Before proposing any stage, decide how big this is.** The full chain exists for work whose shape is genuinely unknown. Run it on a two-hour change and it does not merely cost more; it *manufactures* scope, because every template below is a completeness contract, and a completeness contract applied to a small task gets filled with invented content. The machine that makes omission detectable is the same machine that produces bulk.
@@ -116,13 +118,13 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
 2. `$thasmorato-skills:tm-interview` → brief + glossary + inline ADRs. **GATE (ambiguity):** every required section filled, and the user confirms the shared understanding.
 3. Optional `$thasmorato-skills:tm-research` for open technical questions.
 4. `$thasmorato-skills:tm-prd` → `$thasmorato-skills:tm-doc-validate brief prd`. **GATE (strong):** a wrong PRD contaminates everything below.
-5. `$thasmorato-skills:tm-hld` (+ `$thasmorato-skills:tm-c4-generate` for C1/C2) → `$thasmorato-skills:tm-doc-validate prd hld`. **GATE (strong).** In greenfield, this is where the stack is decided: run `$thasmorato-skills:tm-guidelines` + `$thasmorato-skills:tm-generate-stack-guide <tech>` now, before `$thasmorato-skills:tm-components`.
+5. `$thasmorato-skills:tm-hld` (+ `$thasmorato-skills:tm-c4-generate` for C1/C2) → `$thasmorato-skills:tm-doc-validate prd hld`. **GATE (strong).** In greenfield, this is where the stack is decided: propose `$thasmorato-skills:tm-guidelines` + `$thasmorato-skills:tm-generate-stack-guide <tech>` now, before `$thasmorato-skills:tm-components`.
 6. `$thasmorato-skills:tm-components` → `$thasmorato-skills:tm-doc-validate hld components` (+ `$thasmorato-skills:tm-c4-generate` for the system C3). **GATE (strong):** every FDD below uses these names.
 7. `$thasmorato-skills:tm-decompose` → `$thasmorato-skills:tm-doc-validate prd features`. **GATE (medium):** look at uncovered requirements first.
 8. `$thasmorato-skills:tm-fdd <feature>` per feature (+ `$thasmorato-skills:tm-mermaid-generate`) → `$thasmorato-skills:tm-doc-validate features fdd`. **GATE (per feature, medium).** Independent features can be specced in parallel.
 9. `$thasmorato-skills:tm-boundaries`. **GATE (strong):** every ticket below is sliced against this. Then `$thasmorato-skills:tm-guardrails` (its dependency-linter item) can turn the contract into forbidden imports that fail the build.
 10. `$thasmorato-skills:tm-adr-identify` → confirm → `$thasmorato-skills:tm-adr-generate` → `$thasmorato-skills:tm-adr-link`.
-11. Re-run `$thasmorato-skills:tm-guidelines` only if the FDDs or ADRs brought in a technology its stack table does not list.
+11. Propose `$thasmorato-skills:tm-guidelines` again only if the FDDs or ADRs brought in a technology its stack table does not list.
 
 **Two architecture beats, deliberately apart.** `$thasmorato-skills:tm-components` runs **before** the FDDs so every feature spec shares one vocabulary; `$thasmorato-skills:tm-boundaries` runs **after** them, because the axes of change a boundary separates are only knowable once the features are specced. Reversing the first would make the map a reconciliation of N contradictory carve-ups; moving the second earlier would make it a guess.
 
@@ -131,7 +133,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
 ## Phase 2: Development (per frontier ticket)
 12. `$thasmorato-skills:tm-tickets <feature>` → vertical slices with blocking edges, validated as a set by `$thasmorato-skills:tm-tickets-validate` before the gate. **GATE:** the set must be `clean`, and the tickets-to-seams count is the first thing to read.
 13. Per frontier ticket: `$thasmorato-skills:tm-design` → **GATE** → `$thasmorato-skills:tm-plan` → `$thasmorato-skills:tm-plan-validate` (**GATE:** must be `clean`) → `$thasmorato-skills:tm-implement` (SI by SI, STOP between SIs) → optional `$thasmorato-skills:tm-trim <slug> <fixed-point>`: make the change smaller with the behavior identical, so the review reads less → `$thasmorato-skills:tm-review <fixed-point>` → **GATE** → optional `$thasmorato-skills:tm-tidy <slug> <fixed-point>`: the four rules of Simple Design over what is left → `$thasmorato-skills:tm-acceptance <slug>`: every AC and request part checked in the running software, after the last change to production code → optional `$thasmorato-skills:tm-walkthrough <slug> <fixed-point>`: a lesson over the change with a recall quiz, so the owner understands what merges → `$thasmorato-skills:tm-pr <slug> <fixed-point>`: the PR body (summary as a picture, before/after evidence, merge danger), opened only when the user says so. Both are structural, apply only what the user chooses, and run in every gear that has a review.
-    - **Back-edge:** if implementation surfaces a real architectural decision, run `$thasmorato-skills:tm-adr-identify` and update the FDD, and if it revealed a new axis of change, revisit `$thasmorato-skills:tm-boundaries`. Keep the docs live.
+    - **Back-edge:** if implementation surfaces a real architectural decision, propose `$thasmorato-skills:tm-adr-identify` and an FDD update, and if it revealed a new axis of change, revisit `$thasmorato-skills:tm-boundaries`. Keep the docs live.
     - **Screens:** a ticket that builds a new screen with nothing to copy (no Figma, prototype, image or existing page) runs `$thasmorato-skills:tm-ui-design <screen>` before `$thasmorato-skills:tm-design`; a redesign runs `$thasmorato-skills:tm-ui-audit <screen>` first, then `$thasmorato-skills:tm-ui-design`. A screen with a spec in `docs/ui/` goes straight to `$thasmorato-skills:tm-design`.
     - **Bugs:** a bug whose cause is not known starts at `$thasmorato-skills:tm-diagnose`, never at a fix. It ends with the cause and the pinned and flipped tests; an obvious fix is then made test-first (Direct), anything larger becomes a `Type: bugfix` ticket whose Source is the diagnosis, through `$thasmorato-skills:tm-design` → `$thasmorato-skills:tm-plan` in the Small gear.
 14. When an epic or a cycle finishes: `$thasmorato-skills:tm-retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught: process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
@@ -143,4 +145,4 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
 - ❌ **Implementation is serial in the main context.** Writes conflict, and the code deserves supervision.
 - 🔀 **Real parallelism happens per epic, in worktrees.** `docs/features.md` carries each epic's parallel-safe set, derived from component overlap, so "can these two run at once" is a lookup, not a guess.
 
-Report progress after each stage. The user can stop, redirect, or jump stages at any gate.
+Each stage reports when it ends, and `$thasmorato-skills:tm-flow` again shows where the project stands and what comes next; the user can stop, redirect, or jump stages at any gate.

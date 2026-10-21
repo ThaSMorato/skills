@@ -1,9 +1,10 @@
 ---
 description: Open the Doc-Dev flow with the requirements interview, producing the brief, glossary, and ADRs.
 argument-hint: "[feature or project name]"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `interview` (the elicitation discipline: rounds of questions, the PRD checklist, the gate), then with `domain-model` (the glossary and the inline ADRs). They compose: `interview` drives the conversation, `domain-model` sharpens the vocabulary as it goes. Loading only one silently drops half the stage.
+Read `${CLAUDE_PLUGIN_ROOT}/skills/interview/SKILL.md` and follow it (the elicitation discipline: rounds of questions, the PRD checklist, the gate), then call the Skill tool with `domain-model` (the glossary and the inline ADRs). They compose: `interview` drives the conversation, `domain-model` sharpens the vocabulary as it goes. Loading only one silently drops half the stage.
 
 Elicit requirements for: $ARGUMENTS
 

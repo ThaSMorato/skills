@@ -10,7 +10,7 @@ description: "Look back over a finished epic, feature or cycle from what it left
 **Argument** (the text after the skill name): <epic, feature slug, or a set of ticket ids>
 
 
-Read the `retro` skill (`references/skills/retro/index.md`) over: the text after the skill name
+Read `references/skills/retro/index.md` and follow it over: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

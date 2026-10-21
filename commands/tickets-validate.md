@@ -1,9 +1,10 @@
 ---
 description: Validate a feature's ticket set before the human gate (coverage, invention, tickets too big or too small, several tickets on one seam, blocking cycles, dispersion), with a clean/dirty verdict.
 argument-hint: "<feature name or slug>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `tickets-validate` to validate the tickets for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/tickets-validate/SKILL.md` and follow it to validate the tickets for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

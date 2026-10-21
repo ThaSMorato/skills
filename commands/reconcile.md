@@ -1,6 +1,7 @@
 ---
 description: Re-measure the dependency graph and reconcile it with the component map and boundary contract (drift since the last measurement, the commits behind it, the amendments each owning stage should make, and at most three latent-component proposals backed by measured evidence).
 argument-hint: "(none)"
+disable-model-invocation: true
 ---
 
 Call the Agent tool with `reconciler` to reconcile the structure of this repository.

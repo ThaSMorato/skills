@@ -1,9 +1,10 @@
 ---
 description: Teach a topic over several sessions in a teaching workspace (mission, trusted sources, learning records, glossary), through short HTML lessons with practice, each pitched just past what you already know.
 argument-hint: "<what you want to learn>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `teach` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/teach/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

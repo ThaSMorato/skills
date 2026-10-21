@@ -15,7 +15,7 @@ description: "Make working code simple, Beck's four rules of Simple Design in or
 **Argument** (the text after the skill name): <ticket slug> <fixed point (the same one $thasmorato-skills:tm-review used)>  |  <path>
 
 
-Read the `tidy` skill (`references/skills/tidy/index.md`) for: the text after the skill name
+Read `references/skills/tidy/index.md` and follow it for: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

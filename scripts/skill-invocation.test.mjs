@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { KNOWLEDGE_SKILLS, STAGE_ROOT_NOTE } from './skill-kinds.mjs'
 
 // A skill or an agent is reached by naming the tool that reaches it: "Call the Skill tool with `tdd`",
 // "Call the Agent tool with `prd-writer`". A softer phrasing ("Use the `tdd` skill") lets the model
@@ -85,4 +86,75 @@ test('an agent that calls the Skill tool has it in its tools', () => {
   })
 
   assert.deepEqual(missingTool, [])
+})
+
+// The stop rule. A stage ends at its postflight and names the next stage for the owner; it never runs
+// one. Text alone did not hold: an agent ran /plan and /plan-validate in a loop until the plan passed.
+// So every command and every stage skill carries `disable-model-invocation: true`, which Claude Code
+// enforces on the Skill tool, and a command reaches its closed skill by reading it:
+// "Read `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` and follow it".
+const STAGE_READ = /Read `\$\{CLAUDE_PLUGIN_ROOT\}\/skills\/([a-z0-9-]+)\/SKILL\.md` and follow it/g
+const frontmatterOf = (path) => read(path).match(/^---\n([\s\S]*?)\n---\n/)?.[1] ?? ''
+const isClosed = (path) => /^disable-model-invocation: true$/m.test(frontmatterOf(path))
+const commandFiles = readdirSync(join(root, 'commands')).map((file) => join('commands', file))
+
+test('every command is closed to model invocation', () => {
+  assert.deepEqual(commandFiles.filter((path) => !isClosed(path)), [])
+})
+
+test('every skill but the reference skills is closed to model invocation', () => {
+  const misclassified = skillNames.filter((name) => isClosed(join('skills', name, 'SKILL.md')) === KNOWLEDGE_SKILLS.includes(name))
+
+  assert.deepEqual(misclassified, [])
+})
+
+test('every closed skill is read by path somewhere, so a command still reaches it', () => {
+  const readByPath = new Set(sources.flatMap((path) => [...read(path).matchAll(STAGE_READ)].map(([, name]) => name)))
+  const unreachable = skillNames.filter((name) => !KNOWLEDGE_SKILLS.includes(name) && !readByPath.has(name))
+
+  assert.deepEqual(unreachable, [])
+})
+
+test('every closed skill tells its reader where its plugin paths start', () => {
+  const unanchored = skillNames
+    .filter((name) => !KNOWLEDGE_SKILLS.includes(name))
+    .filter((name) => !read(join('skills', name, 'SKILL.md')).includes(`---\n\n${STAGE_ROOT_NOTE}\n`))
+
+  assert.deepEqual(unanchored, [])
+})
+
+test('a skill read by path exists', () => {
+  const unknown = sources.flatMap((path) =>
+    [...read(path).matchAll(STAGE_READ)].map(([, name]) => name).filter((name) => !skillNames.includes(name)).map((name) => `${path}: ${name}`),
+  )
+
+  assert.deepEqual(unknown, [])
+})
+
+test('a stage names the next stage for the owner and never runs one itself', () => {
+  const RUNS_A_STAGE = /\b(?:[Rr]e-?run|[Rr]un|[Ii]nvoke|hand off to)\s+`?\/[a-z][a-z-]*/
+  const FOR_THE_OWNER = /\btell (?:the )?(?:user|owner|them)\b|\bask (?:the )?(?:user|owner)\b|\b(?:offer|propose|say so)\b|the owner (?:runs|types)/i
+  const QUOTED = /\*"[^"]*"\*|"[^"\n]*"/g
+  const offending = sources.flatMap((path) =>
+    read(path)
+      .replace(QUOTED, '')
+      .split(/(?<=[.!?:])\s+|\n/)
+      .filter((sentence) => RUNS_A_STAGE.test(sentence) && !FOR_THE_OWNER.test(sentence))
+      .map((sentence) => `${path}: ${sentence.trim().slice(0, 100)}`),
+  )
+
+  assert.deepEqual(offending, [])
+})
+
+// "Call the Skill tool with `a`, then with `b`" names the tool once for both. Rewording the first call
+// (a stage skill became a read) leaves "then with `b`" pointing at no tool at all.
+test('a chained "then with `x`" still follows a tool call in its sentence', () => {
+  const dangling = sources.flatMap((path) =>
+    read(path)
+      .split(/(?<=\.)\s+|\n/)
+      .filter((sentence) => /(?:then|and) with `[a-z0-9-]+`/.test(sentence) && !/(?:Skill|Agent) tool with `/.test(sentence))
+      .map((sentence) => `${path}: ${sentence.trim().slice(0, 100)}`),
+  )
+
+  assert.deepEqual(dangling, [])
 })

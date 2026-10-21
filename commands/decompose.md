@@ -1,6 +1,7 @@
 ---
 description: Cut the product into epics and features, ordered by risk, with cross-feature dependencies and requirement coverage.
 argument-hint: "(none): runs once per product scope, re-run when the PRD scope changes"
+disable-model-invocation: true
 ---
 
 Call the Agent tool with `decomposer` to write `docs/features.md` from `docs/prd.md`, `docs/hld.md` and `docs/components.md`.
@@ -24,4 +25,4 @@ Show:
 
 **GATE (medium).** Coverage is the thing to look at first: that column is the whole reason this stage exists, and `partial` rows are the ones most likely to be wrong, because a half-covered requirement looks covered from every other angle.
 
-Then run `/doc-validate prd features` before the gate, and `/fdd <feature>` per feature afterwards. Independent features can be specced in parallel.
+Then tell the user the next stages, and stop: `/doc-validate prd features` before the gate, and `/fdd <feature>` per feature afterwards. Independent features can be specced in parallel.

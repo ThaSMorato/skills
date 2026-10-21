@@ -10,4 +10,4 @@ description: "Writing, exploit phase: turn raw material into a piece one beat at
 **Argument** (the text after the skill name): <path to the raw material> [path to the article]
 
 
-Read the `writing-beats` skill (`references/skills/writing-beats/index.md`) for: the text after the skill name
+Read `references/skills/writing-beats/index.md` and follow it for: the text after the skill name

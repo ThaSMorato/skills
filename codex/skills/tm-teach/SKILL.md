@@ -15,7 +15,7 @@ description: "Teach a topic over several sessions in a teaching workspace (missi
 **Argument** (the text after the skill name): <what you want to learn>
 
 
-Read the `teach` skill (`references/skills/teach/index.md`) for: the text after the skill name
+Read `references/skills/teach/index.md` and follow it for: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

@@ -1,7 +1,10 @@
 ---
 name: plan-validate
 description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates /implement. Use after /plan, on "validate the plan / is this plan ready".
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 Read the plan and decide whether it is safe to implement. This skill **finds problems**; it does not fix them and it does not write code.
 
@@ -87,6 +90,6 @@ fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by 
 
 ## Gate
 - **dirty** → tell the user exactly what to fix: *"validation.md has N open issues. Revise the plan (edit it or re-run /plan <slug>), then re-run /plan-validate <slug>."* Never auto-fix; never partially proceed.
-- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Run /implement <slug> to build it SI by SI."* Starting `/implement` is the owner's call. When this stage runs inside `/flow`, ask it as a structured choice (start, pausing after each SI; start, continuous; stop here, I will run `/implement`) and say that the first two begin writing code.
+- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Run /implement <slug> to build it SI by SI."* Starting `/implement` is the owner's call. Name both modes (`/implement <slug>` pauses after each SI, `/implement <slug> continuous` does not), say that either begins writing code, and stop.
 
 `implement` reads this verdict and refuses to start on a `dirty` (or missing) validation. That refusal is the whole point of this stage.

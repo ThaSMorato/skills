@@ -1,6 +1,7 @@
 ---
 description: Write a Feature Design Doc for one feature, from the HLD (docs/hld.md).
 argument-hint: "<feature name or slug>"
+disable-model-invocation: true
 ---
 
 Call the Agent tool with `fdd-writer` to synthesize a Feature Design Doc into `docs/fdd/<feature-slug>.md` for the feature: $ARGUMENTS

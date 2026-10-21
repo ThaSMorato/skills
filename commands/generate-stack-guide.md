@@ -1,9 +1,10 @@
 ---
 description: Generate a per-technology engineering guide skill (conventions, idioms, gotchas and security idioms for one language or framework), as a lazy-loaded router.
 argument-hint: "<technology> (e.g. ruby, react, nestjs, go)"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `generate-stack-guide` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/generate-stack-guide/SKILL.md` and follow it for: $ARGUMENTS
 
 Run all five phases: choose the source, mine it, confirm the calls with the user, generate `.claude/skills/<tech>-guide/`, and register the routing row in `docs/guidelines.md`.
 
