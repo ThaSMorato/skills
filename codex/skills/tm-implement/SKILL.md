@@ -10,8 +10,8 @@ description: "Execute a validated plan one SI at a time, test-first (red → gre
 **Argument** (the text after the skill name): <plan slug> [continuous]
 
 
-Read the `implement` skill (`references/skills/implement/index.md`) to build the plan: the text after the skill name
+Read `references/skills/implement/index.md` and follow it to build the plan: the text after the skill name
 
 Resolve the plan under `.scratch/<feature-slug>/plans/`, run preflight (validation must be `clean`, branch must be set up), and execute SI by SI: red → green → refactor (production **and** tests), run the SI's tests, record progress, then STOP and wait for the user, unless they asked for continuous mode.
 
-Default is to pause after every SI so the user can `/compact` and resume by re-running this command. When done, hand off to `$thasmorato-skills:tm-review` before any commit.
+Default is to pause after every SI so the user can `/compact` and resume by re-running this command. When done, tell the user to run `$thasmorato-skills:tm-review` before any commit, and stop.

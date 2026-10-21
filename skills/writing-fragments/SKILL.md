@@ -2,7 +2,10 @@
 name: writing-fragments
 description: 'Writing, explore phase: interview the author about what they want to write and collect raw fragments into one file, with no structure yet. Use at the start of an article, a post or a long note, on "/writing-fragments" or "help me find what to write about X".'
 argument-hint: "[path to the fragments file] [topic]"
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 This is **explore**: widen what could be written, without committing to a structure. Committing is **exploit**, the job of `writing-beats` and `writing-shape`. Imposing an outline here closes doors before the material is in.
 

@@ -1,9 +1,10 @@
 ---
 description: 'Install the checks a repository is missing, using the commands it already has: pre-commit hook, CI job, a Claude Code hook that blocks destructive git, and optionally a dependency linter for docs/boundaries.md. Each one is proven to fire.'
 argument-hint: "[what to set up: pre-commit, ci, git-guard, deps; empty for all]"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `guardrails` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/guardrails/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

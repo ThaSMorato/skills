@@ -1,7 +1,10 @@
 ---
 name: questionnaire
 description: 'Turn decisions the owner cannot answer alone into a questionnaire for the person who can, and later fold the filled answers back into the documents that were waiting on them. Use when an interview, a design or a gate is blocked on someone outside the conversation (a PM, another team, legal), or on "questionnaire / send these questions to / ask the PM".'
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 Some answers are not with the owner: they are with a PM, another team, legal, a client. Guessing them produces an `> Assumed:` nobody can confirm; leaving them as open questions in a document nobody sends produces nothing. This stage writes the questions down for that person, and brings their answers back.
 

@@ -1,15 +1,17 @@
 #!/usr/bin/env node
-// Turns a Claude Code session transcript (JSONL) into one readable file per compaction segment,
+// Turns a session transcript (JSONL) into one readable file per compaction segment,
 // keeping only the conversation: what the owner said, answered, rejected or ran as a slash command
 // (with the options a structured question offered), and what the assistant said plus the names of
 // the tools it called. Everything else (file snapshots, tool results,
 // thinking, subagent turns, compaction summaries) is dropped: it is either bulk or not the owner.
+// Claude Code by default; `--harness codex` reads a Codex rollout (see session-extract-codex.mjs).
 // No dependencies beyond the Node standard library.
 
 import { createReadStream, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { createInterface } from 'node:readline'
 import { basename, join } from 'node:path'
 import { homedir } from 'node:os'
+import { codexSessionIdOf, createCodexSegmenter, resolveCodexTranscript } from './session-extract-codex.mjs'
 
 const SYSTEM_REMINDER = /<system-reminder>[\s\S]*?<\/system-reminder>/g
 const HARNESS_MARKUP = /^\s*<(local-command-[a-z]+|task-notification)>/
@@ -214,9 +216,14 @@ function renderIndex({ sessionId, transcript, segments }) {
 
 const pad = (n) => String(n).padStart(2, '0')
 
-export async function extractSession({ transcript, outDir }) {
-  const sessionId = basename(transcript, '.jsonl')
-  const segmenter = createSegmenter()
+const HARNESSES = {
+  claude: { createSegmenter, sessionIdOf: async (transcript) => basename(transcript, '.jsonl') },
+  codex: { createSegmenter: createCodexSegmenter, sessionIdOf: codexSessionIdOf },
+}
+
+export async function extractSession({ transcript, outDir, harness = 'claude' }) {
+  const sessionId = await HARNESSES[harness].sessionIdOf(transcript)
+  const segmenter = HARNESSES[harness].createSegmenter()
   let skippedLines = 0
 
   const lines = createInterface({ input: createReadStream(transcript), crlfDelay: Infinity })
@@ -248,24 +255,29 @@ function parseLine(line) {
 }
 
 function parseArgs(argv) {
-  const args = { cwd: process.cwd() }
+  const args = { cwd: process.cwd(), harness: 'claude' }
   for (let i = 0; i < argv.length; i += 2) {
     const [flag, value] = [argv[i], argv[i + 1]]
     if (flag === '--cwd') args.cwd = value
     else if (flag === '--session') args.sessionId = value
     else if (flag === '--out') args.outRoot = value
     else if (flag === '--projects-root') args.projectsRoot = value
-    else throw new Error(`Unknown argument ${flag}. Usage: session-extract.mjs [--cwd <dir>] [--session <id>] [--out <dir>]`)
+    else if (flag === '--harness' && value in HARNESSES) args.harness = value
+    else if (flag === '--codex-home') args.codexHome = value
+    else throw new Error(`Unknown argument ${flag} ${value ?? ''}. Usage: session-extract.mjs [--harness claude|codex] [--cwd <dir>] [--session <id>] [--out <dir>]`)
   }
   return args
 }
 
 async function main() {
   const args = parseArgs(process.argv.slice(2))
-  const transcript = resolveTranscript(args)
-  const sessionId = basename(transcript, '.jsonl')
+  const transcript =
+    args.harness === 'codex'
+      ? await resolveCodexTranscript({ codexHome: args.codexHome ?? process.env.CODEX_HOME ?? join(homedir(), '.codex'), ...args })
+      : resolveTranscript(args)
+  const sessionId = await HARNESSES[args.harness].sessionIdOf(transcript)
   const outDir = join(args.outRoot ?? join(args.cwd, '.scratch', 'session-analyze'), sessionId)
-  const result = await extractSession({ transcript, outDir })
+  const result = await extractSession({ transcript, outDir, harness: args.harness })
   process.stdout.write(`${JSON.stringify({ ...result, transcript, outDir })}\n`)
 }
 

@@ -1,6 +1,7 @@
 ---
 name: plan-validate
 description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates $thasmorato-skills:tm-implement. Use after $thasmorato-skills:tm-plan, on "validate the plan / is this plan ready".
+disable-model-invocation: true
 ---
 
 Read the plan and decide whether it is safe to implement. This skill **finds problems**; it does not fix them and it does not write code.
@@ -87,6 +88,6 @@ fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by 
 
 ## Gate
 - **dirty** → tell the user exactly what to fix: *"validation.md has N open issues. Revise the plan (edit it or re-run $thasmorato-skills:tm-plan <slug>), then re-run $thasmorato-skills:tm-plan-validate <slug>."* Never auto-fix; never partially proceed.
-- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Run $thasmorato-skills:tm-implement <slug> to build it SI by SI."* Starting `$thasmorato-skills:tm-implement` is the owner's call. When this stage runs inside `$thasmorato-skills:tm-flow`, ask it as a structured choice (start, pausing after each SI; start, continuous; stop here, I will run `$thasmorato-skills:tm-implement`) and say that the first two begin writing code.
+- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Run $thasmorato-skills:tm-implement <slug> to build it SI by SI."* Starting `$thasmorato-skills:tm-implement` is the owner's call. Name both modes (`$thasmorato-skills:tm-implement <slug>` pauses after each SI, `$thasmorato-skills:tm-implement <slug> continuous` does not), say that either begins writing code, and stop.
 
 `implement` reads this verdict and refuses to start on a `dirty` (or missing) validation. That refusal is the whole point of this stage.

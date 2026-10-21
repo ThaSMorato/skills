@@ -27,10 +27,10 @@ Check that Node is available (`node --version`). If it is not, say so and stop: 
 Run:
 
 ```
-node "references/scripts/session-extract.mjs" [--session <id>]
+node "references/scripts/session-extract.mjs" --harness codex [--session <id>]
 ```
 
-With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected, the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the **names** of the tools it called. It drops file snapshots, tool results and the other tools' arguments (where file contents and secrets live), thinking, subagent turns and the compaction summaries.
+With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected, the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the **names** of the tools it called. It drops file snapshots, tool results and the other tools' arguments (where file contents and secrets live), thinking, subagent turns and the compaction summaries. In Codex the extractor reads the Codex rollout instead (`--harness codex`) and keeps the same, except denied approvals and answers to structured questions, which a rollout does not record in a form it can rely on yet: say so in the report when the session ran in Codex.
 
 ## 2. Fan out, one agent per segment
 Call the `spawn_agent` tool with `agent_type = "tm-session-segment-analyst"` for **every** segment **at once** (at most 6 running together; wait for every one), so they run in parallel, each with its segment's path and the index path. A segment fits one agent whole, so there is no chunking and no summarizing, and each agent reads the original conversation rather than a summary of a summary.

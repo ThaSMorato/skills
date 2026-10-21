@@ -1,7 +1,10 @@
 ---
 name: retro
 description: Look back over a finished epic, feature or cycle by reading what the work left on disk (plans, validations, progress notes, review findings) and record what it taught about the process and about the product. Use after a set of tickets completes, at the end of a cycle, or on "retro / look back / what did we learn".
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 Every stage in this flow writes forward. Nothing writes back: the documents freeze at approval, and what the work taught lives in progress notes nobody reopens and in a conversation that is gone after `/compact`. This stage closes that loop: once, over a finished chunk, from the artifacts.
 

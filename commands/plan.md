@@ -1,9 +1,10 @@
 ---
 description: Break one ticket into a validated implementation plan, vertical SIs with tests, dependencies, and acceptance criteria.
 argument-hint: "<ticket file/number, or the work to plan>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `ticket-plan` to turn this into an implementation plan: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/ticket-plan/SKILL.md` and follow it to turn this into an implementation plan: $ARGUMENTS
 
 Read the ticket (or the work the user points to) plus the node map, the FDD, the boundary contract, ADRs, guidelines, and `CONTEXT.md`.
 

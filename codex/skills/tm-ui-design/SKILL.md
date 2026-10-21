@@ -15,7 +15,7 @@ description: "Design a new screen or redesign an existing one before it is built
 **Argument** (the text after the skill name): <screen: a name, or the ticket or feature it belongs to>
 
 
-Read the `ui-design` skill (`references/skills/ui-design/index.md`) for: the text after the skill name
+Read `references/skills/ui-design/index.md` and follow it for: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

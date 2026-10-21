@@ -1,7 +1,10 @@
 ---
 name: tidy
 description: 'Make working code simple by Kent Beck''s four rules of Simple Design, as structural changes only: either the code a reviewed ticket changed, or a path of existing code that has tests covering it. Use after /review, or on "tidy / simplify / clean up this ticket", "clean up this file / this area", "leave it cleaner". Not for behavior changes or bug fixes; use tdd for those.'
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 Make it work, then make it right. `/implement` made the ticket work, and `/review` checked it; this stage makes it **simple**. It is the *After* in Beck's *Tidy First?* (tidy after the behavior ships), because only once the code works can you see the shape it wanted to have.
 

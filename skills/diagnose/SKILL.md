@@ -1,7 +1,10 @@
 ---
 name: diagnose
 description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, on "debug / why does this fail / find the bug / this broke", for a performance regression, and inside /implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
+disable-model-invocation: true
 ---
+
+> Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
 A bug whose cause is unknown is not fixed by trying things. Each try that fails teaches almost nothing, because it tested the guess you already believed. This stage replaces guessing with a small loop that can only end in evidence: a cause at `file:line`, and tests that prove it.
 

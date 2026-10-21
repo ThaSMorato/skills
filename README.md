@@ -4,7 +4,7 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
 
 ## The flow
 
-`/flow` drives the whole thing. It **scans the disk first** and tells you where the project stands and what is waiting for your approval, then runs the next stage, stopping at human gates, because the AI drafts and the human validates.
+`/flow` drives the whole thing. It **scans the disk first** and tells you where the project stands and what is waiting for your approval, then names the next stage for you to run. It never runs one itself, and no stage runs another: every stage ends at its postflight and waits for you, because the AI drafts and the human validates.
 
 ```
 /flow  (coordinator: scans state from artifacts, never from a status file)

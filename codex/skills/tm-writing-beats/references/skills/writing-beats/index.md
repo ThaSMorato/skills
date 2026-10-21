@@ -2,6 +2,7 @@
 name: writing-beats
 description: 'Writing, exploit phase: turn a pile of raw material into a piece one beat at a time, choose-your-own-adventure style, never using a concept before it is grounded. Use with a fragments file or any raw notes, on "/writing-beats" or "turn these notes into a post".'
 argument-hint: "<path to the raw material> [path to the article]"
+disable-model-invocation: true
 ---
 
 This is **exploit**: the exploring is done and the pile is fixed. Commit to a path through it, one beat at a time, mining the pile to fill each one. The raw material is read-only here; the piece goes to a separate file. If no article path was given, ask once and keep it.

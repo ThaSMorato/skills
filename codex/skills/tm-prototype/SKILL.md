@@ -10,7 +10,7 @@ description: "Answer one design question with throwaway code (a clickable HTML d
 **Argument** (the text after the skill name): <the question, e.g. can an order be partly cancelled after a shipment left?>
 
 
-Read the `prototype` skill (`references/skills/prototype/index.md`) for: the text after the skill name
+Read `references/skills/prototype/index.md` and follow it for: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

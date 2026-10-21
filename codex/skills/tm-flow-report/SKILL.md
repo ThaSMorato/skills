@@ -10,10 +10,10 @@ description: "Gather what several projects learned about the plugin itself: thei
 **Argument** (the text after the skill name): <project paths, or a file listing them one per line>
 
 
-Read the `flow-report` skill (`references/skills/flow-report/index.md`) for: the text after the skill name
+Read `references/skills/flow-report/index.md` and follow it for: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
-Preflight: at least one project path resolves. A project with no `docs/retro/` and no `docs/meta-retro/` is listed as not read, not an error; if none has either, say so: run `$thasmorato-skills:tm-retro` or `$thasmorato-skills:tm-session-analyze` in them first.
+Preflight: at least one project path resolves. A project with no `docs/retro/` and no `docs/meta-retro/` is listed as not read, not an error; if none has either, tell the user to run `$thasmorato-skills:tm-retro` or `$thasmorato-skills:tm-session-analyze` in them first.
 
 Postflight: the report's path, the findings repeated across projects (the proposals), the measurement directions per version with their ticket counts, and what could not be told. Then ask which proposals enter the next version's backlog.

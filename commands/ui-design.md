@@ -1,9 +1,10 @@
 ---
 description: 'Design a new screen or redesign an existing one before it is built: the brief in rounds, three directions as HTML with captures, the chosen one through every state and width with an isolated critic, then the screen spec in docs/ui/.'
 argument-hint: "<screen: a name, or the ticket or feature it belongs to>"
+disable-model-invocation: true
 ---
 
-Call the Skill tool with `ui-design` for: $ARGUMENTS
+Read `${CLAUDE_PLUGIN_ROOT}/skills/ui-design/SKILL.md` and follow it for: $ARGUMENTS
 
 > Call the Skill tool with `asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

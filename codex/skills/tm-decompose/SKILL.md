@@ -36,4 +36,4 @@ Show:
 
 **GATE (medium).** Coverage is the thing to look at first: that column is the whole reason this stage exists, and `partial` rows are the ones most likely to be wrong, because a half-covered requirement looks covered from every other angle.
 
-Then run `$thasmorato-skills:tm-doc-validate prd features` before the gate, and `$thasmorato-skills:tm-fdd <feature>` per feature afterwards. Independent features can be specced in parallel.
+Then tell the user the next stages, and stop: `$thasmorato-skills:tm-doc-validate prd features` before the gate, and `$thasmorato-skills:tm-fdd <feature>` per feature afterwards. Independent features can be specced in parallel.

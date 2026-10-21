@@ -1,6 +1,7 @@
 ---
 name: tickets-validate
 description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Runs as the postflight of $thasmorato-skills:tm-tickets, or on "validate the tickets".
+disable-model-invocation: true
 ---
 
 Read one feature's tickets **as a set** and decide whether they are sliced right. This skill finds problems; it does not rewrite tickets.

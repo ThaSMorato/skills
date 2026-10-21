@@ -1,6 +1,7 @@
 ---
 name: pr
 description: 'Write the body of a pull request from what the work left on disk: a summary drawn as the smallest view that explains the change, evidence that it works (before and after), and how dangerous the merge is (one-way or two-way door, blast radius). Use after $thasmorato-skills:tm-tidy (or $thasmorato-skills:tm-review) when a ticket is ready to merge, and on "write the PR / PR description / open a PR".'
+disable-model-invocation: true
 ---
 
 A reviewer decides in minutes whether to trust a change. A PR body that retells the commits spends those minutes on what the diff already says. This one answers three questions instead: **what changed** (as a picture), **how do we know it works** (as evidence), and **what happens if it is wrong** (as danger). Skip any preamble; every sentence answers one of the three.

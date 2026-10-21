@@ -1,4 +1,4 @@
-> Part of the `visuals` skill (see `<plugin root>/agent-references/skills/visuals/index.md`).
+> Part of the `visuals` skill (see `SKILL.md`).
 
 # HTML report
 

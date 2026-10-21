@@ -2,6 +2,7 @@
 name: flow-report
 description: 'Gather what several projects learned about the plugin itself: read their $thasmorato-skills:tm-retro and $thasmorato-skills:tm-session-analyze reports, keep the findings tagged flow, group them by the stage they would change, put the flow measurements side by side per plugin version, and rank what the next version should change. Use when planning the next version of the plugin, on "/flow-report" or "what should the next version fix".'
 argument-hint: "<project paths, or a file listing them one per line>"
+disable-model-invocation: true
 ---
 
 `$thasmorato-skills:tm-retro` and `$thasmorato-skills:tm-session-analyze` run inside a project and write there. Each tags the findings that are about the plugin's own process as `flow`. This stage reads those reports **across projects** and turns them into the input for the next version: which stages, gates and templates keep going wrong, and whether the last version moved the numbers it was meant to move.
