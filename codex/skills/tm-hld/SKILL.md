@@ -17,7 +17,7 @@ description: "Write the High-Level Design from the PRD (docs/prd.md)."
 
 Call the `spawn_agent` tool with `agent_type = "tm-hld-writer"` to synthesize a High-Level Design into `docs/hld.md` from the PRD (the text after the skill name, or `docs/prd.md` by default).
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 If the PRD doesn't exist, tell the user to run `$thasmorato-skills:tm-prd` first instead of delegating.
 

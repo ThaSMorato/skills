@@ -17,7 +17,7 @@ description: "Read a whole working session (every compaction segment) and report
 
 Analyze the working session: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 `$thasmorato-skills:tm-retro` reads what the work left on disk. This reads what only the conversation holds: the owner correcting a proposal, rejecting a question, asking for the same thing twice. `/compact` shrinks the context window but deletes nothing from the transcript, so the whole session, every segment, is still there to read.
 

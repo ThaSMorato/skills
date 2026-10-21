@@ -47,10 +47,10 @@ Write a multi-file skill at `.claude/skills/<tech>-guide/`:
 ```
 
 Rules for the generated guide:
-- **Router shape, like `code-smells`.** `references/skills/generate-stack-guide/SKILL.md` is a table of what to load when; a rule file is read only when its row matches. The whole point is that a stage pays for the rule it needs.
+- **Router shape, like `code-smells`.** `references/skills/generate-stack-guide/index.md` is a table of what to load when; a rule file is read only when its row matches. The whole point is that a stage pays for the rule it needs.
 - **Quote the `description` in the frontmatter.** It is strict YAML, and the description you are about to write is the shape that breaks it: it names trigger phrases, so it carries quotes and often a `Triggers:` label, and an unquoted `: ` reads as a nested mapping and aborts the parse. Use single quotes, since the trigger phrases themselves use double ones. A guide whose frontmatter fails to parse does not load at all, and the failure is a startup warning, not an error at the point of use.
 - **Trigger phrases are technology-scoped** (`"<tech> conventions"`, `"writing <tech>"`) so guides compose instead of colliding.
-- **Reference sub-files with backticks** (`` `rules/errors.md` ``), never markdown links: links risk eager-loading and break lazy disclosure. Sub-files carry no frontmatter and a one-line back-reference to `references/skills/generate-stack-guide/SKILL.md`.
+- **Reference sub-files with backticks** (`` `rules/errors.md` ``), never markdown links: links risk eager-loading and break lazy disclosure. Sub-files carry no frontmatter and a one-line back-reference to `references/skills/generate-stack-guide/index.md`.
 - **Self-contained.** The generated guide references nothing outside itself and the project. Whatever it took from an external source is **copied in**, not linked as a dependency; the source lives on the machine where generation happened, and the guide has to work without it.
 - **Concrete.** Every rule shows the ecosystem's real syntax and names. A rule that would be true of any language belongs in `clean-code`, not here.
 - **Reference only**: no workflow or orchestration sections. The process stays in the plugin's stages; this plugs into them.

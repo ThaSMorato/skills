@@ -1,4 +1,4 @@
-> Part of the `testing` skill (see `<TM_ROOT>/agent-references/skills/testing/SKILL.md`).
+> Part of the `testing` skill (see `<TM_ROOT>/agent-references/skills/testing/index.md`).
 
 # Frontend patterns
 

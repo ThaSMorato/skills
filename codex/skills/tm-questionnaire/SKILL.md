@@ -10,9 +10,9 @@ description: "Write the questions the owner cannot answer alone into a questionn
 **Argument** (the text after the skill name): <who it goes to and about what>, or <path to a filled questionnaire>
 
 
-Read the `questionnaire` skill (`references/skills/questionnaire/SKILL.md`) for: the text after the skill name
+Read the `questionnaire` skill (`references/skills/questionnaire/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: an argument that is a path to a `kind: questionnaire` file with answers runs **read-back**; anything else runs **write**. For write, there is at least one decision to send: an open question, a `> Needs Input:` marker, or one the owner names.
 

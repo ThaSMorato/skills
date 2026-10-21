@@ -17,7 +17,7 @@ description: "Cut the product into epics and features, ordered by risk, with cro
 
 Call the `spawn_agent` tool with `agent_type = "tm-decomposer"` to write `docs/features.md` from `docs/prd.md`, `docs/hld.md` and `docs/components.md`.
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Nothing else in the flow produces this list. `$thasmorato-skills:tm-fdd` asks *which feature to spec* and takes the answer from whoever is at the keyboard, so the set of features exists only in someone's head, sizes drift, and coverage cannot be checked because there is no denominator.
 

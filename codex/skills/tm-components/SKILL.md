@@ -17,7 +17,7 @@ description: "Build the system component map from the HLD, the named parts every
 
 Call the `spawn_agent` tool with `agent_type = "tm-component-mapper"` to write `docs/components.md` from `docs/hld.md`.
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 This is the step that closes a real gap in the chain: the HLD is **required** to list components, and until now nothing turned that list into a shared map, so each FDD invented its own carve-up and nobody owned the cross-feature picture.
 

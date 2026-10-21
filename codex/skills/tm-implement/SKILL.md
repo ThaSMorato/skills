@@ -10,7 +10,7 @@ description: "Execute a validated plan one SI at a time, test-first (red → gre
 **Argument** (the text after the skill name): <plan slug> [continuous]
 
 
-Read the `implement` skill (`references/skills/implement/SKILL.md`) to build the plan: the text after the skill name
+Read the `implement` skill (`references/skills/implement/index.md`) to build the plan: the text after the skill name
 
 Resolve the plan under `.scratch/<feature-slug>/plans/`, run preflight (validation must be `clean`, branch must be set up), and execute SI by SI: red → green → refactor (production **and** tests), run the SI's tests, record progress, then STOP and wait for the user, unless they asked for continuous mode.
 

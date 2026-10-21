@@ -1,4 +1,4 @@
-> Part of the `doc-validate` skill (see `<TM_ROOT>/agent-references/skills/doc-validate/SKILL.md`). Also read by the document writers (`prd-writer`, `hld-writer`, `fdd-writer`) and by `writing-beats` and `writing-shape`, where the reader is the piece's audience.
+> Part of the `doc-validate` skill (see `<TM_ROOT>/agent-references/skills/doc-validate/index.md`). Also read by the document writers (`prd-writer`, `hld-writer`, `fdd-writer`) and by `writing-beats` and `writing-shape`, where the reader is the piece's audience.
 
 # Grounding: no concept is used before the reader has it
 

@@ -12,7 +12,7 @@ description: "Break an FDD into tracer-bullet tickets with blocking edges, then 
 
 Break the feature's design into a set of **tickets**: tracer-bullet vertical slices, each declaring the tickets that **block** it. This is interactive: quiz the user before publishing anything.
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 A ticket may be executed by an agent **or picked up by the owner**, so it carries the why and the constraints, not only the instruction. `references/templates/ticket.md` is the contract.
 
@@ -61,7 +61,7 @@ Write `.scratch/<feature-slug>/request-trace.md` beside them: one row per part o
 
 A part is `covered`, or `excluded`/`deferred` only with the owner's `> Decided:`. An AC that goes wider than the part it covers, or a part dropped, rewritten or deferred, is raised at the gate, never settled in the draft. Copy the owner supplied (text in an image, a document) enters the ticket as `> Decided:` with its source, never as `> Assumed:`.
 
-Then read the `tickets-validate` skill (`references/skills/tickets-validate/SKILL.md`) over the set. This is the postflight, and it is not optional: it checks coverage against the FDD, invention, tickets too big or too small, several tickets on one seam, blocking cycles and dispersion, and writes `.scratch/<feature-slug>/tickets-validation.md`. If it comes back `dirty`, fix the set and re-run it **before** showing the user anything. A set the user sees should already have a verdict, so their attention goes to judgment, not to catching a cycle.
+Then read the `tickets-validate` skill (`references/skills/tickets-validate/index.md`) over the set. This is the postflight, and it is not optional: it checks coverage against the FDD, invention, tickets too big or too small, several tickets on one seam, blocking cycles and dispersion, and writes `.scratch/<feature-slug>/tickets-validation.md`. If it comes back `dirty`, fix the set and re-run it **before** showing the user anything. A set the user sees should already have a verdict, so their attention goes to judgment, not to catching a cycle.
 
 ## 5. Quiz the user
 Present the breakdown as a numbered list (per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers**, **estimated SIs**), headed by the verdict, the **tickets-to-seams count**, the number of tickets in words, and any request part not `covered`. The follow-ups are listed after, as their own question. Ask (merges and splits as a multi-select):

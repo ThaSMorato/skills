@@ -1,4 +1,4 @@
-> Part of the `testing` skill (see `references/skills/testing/SKILL.md`).
+> Part of the `testing` skill (see `references/skills/testing/index.md`).
 
 # Backend patterns
 

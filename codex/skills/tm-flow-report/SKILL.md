@@ -10,9 +10,9 @@ description: "Gather what several projects learned about the plugin itself: thei
 **Argument** (the text after the skill name): <project paths, or a file listing them one per line>
 
 
-Read the `flow-report` skill (`references/skills/flow-report/SKILL.md`) for: the text after the skill name
+Read the `flow-report` skill (`references/skills/flow-report/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: at least one project path resolves. A project with no `docs/retro/` and no `docs/meta-retro/` is listed as not read, not an error; if none has either, say so: run `$thasmorato-skills:tm-retro` or `$thasmorato-skills:tm-session-analyze` in them first.
 

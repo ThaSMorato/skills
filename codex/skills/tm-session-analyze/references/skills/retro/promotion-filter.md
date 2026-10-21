@@ -1,4 +1,4 @@
-> Part of the `retro` skill (see `references/skills/retro/SKILL.md`). Also read by `$thasmorato-skills:tm-session-analyze`.
+> Part of the `retro` skill (see `references/skills/retro/index.md`). Also read by `$thasmorato-skills:tm-session-analyze`.
 
 # Promotion filter: before a finding becomes a skill, a guide or a rule
 

@@ -10,7 +10,7 @@ description: "Generate a per-technology engineering guide skill (conventions, id
 **Argument** (the text after the skill name): <technology> (e.g. ruby, react, nestjs, go)
 
 
-Read the `generate-stack-guide` skill (`references/skills/generate-stack-guide/SKILL.md`) for: the text after the skill name
+Read the `generate-stack-guide` skill (`references/skills/generate-stack-guide/index.md`) for: the text after the skill name
 
 Run all five phases: choose the source, mine it, confirm the calls with the user, generate `.claude/skills/<tech>-guide/`, and register the routing row in `docs/guidelines.md`.
 

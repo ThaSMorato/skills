@@ -1,4 +1,4 @@
-> Part of the `prototype` skill (see `references/skills/prototype/SKILL.md`).
+> Part of the `prototype` skill (see `references/skills/prototype/index.md`).
 
 # UI branch: switchable variants on the real page
 

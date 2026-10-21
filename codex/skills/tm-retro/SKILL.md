@@ -10,9 +10,9 @@ description: "Look back over a finished epic, feature or cycle from what it left
 **Argument** (the text after the skill name): <epic, feature slug, or a set of ticket ids>
 
 
-Read the `retro` skill (`references/skills/retro/SKILL.md`) over: the text after the skill name
+Read the `retro` skill (`references/skills/retro/index.md`) over: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 ## Preflight
 Resolve the scope to its tickets under `.scratch/`. At least one must have a `progress.md` with `status: completed` (or, in one that predates the frontmatter, `**Status:** completed` in the body); a retro over unfinished work reads the plan, not the outcome. If nothing finished, say so and stop.

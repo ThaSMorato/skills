@@ -14,7 +14,7 @@ Your context is isolated; read:
 - The repository and its history, read-only (`git log`, `git diff`, `git blame`).
 - `<TM_ROOT>/agent-references/templates/dependency-graph.md`: the skeleton for the new measurement.
 
-Read the `architecture` skill (`<TM_ROOT>/agent-references/skills/architecture/SKILL.md`): `import-graph.md` (the method, followed exactly), `rules/metrics.md`, `rules/adp-acyclic.md`, `rules/ccp-common-closure.md`, `rules/crp-common-reuse.md`, `rules/rep-reuse-release.md`.
+Read the `architecture` skill (`<TM_ROOT>/agent-references/skills/architecture/index.md`): `import-graph.md` (the method, followed exactly), `rules/metrics.md`, `rules/adp-acyclic.md`, `rules/ccp-common-closure.md`, `rules/crp-common-reuse.md`, `rules/rep-reuse-release.md`.
 
 ## 1. Measure
 Measure the graph by `import-graph.md` and write `docs/analysis/dependency-graph.md` with the new `measured_commit`. This is the one file you write besides your report.

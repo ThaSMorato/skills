@@ -26,6 +26,9 @@ const AGENT_REFERENCES = 'agent-references'
 const MAX_RUNNING_AGENTS = 6
 const SETUP_SOURCE = 'adapters/codex/tm-setup.md'
 const INSTALLER_SOURCE = 'scripts/codex-install-agents.mjs'
+// Codex registers every SKILL.md under the skills root, nested ones too, so a copy goes by another name.
+const COPIED_SKILL_FILE = 'index.md'
+const copiedName = (path) => path.replace(/(^|\/)SKILL\.md$/, `$1${COPIED_SKILL_FILE}`)
 const CLAUDE_ONLY = /Skill tool|Agent tool|CLAUDE_PLUGIN_ROOT|\$ARGUMENTS|in a single message|(?:then|and) with `[a-z0-9-]+`/
 
 const ENTRY_PREAMBLE = [
@@ -109,10 +112,10 @@ export function translate(text, context) {
   const capital = (letter, word) => (letter === letter.toUpperCase() ? word[0].toUpperCase() : word[0]) + word.slice(1)
   let out = spellOutChainedCalls(text)
     .replace(/<the "version" in \$\{CLAUDE_PLUGIN_ROOT\}\/\.claude-plugin\/plugin\.json>/g, version)
-    .replace(/\$\{CLAUDE_PLUGIN_ROOT\}\/((?:templates|skills|scripts)\/[A-Za-z0-9_./-]+)/g, `${prefix}$1`)
+    .replace(/\$\{CLAUDE_PLUGIN_ROOT\}\/((?:templates|skills|scripts)\/[A-Za-z0-9_./-]+)/g, (_, path) => `${prefix}${copiedName(path)}`)
     .replace(/should call the Skill tool with first/g, 'should load first')
-    .replace(/([Cc])all the Skill tool with each of:/g, (_, c) => `${capital(c, 'read')} each of these skills, at \`${prefix}skills/<name>/SKILL.md\`:`)
-    .replace(/([Cc])all the Skill tool with `([a-z0-9-]+)`/g, (_, c, name) => `${capital(c, 'read')} the \`${name}\` skill (\`${prefix}skills/${name}/SKILL.md\`)`)
+    .replace(/([Cc])all the Skill tool with each of:/g, (_, c) => `${capital(c, 'read')} each of these skills, at \`${prefix}skills/<name>/${COPIED_SKILL_FILE}\`:`)
+    .replace(/([Cc])all the Skill tool with `([a-z0-9-]+)`/g, (_, c, name) => `${capital(c, 'read')} the \`${name}\` skill (\`${prefix}skills/${name}/${COPIED_SKILL_FILE}\`)`)
     .replace(/([Cc])all the Agent tool with `([a-z0-9-]+)`/g, (_, c, name) => `${c}all the \`spawn_agent\` tool with \`agent_type = "tm-${name}"\``)
     .replace(/([Cc])all the Agent tool with an exploration agent/g, (_, c) => `${c}all the \`spawn_agent\` tool with \`agent_type = "explorer"\``)
     .replace(/([Cc])all the Agent tool once per/g, (_, c) => `${c}all the \`spawn_agent\` tool once per`)
@@ -131,7 +134,7 @@ export function translate(text, context) {
 
 function rewriteSiblings(text, { skill, files, prefix }) {
   return text.replace(/`([A-Za-z0-9_-]+(?:\/[A-Za-z0-9_.-]+)*\.[a-z]+)`/g, (whole, path) =>
-    files.has(path) ? `\`${prefix}skills/${skill}/${path}\`` : whole,
+    files.has(path) ? `\`${prefix}skills/${skill}/${copiedName(path)}\`` : whole,
   )
 }
 
@@ -188,7 +191,7 @@ function emitReferences(source, out, { base, prefix, deps, file }) {
   for (const skill of deps.skills) {
     const own = filesIn(source.root, `skills/${skill}`)
     const files = new Set(own.map((path) => relative(join('skills', skill), path)))
-    for (const path of own) out.set(`${base}/${path}`, translateCopy(path, { skill, files, prefix }))
+    for (const path of own) out.set(`${base}/${copiedName(path)}`, translateCopy(path, { skill, files, prefix }))
   }
   for (const path of deps.files) out.set(`${base}/${path}`, translateCopy(path))
 }

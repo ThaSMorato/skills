@@ -15,12 +15,12 @@ Read the PRD or FDD and the ticket for the screen, `CONTEXT.md`, the ui-audit wh
 | **A redesign** | keep the product truth (content, function, the user's habits); the old look is evidence to learn from, not a constraint, and the audit's problems are what the design must solve |
 | **No visual authority** | greenfield, nothing to inherit: the directions also propose the visual language, for the owner to choose |
 
-Name the **surface mode** too (operate, read, persuade, experience; see `references/skills/ui-audit/SKILL.md`, step 1). Coherent existing code is a visual world even with no design-system file.
+Name the **surface mode** too (operate, read, persuade, experience; see `references/skills/ui-audit/index.md`, step 1). Coherent existing code is a visual world even with no design-system file.
 
 **Done when** the situation and the mode are named and the owner has confirmed them.
 
 ## 2. The brief
-Read the `asking` skill (`references/skills/asking/SKILL.md`), and ask in rounds of two or three questions, stating your likely reading for the owner to correct rather than sending a questionnaire. Never ask for CSS values. Cover:
+Read the `asking` skill (`references/skills/asking/index.md`), and ask in rounds of two or three questions, stating your likely reading for the owner to correct rather than sending a questionnaire. Never ask for CSS values. Cover:
 - **Job**: who arrives, in what situation, and the one thing they must understand or do; what success looks like.
 - **Content**: every piece of data and copy, with realistic **minimum, typical and maximum** (the longest name, a thousand rows, an empty field), and where each one comes from.
 - **States**: first use, empty, loading, error, partial, success, no permission, overflow; which matter here.
@@ -34,16 +34,16 @@ Look facts up instead of asking them (the content's limits are in the schema; th
 ## 3. Directions
 Follow `references/skills/ui-design/directions.md`: three directions of equal weight, each a short contract and a built HTML page with captures, plus the category-standard option. Build them:
 - **brownfield**: as a throwaway page or route inside the project, with its real components and tokens, so what the owner approves is buildable as shown;
-- **greenfield**: as one standalone HTML file per direction (read the `visuals` skill (`references/skills/visuals/SKILL.md`) for the HTML conventions).
+- **greenfield**: as one standalone HTML file per direction (read the `visuals` skill (`references/skills/visuals/index.md`) for the HTML conventions).
 
-Either way it is disposable: `references/skills/prototype/SKILL.md` says how a throwaway is kept apart and removed. Show the captures side by side and ask which direction, or which parts of which, as a multi-select.
+Either way it is disposable: `references/skills/prototype/index.md` says how a throwaway is kept apart and removed. Show the captures side by side and ask which direction, or which parts of which, as a multi-select.
 
 **Done when** the owner has chosen, and the chosen contract is recorded as `> Decided:`.
 
 ## 4. Build it out, then critique
 Take the chosen direction through every state in the brief and every width, with the brief's real content at its maximums. Apply `references/skills/ui-design/principles.md`. Then verify in **bounded rounds**: one batched round of captures (every state at a phone and a desktop width, motion settled first, each file opened to confirm it shows what its name says), then call the `spawn_agent` tool with `agent_type = "tm-ui-critic"` with the captures, the brief and the contract. Fix everything it returns in one batch and run at most one more round. Two rounds, then stop polishing and report what is left.
 
-For accessibility, read the `ui` skill (`references/skills/ui/SKILL.md`); its catalog applies to the built pages like to any UI.
+For accessibility, read the `ui` skill (`references/skills/ui/index.md`); its catalog applies to the built pages like to any UI.
 
 **Done when** the critic returns **ship**, or the second round is done and the remaining findings are listed for the owner.
 

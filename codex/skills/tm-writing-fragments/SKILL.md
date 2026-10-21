@@ -10,4 +10,4 @@ description: "Writing, explore phase: an interview that collects raw fragments i
 **Argument** (the text after the skill name): [path to the fragments file] [topic]
 
 
-Read the `writing-fragments` skill (`references/skills/writing-fragments/SKILL.md`) for: the text after the skill name
+Read the `writing-fragments` skill (`references/skills/writing-fragments/index.md`) for: the text after the skill name

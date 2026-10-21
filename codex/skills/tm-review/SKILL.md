@@ -17,7 +17,7 @@ description: "Review the diff since a fixed point across narrow lenses in parall
 
 Review the diff between `HEAD` and the fixed point: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 ## 1. Preflight
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty: a bad ref or an empty diff fails here, not inside six agents.

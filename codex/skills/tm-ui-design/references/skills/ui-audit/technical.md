@@ -1,4 +1,4 @@
-> Part of the `ui-audit` skill (see `references/skills/ui-audit/SKILL.md`). Assessment B, with `references/skills/ui-audit/worst-case.md`; accessibility is the `ui` catalog's.
+> Part of the `ui-audit` skill (see `references/skills/ui-audit/index.md`). Assessment B, with `references/skills/ui-audit/worst-case.md`; accessibility is the `ui` catalog's.
 
 # Technical checks
 

@@ -10,9 +10,9 @@ description: "Check every acceptance criterion and every part of the owner's req
 **Argument** (the text after the skill name): <ticket slug>
 
 
-Read the `acceptance` skill (`references/skills/acceptance/SKILL.md`) for: the text after the skill name
+Read the `acceptance` skill (`references/skills/acceptance/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: the ticket's `progress.md` has `status: completed` and a review file exists for it. Run this after the review fixes and `$thasmorato-skills:tm-tidy`, because a later change to production code makes the record stale.
 

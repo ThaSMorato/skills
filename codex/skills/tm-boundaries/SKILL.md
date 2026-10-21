@@ -17,7 +17,7 @@ description: "Write the boundary contract from the component map and the FDDs (a
 
 Call the `spawn_agent` tool with `agent_type = "tm-boundary-architect"` to write `docs/boundaries.md`.
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 This is the second of the two architecture beats. `$thasmorato-skills:tm-components` said **what the parts are**, before the FDDs, so every feature spec had a shared vocabulary. This one says **who may depend on whom**, after the FDDs, because only the feature specs reveal the axes of change that a boundary is supposed to separate.
 

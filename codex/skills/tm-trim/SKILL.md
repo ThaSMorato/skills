@@ -10,9 +10,9 @@ description: "After $thasmorato-skills:tm-implement and before $thasmorato-skill
 **Argument** (the text after the skill name): <ticket slug> <fixed point, the one $thasmorato-skills:tm-review will use>
 
 
-Read the `trim` skill (`references/skills/trim/SKILL.md`) for: the text after the skill name
+Read the `trim` skill (`references/skills/trim/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: the ticket's `progress.md` has `status: completed`. Trimming a half-built ticket cuts code the next SI may need. If it is not completed, point at `$thasmorato-skills:tm-implement` and stop. Then confirm the fixed point resolves and the diff is non-empty.
 

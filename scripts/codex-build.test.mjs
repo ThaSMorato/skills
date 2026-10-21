@@ -65,9 +65,18 @@ test('every knowledge skill is exposed and left open to the model', () => {
 })
 
 // A skill that is neither knowledge nor loaded by an entry would ship nowhere in Codex.
+// Codex registers every SKILL.md under the skills root, nested ones included: a copied stage skill
+// named SKILL.md would be a second, unlocked way into that stage.
+test('only entries and knowledge skills are named SKILL.md', () => {
+  const registered = paths.filter((path) => /(^|\/)skill\.md$/i.test(path))
+  const expected = [...commandNames, 'setup'].map(entrySkill).concat(KNOWLEDGE_SKILLS.map((name) => `skills/${name}/SKILL.md`))
+
+  assert.deepEqual(registered.sort(), expected.sort())
+})
+
 test('every skill ships, as knowledge or inside an entry', () => {
   const shipped = (name) =>
-    KNOWLEDGE_SKILLS.includes(name) || paths.some((path) => path.endsWith(`/references/skills/${name}/SKILL.md`))
+    KNOWLEDGE_SKILLS.includes(name) || paths.some((path) => path.endsWith(`/references/skills/${name}/index.md`))
 
   assert.deepEqual(skillNames.filter((name) => !shipped(name)), [])
 })

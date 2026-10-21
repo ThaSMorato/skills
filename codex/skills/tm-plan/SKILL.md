@@ -10,7 +10,7 @@ description: "Break one ticket into a validated implementation plan, vertical SI
 **Argument** (the text after the skill name): <ticket file/number, or the work to plan>
 
 
-Read the `ticket-plan` skill (`references/skills/ticket-plan/SKILL.md`) to turn this into an implementation plan: the text after the skill name
+Read the `ticket-plan` skill (`references/skills/ticket-plan/index.md`) to turn this into an implementation plan: the text after the skill name
 
 Read the ticket (or the work the user points to) plus the node map, the FDD, the boundary contract, ADRs, guidelines, and `CONTEXT.md`.
 

@@ -1,4 +1,4 @@
-> Part of the `ticket-plan` skill (see `references/skills/ticket-plan/SKILL.md`). The exact shape of a plan document.
+> Part of the `ticket-plan` skill (see `references/skills/ticket-plan/index.md`). The exact shape of a plan document.
 
 # Plan document format
 
@@ -68,7 +68,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 `gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose; `$thasmorato-skills:tm-retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
 
 ## Rules for a good plan
-- **Coarse by default.** Propose the fewest SIs that clear the floor below and the ceiling in this rule list; merge what touches the same file, function, node or screen, what one check verifies, and what has only one consumer (`references/skills/ticket-plan/SKILL.md` §2). At `gear: small`, 1 to 3 SIs.
+- **Coarse by default.** Propose the fewest SIs that clear the floor below and the ceiling in this rule list; merge what touches the same file, function, node or screen, what one check verifies, and what has only one consumer (`references/skills/ticket-plan/index.md` §2). At `gear: small`, 1 to 3 SIs.
 - **One SI = one red → green → refactor cycle** that fits a fresh context window. **If an SI needs two Acts to describe, split it**: the single-act rule, at plan scale. Work verified by the same check at the same seam is one Act, however many ACs it closes.
 - **Vertical, not horizontal.** Each SI cuts through every layer it needs; never "all schema, then all API".
 - **Seams are named up front.** The `implement` loop writes the failing test at the seam the SI declares; no test seam, no test-first.

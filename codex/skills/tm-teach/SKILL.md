@@ -15,9 +15,9 @@ description: "Teach a topic over several sessions in a teaching workspace (missi
 **Argument** (the text after the skill name): <what you want to learn>
 
 
-Read the `teach` skill (`references/skills/teach/SKILL.md`) for: the text after the skill name
+Read the `teach` skill (`references/skills/teach/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: the current directory is the teaching workspace. If it is a code repository or holds unrelated files, say so and suggest a dedicated directory before writing anything; a workspace holds one mission. On a returning session, read `MISSION.md`, the learning records and `NOTES.md` before saying anything.
 

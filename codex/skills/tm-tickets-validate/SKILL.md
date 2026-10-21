@@ -10,9 +10,9 @@ description: "Validate a feature's ticket set before the human gate (coverage, i
 **Argument** (the text after the skill name): <feature name or slug>
 
 
-Read the `tickets-validate` skill (`references/skills/tickets-validate/SKILL.md`) to validate the tickets for: the text after the skill name
+Read the `tickets-validate` skill (`references/skills/tickets-validate/index.md`) to validate the tickets for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 `$thasmorato-skills:tm-tickets` runs this on its own as its postflight. Run it directly after editing tickets by hand.
 

@@ -1,4 +1,4 @@
-> Part of the `teach` skill (see `references/skills/teach/SKILL.md`).
+> Part of the `teach` skill (see `references/skills/teach/index.md`).
 
 # Workspace formats
 

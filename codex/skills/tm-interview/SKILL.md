@@ -10,11 +10,11 @@ description: "Open the Doc-Dev flow with the requirements interview, producing t
 **Argument** (the text after the skill name): [feature or project name]
 
 
-Read the `interview` skill (`references/skills/interview/SKILL.md`) (the elicitation discipline: rounds of questions, the PRD checklist, the gate), then read the `domain-model` skill (`references/skills/domain-model/SKILL.md`) (the glossary and the inline ADRs). They compose: `interview` drives the conversation, `domain-model` sharpens the vocabulary as it goes. Loading only one silently drops half the stage.
+Read the `interview` skill (`references/skills/interview/index.md`) (the elicitation discipline: rounds of questions, the PRD checklist, the gate), then read the `domain-model` skill (`references/skills/domain-model/index.md`) (the glossary and the inline ADRs). They compose: `interview` drives the conversation, `domain-model` sharpens the vocabulary as it goes. Loading only one silently drops half the stage.
 
 Elicit requirements for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 ## Before the first question
 - Read `docs/analysis/system-profile.md` if it exists. Its **Inherited constraints** section is the input a greenfield interview never needs and a brownfield one cannot do without: the immovable, as opposed to the desired. Confirm each with the user rather than assuming it still binds.

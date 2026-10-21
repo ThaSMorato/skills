@@ -14,7 +14,7 @@ The risk this suite cannot test away is an owner who approves code they do not u
 Teach the code **as it is now**, read from the files, not from what the plan intended.
 
 ## The lesson
-One self-contained HTML file. Read the `visuals` skill (`references/skills/visuals/SKILL.md`) for the views and the HTML conventions, and follow the lesson shape and quiz rules of `references/skills/teach/lessons.md`. Sections, in order:
+One self-contained HTML file. Read the `visuals` skill (`references/skills/visuals/index.md`) for the views and the HTML conventions, and follow the lesson shape and quiz rules of `references/skills/teach/lessons.md`. Sections, in order:
 
 1. **What it does**, in two or three sentences of domain words: the behavior a user now gets, by acceptance criterion.
 2. **Where it lives**: a file or component tree diff sketch of what was added and changed, and the main flow as a call tree. One picture, the whole change.

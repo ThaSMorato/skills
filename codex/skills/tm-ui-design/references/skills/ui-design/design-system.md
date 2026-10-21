@@ -1,4 +1,4 @@
-> Part of the `ui-design` skill (see `references/skills/ui-design/SKILL.md`), step 1. Runs only when the project already has a design system.
+> Part of the `ui-design` skill (see `references/skills/ui-design/index.md`), step 1. Runs only when the project already has a design system.
 
 # Inventory the design system
 

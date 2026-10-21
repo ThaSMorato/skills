@@ -17,7 +17,7 @@ description: "Write a Feature Design Doc for one feature, from the HLD (docs/hld
 
 Call the `spawn_agent` tool with `agent_type = "tm-fdd-writer"` to synthesize a Feature Design Doc into `docs/fdd/<feature-slug>.md` for the feature: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 If no feature was given, ask which feature to spec. If `docs/hld.md` doesn't exist, tell the user to run `$thasmorato-skills:tm-hld` first instead of delegating.
 

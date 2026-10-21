@@ -17,7 +17,7 @@ description: "Write the PRD from the requirements brief (docs/requirements-brief
 
 Call the `spawn_agent` tool with `agent_type = "tm-prd-writer"` to synthesize a PRD into `docs/prd.md` from the requirements brief (the text after the skill name, or `docs/requirements-brief.md` by default).
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 If the brief doesn't exist, tell the user to run `$thasmorato-skills:tm-interview` first instead of delegating.
 

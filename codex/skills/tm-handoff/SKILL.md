@@ -10,8 +10,8 @@ description: "Write what only this conversation knows (decisions said in chat, p
 **Argument** (the text after the skill name): [what the next session will do]
 
 
-Read the `handoff` skill (`references/skills/handoff/SKILL.md`) for: the text after the skill name
+Read the `handoff` skill (`references/skills/handoff/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Postflight: the handoff's path, the line to start the next session with, and any decision you offered to move into its artifact.

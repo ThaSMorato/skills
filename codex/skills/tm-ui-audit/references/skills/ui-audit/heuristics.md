@@ -1,4 +1,4 @@
-> Part of the `ui-audit` skill (see `references/skills/ui-audit/SKILL.md`). Read by `ui-critic` for the design assessment and by `ui-design` for its self-critique.
+> Part of the `ui-audit` skill (see `references/skills/ui-audit/index.md`). Read by `ui-critic` for the design assessment and by `ui-design` for its self-critique.
 
 # Heuristics, cognitive load, personas, severity
 

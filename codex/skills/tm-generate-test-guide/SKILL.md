@@ -10,6 +10,6 @@ description: "Analyze a project's stack and generate a project-specific testing-
 **Argument** (the text after the skill name): <project folder> (default: current directory)
 
 
-Read the `generate-test-guide` skill (`references/skills/generate-test-guide/SKILL.md`) for: the text after the skill name
+Read the `generate-test-guide` skill (`references/skills/generate-test-guide/index.md`) for: the text after the skill name
 
 Run all four phases: analyze the stack, research version-aware best practices, ask the user (layers, real/fake per external system, acceptance flows, conventions, coverage philosophy), then generate a multi-file `testing-guide-<project>` skill under `.claude/skills/`. The generic `testing` skill is the baseline it specializes.

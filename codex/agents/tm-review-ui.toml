@@ -14,7 +14,7 @@ Your context is isolated; you receive:
 - `docs/guidelines.md`: load the stack guide its routing table names for the changed files, and the design system's documentation if the repo has one (`docs/design-system.md`, the tokens and components a diff should use: a hardcoded value where a token exists, or a local copy of a library component, is a finding). When the changed screen has a spec in `docs/ui/<screen>.md`, its states and copy are what the diff should match. **Check what the component library already provides** (focus handling in its dialog, labels in its inputs) before flagging: a finding against something the library handles is refuted.
 - The ticket and FDD, for the states and flows the UI must support.
 
-Read the `ui` skill (`<TM_ROOT>/agent-references/skills/ui/SKILL.md`).
+Read the `ui` skill (`<TM_ROOT>/agent-references/skills/ui/index.md`).
 
 ## The bar
 **Every rule in the `ui` catalog, against every changed hunk of UI code** (components, templates, styles). Follow the call one hop out when a changed component renders a shared one. Then check the states: for every piece of UI the diff makes data-driven, are loading, empty and error handled?

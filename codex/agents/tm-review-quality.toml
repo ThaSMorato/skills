@@ -13,7 +13,7 @@ Your context is isolated; you receive:
 - `docs/guidelines.md`: the repo's router. Load the stack guides its routing table names for the changed files: **the repo's documented standard overrides these catalogs**.
 - `CONTEXT.md`: the glossary, for judging names.
 
-Read the `code-smells` skill (`<TM_ROOT>/agent-references/skills/code-smells/SKILL.md`), then read the `clean-code` skill (`<TM_ROOT>/agent-references/skills/clean-code/SKILL.md`).
+Read the `code-smells` skill (`<TM_ROOT>/agent-references/skills/code-smells/index.md`), then read the `clean-code` skill (`<TM_ROOT>/agent-references/skills/clean-code/index.md`).
 
 ## The bar
 **Every changed hunk, against the whole catalog.** A narrow lens exists so this exhaustiveness is affordable; the agent doing five jobs could never promise it. Work hunk by hunk; do not skim for the obvious.

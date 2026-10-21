@@ -1,4 +1,4 @@
-> Part of the `visuals` skill (see `references/skills/visuals/SKILL.md`).
+> Part of the `visuals` skill (see `references/skills/visuals/index.md`).
 
 # HTML report
 

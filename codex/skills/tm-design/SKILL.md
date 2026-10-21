@@ -15,9 +15,9 @@ description: "Build and persist the node map for one ticket (deep modules behind
 **Argument** (the text after the skill name): <ticket file/number, or the work to design>
 
 
-Read the `ticket-design` skill (`references/skills/ticket-design/SKILL.md`) to build the node map for: the text after the skill name
+Read the `ticket-design` skill (`references/skills/ticket-design/index.md`) to build the node map for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 ## Preflight
 - Resolve the ticket under `.scratch/<feature-slug>/issues/`. If there is none and the user pointed at no other work, stop and tell them to run `$thasmorato-skills:tm-tickets <feature>` first.

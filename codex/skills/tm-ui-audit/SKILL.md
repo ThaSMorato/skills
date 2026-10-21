@@ -15,9 +15,9 @@ description: "Evaluate an existing screen in the running software and list its p
 **Argument** (the text after the skill name): <screen: a route, URL or name>
 
 
-Read the `ui-audit` skill (`references/skills/ui-audit/SKILL.md`) for: the text after the skill name
+Read the `ui-audit` skill (`references/skills/ui-audit/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: the screen is named and can run (a route or URL the dev server serves). With no running server and no way to start one, stop and say so: an audit from the code alone is a guess about what the user sees.
 

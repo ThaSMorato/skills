@@ -10,9 +10,9 @@ description: "Validate a design document against the one it came from before the
 **Argument** (the text after the skill name): <from> <to> (e.g. "prd hld"), or omit to validate every available pair
 
 
-Read the `doc-validate` skill (`references/skills/doc-validate/SKILL.md`) to check: the text after the skill name
+Read the `doc-validate` skill (`references/skills/doc-validate/index.md`) to check: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 With no argument, validate every pair whose two documents exist: `brief → prd`, `prd → hld`, `prd → features`, `hld → components`, `features → fdd`.
 

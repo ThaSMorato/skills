@@ -10,9 +10,9 @@ description: "Find the cause of a bug by evidence (reproduce, three hypotheses o
 **Argument** (the text after the skill name): <the symptom: a failing test, an error, a bug report, or a ticket>
 
 
-Read the `diagnose` skill (`references/skills/diagnose/SKILL.md`) for: the text after the skill name
+Read the `diagnose` skill (`references/skills/diagnose/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: there is a symptom to start from, concrete enough to try to reproduce: a failing test, an error with its text, a bug report with steps, or a ticket. If there is only "it's broken", ask for the one thing that lets you reproduce it (where, doing what, seeing what).
 

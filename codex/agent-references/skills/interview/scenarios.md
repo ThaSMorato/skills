@@ -1,4 +1,4 @@
-> Part of the `interview` skill (see `<TM_ROOT>/agent-references/skills/interview/SKILL.md`). Also read by `prd-writer`, `acceptance` and the `testing` skill: the guiding scenario is the one artifact every one of them carries forward.
+> Part of the `interview` skill (see `<TM_ROOT>/agent-references/skills/interview/index.md`). Also read by `prd-writer`, `acceptance` and the `testing` skill: the guiding scenario is the one artifact every one of them carries forward.
 
 # Guiding scenarios
 

@@ -17,7 +17,7 @@ description: "Re-measure the dependency graph and reconcile it with the componen
 
 Call the `spawn_agent` tool with `agent_type = "tm-reconciler"` to reconcile the structure of this repository.
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight: `docs/components.md` must exist. Without a component map there is nothing to reconcile against. Say so and point at `$thasmorato-skills:tm-components` (or `$thasmorato-skills:tm-analyze` in brownfield) instead of delegating.
 

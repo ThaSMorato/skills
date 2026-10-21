@@ -1,4 +1,4 @@
-> Part of the `ui-design` skill (see `references/skills/ui-design/SKILL.md`), step 3.
+> Part of the `ui-design` skill (see `references/skills/ui-design/index.md`), step 3.
 
 # Directions
 

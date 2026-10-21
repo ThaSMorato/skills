@@ -45,7 +45,7 @@ Present the proposals grouped by rule, in order, as a structured choice. Where a
 
 **When the owner declines a proposal with a reason that will still hold next time**, offer to record it in `docs/declined.md`, so no later run proposes it again. A passing reason ("not now") or a self-evident one is not recorded; a reason that is really an architectural decision is an ADR instead (`$thasmorato-skills:tm-adr-generate`).
 
-**In path mode, offer the HTML report** before asking: a path usually yields more proposals than a list carries well. Read the `visuals` skill (`references/skills/visuals/SKILL.md`) and render one card per proposal with `html-report.md`, then ask from the report.
+**In path mode, offer the HTML report** before asking: a path usually yields more proposals than a list carries well. Read the `visuals` skill (`references/skills/visuals/index.md`) and render one card per proposal with `html-report.md`, then ask from the report.
 
 ## 2. Apply, one at a time
 For each chosen tidying, in rule order:

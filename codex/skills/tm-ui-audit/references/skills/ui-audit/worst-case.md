@@ -1,4 +1,4 @@
-> Part of the `ui-audit` skill (see `references/skills/ui-audit/SKILL.md`). The stress-tester persona, run with real worst-case data.
+> Part of the `ui-audit` skill (see `references/skills/ui-audit/index.md`). The stress-tester persona, run with real worst-case data.
 
 # The screen under worst-case data
 

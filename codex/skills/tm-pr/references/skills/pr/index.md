@@ -42,7 +42,7 @@ Closes <ticket id: title>
 ```
 
 ### Summary
-Read the `visuals` skill (`references/skills/visuals/SKILL.md`) and pick the smallest view: a diff sketch of the call tree, the component tree or the file tree when the point is what moved; pseudocode when it is logic; a sequence diagram when it is an interaction. One view usually; two when one cannot carry it. Name the structural commits (from `trim/` and `tidy/`) apart from the behavioral ones, so the reviewer can read them separately.
+Read the `visuals` skill (`references/skills/visuals/index.md`) and pick the smallest view: a diff sketch of the call tree, the component tree or the file tree when the point is what moved; pseudocode when it is logic; a sequence diagram when it is an interaction. One view usually; two when one cannot carry it. Name the structural commits (from `trim/` and `tidy/`) apart from the behavioral ones, so the reviewer can read them separately.
 
 **Done when** someone who has not read the ticket can say what the change does from the summary alone.
 

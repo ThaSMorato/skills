@@ -15,9 +15,9 @@ description: "Make working code simple, Beck's four rules of Simple Design in or
 **Argument** (the text after the skill name): <ticket slug> <fixed point (the same one $thasmorato-skills:tm-review used)>  |  <path>
 
 
-Read the `tidy` skill (`references/skills/tidy/SKILL.md`) for: the text after the skill name
+Read the `tidy` skill (`references/skills/tidy/index.md`) for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/SKILL.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Preflight, by mode:
 - **Ticket** (`<slug> <fixed point>`): the ticket has a review file under `.scratch/<feature-slug>/reviews/`. Tidying before the review mixes two questions, *is it right?* and *is it simple?*, and the answer to the first can change the code the second would tidy. If there is no review, point at `$thasmorato-skills:tm-review` and stop.
