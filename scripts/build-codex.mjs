@@ -128,6 +128,7 @@ export function translate(text, context) {
     .replace(`${STAGE_ROOT_NOTE}\n\n`, '')
     .replace(/<the "version" in \$\{CLAUDE_PLUGIN_ROOT\}\/\.claude-plugin\/plugin\.json>/g, version)
     .replace(/\$\{CLAUDE_PLUGIN_ROOT\}\/((?:templates|skills|scripts)\/[A-Za-z0-9_./-]+)/g, (_, path) => pluginPath(path))
+    .replace(/(scripts\/session-extract\.mjs")/g, '$1 --harness codex')
     .replace(/should call the Skill tool with first/g, 'should load first')
     .replace(/([Cc])all the Skill tool with each of:/g, (_, c) => `${capital(c, 'read')} each of these skills, at \`${prefix}skills/<name>/${COPIED_SKILL_FILE}\`:`)
     .replace(/([Cc])all the Skill tool with `([a-z0-9-]+)`/g, (_, c, name) => `${capital(c, 'read')} the \`${name}\` skill (\`${skillPath(name)}\`)`)
@@ -167,9 +168,15 @@ function dependenciesOf(text, skills) {
   }
 }
 
+/** The plugin-relative paths of the local modules a script imports. */
+function localImportsOf(source, path) {
+  return [...source.read(path).matchAll(/from '\.\/([^']+)'/g)].map(([, imported]) => join(dirname(path), imported))
+}
+
 /**
- * Every file reachable from `texts`, following skills into their own files. `own` is the skill the
- * texts belong to and `exposed` the skills read where they ship: neither is copied.
+ * Every file reachable from `texts`, following skills into their own files and scripts into their
+ * imports. `own` is the skill the texts belong to and `exposed` the skills read where they ship:
+ * neither is copied.
  */
 function closure(source, texts, { own, exposed = [] } = {}) {
   const skills = new Set()
@@ -182,6 +189,7 @@ function closure(source, texts, { own, exposed = [] } = {}) {
       if (!existsSync(join(source.root, path))) throw new Error(`cited plugin file does not exist: ${path}`)
       files.add(path)
       if (path.endsWith('.md')) pending.push(source.read(path))
+      if (path.endsWith('.mjs')) pending.push(...localImportsOf(source, path).map((imported) => `\${CLAUDE_PLUGIN_ROOT}/${imported}`))
     }
     for (const skill of deps.skills) {
       if (skills.has(skill) || skill === own || exposed.includes(skill)) continue
