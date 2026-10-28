@@ -23,8 +23,8 @@ acs: <the number of AC-N lines below>
 
 ## Metadata (required)
 - **Status:** ready | blocked | in progress | done
-- **Source:** <docs/fdd/<feature>.md: the FDD this slice comes from; or `direct (<gear> gear, no FDD): <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
-- **Components touched:** <names from docs/components.md, or `unknown, no component map`>
+- **Source:** <docs/features/<feature>/fdd.md: the FDD this slice comes from; or `direct (<gear> gear, no FDD): <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
+- **Components touched:** <names from docs/architecture/components.md, or `unknown, no component map`>
 
 > **Type** is verifiable, not decorative. A **structural** ticket (prefactoring, expand/migrate/contract)
 > changes shape and **not behavior**: existing tests stay unchanged and stay green. A **behavioral**

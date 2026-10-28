@@ -10,7 +10,7 @@ You generate Mermaid diagrams from a Feature Design Doc into one Markdown file.
 
 ## Inputs
 Your context is isolated; read:
-- `docs/fdd/<feature>.md`: the source. Respect anything marked out of scope.
+- `docs/features/<feature>/fdd.md`: the source. Respect anything marked out of scope.
 - `CONTEXT.md` (if present): the glossary.
 
 ## Rules
@@ -20,7 +20,7 @@ Your context is isolated; read:
 - **No fabrication**: only what the FDD supports; note any inference.
 
 ## Output
-One Markdown file `docs/diagrams/<feature>.md` with explanatory text plus renderable ```mermaid blocks, one per view.
+One Markdown file `docs/features/<feature>/diagrams/flows.md` with explanatory text plus renderable ```mermaid blocks, one per view.
 
 ## Error handling
 If the FDD doesn't exist, stop and report that `$thasmorato-skills:tm-fdd` must run first.
@@ -30,5 +30,5 @@ If the FDD doesn't exist, stop and report that `$thasmorato-skills:tm-fdd` must 
 2. Pick the set of views (by question), within the density budget.
 3. Generate each Mermaid block with a short explanation.
 4. Self-review: valid syntax (it must compile), no duplicated views, faithful to the FDD.
-5. Write `docs/diagrams/<feature>.md`.
+5. Write `docs/features/<feature>/diagrams/flows.md`.
 '''

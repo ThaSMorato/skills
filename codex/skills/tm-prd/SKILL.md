@@ -1,6 +1,6 @@
 ---
 name: tm-prd
-description: "Write the PRD from the requirements brief (docs/requirements-brief.md)."
+description: "Write the PRD from the requirements brief (.scratch/<effort>/brief.md)."
 ---
 
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
@@ -12,10 +12,10 @@ description: "Write the PRD from the requirements brief (docs/requirements-brief
 > is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
-**Argument** (the text after the skill name): (optional) path to the brief, if not docs/requirements-brief.md
+**Argument** (the text after the skill name): (optional) the effort slug, or a path to the brief
 
 
-Call the `spawn_agent` tool with `agent_type = "tm-prd-writer"` to synthesize a PRD into `docs/prd.md` from the requirements brief (the text after the skill name, or `docs/requirements-brief.md` by default).
+Call the `spawn_agent` tool with `agent_type = "tm-prd-writer"` to synthesize a PRD into `docs/product/prd.md` from the effort's requirements brief (`.scratch/<effort>/brief.md`, or the path given). The effort is the slug `$thasmorato-skills:tm-interview` gave this work, the folder under `.scratch/`: take it from the argument, or use the only `.scratch/*/brief.md` there is; with more than one and no argument, ask which.
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

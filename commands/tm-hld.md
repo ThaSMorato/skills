@@ -1,10 +1,10 @@
 ---
-description: Write the High-Level Design from the PRD (docs/prd.md).
-argument-hint: "(optional) path to the PRD, if not docs/prd.md"
+description: Write the High-Level Design from the PRD (docs/product/prd.md).
+argument-hint: "(optional) path to the PRD, if not docs/product/prd.md"
 disable-model-invocation: true
 ---
 
-Call the Agent tool with `hld-writer` to synthesize a High-Level Design into `docs/hld.md` from the PRD ($ARGUMENTS, or `docs/prd.md` by default).
+Call the Agent tool with `hld-writer` to synthesize a High-Level Design into `docs/architecture/hld.md` from the PRD ($ARGUMENTS, or `docs/product/prd.md` by default).
 
 > Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

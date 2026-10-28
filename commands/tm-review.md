@@ -31,7 +31,7 @@ Call the Agent tool once per lens below, all **in a single message** so they run
 
 If `/tm-trim` ran, `.scratch/<feature-slug>/trim/<NN>-<slug>.md` has an **Unrequested behavior** section: hand it to `review-spec` as leads (behavior in the diff that no AC asked for, which trimming could not cut because cutting it changes behavior). Leads, not findings: the lens confirms each against the plan and the ticket like anything else.
 
-When `docs/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the Agent tool with `review-ui` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
+When `docs/architecture/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the Agent tool with `review-ui` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
 
 **Pass `docs/declined.md` to every lens** when it exists: proposals the owner already turned down, with the scope and the reason. A lens does not raise a finding that matches a `declined` entry (same kind, a scope the entry covers) unless the entry's **Revisit when** has happened; if it believes that has happened, it raises the finding and cites the entry.
 

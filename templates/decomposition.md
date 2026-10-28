@@ -1,26 +1,28 @@
 <!--
-TEMPLATE: features (the decomposition: product → epics → features)
-Filled by the decomposer agent after the component map and BEFORE the FDDs. It answers the question no
-stage used to own: WHICH features exist. Without this list, "does every in-scope feature have an FDD?"
-has no denominator, and feature size drifts because "feature" is whatever gets named in the moment.
+TEMPLATE: decomposition (.scratch/<effort>/decomposition.md: how one effort cuts and orders its work)
+Filled by the decomposer agent after the component map and BEFORE the FDDs. It answers, for this
+effort, the question no stage used to own: WHICH features it builds, in WHICH order, and what may run
+at the same time. Without it, "does every in-scope feature have an FDD?" has no denominator. It is
+temporary: when the effort ships, the features it delivered are `live` in docs/features/README.md and
+this file goes with the rest of `.scratch/<effort>/`.
 PRUNE + RENUMBER optional sections that don't apply; (required) sections always stay.
 
-IDS ARE PERMANENT ADDRESSES. On a re-run, never renumber: other artifacts are keyed on these ids and
-slugs (docs/fdd/<slug>.md, .scratch/<slug>/issues/). Insert with a suffix (E1b, F3a); a retired id is
-never reused. A removed or merged row is struck through in "Retired", not deleted.
+Feature ids are the index's (docs/features/README.md): never invent one here. Epic ids are this
+effort's; on a re-run, never renumber them either: insert with a suffix (E1b).
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
 An unmarked one is a validation finding (AS-N).
 -->
 
-# Decomposition: <product>
+# Decomposition: <effort>
 
 ## Metadata (required)
 - **Status:** draft | in review | approved
-- **Sources:** <prd.md, hld.md, components.md, adr/*.md>
+- **Effort:** <slug, the folder name under .scratch/>
+- **Sources:** <.scratch/<effort>/brief.md, docs/product/prd.md, docs/architecture/hld.md, docs/architecture/components.md, docs/adr/*.md, docs/features/README.md>
 
 ## Epics (required)
-> A module-level slice of the product, `Level: module (EPIC)` in the PRD's vocabulary. Epics answer
+> A module-level slice of the effort, `Level: module (EPIC)` in the PRD's vocabulary. Epics answer
 > two different scheduling questions, and the columns keep them apart:
 > **`Parallel-safe with`** says what may run *at the same time*, derived from component overlap.
 > **`Depends on`** and **`Exists to falsify`** say what should run *first*.
@@ -40,39 +42,31 @@ An unmarked one is a validation finding (AS-N).
 |---|---|---|---|---|---|---|
 | **E1**: <name> | <the outcome, one line> | <from components.md> | <epic ids, or none> | <epic ids> | <epic ids, or none> | <ADR id / HLD section, or none> |
 
-## Features (required)
-> The unit an FDD specs and `/tm-tickets` breaks down. Every feature belongs to exactly one epic and
-> traces to at least one PRD requirement: that trace is what makes the 1:N coverage check computable.
-> Keep features comparable in size within an epic.
+## Features in this effort (required)
+> The features this effort builds or changes, by their index id. Every feature belongs to exactly one
+> epic. Keep features comparable in size within an epic.
 >
 > **`Depends on`** records cross-feature blocking: F4 cannot start until F2's schema lands. These
 > edges are **coarse and advisory**: `/tm-tickets` owns the authoritative blocking graph at ticket
-> level. What they exist for is the product-wide view, which ticket edges cannot give because
+> level. What they exist for is the effort-wide view, which ticket edges cannot give because
 > `/tm-tickets` reads one FDD at a time and can never see across features.
->
-> **`Not delivering`** is the boundary between this feature and its neighbours: what a reader might
-> reasonably assume is inside and isn't. It is a scope decision, knowable now, and it is what stops
-> `/tm-fdd` inferring the bound and inferring it differently each run.
 >
 > **`Milestone`** is the PRD's: a feature is `M1` when it delivers an `M1` requirement. The `M1`
 > features together must let the persona of the first milestone's scenario reach their goal end to
 > end; a missing link is a coverage gap below, not a later epic's problem.
->
-> **`Constrained by`** lists the ADRs binding this feature. Where the formal ADRs don't exist yet,
-> cite the **ADR candidates the HLD flagged**. Leave it empty rather than inventing an id.
 
-| Feature | Epic | Covers (RF/RNF) | Milestone | Depends on | Components touched | Not delivering | Constrained by | FDD |
-|---|---|---|---|---|---|---|---|---|
-| **F1**: <slug> | E1 | RF-001, RF-003 | M1 | <feature ids, or none> | | <the neighbouring scope it excludes> | <ADR ids, or none> | `docs/fdd/<slug>.md` |
+| Feature | Epic | Milestone | Depends on | New or changed |
+|---|---|---|---|---|
+| **F1**: <slug> | E1 | M1 | <feature ids, or none> | new \| changes F1's living docs |
 
 ## Requirement coverage (required)
-> The omission direction: every RF/RNF in the PRD scope is owned by at least one feature. List here
-> anything **not fully** covered, with the reason: deferred, out of scope, genuinely missed, or
+> The omission direction: every RF/RNF in this effort's scope is owned by at least one feature. List
+> here anything **not fully** covered, with the reason: deferred, out of scope, genuinely missed, or
 > **partial**.
 >
 > **Partial coverage is not coverage.** A requirement naming two things, of which a feature delivers
-> one, belongs here marked `partial`, not ticked in the table above. Half a proof credited as a
-> proof is how a requirement gets marked done by a release that does not meet it.
+> one, belongs here marked `partial`, not ticked in the index. Half a proof credited as a proof is
+> how a requirement gets marked done by a release that does not meet it.
 
 | Requirement | Covered by | Status (covered \| partial \| uncovered) | If not fully covered, why |
 |---|---|---|---|
@@ -81,14 +75,5 @@ An unmarked one is a validation finding (AS-N).
 > Where the user-journey carve-up and the component carve-up disagree. The journey wins the feature
 > boundary (a feature must deliver user-visible value), and the disagreement is recorded here because
 > it predicts where features will contend for the same component.
-
-## Retired (optional)
-> Features and epics removed, merged, or split on a re-run: **struck through, never deleted**, each
-> with the reason and where its scope went. The previous cut is part of the record: without it, the
-> next reader cannot tell a deliberate removal from an oversight, and a re-run looks like a first run.
-
-| ~~Id~~ | Was | What happened |
-|---|---|---|
-| ~~F7~~ | <name> | merged into F3, the two shared a single seam |
 
 ## Open questions / Needs Input (optional)

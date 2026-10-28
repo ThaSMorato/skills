@@ -65,9 +65,9 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 |---|---|
 | `CONTEXT.md` | naming anything: it owns the vocabulary |
 | `docs/adr/index.md` | a decision in the area is binding |
-| `docs/components.md` | you need the component map |
-| `docs/boundaries.md` | you are adding a dependency between components |
-| `docs/hld.md` · `docs/fdd/*.md` | specifying or verifying behavior |
+| `docs/architecture/components.md` | you need the component map |
+| `docs/architecture/boundaries.md` | you are adding a dependency between components |
+| `docs/architecture/hld.md` · `docs/features/*/fdd.md` | specifying or verifying behavior |
 
 ## 7. External references (optional)
 > Authoritative external sources, with what each one answers. Links, not summaries.

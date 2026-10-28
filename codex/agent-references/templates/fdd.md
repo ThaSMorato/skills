@@ -17,14 +17,14 @@ An unmarked one is a validation finding (AS-N).
 - **ID:** <FDD-xxx>
 - **Level:** feature
 - **Status:** draft | in review | approved
-- **Feature:** <the feature id from docs/features.md, e.g. F3>
-- **Components touched:** <names from docs/components.md, the components this feature crosses>
+- **Feature:** <the feature id from docs/features/README.md, e.g. F3>
+- **Components touched:** <names from docs/architecture/components.md, the components this feature crosses>
 - **Sources:** <hld.md, prd.md, components.md, codebase, deep-research>
 
 > **Components touched** is what ties this feature to the system map. Two FDDs written in parallel
 > that touch the same component can specify contracts that contradict each other, and this field is
 > what makes that detectable; `$thasmorato-skills:tm-doc-validate` cross-checks the FDDs that share a component. Name
-> components exactly as `docs/components.md` names them; if a component you need is missing there,
+> components exactly as `docs/architecture/components.md` names them; if a component you need is missing there,
 > say so in Open questions rather than inventing a name.
 
 ## Context and goals (required)

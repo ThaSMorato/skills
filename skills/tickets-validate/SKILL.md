@@ -17,7 +17,7 @@ It exists because the ticket set was the one artifact in the flow with no valida
 ## Sources
 - **The tickets**, all of them, together.
 - **The FDD** named in their `Source`: its acceptance criteria and its declared **test seams**.
-- `docs/features.md`, this feature's row: the `Depends on` column holds the cross-feature blockers.
+- the decomposition that lists this feature (`.scratch/*/decomposition.md`), its row: the `Depends on` column holds the cross-feature blockers.
 - `.scratch/<feature-slug>/request-trace.md`, when it exists: the owner's request, part by part.
 
 A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)`) has no FDD to check coverage against. Skip `SC` for it, and run everything else, since its seam is in its own `Test seam` field.

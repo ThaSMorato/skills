@@ -14,14 +14,14 @@ The code phase already works this way: `plan` writes, `plan-validate` judges, `i
 
 | From → To | Files | Coverage shape |
 |---|---|---|
-| `brief → prd` | `docs/requirements-brief.md` → `docs/prd.md` | 1:1 |
-| `prd → hld` | `docs/prd.md` → `docs/hld.md` | 1:1 |
-| `prd → features` | `docs/prd.md` → `docs/features.md` | 1:N |
-| `hld → components` | `docs/hld.md` → `docs/components.md` | 1:1 |
-| `features → fdd` | `docs/features.md` → `docs/fdd/*.md` | 1:N |
-| `hld → fdd` | `docs/hld.md` → `docs/fdd/*.md` | 1:N |
+| `brief → prd` | `.scratch/<effort>/brief.md` → `docs/product/prd.md` | 1:1 |
+| `prd → hld` | `docs/product/prd.md` → `docs/architecture/hld.md` | 1:1 |
+| `prd → features` | `docs/product/prd.md` → `docs/features/README.md` + `.scratch/<effort>/decomposition.md` | 1:N |
+| `hld → components` | `docs/architecture/hld.md` → `docs/architecture/components.md` | 1:1 |
+| `features → fdd` | `docs/features/README.md` → `docs/features/*/fdd.md` | 1:N |
+| `hld → fdd` | `docs/architecture/hld.md` → `docs/features/*/fdd.md` | 1:N |
 
-With no argument, validate every pair whose two sides both exist.
+With no argument, validate every pair whose two sides both exist. A pair with an effort side (`.scratch/<effort>/…`) runs once per effort folder that has the file; an argument after the pair (`brief prd checkout-v2`) picks one.
 
 If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` first."*
 
@@ -37,7 +37,7 @@ If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` firs
 | `SC-N` | Set coverage | In a 1:N pair, a source item no member of the target set owns |
 | `PC-N` | Partial credit | A source item the target marks as covered but only partly delivers, ticked where it should be listed as `partial` |
 | `SN-N` | Scenario coverage | A guiding-scenario step that needs the product and has no requirement; a requirement on no step; a first milestone whose `M1` requirements do not complete its scenario; an RNF that protects no step; in `prd → features`, an `M1` requirement no `M1` feature delivers |
-| `DG-N` | Dependency graph | A cycle in `docs/features.md`'s epic or feature graph, or a feature depending on one that no longer exists |
+| `DG-N` | Dependency graph | A cycle in the decomposition's epic or feature graph, or a feature depending on one that no longer exists |
 | `IV-N` | Invention | An element of the target that traces to nothing in the source |
 | `RN-N` | Unanswered driver | An `RNF` in the PRD with no architectural response in the HLD |
 | `IC-N` | Inconsistency | Two documents contradict, including two FDDs specifying conflicting contracts for a component they both list as touched |

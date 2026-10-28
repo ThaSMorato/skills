@@ -13,7 +13,7 @@ Produce `docs/research/<slug>.md`: findings on the question, each claim cited, f
 ## Inputs
 Your context is isolated; read:
 - The research question (from the command).
-- `docs/requirements-brief.md` / `docs/prd.md` (if present): context for scope and constraints.
+- the open efforts' `.scratch/*/brief.md` / `docs/product/prd.md` (if present): context for scope and constraints.
 - `docs/research/<slug>/sources/*.md` (if present): notes from `source-reader` agents that already deep-read the primary sources. When they exist, **synthesize from them** instead of re-fetching.
 - `${CLAUDE_PLUGIN_ROOT}/templates/research-report.md`: the skeleton you fill.
 

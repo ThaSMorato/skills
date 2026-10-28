@@ -1,6 +1,6 @@
 ---
 name: tm-hld
-description: "Write the High-Level Design from the PRD (docs/prd.md)."
+description: "Write the High-Level Design from the PRD (docs/product/prd.md)."
 ---
 
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
@@ -12,10 +12,10 @@ description: "Write the High-Level Design from the PRD (docs/prd.md)."
 > is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
-**Argument** (the text after the skill name): (optional) path to the PRD, if not docs/prd.md
+**Argument** (the text after the skill name): (optional) path to the PRD, if not docs/product/prd.md
 
 
-Call the `spawn_agent` tool with `agent_type = "tm-hld-writer"` to synthesize a High-Level Design into `docs/hld.md` from the PRD (the text after the skill name, or `docs/prd.md` by default).
+Call the `spawn_agent` tool with `agent_type = "tm-hld-writer"` to synthesize a High-Level Design into `docs/architecture/hld.md` from the PRD (the text after the skill name, or `docs/product/prd.md` by default).
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

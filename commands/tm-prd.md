@@ -1,10 +1,10 @@
 ---
-description: Write the PRD from the requirements brief (docs/requirements-brief.md).
-argument-hint: "(optional) path to the brief, if not docs/requirements-brief.md"
+description: Write the PRD from the requirements brief (.scratch/<effort>/brief.md).
+argument-hint: "(optional) the effort slug, or a path to the brief"
 disable-model-invocation: true
 ---
 
-Call the Agent tool with `prd-writer` to synthesize a PRD into `docs/prd.md` from the requirements brief ($ARGUMENTS, or `docs/requirements-brief.md` by default).
+Call the Agent tool with `prd-writer` to synthesize a PRD into `docs/product/prd.md` from the effort's requirements brief (`.scratch/<effort>/brief.md`, or the path given). The effort is the slug `/tm-interview` gave this work, the folder under `.scratch/`: take it from the argument, or use the only `.scratch/*/brief.md` there is; with more than one and no argument, ask which.
 
 > Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 

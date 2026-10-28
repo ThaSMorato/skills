@@ -29,7 +29,22 @@ Built as a stack, one PR per wave; nothing merges before the release.
   stage that verifies it: `/tm-tickets` no longer runs the ticket validation in a loop before
   showing the set; it names `/tm-tickets-validate` for the owner.
 
-**Migration.** Type the new names; the stage skills, the documents and their paths do not change.
+### Wave E1: living docs, the layout
+
+- **The documents describe the system, one folder per feature.** `docs/product/` (the PRD, the
+  design system), `docs/architecture/` (HLD, components, boundaries, the system C4),
+  `docs/features/<feature>/` (`fdd.md`, `diagrams/`, `ui/`), with `docs/features/README.md` as the
+  feature index. `CONTEXT.md` and `docs/adr/` stay. `scripts/docs-layout.test.mjs` fails on any old
+  path outside the migration.
+- **What belongs to one effort is temporary:** `/tm-interview` names the effort, and its brief and
+  its decomposition live in `.scratch/<effort>/`. `features.md` is split into the living index
+  (`templates/features-index.md`) and the effort's cut (`templates/decomposition.md`); `/tm-decompose`
+  amends the first and writes the second.
+- **`/tm-docs-migrate` (temporary)** moves a project from the old layout: it proposes the map,
+  including which feature each per-task FDD belongs to, moves nothing before the owner approves, and
+  rewrites the references. `/tm-flow` names it when it finds the old layout.
+
+**Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |
 |---|---|

@@ -1,6 +1,6 @@
 ---
 name: guardrails
-description: 'Install the barriers that make a repository catch mistakes on its own: a pre-commit hook and a CI job that run the checks the repo already has, a Claude Code hook that stops destructive git commands, and optionally a dependency linter that enforces docs/boundaries.md. Use when $thasmorato-skills:tm-retro reports a missing guardrail, on a new repository, or on "set up pre-commit / CI checks / block git push / guardrails".'
+description: 'Install the barriers that make a repository catch mistakes on its own: a pre-commit hook and a CI job that run the checks the repo already has, a Claude Code hook that stops destructive git commands, and optionally a dependency linter that enforces docs/architecture/boundaries.md. Use when $thasmorato-skills:tm-retro reports a missing guardrail, on a new repository, or on "set up pre-commit / CI checks / block git push / guardrails".'
 disable-model-invocation: true
 user-invocable: false
 ---
@@ -13,7 +13,7 @@ Read, never assume:
 - **The hook manager** already present: `.husky/`, `.pre-commit-config.yaml`, `lefthook.yml`, `.git/hooks/` scripts, `simple-git-hooks` in `package.json`.
 - **The CI**: `.github/workflows/*.yml`, `.gitlab-ci.yml`, or another, and which of the check commands each job runs.
 - **Claude Code hooks** in `.claude/settings.json` and `.claude/settings.local.json`.
-- **`docs/boundaries.md`**, if `$thasmorato-skills:tm-boundaries` wrote one.
+- **`docs/architecture/boundaries.md`**, if `$thasmorato-skills:tm-boundaries` wrote one.
 
 Run each check command once and record whether it passes today: a hook that wires in a failing command blocks every commit from the first one.
 
@@ -24,7 +24,7 @@ From the table, propose only what is missing, as a structured choice the owner p
 - **Pre-commit hook**: format and lint on the **staged files only**, plus the type check. Tests go in the hook only when they run in seconds; otherwise they belong to CI. Use the hook manager the repo already has; when it has none, propose the one its ecosystem uses (`husky` + `lint-staged` for Node, the `pre-commit` framework for Python, `lefthook` as the language-neutral choice) and say why.
 - **CI job**: lint, type check and tests on every pull request, on the CI platform the repo already uses, with the same commands the table names.
 - **Git guard for Claude Code**: `references/skills/guardrails/git-guard.sh` as a `PreToolUse` hook on `Bash`, blocking `push`, `reset --hard`, `clean -f`, `branch -D`, `checkout --`, `restore <path>` and `stash drop`/`clear`. The owner picks which rules stay (they are named at the top of the script) and whether it goes in the project (`.claude/settings.json`, shared with the team) or only on this machine (`.claude/settings.local.json`).
-- **Dependency linter** (only when `docs/boundaries.md` exists): the rules of `boundaries.md` as forbidden imports, with the tool the stack uses (`dependency-cruiser` for TypeScript and JavaScript, `import-linter` for Python, `depguard` in `golangci-lint` for Go, `packwerk` for Ruby). Propose the config; each rule cites the boundary it enforces.
+- **Dependency linter** (only when `docs/architecture/boundaries.md` exists): the rules of `boundaries.md` as forbidden imports, with the tool the stack uses (`dependency-cruiser` for TypeScript and JavaScript, `import-linter` for Python, `depguard` in `golangci-lint` for Go, `packwerk` for Ruby). Propose the config; each rule cites the boundary it enforces.
 
 A check command that fails today is proposed with a choice: fix it first, or wire it in non-blocking (a CI job that reports without failing) until it is fixed. Never wire a failing command in as blocking.
 

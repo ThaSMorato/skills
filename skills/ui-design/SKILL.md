@@ -10,7 +10,7 @@ user-invocable: false
 The rest of the flow builds and checks what a design says. When there is no design, someone still decides the hierarchy, the layout, the states and the copy, usually in the middle of implementing, one component at a time. This stage makes those decisions first, with the owner, and writes them down.
 
 ## 1. Decide what is already true
-Read the PRD or FDD and the ticket for the screen, `CONTEXT.md`, the ui-audit when this is a redesign (`.scratch/ui-audit/<screen>/audit.md`), and `docs/design-system.md`. When the project has a design system and that file does not exist yet, write it first (`design-system.md`). Then classify, and say it to the owner:
+Read the PRD or FDD and the ticket for the screen, `CONTEXT.md`, the ui-audit when this is a redesign (`.scratch/ui-audit/<screen>/audit.md`), and `docs/product/design-system.md`. When the project has a design system and that file does not exist yet, write it first (`design-system.md`). Then classify, and say it to the owner:
 
 | Situation | What it means |
 |---|---|
@@ -52,7 +52,7 @@ For accessibility, call the Skill tool with `thasmorato-skills:ui`; its catalog 
 **Done when** the critic returns **ship**, or the second round is done and the remaining findings are listed for the owner.
 
 ## Output
-Write `docs/ui/<screen-slug>.md` from `${CLAUDE_PLUGIN_ROOT}/templates/ui-spec.md`, with the final captures under `docs/ui/<screen-slug>/`. The spec is the screen's source of truth: `/tm-design` builds its node map from it, `/tm-acceptance` compares the running screen against its states and widths, and the next redesign starts from it. Remove the throwaway pages.
+Write the spec in the folder of the feature that owns the screen (the one whose FDD or ticket asked for it; a screen several features share belongs to the one that owns its route), `docs/features/<feature>/ui/<screen-slug>.md`, from `${CLAUDE_PLUGIN_ROOT}/templates/ui-spec.md`, with the final captures under `docs/features/<feature>/ui/<screen-slug>/`. The spec is the screen's source of truth: `/tm-design` builds its node map from it, `/tm-acceptance` compares the running screen against its states and widths, and the next redesign starts from it. Remove the throwaway pages.
 
 ## Gate
 The brief for the spec: the direction and why, the states and widths covered, the critic's verdict, the decisions still open, every `> Assumed:`, and the audit problems (`UA-N`) each part solves, when this was a redesign. Next: `/tm-tickets` or `/tm-design` for the work that builds it.

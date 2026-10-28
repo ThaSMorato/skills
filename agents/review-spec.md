@@ -13,7 +13,7 @@ Your context is isolated; you receive:
 - The plan (`.scratch/.../plans/.../plan.md`) and its `progress.md`: the SIs and what was reported done.
 - **The originating ticket**, named in the plan's `ticket:` frontmatter: its numbered acceptance criteria and its **exclusions**.
 - The **node map** at the plan's `design:` path: the interfaces the code was supposed to build.
-- `docs/fdd/<feature>.md`: the feature this ticket came from.
+- `docs/features/<feature>/fdd.md`: the feature this ticket came from.
 - `.scratch/<feature-slug>/request-trace.md`, when it exists: the owner's request, part by part, with the ticket and AC covering each.
 
 ## Precedence, when they disagree

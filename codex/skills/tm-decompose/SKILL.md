@@ -12,19 +12,19 @@ description: "Cut the product into epics and features, ordered by risk, with cro
 > is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
-**Argument** (the text after the skill name): (none): runs once per product scope, re-run when the PRD scope changes
+**Argument** (the text after the skill name): (optional) the effort slug; runs once per effort, re-run when its scope changes
 
 
-Call the `spawn_agent` tool with `agent_type = "tm-decomposer"` to write `docs/features.md` from `docs/prd.md`, `docs/hld.md` and `docs/components.md`.
+Call the `spawn_agent` tool with `agent_type = "tm-decomposer"` to amend the feature index (`docs/features/README.md`) and write this effort's cut (`.scratch/<effort>/decomposition.md`) from the effort's brief, `docs/product/prd.md`, `docs/architecture/hld.md` and `docs/architecture/components.md`. The effort is the slug `$thasmorato-skills:tm-interview` gave this work, the folder under `.scratch/`: take it from the argument, or use the only `.scratch/*/brief.md` there is; with more than one and no argument, ask which.
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 Nothing else in the flow produces this list. `$thasmorato-skills:tm-fdd` asks *which feature to spec* and takes the answer from whoever is at the keyboard, so the set of features exists only in someone's head, sizes drift, and coverage cannot be checked because there is no denominator.
 
-If `docs/prd.md` is missing, tell the user to run `$thasmorato-skills:tm-prd` first. If `docs/components.md` is missing, say so and continue; the decomposition still works, but the parallel-safety column will be empty and `$thasmorato-skills:tm-boundaries` will have less to check against.
+If `docs/product/prd.md` is missing, tell the user to run `$thasmorato-skills:tm-prd` first. If `docs/architecture/components.md` is missing, say so and continue; the decomposition still works, but the parallel-safety column will be empty and `$thasmorato-skills:tm-boundaries` will have less to check against.
 
-## If `docs/features.md` already exists
-This is an **amendment**, not a rewrite. Ids are permanent addresses: `docs/fdd/<slug>.md` paths and the `.scratch/<slug>/issues/` directories `$thasmorato-skills:tm-tickets` published are keyed on them, so renumbering breaks artifacts that already exist. New items get a suffixed id (`F3a`); removed ones are struck through in `Retired` with their reason. Tell the user which rows changed.
+## The index already exists
+It always is an **amendment**, not a rewrite: the index is the system's, and this effort only adds, changes or retires rows. Ids are permanent addresses: the `docs/features/<slug>/` folders and the `.scratch/<slug>/issues/` directories `$thasmorato-skills:tm-tickets` published are keyed on them, so renumbering breaks artifacts that already exist. New items get a suffixed id (`F3a`); removed ones are struck through in `Retired` with their reason. Tell the user which rows changed.
 
 ## After the agent returns
 Show:

@@ -4,19 +4,20 @@
 
 | Template | Filled by | Produces |
 |---|---|---|
-| `requirements-brief.md` | `/tm-interview` | `docs/requirements-brief.md` |
+| `requirements-brief.md` | `/tm-interview` | `.scratch/<effort>/brief.md` |
 | `context.md` | `domain-model` skill | `CONTEXT.md` |
 | `research-report.md` | `researcher` | `docs/research/<slug>.md` |
-| `prd.md` | `prd-writer` | `docs/prd.md` |
-| `hld.md` | `hld-writer` | `docs/hld.md` |
-| `components.md` | `component-mapper` | `docs/components.md` |
-| `features.md` | `decomposer` | `docs/features.md` |
-| `fdd.md` | `fdd-writer` | `docs/fdd/<feature>.md` |
-| `boundaries.md` | `boundary-architect` | `docs/boundaries.md` |
+| `prd.md` | `prd-writer` | `docs/product/prd.md` |
+| `hld.md` | `hld-writer` | `docs/architecture/hld.md` |
+| `components.md` | `component-mapper` | `docs/architecture/components.md` |
+| `features-index.md` | `decomposer` | `docs/features/README.md` |
+| `decomposition.md` | `decomposer` | `.scratch/<effort>/decomposition.md` |
+| `fdd.md` | `fdd-writer` | `docs/features/<feature>/fdd.md` |
+| `boundaries.md` | `boundary-architect` | `docs/architecture/boundaries.md` |
 | `adr.md` | `adr-generator` | `docs/adr/NNNN-<slug>.md` |
 | `guidelines.md` | `guideline-generator` | `docs/guidelines.md` (a **router**, ≤150 lines) |
-| `ui-spec.md` | `/tm-ui-design` | `docs/ui/<screen>.md` |
-| `design-system.md` | `/tm-ui-design` (only when the project has a design system) | `docs/design-system.md` |
+| `ui-spec.md` | `/tm-ui-design` | `docs/features/<feature>/ui/<screen>.md` |
+| `design-system.md` | `/tm-ui-design` (only when the project has a design system) | `docs/product/design-system.md` |
 | `ticket.md` | `/tm-tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
 | `system-profile.md` | `architectural-analyzer` | `docs/analysis/system-profile.md` |
 | `declined.md` | `/tm-tidy`, `/tm-trim`, `/tm-review` (append-only) | `docs/declined.md` |
