@@ -15,7 +15,8 @@ Your context is isolated; read all `docs/adr/*.md` and their frontmatter (`super
 
 ## Output
 - **Repair inverses:** if A `supersedes` B, ensure B has `superseded-by: A` (and the same for `amends`). Edit the affected ADRs' frontmatter to add missing inverses. When an ADR is superseded, set its `status: superseded`.
-- **Index:** write/refresh `docs/adr/index.md`: a **timeline** (by date) and the **graph** (which supersedes/amends/relates to which), showing each ADR's status.
+- **Index:** write/refresh `docs/adr/index.md`: a **timeline** (by date) and the **graph** (which supersedes/amends/relates to which), showing each ADR's status and scope. Every ADR in it is a relative link to its file (`${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/links.md`), so Obsidian draws the graph from the index too.
+- **Bindings:** for each ADR's `features`, check the feature's row in `docs/features/README.md` lists it under `Constrained by`; report each missing one for `/tm-decompose` to amend (the index is not yours to edit).
 
 ## Rules (negative)
 - **Never delete or rewrite a decision**; only fix/complete link metadata and the index. Don't rewrite the past.

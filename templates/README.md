@@ -35,10 +35,12 @@ Triple duty: (a) generation **scaffold**, (b) **handoff anchor** between isolate
 
 Rules: **self-contained** (no external links); sections marked **required × optional**; the agent **prunes + renumbers** what doesn't apply; a skeleton = headers + one line of intent per section, **not** a heavy example.
 
+**Properties.** A living document (PRD, HLD, components, boundaries, the feature index, a feature's README and FDD) and an ADR start with a YAML frontmatter: `kind`, `status`, and `level` or `feature` where they apply. Obsidian's Bases filters on them, and `/tm-flow` reads `status` there. The template's leading comment is instructions, never copied: the filled document **starts** with its frontmatter. A document from before 0.7.0 carries Status and Level as Metadata lines; read them there. The effort's files (brief, scope, decomposition, criteria) keep them in Metadata.
+
 Three fields are read by other stages, so they are contracts rather than decoration:
 
-- **`Status: draft | in review | approved | changes-requested`**: the gate record. Whoever runs the gate writes it; `/tm-flow` reads it to report what is waiting on the user. Nobody else may set it to `approved`.
-- **`Level: product | module (EPIC) | feature`**: sets the depth of the document, and propagates brief → PRD → HLD → FDD.
+- **`status: draft | in review | approved | changes-requested`**: the gate record. Whoever runs the gate writes it; `/tm-flow` reads it to report what is waiting on the user. Nobody else may set it to `approved`.
+- **`level: product | module (EPIC) | feature`**: sets the depth of the document, and propagates brief → PRD → HLD → FDD.
 - **Numbered ids** (`RF-001`, `AC-1`, `SI-1`): what makes coverage checks mechanical instead of textual.
 
 **Living or temporary.** The templates that fill `docs/product/`, `docs/architecture/` and `docs/features/` produce **living** documents: each effort amends them in place, by section, and none carries an acceptance criterion or a milestone (`skills/doc-validate/living.md`). The ones that fill `.scratch/` (brief, scope, decomposition, criteria, tickets) belong to one effort and go with it.

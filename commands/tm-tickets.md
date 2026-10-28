@@ -42,6 +42,8 @@ Each slice cuts a **narrow but complete** path through every layer (schema, API,
 **Wide-refactor exception:** a single mechanical change whose blast radius breaks thousands of call sites can't land green as a vertical slice. Sequence it **expand → migrate (batches, each blocked by expand) → contract (blocked by every batch)**, all structural; if batches can't stay green alone, share an integration branch that all block a final integrate-and-verify ticket. The **contract** ticket, the one that removes the old shape, carries an acceptance criterion of **zero remaining consumers**, with the evidence named: no calls in the logs over an agreed window, no import in any consumer, no failing consumer contract test. Removing on the belief that nobody uses it is how a published contract breaks.
 
 ## 4. Write the set
+Every reference a ticket makes to another document (the FDD and criteria in `Source`, the feature criterion behind each AC, a constraining ADR) is a relative link to its file, by `${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/links.md`.
+
 Write **local files** first, always, even when the tickets will end up in a tracker: one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order, each filling `${CLAUDE_PLUGIN_ROOT}/templates/ticket.md`. Number the acceptance criteria `AC-1`, `AC-2`. `/tm-plan` maps each to an SI and `/tm-plan-validate` checks the coverage by id, which it cannot do against unlabelled bullets.
 
 Write `.scratch/<feature-slug>/request-trace.md` beside them: one row per part of the owner's request (their message, `task.md`, the brief, an image or document they supplied), quoted, with the ticket and AC that cover it:

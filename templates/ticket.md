@@ -7,7 +7,9 @@ up and build it by hand, so it must carry the WHY and the CONSTRAINTS, not just 
 PRUNE + RENUMBER optional sections that don't apply; (required) sections always stay.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 FRONTMATTER: `type`, `gear` and `acs` are fields, not prose, because /tm-retro sums them; `acs` is the
 number of AC-N lines under Acceptance criteria. A ticket that predates the frontmatter carries Type
 and Gear as Metadata lines; read them there.
@@ -24,7 +26,7 @@ acs: <the number of AC-N lines below>
 
 ## Metadata (required)
 - **Status:** ready | blocked | in progress | done
-- **Source:** <docs/features/<feature>/fdd.md + .scratch/<effort>/criteria/<feature>.md: the FDD and the criteria this slice comes from; or `direct (<gear> gear, no FDD): <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
+- **Source:** <[FDD](../../../docs/features/<feature>/fdd.md) + [criteria](../../<effort>/criteria/<feature>.md): the FDD and the criteria this slice comes from, as relative links; or `direct (<gear> gear, no FDD): <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
 - **Components touched:** <names from docs/architecture/components.md, or `unknown, no component map`>
 
 > **Type** is verifiable, not decorative. A **structural** ticket (prefactoring, expand/migrate/contract)
@@ -55,8 +57,8 @@ acs: <the number of AC-N lines below>
 > Numbered and verifiable. The IDs are load-bearing: `/tm-plan` maps each to an SI and `/tm-plan-validate`
 > checks the coverage mechanically. Each names the feature criterion it comes from, `(from <F-id> AC-n)`:
 > that trace is how `/tm-acceptance` knows when a criterion is delivered and can be absorbed into the FDD.
-- [ ] **AC-1** (from F<n> AC-<n>):
-- [ ] **AC-2** (from F<n> AC-<n>):
+- [ ] **AC-1** (from [F<n> AC-<n>](../../<effort>/criteria/<feature>.md)):
+- [ ] **AC-2** (from [F<n> AC-<n>](../../<effort>/criteria/<feature>.md)):
 
 ## Exclusions (required)
 > What this ticket explicitly does NOT build, drawn from the FDD's scope exclusions and from the

@@ -16,6 +16,6 @@ After the agent returns, show: the component inventory, which are policy and whi
 
 **Decisions the amendment changed** (the agent returns them, one line each): show every one, then name `/tm-adr-identify`, which records each as an ADR that amends or supersedes the old decision. A changed decision with no ADR is a regression `/tm-doc-validate` reports.
 
-**GATE (strong).** The user approves the map before any FDD is written: every feature spec below depends on these names, and renaming a component afterwards means touching every FDD that used it. On approval, set `Status: approved` in the file.
+**GATE (strong).** The user approves the map before any FDD is written: every feature spec below depends on these names, and renaming a component afterwards means touching every FDD that used it. On approval, set `status: approved` in the file's frontmatter.
 
 Then suggest `/tm-c4-generate` for the system C3 diagram, and `/tm-decompose` to cut the product into epics and features along these boundaries.

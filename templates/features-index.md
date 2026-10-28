@@ -11,13 +11,19 @@ slugs (docs/features/<slug>/, .scratch/<slug>/issues/). Insert with a suffix (F3
 never reused. A removed or merged row is struck through in "Retired", not deleted.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
+
+---
+kind: features-index
+status: draft            # draft | in review | approved | changes-requested; only the gate moves it
+---
 
 # Features: <product>
 
 ## Metadata (required)
-- **Status:** draft | in review | approved
 - **Sources:** <docs/product/prd.md, docs/architecture/hld.md, docs/architecture/components.md, docs/adr/*.md>
 
 ## Features (required)
@@ -37,7 +43,7 @@ An unmarked one is a validation finding (AS-N).
 
 | Feature | Covers (RF/RNF) | Components touched | Not delivering | Constrained by | Docs | State |
 |---|---|---|---|---|---|---|
-| **F1**: <name> (`<slug>`) | RF-001, RF-003 | <from components.md> | <the neighbouring scope it excludes> | <ADR ids, or none> | `docs/features/<slug>/` | planned \| live |
+| **F1**: <name> (`<slug>`) | [RF-001](../product/prd.md), [RF-003](../product/prd.md) | <from [components.md](../architecture/components.md)> | <the neighbouring scope it excludes> | <[ADR-NNNN](../adr/NNNN-<slug>.md), or none> | [<slug>](<slug>/README.md) | planned \| live |
 
 ## Retired (optional)
 > Features removed, merged, or split: **struck through, never deleted**, each with the reason and

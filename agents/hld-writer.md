@@ -47,7 +47,7 @@ Stronger guarantees cost latency or fault tolerance, so a guarantee left weak is
 `docs/architecture/hld.md` describes the system as it is, and every effort amends it. When it does not exist, fill the template and write it whole. When it exists, follow `${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/living.md`: read it whole, change it **section by section with `Edit`**, only where this effort's sources change it, ids permanent, present tense, no acceptance criteria, symbols and not `path:line`. Every decision your amendment changes (not adds) goes in your return as one line: the section, what it said, what it says now, the source that changed it.
 
 ## Output
-Write `docs/architecture/hld.md` by filling the template, or amend it. Prune and renumber the optional sections that don't apply. Carry `Level` over from the PRD; set `Status: draft`. Every element must trace to the PRD.
+Write `docs/architecture/hld.md` by filling the template, or amend it. Prune and renumber the optional sections that don't apply. Carry `level` over from the PRD; set `status: draft` (both in the frontmatter). Every element must trace to the PRD.
 
 ## Rules (negative)
 - **System-level, not code.** Describe structure, not line-by-line implementation or full contracts.

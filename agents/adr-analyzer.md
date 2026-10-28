@@ -1,6 +1,6 @@
 ---
 name: adr-analyzer
-description: Sweep the design docs (HLD/FDD/boundaries) for architectural decisions that merit an ADR and propose them as Potential ADRs for the user to confirm. Delegate after /tm-hld or /tm-fdd, or when the user runs /tm-adr-identify. It identifies and justifies; it does NOT write formal ADRs.
+description: Sweep the design docs (HLD/FDD/boundaries) for architectural decisions that merit an ADR and propose them as Potential ADRs for the user to confirm. Delegate after /tm-hld or /tm-fdd, or when the user runs /tm-adr-identify; /tm-adr-propose uses it to triage one decision (new, amends, supersedes, already decided). It identifies and justifies; it does NOT write formal ADRs.
 tools: Read, Write, Grep, Glob, Bash
 effort: high
 ---
@@ -52,9 +52,18 @@ formalized-as: <NNNN, when state is formalized>
 ---
 ```
 
-plus the decision, the **evidence** (where in the HLD/FDD/boundaries/code/commit it lives), the Step-0 category or the 3-E justification, any related/duplicate existing ADR, and a `> Needs Input` marker for anything the user must confirm.
+plus the decision, the **evidence** (where in the HLD/FDD/boundaries/code/commit it lives; paths are fine here, never in the formal ADR), the Step-0 category or the 3-E justification, any related/duplicate existing ADR, the **relationship** (`new`, `amends: NNNN`, `supersedes: NNNN`), the **scope** (`repo-wide`, `backend`, `frontend`, `cross-layer`, and the subprojects), the **requirements** and **features** it binds, whether it is **retroactive** (already in the code: where it was found), and a `> Needs Input:` marker for anything the user must confirm, as a callout: `> [!CAUTION]` on the line above it, every line starting with `> `.
 
 Update `docs/adr/potential/index.md`: one line per file with its state, so what is pending, formalized and rejected is visible at a glance.
+
+## One decision (triage)
+When the command passes a single decision in the owner's words ("adopt X", "stop doing Y"), from `/tm-adr-propose`, do not sweep: triage that one decision before anything is planned on it.
+1. **Already decided?** An accepted ADR that says the same: report it and write nothing. A `rejected` Potential on the same ground: report it with its reason, and write a Potential only if the owner's words bring something its reason did not weigh.
+2. **New, amends or supersedes.** Against every ADR and Potential in any state: `amends: NNNN` when it adjusts part of one and leaves the rest standing, `supersedes: NNNN` when it replaces one, `new` when nothing covers it. Two plausible readings are a `> Needs Input:`, not a guess.
+3. **Scope and bindings**: where it binds, and which requirements and features it constrains (from the PRD and the feature index).
+4. **The funnel still applies** (Step 0, red flags, 3 E's): a decision that fails it is reported as not ADR-worthy, with the reason, and nothing is written.
+
+Write the one Potential ADR, refresh the index, and return the triage: the verdict, the relationship, the scope and the bindings.
 
 ## Rules
 - **Identify, don't author.** No formal ADR bodies.

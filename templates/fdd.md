@@ -12,16 +12,23 @@ belong to one effort, in .scratch/<effort>/criteria/<feature>.md, and become rul
 delivered. It names symbols (a function, a type, an endpoint, a config key), never `path:line`.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
+
+---
+kind: fdd
+status: draft            # draft | in review | approved | changes-requested; only the gate moves it
+level: feature
+feature: <the feature id from docs/features/README.md, e.g. F3>
+---
 
 # FDD: <feature>
 
 ## Metadata (required)
 - **ID:** <FDD-xxx>
-- **Level:** feature
-- **Status:** draft | in review | approved
-- **Feature:** <the feature id from docs/features/README.md, e.g. F3>
+- **Feature:** <[F3](../README.md): the feature's row in the index, linked>
 - **Components touched:** <names from docs/architecture/components.md, the components this feature crosses>
 - **Sources:** <hld.md, prd.md, components.md, codebase, deep-research>
 
@@ -42,6 +49,16 @@ An unmarked one is a validation finding (AS-N).
 
 ## Public contracts (required)
 > The precise interface: signatures, endpoints, headers, examples, response semantics. Integration depends on precision, not intent.
+
+## Authorization (required when the feature has roles or owned data)
+> Who may do what: one row per role and action the feature exposes, including the ones that are
+> denied, because a denial nobody wrote down is a check nobody implements. "Own only" means the actor
+> must own the resource; say how ownership is established. A feature with one kind of user and no data
+> that belongs to anyone says so in one line instead.
+
+| Role | Action | Allowed (yes \| no \| own only) | Enforced at |
+|---|---|---|---|
+| <role from the glossary> | <action on a contract above> | own only | <the component or the contract that checks it> |
 
 ## Errors, exceptions, and fallbacks (required)
 > Specified behavior, not left to the implementer. Each fallback is an operational rule with a trigger condition and an observable effect.

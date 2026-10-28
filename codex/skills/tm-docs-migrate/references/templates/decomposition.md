@@ -11,7 +11,9 @@ Feature ids are the index's (docs/features/README.md): never invent one here. Ep
 effort's; on a re-run, never renumber them either: insert with a suffix (E1b).
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
 
 # Decomposition: <effort>

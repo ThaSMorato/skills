@@ -75,6 +75,30 @@ Built as a stack, one PR per wave; nothing merges before the release.
 - **`/tm-docs-migrate`** also moves the PRD's milestone and criteria to the scope and each FDD's
   criteria to the feature's criteria file. `scripts/living-docs.test.mjs` holds all of this.
 
+### Wave E3: ADRs and links
+
+- **`/tm-adr-propose "<decision>"`** triages one decision the owner announces before anything is
+  planned on it: already decided, not ADR-worthy, `new`, `amends` or `supersedes`, through
+  `adr-analyzer`'s new one-decision mode; it writes the Potential ADR and names `/tm-adr-generate`
+  (items 16, 55).
+- **The ADR says where it applies and what it binds:** `scope` (repo-wide, backend, frontend,
+  cross-layer), `subprojects`, `requirements`, `features`; and when it was found: `retroactive`,
+  `discovered`, `formalized` (items 15, 56, 57). It names components, concepts and technologies, never
+  a file or a class; the paths stay in the Potential (item 58). `doc-validate` checks the bindings both
+  ways (`adr → features`), and `adr-linker` reports a feature row missing its ADR.
+- **The FDD has an `Authorization` matrix** (role × action, denials included), required when the
+  feature has roles or owned data (item 14).
+- **Links:** every reference to another document's id is a relative Markdown link to its file, the id
+  as the text (`skills/doc-validate/links.md`); the templates show it, `doc-validate` reports a broken
+  one or a wikilink (`LK-N`), and a test holds the plugin's own links to it.
+- **Properties:** the living documents and the ADRs start with a frontmatter (`kind`, `status`,
+  `level`, `feature`; `state` on a feature's README), for Obsidian's Bases; `Status` and `Level` left
+  their Metadata lines.
+- **Callouts:** each marker has a callout line above it (`> [!CAUTION]` Needs Input, `> [!WARNING]`
+  Assumed, `> [!NOTE]` Decided); the marker line itself is unchanged, so the validators still find it.
+- **`/tm-docs-migrate`** adds the callout lines and moves Status and Level into the frontmatter.
+  `scripts/adr-links.test.mjs` holds the wave.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |

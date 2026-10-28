@@ -23,6 +23,7 @@ The code phase already works this way: `plan` writes, `plan-validate` judges, `i
 | `features → fdd` | `docs/features/README.md` → `docs/features/*/fdd.md` | 1:N |
 | `hld → fdd` | `docs/architecture/hld.md` → `docs/features/*/fdd.md` | 1:N |
 | `scope → criteria` | `.scratch/<effort>/scope.md` → `.scratch/<effort>/criteria/*.md` | 1:N |
+| `adr → features` | `docs/adr/*.md` ↔ `docs/features/README.md` and `docs/product/prd.md` | both directions |
 
 With no argument, validate every pair whose two sides both exist. A pair with an effort side (`.scratch/<effort>/…`) runs once per effort folder that has the file; an argument after the pair (`brief prd checkout-v2`) picks one.
 
@@ -30,6 +31,8 @@ If the target doesn't exist, abort: *"No `<to>` at `<path>`. Run `/<stage>` firs
 
 ## Living documents are checked against their previous version
 The PRD, the HLD, the component map, the boundary contract, the feature index and each feature's docs are **living**: an effort amends them on its branch (`${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/living.md`). When the target is one of them and it exists on the base branch, a pair also reads its diff against the base, and the coverage checks run on what the effort **changed**: an amended requirement traces to the scope, an amended FDD section to the HLD or the scope. What the amendment removed or rewrote without a source is `RG`.
+
+`adr → features` checks the bindings both ways: every feature and requirement id in an ADR's frontmatter exists, every feature an ADR lists has that ADR under `Constrained by`, and every ADR a row lists names that feature back. An accepted ADR with no requirement and no feature binds nothing anyone can find; report it (`SC`) unless its `scope` is `repo-wide`.
 
 `scope → criteria` is the effort's yardstick: every product criterion and every requirement the scope adds or changes is refined by at least one feature criterion, and every feature criterion refines one of them.
 
@@ -54,6 +57,7 @@ The PRD, the HLD, the component map, the boundary contract, the feature index an
 | `SR-N` | Serialization gap | The prose and the JSON contract carry different content |
 | `MD-N` | Metadata | A `(required)` section empty, an unresolved `> Needs Input`, `Status`/`Level` incoherent between source and target, or a feature's `README.md` whose `State` disagrees with its index row |
 | `RG-N` | Regression | In an amended living document, compared with its version on the base branch: an element removed or changed with no source behind it, an id renumbered or reused, a `> Decided:` changed, a changed decision with no ADR or Potential ADR, or text about the change instead of the system; walked by [`living.md`](living.md) |
+| `LK-N` | Broken link | A relative link in the target whose file does not exist, or a link written as a `[[wikilink]]`; the rules are in [`links.md`](links.md) |
 | `LC-N` | Criterion in a living document | An acceptance criterion or a milestone written into a living document instead of the effort's `scope.md` or `criteria/` |
 | `UG-N` | Ungrounded concept | A load-bearing concept used before the target introduces it, with no glossary entry or upstream document to bring it; walked top to bottom by [`grounding.md`](grounding.md) |
 | `AS-N` | Unmarked assumption | A value in one of the `asking` skill's assumption classes (§6) that the source does not give, that carries no `> Assumed:` or `> Decided:` marker, and that would change the target if it were different |
@@ -96,7 +100,7 @@ open_issues: <count of open issues>
 
 ## Gate
 - **dirty** → report exactly what to fix: *"`<path>` has N open issues. Fix the document (edit it or re-run `/<stage>`), then re-run `/tm-doc-validate <from> <to>`."* **Never auto-fix**, and never partially proceed: a validator that edits the thing it judges has stopped being a second opinion.
-- **clean** → *"`<from> → <to>` is clean. The gate is now: approve `<to>` and set `Status: approved`."*
+- **clean** → *"`<from> → <to>` is clean. The gate is now: approve `<to>` and set its `status: approved` (the frontmatter of a living document or an ADR, the Metadata line of an effort file)."*
 
 The human gate reads this verdict first. A `dirty` verdict is not a veto over the user's judgement (they may approve anyway), but it means they are approving something with named, listed problems rather than approving in the dark.
 

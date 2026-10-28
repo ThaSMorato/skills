@@ -32,7 +32,7 @@ The FDD and the feature's `README.md` describe the feature as it is, and every e
 **Legacy FDDs.** A migration from the per-task layout leaves the other FDDs of this feature in `legacy/`. Fold each into the FDD: what it specifies that the FDD does not say becomes the FDD's; where the two contradict, the newer decision wins and goes in your return as a changed decision. Its acceptance criteria are delivered behavior when the feature is `live`: absorb them as rules by `${CLAUDE_PLUGIN_ROOT}/skills/acceptance/absorb.md`, naming the test that proves each when you can find it, and `> Assumed:` when you cannot. Report each folded file; deleting it is the owner's call at the gate.
 
 ## Output
-- **The FDD**, `docs/features/<feature-slug>/fdd.md` (create the feature's folder if needed). On a new FDD, prune and renumber the optional sections that don't apply. Set `Status: draft`.
+- **The FDD**, `docs/features/<feature-slug>/fdd.md` (create the feature's folder if needed). On a new FDD, prune and renumber the optional sections that don't apply. Set `status: draft` and `feature` in the frontmatter.
 - **The criteria**, `.scratch/<effort>/criteria/<feature-slug>.md`: the verifiable conditions under which this effort's change to the feature is correct, numbered `AC-1…`, each naming the product criterion or requirement it refines, every state `open`. `/tm-tickets` copies them down and the coverage checks follow the ids.
 - **The feature README**, `docs/features/<feature-slug>/README.md`: created with the first FDD, amended when what it lists changes. `State` is the index row's.
 
@@ -61,7 +61,7 @@ If `docs/architecture/hld.md` is missing, do not guess an FDD; stop and report t
 ## Workflow
 1. Read the HLD, the component map, the index row, the feature's living documents and legacy files, the PRD and the scope, `CONTEXT.md`, the relevant codebase, and the templates.
 2. Identify the test seams / deep-module opportunities.
-3. Draft or amend the FDD: context/scope → detailed flows → public contracts → errors/fallbacks → config/deps → seams → risks; fold the legacy files.
+3. Draft or amend the FDD: context/scope → detailed flows → public contracts → authorization (every role × action, denials included, when the feature has roles or owned data) → errors/fallbacks → config/deps → seams → risks; fold the legacy files.
 4. Write the criteria: numbered, verifiable, each refining a product criterion or a requirement.
 5. Prune + renumber optional sections on a new FDD only.
 6. Self-review: every `(required)` section filled, components named from the map, seams chosen, the FDD holding no criterion, every scope requirement for this feature has a criterion, everything traces to the HLD/PRD.

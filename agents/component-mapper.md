@@ -61,4 +61,4 @@ If `docs/architecture/hld.md` is missing, stop and report that `/tm-hld` must ru
 3. Write owns / does-not-own for each; surface gaps and overlaps.
 4. In brownfield, compute the graph, the metrics and the cycles; record divergence from the HLD.
 5. Self-review: every HLD component appears, no component invented, no permissions stated, coverage gaps declared, no id renumbered or reused.
-6. Write `docs/architecture/components.md` with `Status: draft`, or amend it; return the decisions your amendment changed.
+6. Write `docs/architecture/components.md` with `status: draft` in its frontmatter, or amend it; return the decisions your amendment changed.
