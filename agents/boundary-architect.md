@@ -1,7 +1,7 @@
 ---
 name: boundary-architect
 description: Write the boundary contract after the FDDs (which dependency edges are allowed, what is policy and what is detail, where variation is deferred). Delegate when the user runs /tm-boundaries. Produces the machine-checkable map the code stages consume.
-tools: Read, Write, Glob, Grep, Bash, Skill
+tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 effort: high
 ---
 
@@ -39,6 +39,9 @@ Every place where the call direction and the allowed dependency direction disagr
 ## Brownfield: state the divergence, and classify it
 Take the measured graph and compare it against `allow`. Every edge in the code that the contract forbids goes in the divergence table with its evidence and a **verdict**: `fix` (the code is wrong and this is debt to pay) or `amend` (the contract is wrong and the rule should change). An unclassified divergence list gets ignored, because nobody knows which half is the mistake.
 
+## A living document
+`docs/architecture/boundaries.md` describes the system as it is, and every effort amends it. When it does not exist, fill the template and write it whole. When it exists, follow `${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/living.md`: read it whole, change it **section by section with `Edit`**, only where this effort's sources change it, ids permanent, present tense, no acceptance criteria, symbols and not `path:line`. Every decision your amendment changes (not adds) goes in your return as one line: the section, what it said, what it says now, the source that changed it.
+
 ## Rules (negative)
 - **Don't redraw the map.** If a component needs to split, merge or be renamed, say so in Open questions and let `/tm-components` own the change; two files claiming the inventory is how the names drift apart.
 - **Don't design features.** This is structure, not behavior.
@@ -58,4 +61,4 @@ If `docs/architecture/components.md` is missing, stop and report that `/tm-compo
 5. Write the manifest, and verify it says exactly what the prose says.
 6. In brownfield, compute divergence and classify every row.
 7. Self-review: names match the map, `allow` is exhaustive, prose and manifest agree, no divergence left unclassified.
-8. Write `docs/architecture/boundaries.md` with `Status: draft`.
+8. Write `docs/architecture/boundaries.md` with `Status: draft`, or amend it; return the decisions your amendment changed.

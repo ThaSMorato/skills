@@ -19,7 +19,7 @@ An unmarked one is a validation finding (AS-N).
 ## Metadata (required)
 - **Status:** draft | in review | approved
 - **Effort:** <slug, the folder name under .scratch/>
-- **Sources:** <.scratch/<effort>/brief.md, docs/product/prd.md, docs/architecture/hld.md, docs/architecture/components.md, docs/adr/*.md, docs/features/README.md>
+- **Sources:** <.scratch/<effort>/brief.md, .scratch/<effort>/scope.md, docs/product/prd.md, docs/architecture/hld.md, docs/architecture/components.md, docs/adr/*.md, docs/features/README.md>
 
 ## Epics (required)
 > A module-level slice of the effort, `Level: module (EPIC)` in the PRD's vocabulary. Epics answer
@@ -51,7 +51,8 @@ An unmarked one is a validation finding (AS-N).
 > level. What they exist for is the effort-wide view, which ticket edges cannot give because
 > `/tm-tickets` reads one FDD at a time and can never see across features.
 >
-> **`Milestone`** is the PRD's: a feature is `M1` when it delivers an `M1` requirement. The `M1`
+> **`Milestone`** is the scope's (`.scratch/<effort>/scope.md`): a feature is `M1` when it delivers an
+> `M1` requirement. The `M1`
 > features together must let the persona of the first milestone's scenario reach their goal end to
 > end; a missing link is a coverage gap below, not a later epic's problem.
 
@@ -60,7 +61,8 @@ An unmarked one is a validation finding (AS-N).
 | **F1**: <slug> | E1 | M1 | <feature ids, or none> | new \| changes F1's living docs |
 
 ## Requirement coverage (required)
-> The omission direction: every RF/RNF in this effort's scope is owned by at least one feature. List
+> The omission direction: every RF/RNF in this effort's scope (the requirements `scope.md` lists as
+> added or changed) is owned by at least one feature. List
 > here anything **not fully** covered, with the reason: deferred, out of scope, genuinely missed, or
 > **partial**.
 >

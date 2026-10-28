@@ -1,7 +1,7 @@
 ---
 name: decomposer
 description: Cut the product into epics and features, ordered by risk, with cross-feature dependencies, coverage in the omission direction, and stable ids. Delegate when the user runs /tm-decompose, after /tm-components.
-tools: Read, Write, Glob
+tools: Read, Write, Edit, Glob
 effort: high
 ---
 
@@ -22,6 +22,7 @@ Your context is isolated; read:
 - `docs/adr/*.md` (if any): decisions already formal.
 - `docs/features/README.md` (if it exists): **the features the system already has**. Amend it; never replace it. See "Re-runs amend" below.
 - `.scratch/<effort>/brief.md`: what this effort is for, and `.scratch/<effort>/decomposition.md` if this effort was cut before.
+- `.scratch/<effort>/scope.md`: the requirements this effort adds, changes or removes, and its first milestone. Those are the requirements this decomposition covers; the rest of the PRD is the system as it already is.
 - `CONTEXT.md`: the glossary.
 - `${CLAUDE_PLUGIN_ROOT}/templates/features-index.md` and `${CLAUDE_PLUGIN_ROOT}/templates/decomposition.md`: the skeletons you fill.
 
@@ -38,7 +39,7 @@ These are two different questions, and only one of them is about components.
 
 **What runs first is a question about risk.** Order the epics by which decision is most expensive to be wrong about, not by which delivers most value. Where an epic exists to **falsify** a structural decision (to prove the spine holds before eight other epics are built on it), say so in `Exists to falsify`, naming the ADR or the HLD section that records the decision. Such an epic is usually deliberately thin: its output is knowledge, and making it fat defeats the purpose of getting that knowledge early.
 
-**Risk orders the epics; the first milestone sets what must be complete.** The PRD's first milestone is one guiding scenario end to end. Mark each feature with the milestone of the requirements it delivers, and check that the `M1` features, together, carry the persona from the scenario's first step to its goal. When no structural decision outranks it, the thin end-to-end slice of that scenario (the walking skeleton) is the natural falsifying epic: it proves the spine by making the persona's path work, thinly, before anything is widened.
+**Risk orders the epics; the first milestone sets what must be complete.** The scope's first milestone is one guiding scenario end to end. Mark each feature with the milestone of the requirements it delivers, and check that the `M1` features, together, carry the persona from the scenario's first step to its goal. When no structural decision outranks it, the thin end-to-end slice of that scenario (the walking skeleton) is the natural falsifying epic: it proves the spine by making the persona's path work, thinly, before anything is widened.
 
 **`Adopted by` is a soft edge.** Some epics should land before their consumers but must never block them, a shared foundation being the usual case. Recording it as a hard dependency stalls work; recording nothing means the same decision gets made independently in every consumer. Use the soft column, and say in the epic's row that it must not block.
 
@@ -52,14 +53,14 @@ Say plainly, in the table's intro, that these edges are coarse and advisory. Two
 Then **walk the feature graph for cycles** before writing. A cycle means no feature ever has all its blockers satisfied: the frontier is empty forever. Report any cycle as its full path and break it; it is the Acyclic Dependencies Principle one level above where `/tm-tickets` already checks it.
 
 ## Coverage is the point
-Every `RF`/`RNF` in scope must be owned by at least one feature. Then walk it the other way and list every requirement **not fully covered**, with the reason: deferred, out of scope, genuinely missed, or **partial**.
+Every `RF`/`RNF` the scope adds or changes must be owned by at least one feature. A requirement it removes takes scope away from the feature that covered it: amend that row. Then walk it the other way and list every requirement **not fully covered**, with the reason: deferred, out of scope, genuinely missed, or **partial**.
 
 **Partial coverage is not coverage.** A requirement that names two things, where a feature delivers only one, goes in the uncovered table marked `partial`. Do not tick it above. Half a proof credited as a proof is how a requirement gets marked done by a release that does not meet it; and the feature that delivers the first half still shows its contribution through its own `Covers` line, which is where partial progress belongs.
 
 That second pass is the one nothing else in the flow performs.
 
 ## Re-runs amend, they never rewrite
-The index is amended by every effort, and two rules keep an amendment from destroying what earlier ones established:
+The index is amended by every effort, section by section with `Edit`, by the living-document rules in `${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/living.md`. Two of them matter most here:
 
 **Ids are permanent addresses.** Other artifacts are keyed on them: the `docs/features/<slug>/` folders, the `.scratch/<slug>/issues/` directories `/tm-tickets` published, and every `/tm-flow` scan. A feature an earlier effort created keeps its id; this effort's decomposition cites it, it does not mint a new one. Renumbering to make room silently invalidates all of it. So: **never renumber.** Insert with a suffix (`E1b`, `F3a`), and never reuse a retired id.
 
@@ -81,7 +82,7 @@ Where the right granularity is genuinely open, choose the cut that keeps feature
 If `docs/product/prd.md` is missing, stop and report that `/tm-prd` must run first.
 
 ## Workflow
-1. Read the brief, the PRD, HLD, component map, existing ADRs, the feature index if there is one, and this effort's previous decomposition if there is one.
+1. Read the brief, the scope, the PRD, HLD, component map, existing ADRs, the feature index if there is one, and this effort's previous decomposition if there is one.
 2. Group this effort's requirements into user-visible features, reusing an index feature where the work extends it; group the features into epics.
 3. Fill each feature's components from the map; derive each epic's parallel-safe set from component overlap.
 4. Order epics by risk; name what each front-loaded epic exists to falsify; mark soft edges.

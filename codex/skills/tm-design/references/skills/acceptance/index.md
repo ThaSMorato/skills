@@ -1,0 +1,81 @@
+---
+name: acceptance
+description: 'Check every acceptance criterion and every part of the owner''s request against the running software before the work is called done: each one verified in the browser (with a screenshot), by a named test only, or not verified with the reason, recorded in one index the pull request reads. Use after the last $thasmorato-skills:tm-review fix and $thasmorato-skills:tm-tidy, before $thasmorato-skills:tm-walkthrough and $thasmorato-skills:tm-pr, or on "test it in the browser / were all the ACs checked".'
+disable-model-invocation: true
+user-invocable: false
+---
+
+Green tests say the code does what the tests ask. The owner asks something else: does the feature do what was requested, on screen, with real data. This stage answers that, item by item, after the last change to production code, and leaves a record nobody has to take on trust.
+
+## 1. List what was asked
+Read, and number every item:
+- the owner's request, from `.scratch/<feature-slug>/request-trace.md` when it exists (every row marked `covered`), or else the request itself (`task.md`, the brief, the message that started the work);
+- every acceptance criterion of the ticket, by id;
+- the plan's **Not verified** list in `progress.md`;
+- when the ticket builds a screen with a spec in `docs/features/<feature>/ui/<screen>.md`: each state and each width it lists, checked against its capture;
+- when this ticket delivers the last requirement a **guiding scenario** in `docs/product/prd.md` was waiting on (every requirement on its steps is now built): **the whole scenario**, as one item, walked from its first step to the persona's goal (`references/skills/interview/scenarios.md`). Separate checks can each pass on a path no user can walk.
+
+An item in the request and in an AC is one item: write it once, with both references.
+
+**Done when** each item has a number, its words quoted from the source, and where it came from.
+
+## 2. Find the means
+A check needs a way to see the software run. Find it before concluding there is none:
+- **A browser tool.** Search the available tools for one (`ToolSearch` with "playwright" or "browser", or the MCP servers listed). A missing tool is a reason only after this search.
+- **A running server.** Read the dev command and port from `docs/guidelines.md`, the stack guide or the scripts (`package.json`, `Procfile`, `bin/`), and check the port. When a navigation fails, try once more before deciding the server is down. When it is down, ask the owner to start it with the command you found and wait; starting a long watcher yourself competes with theirs.
+- **Real data.** Use the data the environment already has (the local database, the seeds, a fixture the project's testing guide names) before mocking an integration. When nothing real exists for an item, ask the owner for a sample; a mock is the last resort, and the index says so at the top.
+
+**Done when** the browser tool, the server and the data source are named, or each missing one is named with what was searched.
+
+## 3. Check each item
+For each item, one verdict:
+- **browser**: performed in the running software. Save a screenshot to `.scratch/<feature-slug>/acceptance/<NN>-<slug>/<item>.png` and say what it shows.
+- **test**: no screen shows it (a rule deep in a service, an error path the UI cannot reach), and a test covers it: name the test, `file:line`.
+- **not verified**: neither was possible. Say why, and what would verify it.
+
+Walk a whole-scenario item **as its persona**: with only what they would know, through the way they would find the feature, never by typing a URL only the team knows. Write down every point where you hesitated, searched, read a message twice or took a step the scenario did not have: that is **friction**. Friction is not a failure (the persona got there) and goes in its own section, with a screenshot and the step it happened on, for the owner to judge.
+
+A visual item (layout, copy, a state the user sees) is **browser** or **not verified**; a test does not see the screen. An item that fails is a defect: report it and stop, and the fix goes back through `$thasmorato-skills:tm-implement`'s loop before this stage runs again.
+
+**Done when** every item has a verdict, every browser verdict has its screenshot, and every failure is reported.
+
+## Output
+Write `.scratch/<feature-slug>/acceptance/<NN>-<slug>.md`:
+
+```markdown
+---
+kind: acceptance
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+slug: <NN>-<slug>
+verified_at: <the commit checked, git rev-parse HEAD>
+items: <count>
+by_verdict: {browser: <n>, test: <n>, not_verified: <n>}
+failed: <count>
+friction: <count of friction notes>
+mocked: <true | false>
+---
+
+# Acceptance: <NN> <Ticket title>
+
+| # | Item (quoted) | Source | Verdict | Evidence |
+|---|---|---|---|---|
+| 1 | "<words>" | request · AC-2 | browser | `<item>.png`: <what it shows> |
+| 2 | GS-1: "<the outcome>" | prd · GS-1 | browser | `gs-1-<step>.png` per step |
+
+## Friction
+| Scenario step | What happened | Evidence |
+|---|---|---|
+| GS-1.3 | looked for the export under Reports; it is under Settings | `gs-1-3.png` |
+```
+
+**The record is valid at `verified_at` only.** Any later change to production code (a review fix, a tidying) makes it stale: `$thasmorato-skills:tm-pr` and `$thasmorato-skills:tm-flow` compare `verified_at` with `HEAD` and ask for a re-run when files outside the tests and `docs/` changed in between. A change to the documents alone (the absorption below) changes nothing the record checked.
+
+## 4. Absorb the delivered criteria
+With every item passed, follow `references/skills/acceptance/absorb.md`: each feature criterion this ticket finished delivering becomes a rule in the feature's `fdd.md` (or leaves, when a flow or contract there already says it), and is marked in `.scratch/<effort>/criteria/<feature>.md`. With any failure, skip this step: nothing was delivered.
+
+**Done when** every criterion this ticket's ACs trace to is `absorbed` or `delivered, waiting on` its other tickets.
+
+## Gate
+Report the counts, every failure, every **not verified** item resolved to its words, the friction notes, and the criteria absorbed (each with where it went and its test) or waiting. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `$thasmorato-skills:tm-walkthrough` or `$thasmorato-skills:tm-pr`.

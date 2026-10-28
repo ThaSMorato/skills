@@ -6,7 +6,7 @@
 
 Two families:
 
-**Generation**: one artifact each, from the templates: `prd-writer`, `hld-writer`, `component-mapper`, `decomposer`, `fdd-writer`, `boundary-architect`, `adr-analyzer`, `adr-generator`, `adr-linker`, `c4-generator`, `mermaid-generator`, `guideline-generator`, `researcher`, `source-reader`.
+**Generation**: one artifact each, from the templates: `prd-writer`, `hld-writer`, `component-mapper`, `decomposer`, `fdd-writer`, `boundary-architect`, `adr-analyzer`, `adr-generator`, `adr-linker`, `c4-generator`, `mermaid-generator`, `guideline-generator`, `researcher`, `source-reader`. The writers of the living documents (`prd-writer`, `hld-writer`, `component-mapper`, `decomposer`, `fdd-writer`, `boundary-architect`) also amend: when the document exists they change it section by section with `Edit`, never rewrite it, and return every decision the amendment changed (`skills/doc-validate/living.md`); the effort's own part goes beside it in `.scratch/<effort>/` (the scope, the criteria).
 
 **Analysis and review**: read-only, reporting only: `architectural-analyzer`, `component-analyzer`, `dependency-auditor`, `reconciler` (which writes only its measurement and report, under `docs/analysis/`), the seven `review-*` lenses fanned out by `/tm-review`, and `review-verifier`, which checks their synthesized findings against the code. Like the lenses it is read-only: it returns a verdict per finding, and `/tm-review` writes them into its own file. It never drops a finding.
 

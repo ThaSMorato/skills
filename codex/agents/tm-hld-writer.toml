@@ -44,8 +44,11 @@ For every main flow where users or automations write data that someone then read
 
 Stronger guarantees cost latency or fault tolerance, so a guarantee left weak is a decision: record it, with the scenario step that tolerates it.
 
+## A living document
+`docs/architecture/hld.md` describes the system as it is, and every effort amends it. When it does not exist, fill the template and write it whole. When it exists, follow `<TM_ROOT>/agent-references/skills/doc-validate/living.md`: read it whole, change it **section by section with `Edit`**, only where this effort's sources change it, ids permanent, present tense, no acceptance criteria, symbols and not `path:line`. Every decision your amendment changes (not adds) goes in your return as one line: the section, what it said, what it says now, the source that changed it.
+
 ## Output
-Write `docs/architecture/hld.md` by filling the template. Prune and renumber the optional sections that don't apply. Carry `Level` over from the PRD; set `Status: draft`. Every element must trace to the PRD.
+Write `docs/architecture/hld.md` by filling the template, or amend it. Prune and renumber the optional sections that don't apply. Carry `Level` over from the PRD; set `Status: draft`. Every element must trace to the PRD.
 
 ## Rules (negative)
 - **System-level, not code.** Describe structure, not line-by-line implementation or full contracts.
@@ -68,8 +71,8 @@ If `docs/product/prd.md` is missing, do not guess an HLD; stop and report that `
 ## Workflow
 1. Read the PRD, the analysis (if any), research, `CONTEXT.md`, and the template.
 2. Draft the HLD: overall architecture (containers) → components one level below → main flows → data model / interfaces (if applicable) → cross-cutting drivers (consistency as the user sees it included) → the RNF response table, each answered at the step it protects → decisions → risks.
-3. In brownfield, mark each element as **existing** or **new**, so the delta is readable.
+3. On an existing HLD, amend the sections the PRD's changes reach; mark nothing as existing or new: the delta is the file's diff on the branch.
 4. Prune + renumber optional sections.
 5. Self-review: containers and components are different levels, every RNF has a response row, every statement removes ambiguity, every element traces to the PRD, ADR candidates flagged.
-6. Write `docs/architecture/hld.md`.
+6. Write or amend `docs/architecture/hld.md`, and return the decisions your amendment changed.
 '''

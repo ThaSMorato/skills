@@ -37,12 +37,14 @@ docs/
   product/                    prd.md, design-system.md
   architecture/               hld.md, components.md, boundaries.md, c4/
   features/README.md          the feature index: what the system has, and where each feature's docs are
-  features/<feature>/         fdd.md, diagrams/, ui/  (living, one folder per feature)
+  features/<feature>/         README.md, fdd.md, prd.md, diagrams/, ui/  (living, one folder per feature)
   adr/                        records: changed only by a new ADR
   guidelines.md, guardrails.md, analysis/, research/, retro/, …
-.scratch/<effort>/            brief.md, decomposition.md  (die with the effort)
+.scratch/<effort>/            brief.md, scope.md, decomposition.md, criteria/<feature>.md  (die with the effort)
 .scratch/<feature>/           tickets, plans, progress, reviews
 ```
+
+A living document is **amended, never rewritten**: the writer changes it section by section, ids stay, and every decision the amendment changed is listed for `/tm-adr-identify`. It carries no acceptance criteria and no milestone: those are the effort's (`scope.md`, `criteria/<feature>.md`), and `/tm-acceptance` turns each delivered criterion into a rule in the feature's `fdd.md`. The branch that changes the code fixes the docs it made false, and `review-docs` checks it.
 
 A project from before 0.7.0 moves with `/tm-docs-migrate` (temporary), which proposes the map and moves nothing until you approve it.
 

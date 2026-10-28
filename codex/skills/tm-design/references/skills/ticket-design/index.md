@@ -93,6 +93,15 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 | To make it reachable | Change | Example |
 |---|---|---|
 
+## Documents to amend
+> The living documents this ticket changes, and the ones its renames would make false: the feature's
+> `fdd.md` (which contract, flow or rule), the glossary, a README, a sibling FDD that cites a symbol
+> this ticket renames. The docs live on the same branch as the code, so they are part of the work:
+> the plan turns each into a deliverable (`references/skills/doc-validate/living.md`).
+
+| Document | Section or symbol | Change |
+|---|---|---|
+
 ## Grounding summary
 > Every node marked `new`, and the search that justifies it. A `new` without a recorded search is an
 > assumption wearing the costume of a decision, and it is the assumption that the stages below will

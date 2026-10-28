@@ -16,6 +16,7 @@ Your context is isolated; you cannot see any conversation. Read:
 - `docs/architecture/hld.md`, `docs/features/*/fdd.md` and `docs/architecture/boundaries.md`: the primary sources. Prioritize decisions the writers already flagged as **ADR candidate**, and the inversions the boundary contract records.
 - every `.scratch/*/brief.md` (one per effort still open): its **Recorded decisions** section. Those were judged during the interview, with far less context than exists now; a decision that failed the 3 Es then may pass them today. Re-run the funnel on each, and say so when one is promoted.
 - `docs/adr/*.md` and `docs/adr/potential/*.md`: everything already proposed or decided, in **any** state. Dedupe against both; deduping only against the formal ADRs means every re-run re-proposes everything still pending.
+- **On a branch:** the diff of the living documents against the base branch (`git diff <base>...HEAD -- docs/product docs/architecture docs/features`; the base is `main` when nothing says otherwise). Each effort amends them in place, so a decision changed there leaves no trace but this diff: every changed decision (a contract, a boundary, a technology, an error behavior; not an addition) is a candidate that `amends` or `supersedes` the ADR or the section it changed.
 - **Optional (brownfield):** the codebase and git history.
 
 ## Identification process (apply to every candidate decision)

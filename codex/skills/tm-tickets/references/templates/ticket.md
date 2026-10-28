@@ -1,6 +1,7 @@
 <!--
 TEMPLATE: ticket
-Filled by $thasmorato-skills:tm-tickets, one file per ticket, from an FDD. A ticket is a tracer-bullet vertical slice:
+Filled by $thasmorato-skills:tm-tickets, one file per ticket, from an FDD and the feature's criteria for the effort
+(.scratch/<effort>/criteria/<feature>.md). A ticket is a tracer-bullet vertical slice:
 one test seam crossed end to end. DUAL AUDIENCE: an agent may execute it, or the owner may pick it
 up and build it by hand, so it must carry the WHY and the CONSTRAINTS, not just the WHAT.
 PRUNE + RENUMBER optional sections that don't apply; (required) sections always stay.
@@ -23,7 +24,7 @@ acs: <the number of AC-N lines below>
 
 ## Metadata (required)
 - **Status:** ready | blocked | in progress | done
-- **Source:** <docs/features/<feature>/fdd.md: the FDD this slice comes from; or `direct (<gear> gear, no FDD): <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
+- **Source:** <docs/features/<feature>/fdd.md + .scratch/<effort>/criteria/<feature>.md: the FDD and the criteria this slice comes from; or `direct (<gear> gear, no FDD): <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
 - **Components touched:** <names from docs/architecture/components.md, or `unknown, no component map`>
 
 > **Type** is verifiable, not decorative. A **structural** ticket (prefactoring, expand/migrate/contract)
@@ -52,9 +53,10 @@ acs: <the number of AC-N lines below>
 
 ## Acceptance criteria (required)
 > Numbered and verifiable. The IDs are load-bearing: `$thasmorato-skills:tm-plan` maps each to an SI and `$thasmorato-skills:tm-plan-validate`
-> checks the coverage mechanically.
-- [ ] **AC-1**:
-- [ ] **AC-2**:
+> checks the coverage mechanically. Each names the feature criterion it comes from, `(from <F-id> AC-n)`:
+> that trace is how `$thasmorato-skills:tm-acceptance` knows when a criterion is delivered and can be absorbed into the FDD.
+- [ ] **AC-1** (from F<n> AC-<n>):
+- [ ] **AC-2** (from F<n> AC-<n>):
 
 ## Exclusions (required)
 > What this ticket explicitly does NOT build, drawn from the FDD's scope exclusions and from the
