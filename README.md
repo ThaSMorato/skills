@@ -13,7 +13,7 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
  │     /tm-interview → /tm-research → /tm-prd → /tm-hld (+/tm-c4-generate)
  │       → greenfield: /tm-guidelines (+ stack guides)
  │       → /tm-components → /tm-decompose → /tm-fdd (+/tm-mermaid-generate) → /tm-boundaries
- │       → /tm-adr-identify → /tm-adr-generate → /tm-adr-link
+ │       → /tm-adr-identify (or /tm-adr-propose "<decision>") → /tm-adr-generate → /tm-adr-link
  │     with /tm-doc-validate between each pair, before every gate
  └─ Phase 2 (dev, per frontier ticket):
        /tm-tickets (→ /tm-tickets-validate) → /tm-design → /tm-plan → /tm-plan-validate → /tm-implement → /tm-trim → /tm-review → /tm-tidy → /tm-acceptance → /tm-walkthrough → /tm-pr
@@ -45,6 +45,8 @@ docs/
 ```
 
 A living document is **amended, never rewritten**: the writer changes it section by section, ids stay, and every decision the amendment changed is listed for `/tm-adr-identify`. It carries no acceptance criteria and no milestone: those are the effort's (`scope.md`, `criteria/<feature>.md`), and `/tm-acceptance` turns each delivered criterion into a rule in the feature's `fdd.md`. The branch that changes the code fixes the docs it made false, and `review-docs` checks it.
+
+**Read in Obsidian (or on GitHub).** The documents link to each other with relative Markdown links to the file, the id as the text (`[RF-003](../../product/prd.md)`), which both follow; in Obsidian they also give the backlinks and the graph of the chain. Set **Settings → Files and links → Use [[Wikilinks]] off** and **New link format: Relative path to file**, so the links Obsidian creates match. The living documents and the ADRs carry `kind`, `status` and `level` or `feature` as frontmatter properties, for Bases to filter on, and the `> Needs Input:`, `> Assumed:` and `> Decided:` markers are callouts, a colored box in both.
 
 A project from before 0.7.0 moves with `/tm-docs-migrate` (temporary), which proposes the map and moves nothing until you approve it.
 
@@ -87,7 +89,7 @@ Every command carries the `tm-` prefix (since 0.7.0), so no Claude Code built-in
 | Documentation | `/tm-prd` · `/tm-hld` · `/tm-fdd` · `/tm-doc-validate` |
 | Architecture | `/tm-components` · `/tm-decompose` · `/tm-boundaries` · `/tm-reconcile` |
 | Diagrams | `/tm-c4-generate` · `/tm-mermaid-generate` |
-| Decisions (ADR) | `/tm-adr-identify` · `/tm-adr-generate` · `/tm-adr-link` |
+| Decisions (ADR) | `/tm-adr-identify` · `/tm-adr-propose` · `/tm-adr-generate` · `/tm-adr-link` |
 | Standards | `/tm-guidelines` · `/tm-generate-stack-guide` · `/tm-generate-test-guide` · `/tm-guardrails` |
 | Development | `/tm-tickets` · `/tm-tickets-validate` · `/tm-ui-audit` · `/tm-ui-design` · `/tm-design` · `/tm-prototype` · `/tm-plan` · `/tm-plan-validate` · `/tm-implement` · `/tm-trim` · `/tm-review` · `/tm-tidy` · `/tm-acceptance` · `/tm-walkthrough` · `/tm-pr` · `/tm-diagnose` |
 | Looking back | `/tm-retro` · `/tm-session-analyze` · `/tm-flow-report` |

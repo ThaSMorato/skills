@@ -7,14 +7,20 @@ It is a MAP (what parts exist), not a CONTRACT (who may depend on whom); the con
 docs/architecture/boundaries.md, written after the FDDs. PRUNE + RENUMBER optional sections; (required) stay.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
+
+---
+kind: components
+status: draft            # draft | in review | approved | changes-requested; only the gate moves it
+level: system
+---
 
 # Component map: <system>
 
 ## Metadata (required)
-- **Status:** draft | in review | approved
-- **Level:** system
 - **Sources:** <hld.md, analysis/architecture.md, prd.md>
 
 ## Component inventory (required)

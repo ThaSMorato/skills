@@ -21,6 +21,8 @@ What belongs to one effort lives in `.scratch/<effort>/` and dies with it: the b
 
 **No acceptance criteria.** A criterion is the yardstick of one delivery and lives in `.scratch/<effort>/`. A living document states the behavior as a rule; `acceptance` turns a delivered criterion into one (`${CLAUDE_PLUGIN_ROOT}/skills/acceptance/absorb.md`).
 
+**Link, don't just name.** A reference to another document's id is a relative Markdown link to that document's file, by [`links.md`](links.md).
+
 **Cite symbols, never `path:line`.** A living document names the function, the type, the endpoint, the config key. A line number is false after the next commit.
 
 **A changed decision is reported, not buried.** When an amendment changes what the document had decided (as opposed to adding to it), report it in your return, one line each: the section, what it said, what it says now, and the source that changed it. The command shows the list and names `/tm-adr-identify`, which turns each into an ADR that `amends` or `supersedes` the old one. A decision changed in place and not reported leaves no trace of why it changed.

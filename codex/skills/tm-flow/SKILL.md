@@ -39,7 +39,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/meta-retro/*.md` | what a working session taught: where the owner corrected, rejected or repeated | `$thasmorato-skills:tm-session-analyze` |
 | `docs/features/<feature>/fdd.md`, `README.md` + `.scratch/<effort>/criteria/<feature>.md` | FDD and front page, per feature (living), and this effort's acceptance criteria for it | `$thasmorato-skills:tm-fdd <feature>` |
 | `docs/architecture/boundaries.md` | boundary contract | `$thasmorato-skills:tm-boundaries` |
-| `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `$thasmorato-skills:tm-adr-identify` → `$thasmorato-skills:tm-adr-generate` |
+| `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `$thasmorato-skills:tm-adr-identify` or `$thasmorato-skills:tm-adr-propose` → `$thasmorato-skills:tm-adr-generate` |
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `$thasmorato-skills:tm-guidelines`, `$thasmorato-skills:tm-generate-stack-guide` |
 | `docs/guardrails.md` | the repo's installed checks (pre-commit, CI, git guard, dependency linter) and how each was proven | `$thasmorato-skills:tm-guardrails` |
 | `docs/declined.md` | proposals the owner turned down for a lasting reason, read before `$thasmorato-skills:tm-tidy`, `$thasmorato-skills:tm-trim` and `$thasmorato-skills:tm-review` propose again | `$thasmorato-skills:tm-tidy`, `$thasmorato-skills:tm-trim`, `$thasmorato-skills:tm-review` (append-only) |
@@ -126,7 +126,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
 7. `$thasmorato-skills:tm-decompose` → `$thasmorato-skills:tm-doc-validate prd features`. **GATE (medium):** look at uncovered requirements first.
 8. `$thasmorato-skills:tm-fdd <feature>` per feature (+ `$thasmorato-skills:tm-mermaid-generate`) → `$thasmorato-skills:tm-doc-validate features fdd`. **GATE (per feature, medium).** Independent features can be specced in parallel.
 9. `$thasmorato-skills:tm-boundaries`. **GATE (strong):** every ticket below is sliced against this. Then `$thasmorato-skills:tm-guardrails` (its dependency-linter item) can turn the contract into forbidden imports that fail the build.
-10. `$thasmorato-skills:tm-adr-identify` → confirm → `$thasmorato-skills:tm-adr-generate` → `$thasmorato-skills:tm-adr-link`.
+10. `$thasmorato-skills:tm-adr-identify` → confirm → `$thasmorato-skills:tm-adr-generate` → `$thasmorato-skills:tm-adr-link`. A decision the owner announces on its own ("adopt X") goes through `$thasmorato-skills:tm-adr-propose` before anything is planned on it.
 11. Propose `$thasmorato-skills:tm-guidelines` again only if the FDDs or ADRs brought in a technology its stack table does not list.
 
 **Two architecture beats, deliberately apart.** `$thasmorato-skills:tm-components` runs **before** the FDDs so every feature spec shares one vocabulary; `$thasmorato-skills:tm-boundaries` runs **after** them, because the axes of change a boundary separates are only knowable once the features are specced. Reversing the first would make the map a reconciliation of N contradictory carve-ups; moving the second earlier would make it a guess.

@@ -33,7 +33,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/meta-retro/*.md` | what a working session taught: where the owner corrected, rejected or repeated | `/tm-session-analyze` |
 | `docs/features/<feature>/fdd.md`, `README.md` + `.scratch/<effort>/criteria/<feature>.md` | FDD and front page, per feature (living), and this effort's acceptance criteria for it | `/tm-fdd <feature>` |
 | `docs/architecture/boundaries.md` | boundary contract | `/tm-boundaries` |
-| `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `/tm-adr-identify` → `/tm-adr-generate` |
+| `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `/tm-adr-identify` or `/tm-adr-propose` → `/tm-adr-generate` |
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `/tm-guidelines`, `/tm-generate-stack-guide` |
 | `docs/guardrails.md` | the repo's installed checks (pre-commit, CI, git guard, dependency linter) and how each was proven | `/tm-guardrails` |
 | `docs/declined.md` | proposals the owner turned down for a lasting reason, read before `/tm-tidy`, `/tm-trim` and `/tm-review` propose again | `/tm-tidy`, `/tm-trim`, `/tm-review` (append-only) |
@@ -120,7 +120,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `/tm-analyze` runs fi
 7. `/tm-decompose` → `/tm-doc-validate prd features`. **GATE (medium):** look at uncovered requirements first.
 8. `/tm-fdd <feature>` per feature (+ `/tm-mermaid-generate`) → `/tm-doc-validate features fdd`. **GATE (per feature, medium).** Independent features can be specced in parallel.
 9. `/tm-boundaries`. **GATE (strong):** every ticket below is sliced against this. Then `/tm-guardrails` (its dependency-linter item) can turn the contract into forbidden imports that fail the build.
-10. `/tm-adr-identify` → confirm → `/tm-adr-generate` → `/tm-adr-link`.
+10. `/tm-adr-identify` → confirm → `/tm-adr-generate` → `/tm-adr-link`. A decision the owner announces on its own ("adopt X") goes through `/tm-adr-propose` before anything is planned on it.
 11. Propose `/tm-guidelines` again only if the FDDs or ADRs brought in a technology its stack table does not list.
 
 **Two architecture beats, deliberately apart.** `/tm-components` runs **before** the FDDs so every feature spec shares one vocabulary; `/tm-boundaries` runs **after** them, because the axes of change a boundary separates are only knowable once the features are specced. Reversing the first would make the map a reconciliation of N contradictory carve-ups; moving the second earlier would make it a guess.

@@ -4,9 +4,16 @@ Created by the fdd-writer with the feature's first FDD and amended by every effo
 feature; /tm-acceptance adds the tests when it absorbs a criterion. It is the state of the feature,
 not of an effort: no criteria, no history (${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/living.md). Its
 row in docs/features/README.md is the one-line summary; this page is where a reader lands from it.
-`State` agrees with that row: a disagreement is a validation finding.
+`state` (the frontmatter) agrees with that row: a disagreement is a validation finding.
 PRUNE optional sections that don't apply; (required) sections always stay.
 -->
+
+---
+kind: feature-readme
+status: draft            # draft | in review | approved | changes-requested; only the gate moves it
+feature: <F-id>
+state: planned           # planned | live; the same value as the index row
+---
 
 # <Feature name> (<F-id>)
 
@@ -14,15 +21,13 @@ PRUNE optional sections that don't apply; (required) sections always stay.
 > One paragraph, in the user's vocabulary (the glossary's terms): what a user can do with this feature
 > and why it exists. Point to the PRD requirements it covers by id; don't restate them.
 
-## State (required)
-> `planned` until an effort delivers it, then `live`; the same value as the index row.
-
 ## Documents (required)
-> The feature's living documents, the ones that exist: `fdd.md`, `prd.md` (when the feature earned
-> one), `diagrams/`, `ui/`.
+> The feature's living documents, the ones that exist, each a link: [fdd.md](fdd.md), `prd.md` (when the
+> feature earned one), the files under `diagrams/` and `ui/`.
 
 ## Constrained by (optional)
-> The ADRs that bind this feature, by id, with one line on what each constrains.
+> The ADRs that bind this feature, each a link to its file (`[ADR-NNNN](../../adr/NNNN-<slug>.md)`),
+> with one line on what each constrains.
 
 ## Tests (optional)
 > Where the feature's rules are proved: the test suites or test names, per rule id when a rule names

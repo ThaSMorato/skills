@@ -12,18 +12,25 @@ is in .scratch/<effort>/scope.md (template scope.md). A feature-level PRD lives 
 docs/features/<feature>/prd.md and follows the same rules.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
+
+---
+kind: prd
+status: draft            # draft | in review | approved | changes-requested; only the gate moves it
+level: product           # product | module | feature
+feature: <F-id, only at level feature>
+---
 
 # PRD: <name>
 
 ## Metadata (required)
-- **Level:** product | module (EPIC) | feature
 - **ID:** <PRD-xxx>
-- **Status:** draft | in review | approved
 - **Sources:** <requirements-brief, interview, attached docs>
 
-> **Level** and **Status** are read by other stages, not decoration. **Level** sets the depth of this
+> **`level`** and **`status`** (the frontmatter) are read by other stages, not decoration. **Level** sets the depth of this
 > document (`product` states outcomes, `feature` states behavior) and it propagates from the brief.
 > **Status** is the gate record: it starts `draft`, and only whoever runs the gate moves it to
 > `approved` or `changes-requested`. `$thasmorato-skills:tm-flow` reads it to answer "what is waiting on me?", so a Status

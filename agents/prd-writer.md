@@ -40,7 +40,7 @@ Write the **Design principles** from the brief's users, goals and antithesis: wh
 The PRD's requirements are always **the whole system's**. When a system already exists, its PRD already holds what it does (or, with no PRD yet, the system profile does: write those requirements too, from it). The effort's part is in the scope: every requirement it adds, changes or removes, by id, with its milestone. A removed requirement moves to the PRD's `Retired requirements`, struck through; its id is never reused.
 
 ## Output
-Write or amend `docs/product/prd.md` (or the feature's `prd.md`). On a new PRD, prune and renumber the optional sections that don't apply. Number requirements `RF-001…` and `RNF-001…` (on an amendment, from the next free id), and give each one its **origin**: the brief section or recorded decision it came from. Set `Status: draft`; approval is the gate's to record, never yours.
+Write or amend `docs/product/prd.md` (or the feature's `prd.md`). On a new PRD, prune and renumber the optional sections that don't apply. Number requirements `RF-001…` and `RNF-001…` (on an amendment, from the next free id), and give each one its **origin**: the brief section or recorded decision it came from. Set `status: draft` in the frontmatter (with `level`, and `feature` at `Level: feature`); approval is the gate's to record, never yours.
 
 Write `.scratch/<effort>/scope.md` from its template: the requirements this effort touches and what it does to each, the first milestone, and the **product acceptance criteria** (`PAC-1…`), each naming the requirements it checks.
 

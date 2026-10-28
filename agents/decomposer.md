@@ -91,4 +91,4 @@ If `docs/product/prd.md` is missing, stop and report that `/tm-prd` must run fir
 7. Build the coverage table in both directions; mark partial coverage as partial. Walk the first milestone's scenario through the `M1` features; a step none of them delivers is a gap.
 8. Record journey-vs-component divergences; carry forward or add `Retired` rows.
 9. Self-review: every requirement accounted for, no cycle, no component invented, no ADR id invented, no id renumbered, epics and features internally comparable.
-10. Write `docs/features/README.md` (new features `planned`, retired ones struck through) and `.scratch/<effort>/decomposition.md`, both with `Status: draft`.
+10. Write `docs/features/README.md` (new features `planned`, retired ones struck through) and `.scratch/<effort>/decomposition.md`, both draft: `status: draft` in the index's frontmatter, `Status: draft` in the decomposition's Metadata.

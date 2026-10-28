@@ -6,7 +6,9 @@ when its tickets are delivered `/tm-acceptance` absorbs it into the FDD as a rul
 (${CLAUDE_PLUGIN_ROOT}/skills/acceptance/absorb.md). Temporary: it goes with .scratch/<effort>/.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
 
 # Acceptance criteria: <feature> (<effort>)
@@ -14,7 +16,7 @@ An unmarked one is a validation finding (AS-N).
 ## Metadata (required)
 - **Feature:** <the feature id and slug from docs/features/README.md, e.g. F3 (`checkout`)>
 - **Effort:** <slug>
-- **FDD:** docs/features/<feature>/fdd.md
+- **FDD:** [fdd.md](../../../docs/features/<feature>/fdd.md)
 - **Status:** draft | in review | approved
 
 ## Criteria (required)
@@ -33,4 +35,4 @@ An unmarked one is a validation finding (AS-N).
 
 | Id | Criterion | Refines | State |
 |---|---|---|---|
-| **AC-1** | <condition> | PAC-<n> \| RF-<n> | open |
+| **AC-1** | <condition> | [PAC-<n>](../scope.md) \| [RF-<n>](../../../docs/product/prd.md) | open |

@@ -62,5 +62,5 @@ If `docs/architecture/components.md` is missing, stop and report that `$thasmora
 5. Write the manifest, and verify it says exactly what the prose says.
 6. In brownfield, compute divergence and classify every row.
 7. Self-review: names match the map, `allow` is exhaustive, prose and manifest agree, no divergence left unclassified.
-8. Write `docs/architecture/boundaries.md` with `Status: draft`, or amend it; return the decisions your amendment changed.
+8. Write `docs/architecture/boundaries.md` with `status: draft` in its frontmatter, or amend it; return the decisions your amendment changed.
 '''
