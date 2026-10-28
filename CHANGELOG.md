@@ -44,6 +44,37 @@ Built as a stack, one PR per wave; nothing merges before the release.
   including which feature each per-task FDD belongs to, moves nothing before the owner approves, and
   rewrites the references. `/tm-flow` names it when it finds the old layout.
 
+### Wave E2: living docs, amended
+
+- **The writers amend.** `prd-writer`, `hld-writer`, `component-mapper`, `boundary-architect`,
+  `decomposer` and `fdd-writer` have `Edit`: an existing document is changed section by section and
+  never rewritten, ids are permanent, the text is in the present tense, and every decision the
+  amendment changed comes back for `/tm-adr-identify`. The rules are one file,
+  `skills/doc-validate/living.md`, read by the writers, `doc-validate` and `acceptance`.
+- **Living documents carry no acceptance criteria and no milestone.** The PRD states the whole system;
+  the effort's requirements, first milestone and product criteria go in `.scratch/<effort>/scope.md`
+  (`templates/scope.md`). The FDD loses `Acceptance criteria` and gains `Rules`; the effort's criteria
+  for a feature go in `.scratch/<effort>/criteria/<feature>.md` (`templates/criteria.md`), and every
+  ticket AC names the criterion it comes from. `/tm-tickets`, `tickets-validate`, `review-spec` and
+  `review-tests` read the criteria there.
+- **`/tm-acceptance` absorbs.** With every item passed, each criterion the ticket finished delivering
+  becomes a rule in the feature's `fdd.md`, with the test that proves it, or leaves when the FDD
+  already says it (`skills/acceptance/absorb.md`). A change to `docs/` alone does not make the
+  acceptance record stale.
+- **A front page per feature:** `docs/features/<feature>/README.md` (`templates/feature-readme.md`),
+  written by `fdd-writer`; at `Level: feature` the PRD is the feature's, `docs/features/<feature>/prd.md`.
+  `fdd-writer` folds the `legacy/` FDDs a migration left.
+- **The docs the diff makes false (item 119).** The node map lists the documents to amend, the plan's
+  Deliverables list every doc citing a renamed or removed symbol, `/tm-implement`'s refactor step fixes
+  them in the same SI (and amends the map when the SI departed from it), and living docs cite symbols,
+  never `path:line`. `review-docs` now reads the living docs, through the feature index.
+- **`doc-validate`** compares an amended document with its base-branch version (`RG-N`), reports a
+  criterion or milestone written into a living document (`LC-N`), checks a feature README against its
+  index row, and has a new pair, `scope → criteria`. `adr-analyzer` reads the diff of the living docs
+  on a branch: a decision changed there is a candidate.
+- **`/tm-docs-migrate`** also moves the PRD's milestone and criteria to the scope and each FDD's
+  criteria to the feature's criteria file. `scripts/living-docs.test.mjs` holds all of this.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |

@@ -64,6 +64,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 - [ ] <lint command> passes (if the repo has one)
 - [ ] <build command> passes (if the repo has one)
 - [ ] <each ticket acceptance criterion, restated as a checkable line>
+- [ ] Docs this diff makes false, fixed: <file → the symbol or statement it cites>, or `none (searched <terms>)`
 ```
 
 ## The frontmatter is what gets counted
@@ -80,6 +81,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 - **An SI has a floor.** It changes production code, changes something observable at its seam, and owns at least one AC. "Write the test for X" and "change the value" are steps of an SI, not SIs. If the plan has more SIs than the ticket has ACs, check that each one clears the floor before you present it.
 - **A bugfix plan starts from the diagnosis.** For `type: bugfix`: the ticket's Source is a `/tm-diagnose` file with `status: cause-found`. The first SI writes the pinned and flipped tests at **every level** the diagnosis lists (`levels`), and the flipped tests are its red step; the fix is the green. The flipped tests are sealed: no later SI edits them. A level in the diagnosis's `seam_gaps` has no test SI; the plan names it as a known gap instead. The final verification also runs the diagnosis's `loop` command against the original scenario, and it must go green; the commit or PR message names the hypothesis that held.
 - **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
+- **Deliverables name the docs the diff makes false.** The node map's `Documents to amend` is the start. Then grep every identifier the ticket renames or removes, and every member it adds to an enum or a closed list, across `docs/`, `CONTEXT.md`, the READMEs, the sibling FDDs and this feature's own FDD (its contracts and rules). Each hit is a deliverable line; the SI that changes the symbol fixes it.
 - **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them; the final verification runs exactly these.
 - **Mark the decisions the sources do not give.** A threshold, a failure behavior or a visibility rule that the ticket, node map and FDD are silent on is written with `> Assumed:` under the SI that depends on it (the `asking` skill §4 and §6). Facts are not assumptions: if the repo can answer it, look it up.
 - **No stale detail.** Prefer intent over hard-coded file paths and code snippets; the exception is a decision-encoding snippet trimmed to the decision. A `Mirror:` pointer is not stale detail: it names existing code to imitate, copied from the node map, and carries no snippet.

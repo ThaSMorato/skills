@@ -32,7 +32,8 @@ An unmarked one is a validation finding (AS-N).
 > cite the **ADR candidates the HLD flagged**. Leave it empty rather than inventing an id.
 >
 > **`State`** is `planned` until an effort delivers it, then `live`. The folder holds the feature's
-> living documents: `fdd.md`, `prd.md` when the feature earns one, `diagrams/` and `ui/`.
+> living documents: `README.md` (the feature's front page), `fdd.md`, `prd.md` when the feature earns
+> one, `diagrams/` and `ui/`. The feature's `README.md` repeats `State`; the two agree.
 
 | Feature | Covers (RF/RNF) | Components touched | Not delivering | Constrained by | Docs | State |
 |---|---|---|---|---|---|---|

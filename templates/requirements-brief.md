@@ -29,7 +29,7 @@ An unmarked one is a validation finding (AS-N).
 ## Guiding scenarios (required)
 > One to three stories, each a specific persona with a motivation, simulated step by step until their
 > goal is met, in the format of `${CLAUDE_PLUGIN_ROOT}/skills/interview/scenarios.md`. Every later stage
-> carries these forward: the PRD slices them into requirements and picks one as the first milestone.
+> carries these forward: the PRD slices them into requirements, and the effort's scope picks one as the first milestone.
 
 ### GS-1: <the outcome, in the persona's words>
 - **Persona:**

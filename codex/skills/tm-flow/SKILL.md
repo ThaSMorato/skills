@@ -29,7 +29,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/analysis/dependency-graph.md`, `docs/analysis/reconcile.md` | the measured import graph, and the drift since the documents | `$thasmorato-skills:tm-analyze` first, `$thasmorato-skills:tm-reconcile` after |
 | `.scratch/<effort>/brief.md` + `CONTEXT.md` | interview | `$thasmorato-skills:tm-interview` |
 | `docs/research/*.md` | research (optional) | `$thasmorato-skills:tm-research` |
-| `docs/product/prd.md` | PRD | `$thasmorato-skills:tm-prd` |
+| `docs/product/prd.md` + `.scratch/<effort>/scope.md` | PRD (living), and this effort's scope: its requirements, first milestone and product criteria | `$thasmorato-skills:tm-prd` |
 | `docs/architecture/hld.md` | HLD | `$thasmorato-skills:tm-hld` |
 | `docs/architecture/components.md` | component map | `$thasmorato-skills:tm-components` |
 | `docs/features/README.md` | the feature index: what the system has, and where each feature's living docs are | `$thasmorato-skills:tm-decompose` |
@@ -37,7 +37,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/evolutions.md` | findings kept but traced to no requirement; read it when scope is next revisited | `$thasmorato-skills:tm-decompose`, `$thasmorato-skills:tm-retro` append |
 | `docs/retro/*.md` | what finished work taught about the process | `$thasmorato-skills:tm-retro` |
 | `docs/meta-retro/*.md` | what a working session taught: where the owner corrected, rejected or repeated | `$thasmorato-skills:tm-session-analyze` |
-| `docs/features/<feature>/fdd.md` | FDD, per feature | `$thasmorato-skills:tm-fdd <feature>` |
+| `docs/features/<feature>/fdd.md`, `README.md` + `.scratch/<effort>/criteria/<feature>.md` | FDD and front page, per feature (living), and this effort's acceptance criteria for it | `$thasmorato-skills:tm-fdd <feature>` |
 | `docs/architecture/boundaries.md` | boundary contract | `$thasmorato-skills:tm-boundaries` |
 | `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `$thasmorato-skills:tm-adr-identify` → `$thasmorato-skills:tm-adr-generate` |
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `$thasmorato-skills:tm-guidelines`, `$thasmorato-skills:tm-generate-stack-guide` |
@@ -71,7 +71,7 @@ Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which
 The **frontier** is the tickets whose blockers are all `done`, crossed with where each stopped.
 
 ### Then report
-Before reporting a ticket done, its request-trace parts all have a ticket or an owner decision, and its acceptance record's `verified_at` is current (no production change since); say which is missing otherwise.
+Before reporting a ticket done, its request-trace parts all have a ticket or an owner decision, and its acceptance record's `verified_at` is current (no change outside the tests and `docs/` since); say which is missing otherwise.
 
 Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop. The command is the last line, written out with its arguments and "you run it"; it is never one of the options of a question, because an answer to a question is not the owner starting a stage. When the owner's last turn is a command typed as plain text that did not load, say in one line to send it again with the `/` first.
 

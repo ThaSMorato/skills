@@ -72,7 +72,12 @@ mocked: <true | false>
 | GS-1.3 | looked for the export under Reports; it is under Settings | `gs-1-3.png` |
 ```
 
-**The record is valid at `verified_at` only.** Any later change to production code (a review fix, a tidying) makes it stale: `/tm-pr` and `/tm-flow` compare `verified_at` with `HEAD` and ask for a re-run when non-test files changed in between.
+**The record is valid at `verified_at` only.** Any later change to production code (a review fix, a tidying) makes it stale: `/tm-pr` and `/tm-flow` compare `verified_at` with `HEAD` and ask for a re-run when files outside the tests and `docs/` changed in between. A change to the documents alone (the absorption below) changes nothing the record checked.
+
+## 4. Absorb the delivered criteria
+With every item passed, follow `${CLAUDE_PLUGIN_ROOT}/skills/acceptance/absorb.md`: each feature criterion this ticket finished delivering becomes a rule in the feature's `fdd.md` (or leaves, when a flow or contract there already says it), and is marked in `.scratch/<effort>/criteria/<feature>.md`. With any failure, skip this step: nothing was delivered.
+
+**Done when** every criterion this ticket's ACs trace to is `absorbed` or `delivered, waiting on` its other tickets.
 
 ## Gate
-Report the counts, every failure, every **not verified** item resolved to its words, and the friction notes. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/tm-walkthrough` or `/tm-pr`.
+Report the counts, every failure, every **not verified** item resolved to its words, the friction notes, and the criteria absorbed (each with where it went and its test) or waiting. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/tm-walkthrough` or `/tm-pr`.

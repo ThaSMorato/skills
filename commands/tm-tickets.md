@@ -11,7 +11,7 @@ Break the feature's design into a set of **tickets**: tracer-bullet vertical sli
 A ticket may be executed by an agent **or picked up by the owner**, so it carries the why and the constraints, not only the instruction. `${CLAUDE_PLUGIN_ROOT}/templates/ticket.md` is the contract.
 
 ## 1. Gather context
-Read `docs/features/<feature>/fdd.md` for: $ARGUMENTS (or the reference passed as an argument). Also read `docs/architecture/boundaries.md` (the components this feature may touch and the edges it may add), the relevant `docs/adr/*.md`, and `CONTEXT.md`. If no FDD exists, tell the user to run `/tm-fdd` first.
+Read `docs/features/<feature>/fdd.md` for: $ARGUMENTS (or the reference passed as an argument), and the feature's criteria for this effort, `.scratch/<effort>/criteria/<feature>.md` (the effort is the one whose decomposition lists the feature; with several, ask which). The FDD says how the feature works; the criteria say what this effort must make true, and every ticket AC names the criterion it comes from, `(from <F-id> AC-n)`. Also read `docs/architecture/boundaries.md` (the components this feature may touch and the edges it may add), the relevant `docs/adr/*.md`, and `CONTEXT.md`. If no FDD or no criteria file exists, tell the user to run `/tm-fdd` first.
 
 Read `docs/guidelines.md` too, if it exists, and load what its routing table names for the code this feature will touch: the stack guides and `testing-guide-<project>`. Every ticket declares a `Test seam`, and what a seam can be (a request spec, a component test, a service object's public method) is decided by the stack and by this project's testing guide, not by the FDD alone.
 
@@ -31,7 +31,7 @@ Each slice cuts a **narrow but complete** path through every layer (schema, API,
 
 **A ticket is not a test point.** Slices that share a layer or a screen go in one ticket; the AC list is where the test points live. When a sibling feature was already broken down, start from its grouping and say so.
 
-**Size has a floor, not just a ceiling.** A ticket is too small when nothing observable changes through its seam ("add a test"), or when none of its ACs traces to an FDD criterion ("change a constant"). Either of those belongs inside another ticket's plan, as an SI or as a step of one.
+**Size has a floor, not just a ceiling.** A ticket is too small when nothing observable changes through its seam ("add a test"), or when none of its ACs traces to a feature criterion ("change a constant"). Either of those belongs inside another ticket's plan, as an SI or as a step of one.
 
 **Size relatively.** After drafting, put the tickets side by side and compare them to each other, not to an absolute limit. Comparison is far more reliable than estimation, for a model and for a person, and dispersion is what actually goes wrong here.
 

@@ -1,6 +1,6 @@
 ---
 name: review-docs
-description: Review a diff for documentation it made false (a README step, an env var, a CLI flag, a described behavior that the changed code no longer matches). One of the /tm-review fan-out. Reports findings; never edits.
+description: Review a diff for documentation it made false (a README step, an env var, a CLI flag, a feature's living FDD or the glossary describing behavior the changed code no longer matches). One of the /tm-review fan-out. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash
 effort: high
 ---
@@ -18,7 +18,9 @@ Your context is isolated; you receive:
 ## What counts as documentation here
 Setup and usage docs a person or an agent follows: `README*`, `CONTRIBUTING*`, `CLAUDE.md` / `AGENTS.md`, `docs/**/*.md` that describe how to run, configure or use the system, `.env.example` and other sample configs, API reference files (OpenAPI, GraphQL schema docs), CLI `--help` text, and doc comments on public interfaces.
 
-**Not this lens:** the flow's own design documents (PRD, HLD, FDD, ADRs, components, boundaries). They are updated through the flow's back-edge, and `review-spec` judges the diff against them.
+**The living docs are this lens too.** The feature docs (`docs/features/<feature>/fdd.md`, its `README.md`, its `prd.md`), the architecture docs and `CONTEXT.md` describe the system as it is, and the branch that changes the code changes them (`${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/living.md`). Find the ones the diff reaches through the feature index, `docs/features/README.md`: the rows whose `Components touched` include a component the diff changes, and their `Docs` folder. A contract, a flow, a rule, an error behavior or a glossary term the diff made false, and left unamended on the branch, is a finding.
+
+**Not this lens:** whether the diff does what was asked (that is `review-spec`, against the criteria and the FDD), and the ADRs, which are records: a decision the diff contradicts is `review-standards`.
 
 ## The bar
 For every changed hunk, find the documentation that talks about what it changed: grep the changed names (commands, flags, env vars, endpoints, config keys, function names) across the doc files. Then, for each statement you find:

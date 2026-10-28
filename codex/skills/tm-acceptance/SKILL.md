@@ -16,4 +16,4 @@ Read `references/skills/acceptance/index.md` and follow it for: the text after t
 
 Preflight: the ticket's `progress.md` has `status: completed` and a review file exists for it. Run this after the review fixes and `$thasmorato-skills:tm-tidy`, because a later change to production code makes the record stale.
 
-Postflight: the path to the acceptance file, the counts by verdict, every failure and every item not verified (each quoted), and the next step, `$thasmorato-skills:tm-walkthrough` or `$thasmorato-skills:tm-pr`.
+Postflight: the path to the acceptance file, the counts by verdict, every failure and every item not verified (each quoted), the criteria absorbed into the feature's docs (each with the rule it became and its test) or still waiting on other tickets, and the next step, `$thasmorato-skills:tm-walkthrough` or `$thasmorato-skills:tm-pr`.

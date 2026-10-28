@@ -13,7 +13,7 @@ Tests are production code with a different job. They are also the only lens wher
 Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
 - The plan (`.scratch/.../plans/.../plan.md`): each SI's declared **seams** and acceptance criteria.
-- The ticket and the FDD: the acceptance criteria the tests must make observable, and the seams the FDD declared.
+- The ticket, its feature criteria (named in its `Source`) and the FDD: the acceptance criteria the tests must make observable, and the seams the FDD declared.
 - `docs/guidelines.md`'s routing table → load `testing-guide-<project>` if the repo ships one; its conventions **override** the generic skill.
 
 Call the Skill tool with `thasmorato-skills:testing`.

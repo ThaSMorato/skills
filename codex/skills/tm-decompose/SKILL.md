@@ -15,7 +15,7 @@ description: "Cut the product into epics and features, ordered by risk, with cro
 **Argument** (the text after the skill name): (optional) the effort slug; runs once per effort, re-run when its scope changes
 
 
-Call the `spawn_agent` tool with `agent_type = "tm-decomposer"` to amend the feature index (`docs/features/README.md`) and write this effort's cut (`.scratch/<effort>/decomposition.md`) from the effort's brief, `docs/product/prd.md`, `docs/architecture/hld.md` and `docs/architecture/components.md`. The effort is the slug `$thasmorato-skills:tm-interview` gave this work, the folder under `.scratch/`: take it from the argument, or use the only `.scratch/*/brief.md` there is; with more than one and no argument, ask which.
+Call the `spawn_agent` tool with `agent_type = "tm-decomposer"` to amend the feature index (`docs/features/README.md`) and write this effort's cut (`.scratch/<effort>/decomposition.md`) from the effort's brief and scope (`.scratch/<effort>/scope.md`), `docs/product/prd.md`, `docs/architecture/hld.md` and `docs/architecture/components.md`. The effort is the slug `$thasmorato-skills:tm-interview` gave this work, the folder under `.scratch/`: take it from the argument, or use the only `.scratch/*/brief.md` there is; with more than one and no argument, ask which.
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
