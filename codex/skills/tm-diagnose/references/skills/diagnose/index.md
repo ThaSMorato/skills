@@ -2,6 +2,7 @@
 name: diagnose
 description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, on "debug / why does this fail / find the bug / this broke", for a performance regression, and inside $thasmorato-skills:tm-implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 A bug whose cause is unknown is not fixed by trying things. Each try that fails teaches almost nothing, because it tested the guess you already believed. This stage replaces guessing with a small loop that can only end in evidence: a cause at `file:line`, and tests that prove it.
@@ -78,7 +79,9 @@ Write `.scratch/<feature-slug>/diagnoses/<slug>.md`, or `.scratch/standalone/dia
 ```markdown
 ---
 kind: diagnosis
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <slug>
 status: cause-found | unresolved | no-loop
 loop: <the one command that goes red, or `none`>

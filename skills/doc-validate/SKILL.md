@@ -1,7 +1,8 @@
 ---
 name: doc-validate
-description: Validate one design document against the one it came from before the human gate (coverage in both directions, contradictions, glossary drift, unanswered non-functional requirements, unfilled required sections) and emit a clean/dirty verdict. Use after /prd, /hld, /decompose or /fdd, on "validate the docs / is the PRD ready / check the HLD against the PRD".
+description: Validate one design document against the one it came from before the human gate (coverage in both directions, contradictions, glossary drift, unanswered non-functional requirements, unfilled required sections) and emit a clean/dirty verdict. Use after /tm-prd, /tm-hld, /tm-decompose or /tm-fdd, on "validate the docs / is the PRD ready / check the HLD against the PRD".
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -11,7 +12,7 @@ Read a source document and the document derived from it, and decide whether the 
 The code phase already works this way: `plan` writes, `plan-validate` judges, `implement` refuses to start on a dirty verdict. The doc phase had authoring and a human gate and nothing in between, so the person at the gate reads four pages looking for what is missing, which is the hardest thing for a reader to see. This stage turns *"read this and approve"* into *"resolve these three conflicts"*.
 
 ## Input
-`/doc-validate <from> <to>`: the pair to check. Recognised pairs:
+`/tm-doc-validate <from> <to>`: the pair to check. Recognised pairs:
 
 | From → To | Files | Coverage shape |
 |---|---|---|
@@ -64,6 +65,8 @@ Write `docs/validation/<from>-to-<to>.md`:
 ---
 kind: doc-validation
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 pair: <from> → <to>
 status: clean | dirty
 open_issues: <count of open issues>
@@ -84,7 +87,7 @@ open_issues: <count of open issues>
 `status: clean` only when every finding is resolved. Otherwise `status: dirty`.
 
 ## Gate
-- **dirty** → report exactly what to fix: *"`<path>` has N open issues. Fix the document (edit it or re-run `/<stage>`), then re-run `/doc-validate <from> <to>`."* **Never auto-fix**, and never partially proceed: a validator that edits the thing it judges has stopped being a second opinion.
+- **dirty** → report exactly what to fix: *"`<path>` has N open issues. Fix the document (edit it or re-run `/<stage>`), then re-run `/tm-doc-validate <from> <to>`."* **Never auto-fix**, and never partially proceed: a validator that edits the thing it judges has stopped being a second opinion.
 - **clean** → *"`<from> → <to>` is clean. The gate is now: approve `<to>` and set `Status: approved`."*
 
 The human gate reads this verdict first. A `dirty` verdict is not a veto over the user's judgement (they may approve anyway), but it means they are approving something with named, listed problems rather than approving in the dark.

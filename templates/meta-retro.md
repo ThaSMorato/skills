@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: meta-retro (what one working session taught about the flow and the project)
-Filled by /session-analyze from a session transcript, across every compaction segment.
+Filled by /tm-session-analyze from a session transcript, across every compaction segment.
 EVERY FINDING RESTS ON AN OWNER TURN: uuid, timestamp, the owner's own words. The assistant
 criticizing itself is not evidence. Where the conversation cannot answer something, say so.
 The written file STARTS with the frontmatter below; this comment is not copied.
@@ -9,6 +9,8 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 ---
 kind: meta-retro
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 session: <session id>
 analyzed_at: <YYYY-MM-DD>
 segments: <n>

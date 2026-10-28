@@ -9,7 +9,7 @@ Most of the time a request spends goes to I/O, not to computation, and the expen
 
 Two things make them hard to see in a diff:
 - **The cost lives in the call, not the line.** `order.customer.name` is one line and can be one query per order. You have to know what the call does.
-- **The query is often outside the diff.** The loop was added; the repository method it calls was not changed. Follow the call one hop (see `/review`) or you will not see it.
+- **The query is often outside the diff.** The loop was added; the repository method it calls was not changed. Follow the call one hop (see `/tm-review`) or you will not see it.
 
 **The idiom is stack-specific.** Eager loading, batching, pagination and transaction boundaries each have a different spelling in every ORM and driver. Read the repo's stack guide for the spelling; this catalog tells you what to look for.
 

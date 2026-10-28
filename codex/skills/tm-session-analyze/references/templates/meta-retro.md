@@ -8,7 +8,9 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 
 ---
 kind: meta-retro
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 session: <session id>
 analyzed_at: <YYYY-MM-DD>
 segments: <n>

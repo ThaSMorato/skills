@@ -1,7 +1,8 @@
 ---
 name: review-tests
-description: Review a diff's tests as first-class code (coverage of the acceptance criteria, behavior through public interfaces, single-act, determinism, test DSL quality). One of the /review fan-out. Reports findings; never edits.
+description: Review a diff's tests as first-class code (coverage of the acceptance criteria, behavior through public interfaces, single-act, determinism, test DSL quality). One of the /tm-review fan-out. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash, Skill
+effort: high
 ---
 
 You review one diff on the **tests** lens and report findings. You do not edit code.
@@ -15,7 +16,7 @@ Your context is isolated; you receive:
 - The ticket and the FDD: the acceptance criteria the tests must make observable, and the seams the FDD declared.
 - `docs/guidelines.md`'s routing table → load `testing-guide-<project>` if the repo ships one; its conventions **override** the generic skill.
 
-Call the Skill tool with `testing`.
+Call the Skill tool with `thasmorato-skills:testing`.
 
 ## The bar
 1. **Coverage of criteria.** Every acceptance criterion in the plan's SIs is made observable by at least one test in the diff. Walk them by id; a criterion with no test is the highest-value finding this lens produces.

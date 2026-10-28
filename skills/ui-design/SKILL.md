@@ -1,7 +1,8 @@
 ---
 name: ui-design
-description: 'Design a new screen or redesign an existing one before it is built: classify what is already true (redesign, an established visual world, or none), write the screen brief in rounds, propose three genuinely different directions as HTML with captures, refine the chosen one through every state and width with an isolated critic, and write the screen spec that /design builds from and /acceptance checks against. Use when a screen has no design to copy, or on "design / redesign this screen".'
+description: 'Design a new screen or redesign an existing one before it is built: classify what is already true (redesign, an established visual world, or none), write the screen brief in rounds, propose three genuinely different directions as HTML with captures, refine the chosen one through every state and width with an isolated critic, and write the screen spec that /tm-design builds from and /tm-acceptance checks against. Use when a screen has no design to copy, or on "design / redesign this screen".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -23,7 +24,7 @@ Name the **surface mode** too (operate, read, persuade, experience; see `${CLAUD
 **Done when** the situation and the mode are named and the owner has confirmed them.
 
 ## 2. The brief
-Call the Skill tool with `asking`, and ask in rounds of two or three questions, stating your likely reading for the owner to correct rather than sending a questionnaire. Never ask for CSS values. Cover:
+Call the Skill tool with `thasmorato-skills:asking`, and ask in rounds of two or three questions, stating your likely reading for the owner to correct rather than sending a questionnaire. Never ask for CSS values. Cover:
 - **Job**: who arrives, in what situation, and the one thing they must understand or do; what success looks like.
 - **Content**: every piece of data and copy, with realistic **minimum, typical and maximum** (the longest name, a thousand rows, an empty field), and where each one comes from.
 - **States**: first use, empty, loading, error, partial, success, no permission, overflow; which matter here.
@@ -37,7 +38,7 @@ Look facts up instead of asking them (the content's limits are in the schema; th
 ## 3. Directions
 Follow `directions.md`: three directions of equal weight, each a short contract and a built HTML page with captures, plus the category-standard option. Build them:
 - **brownfield**: as a throwaway page or route inside the project, with its real components and tokens, so what the owner approves is buildable as shown;
-- **greenfield**: as one standalone HTML file per direction (call the Skill tool with `visuals` for the HTML conventions).
+- **greenfield**: as one standalone HTML file per direction (call the Skill tool with `thasmorato-skills:visuals` for the HTML conventions).
 
 Either way it is disposable: `${CLAUDE_PLUGIN_ROOT}/skills/prototype/SKILL.md` says how a throwaway is kept apart and removed. Show the captures side by side and ask which direction, or which parts of which, as a multi-select.
 
@@ -46,12 +47,12 @@ Either way it is disposable: `${CLAUDE_PLUGIN_ROOT}/skills/prototype/SKILL.md` s
 ## 4. Build it out, then critique
 Take the chosen direction through every state in the brief and every width, with the brief's real content at its maximums. Apply `principles.md`. Then verify in **bounded rounds**: one batched round of captures (every state at a phone and a desktop width, motion settled first, each file opened to confirm it shows what its name says), then call the Agent tool with `ui-critic` with the captures, the brief and the contract. Fix everything it returns in one batch and run at most one more round. Two rounds, then stop polishing and report what is left.
 
-For accessibility, call the Skill tool with `ui`; its catalog applies to the built pages like to any UI.
+For accessibility, call the Skill tool with `thasmorato-skills:ui`; its catalog applies to the built pages like to any UI.
 
 **Done when** the critic returns **ship**, or the second round is done and the remaining findings are listed for the owner.
 
 ## Output
-Write `docs/ui/<screen-slug>.md` from `${CLAUDE_PLUGIN_ROOT}/templates/ui-spec.md`, with the final captures under `docs/ui/<screen-slug>/`. The spec is the screen's source of truth: `/design` builds its node map from it, `/acceptance` compares the running screen against its states and widths, and the next redesign starts from it. Remove the throwaway pages.
+Write `docs/ui/<screen-slug>.md` from `${CLAUDE_PLUGIN_ROOT}/templates/ui-spec.md`, with the final captures under `docs/ui/<screen-slug>/`. The spec is the screen's source of truth: `/tm-design` builds its node map from it, `/tm-acceptance` compares the running screen against its states and widths, and the next redesign starts from it. Remove the throwaway pages.
 
 ## Gate
-The brief for the spec: the direction and why, the states and widths covered, the critic's verdict, the decisions still open, every `> Assumed:`, and the audit problems (`UA-N`) each part solves, when this was a redesign. Next: `/tickets` or `/design` for the work that builds it.
+The brief for the spec: the direction and why, the states and widths covered, the critic's verdict, the decisions still open, every `> Assumed:`, and the audit problems (`UA-N`) each part solves, when this was a redesign. Next: `/tm-tickets` or `/tm-design` for the work that builds it.

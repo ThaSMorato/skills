@@ -2,6 +2,7 @@
 name: walkthrough
 description: 'Teach the owner the change the AI built, before it merges: a short HTML lesson over the ticket''s diff (what it does in domain words, where it lives, the path through the code for each acceptance criterion, what can go wrong) with a recall quiz, so nobody approves code they do not understand. Use after $thasmorato-skills:tm-review or $thasmorato-skills:tm-tidy and before $thasmorato-skills:tm-pr, or on "walk me through this change / explain what you built".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 The risk this suite cannot test away is an owner who approves code they do not understand: the tests are green, the review is clean, and nobody who will maintain it knows how it works. This stage turns the ticket's diff into a short lesson for the owner, and checks the understanding with a quiz before the change merges.
@@ -36,7 +37,9 @@ Beside the lesson, write `.scratch/<feature-slug>/walkthrough/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: walkthrough
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 fixed_point: <ref>
 questions: <n>

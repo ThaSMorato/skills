@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/review-verifier.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/review-verifier.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-verifier"
 description = "Check every finding of a synthesized $thasmorato-skills:tm-review against the repository before the owner decides what to fix; give each a verdict backed by cited code, and never drop one. Runs inside $thasmorato-skills:tm-review, after synthesis. Returns verdicts; never edits anything."
+model_reasoning_effort = "high"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.

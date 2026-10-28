@@ -1,8 +1,9 @@
 ---
 name: flow-report
-description: 'Gather what several projects learned about the plugin itself: read their $thasmorato-skills:tm-retro and $thasmorato-skills:tm-session-analyze reports, keep the findings tagged flow, group them by the stage they would change, put the flow measurements side by side per plugin version, and rank what the next version should change. Use when planning the next version of the plugin, on "/flow-report" or "what should the next version fix".'
+description: 'Gather what several projects learned about the plugin itself: read their $thasmorato-skills:tm-retro and $thasmorato-skills:tm-session-analyze reports, keep the findings tagged flow, group them by the stage they would change, put the flow measurements side by side per plugin version, and rank what the next version should change. Use when planning the next version of the plugin, on "/tm-flow-report" or "what should the next version fix".'
 argument-hint: "<project paths, or a file listing them one per line>"
 disable-model-invocation: true
+user-invocable: false
 ---
 
 `$thasmorato-skills:tm-retro` and `$thasmorato-skills:tm-session-analyze` run inside a project and write there. Each tags the findings that are about the plugin's own process as `flow`. This stage reads those reports **across projects** and turns them into the input for the next version: which stages, gates and templates keep going wrong, and whether the last version moved the numbers it was meant to move.
@@ -27,7 +28,7 @@ Rank by evidence:
 3. **Single**: listed, not proposed.
 
 ## 3. Measurements, per version
-Put the flow measurements side by side **per `plugin_version`**, summed across projects: escalations per ticket, validation runs to `clean` and the categories that fired, review findings and each lens's precision (refuted over raised), trim and tidy reverted over applied, diagnoses `cause-found` over all, walkthrough `missed` over questions. For each, the direction from the previous version, and how many tickets it rests on. A version with a handful of tickets is reported with its count and no trend: a direction from three tickets is noise.
+Put the flow measurements side by side **per `plugin_version`**, summed across projects: escalations per ticket, validation runs to `clean` and the categories that fired, review findings and each lens's precision (refuted over raised), trim and tidy reverted over applied, diagnoses `cause-found` over all, walkthrough `missed` over questions. For each, the direction from the previous version, and how many tickets it rests on. Then the same measurements per `model` and `harness`, and the reviews per author × reviewer pair (the `progress.md`'s and the review's), with `unknown` for the artifacts that predate the fields. A version with a handful of tickets is reported with its count and no trend: a direction from three tickets is noise.
 
 ## 4. Propose
 For each group in tiers 1 and 2: the change to the plugin (which file, what it should do differently), the instances it rests on (project, report, row), and the measurement it should move. Proposals that touch the same file are merged. The owner decides what enters the next version's backlog; nothing here edits the plugin.

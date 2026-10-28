@@ -27,7 +27,7 @@ An unmarked one is a validation finding (AS-N).
 > **(a)** by properties × by a concrete example · **(b)** what it is × what it is explicitly not ·
 > **(c)** prose × a formal shape (fields, types, cardinality, allowed states).
 >
-> `/doc-validate` compares the two and reports only the pairs that disagree.
+> `/tm-doc-validate` compares the two and reports only the pairs that disagree.
 
 ### <Term>
 - **Axis:** <a | b | c>

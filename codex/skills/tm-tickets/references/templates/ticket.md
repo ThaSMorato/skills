@@ -7,14 +7,22 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
 An unmarked one is a validation finding (AS-N).
+FRONTMATTER: `type`, `gear` and `acs` are fields, not prose, because $thasmorato-skills:tm-retro sums them; `acs` is the
+number of AC-N lines under Acceptance criteria. A ticket that predates the frontmatter carries Type
+and Gear as Metadata lines; read them there.
 -->
+
+---
+kind: ticket
+type: behavioral | structural | bugfix
+gear: full | feature | small (the gear `$thasmorato-skills:tm-flow` confirmed for this work; `full` when nobody chose one)
+acs: <the number of AC-N lines below>
+---
 
 # <NN>: <Ticket title>
 
 ## Metadata (required)
 - **Status:** ready | blocked | in progress | done
-- **Type:** behavioral | structural | bugfix
-- **Gear:** full | feature | small (the gear `$thasmorato-skills:tm-flow` confirmed for this work; `full` when nobody chose one)
 - **Source:** <docs/fdd/<feature>.md: the FDD this slice comes from; or `direct (<gear> gear, no FDD): <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
 - **Components touched:** <names from docs/components.md, or `unknown, no component map`>
 

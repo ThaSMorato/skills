@@ -17,6 +17,6 @@
 
 The reference skills are **routers**: a short index plus `rules/` or sibling files, read only when a row matches. That shape is the point: a stage that needs one rule shouldn't pay for the catalog.
 
-Every stage skill carries `disable-model-invocation: true`, and so does every command: only the owner typing a command starts a stage, and a stage never starts another (the stop rule, 0.6.7). A command reaches its closed skill by reading the file, not through the Skill tool, which the flag refuses. The reference skills stay open: any stage, agent or the model itself loads them.
+Every stage skill carries `disable-model-invocation: true` and `user-invocable: false` (it leaves the menu; its `tm-` command is the way in), and every command carries the first: only the owner typing a command starts a stage, and a stage never starts another (the stop rule, 0.6.7). A command reaches its closed skill by reading the file, not through the Skill tool, which the flag refuses. The reference skills stay open: any stage, agent or the model itself loads them.
 
 When it's skill × command × agent: see [`docs/anatomy/plugin-anatomy.md`](../docs/anatomy/plugin-anatomy.md). How to write one: [`docs/anatomy/skill-anatomy.md`](../docs/anatomy/skill-anatomy.md).

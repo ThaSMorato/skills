@@ -2,12 +2,13 @@
 name: plan-validate
 description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates $thasmorato-skills:tm-implement. Use after $thasmorato-skills:tm-plan, on "validate the plan / is this plan ready".
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Read the plan and decide whether it is safe to implement. This skill **finds problems**; it does not fix them and it does not write code.
 
 ## Input
-`$thasmorato-skills:tm-plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`. If it does not exist, abort: *"No plan at <path>. Run $thasmorato-skills:tm-plan <ticket> first."*
+`$thasmorato-skills:tm-plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/tm-plan.md`. If it does not exist, abort: *"No plan at <path>. Run $thasmorato-skills:tm-plan <ticket> first."*
 
 ## Sources
 Read the plan, and everything it is accountable to:
@@ -59,7 +60,9 @@ Write `.scratch/<feature-slug>/plans/<NN>-<slug>/validation.md`:
 ```markdown
 ---
 kind: validation
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 status: clean | dirty
 open_issues: <count of open issues>

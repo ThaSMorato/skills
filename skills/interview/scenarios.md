@@ -2,7 +2,7 @@
 
 # Guiding scenarios
 
-A **guiding scenario** is a user story told in full: a specific person, with a reason, simulated step by step as they discover and use the product to solve their problem. A list of requirements is a set, and a missing item makes no noise; a scenario is a sequence, and step 4 without step 3 is visibly impossible. That is why a plot hole in a scenario is easier to find than a gap in a requirements list, and why the same scenarios are carried through every document: they become the PRD's requirements, the first milestone, the scenario tests, and the walk `/acceptance` takes at the end.
+A **guiding scenario** is a user story told in full: a specific person, with a reason, simulated step by step as they discover and use the product to solve their problem. A list of requirements is a set, and a missing item makes no noise; a scenario is a sequence, and step 4 without step 3 is visibly impossible. That is why a plot hole in a scenario is easier to find than a gap in a requirements list, and why the same scenarios are carried through every document: they become the PRD's requirements, the first milestone, the scenario tests, and the walk `/tm-acceptance` takes at the end.
 
 Keep **one to three** per brief: the most important and illustrative stories, the ones the roadmap would be built around. More than three is a list again.
 

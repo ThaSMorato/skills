@@ -2,6 +2,7 @@
 name: trim
 description: 'After a ticket is implemented and before it is reviewed, make its change smaller without changing behavior; read every file the diff created or modified against the plan and the acceptance criteria, and propose structural cuts with evidence: incidental hunks nothing asked for, code that re-implements what the repo already has, new files or layers the change did not need, a behavior spread over more files than it needs. Applies only the cuts the user picks, one at a time, with the tests untouched and green. Use after $thasmorato-skills:tm-implement and before $thasmorato-skills:tm-review, on "trim / shrink / make this diff smaller / more targeted".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 `$thasmorato-skills:tm-implement` made the ticket work. Before anyone reviews it, this stage asks: **did the change need to be this big?** A diff that works often carries more than the ticket needed: a drive-by rename, a helper the repo already had, a new file where an edit would do, one behavior threaded through five files. The unit here is the **delta against the fixed point**, not the resulting code, and the goal is fewer and smaller files touched **with the behavior identical**.
@@ -59,7 +60,9 @@ Write `.scratch/<feature-slug>/trim/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: trim
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 fixed_point: <ref>
 before: {files_created: <n>, files_modified: <n>, added: <n>, removed: <n>}

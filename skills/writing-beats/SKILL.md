@@ -1,8 +1,9 @@
 ---
 name: writing-beats
-description: 'Writing, exploit phase: turn a pile of raw material into a piece one beat at a time, choose-your-own-adventure style, never using a concept before it is grounded. Use with a fragments file or any raw notes, on "/writing-beats" or "turn these notes into a post".'
+description: 'Writing, exploit phase: turn a pile of raw material into a piece one beat at a time, choose-your-own-adventure style, never using a concept before it is grounded. Use with a fragments file or any raw notes, on "/tm-writing-beats" or "turn these notes into a post".'
 argument-hint: "<path to the raw material> [path to the article]"
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.

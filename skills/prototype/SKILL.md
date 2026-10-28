@@ -1,7 +1,8 @@
 ---
 name: prototype
-description: 'Answer one design question with throwaway code before it is designed for real: a clickable HTML demo for a state model or business logic, or switchable variants of a UI on its real page. Use when a decision in /design, /fdd or an interview cannot be settled on paper ("does this state machine hold up", "what should this screen look like"), or on "prototype / spike / try it out". Not for building the feature: that is /design → /plan → /implement, test-first.'
+description: 'Answer one design question with throwaway code before it is designed for real: a clickable HTML demo for a state model or business logic, or switchable variants of a UI on its real page. Use when a decision in /tm-design, /tm-fdd or an interview cannot be settled on paper ("does this state machine hold up", "what should this screen look like"), or on "prototype / spike / try it out". Not for building the feature: that is /tm-design → /tm-plan → /tm-implement, test-first.'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -23,7 +24,7 @@ When the question is ambiguous and the owner is not there to answer, take the br
 - **Throwaway, and marked as such.** Put it next to what it prototypes so the context is obvious, and name it so nobody mistakes it for production (`prototype` in the file or route name). Follow the project's routing and file conventions.
 - **Trivial to run.** A logic demo opens by double-click; a UI prototype starts with one command from the project's task runner. Say the command.
 - **In memory.** No persistence, unless persistence is the question; then a scratch store named so it is obviously disposable.
-- **No polish.** No tests, no error handling beyond what keeps it running, no abstractions. A prototype is outside the test-first rule because it never merges: the decision it validates is built again, test-first, by `/implement`.
+- **No polish.** No tests, no error handling beyond what keeps it running, no abstractions. A prototype is outside the test-first rule because it never merges: the decision it validates is built again, test-first, by `/tm-implement`.
 - **Show the state.** After every action (logic) or variant switch (UI), the full relevant state is visible.
 
 ## 2. Hand it over, and listen for the surprise
@@ -46,6 +47,6 @@ kept_on: <the throwaway branch, or `deleted`>
 
 Then the **question**, the **answer** (with who gave it), **what surprised** (the reactions that changed the idea), and the **decision-bearing snippet**, when there is one: the reducer, the state machine, the schema, the type shape that says the decision more precisely than prose. Trim it to the decision; it is not a demo.
 
-The answer becomes a `> Decided:` in the document that was waiting on it (the node map's Open decisions, the FDD, the brief), citing this file; a ticket may quote the snippet, marked as coming from a prototype (`/tickets` allows exactly this exception).
+The answer becomes a `> Decided:` in the document that was waiting on it (the node map's Open decisions, the FDD, the brief), citing this file; a ticket may quote the snippet, marked as coming from a prototype (`/tm-tickets` allows exactly this exception).
 
 The prototype code itself does not merge. Suggest committing it to a throwaway branch (`prototype/<slug>`) as the primary source and recording that branch in `kept_on`, or deleting it; version control is the owner's call. **Done when** the answer is at its destination and nothing of the prototype is left on the working branch.

@@ -23,7 +23,7 @@ An unmarked one is a validation finding (AS-N).
 
 > **Components touched** is what ties this feature to the system map. Two FDDs written in parallel
 > that touch the same component can specify contracts that contradict each other, and this field is
-> what makes that detectable; `/doc-validate` cross-checks the FDDs that share a component. Name
+> what makes that detectable; `/tm-doc-validate` cross-checks the FDDs that share a component. Name
 > components exactly as `docs/components.md` names them; if a component you need is missing there,
 > say so in Open questions rather than inventing a name.
 
@@ -50,7 +50,7 @@ An unmarked one is a validation finding (AS-N).
 
 ## Acceptance criteria (required)
 > The core: verifiable conditions under which the feature is correct (contracts ok, tests passing,
-> performance/resilience where relevant). Not subjective judgment. Numbered, because `/tickets` copies
+> performance/resilience where relevant). Not subjective judgment. Numbered, because `/tm-tickets` copies
 > them down and the coverage check follows the ids.
 >
 > **Precedence.** Acceptance criteria exist in three places: the PRD (product-level), here, and the

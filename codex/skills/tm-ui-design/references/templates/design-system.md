@@ -9,7 +9,9 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 
 ---
 kind: design-system
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 inventoried_at: <git rev-parse HEAD>
 sources: [<the files the values were read from>]
 ---

@@ -2,14 +2,14 @@
 
 # Plan document format
 
-Location: `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`.
+Location: `.scratch/<feature-slug>/plans/<NN>-<slug>/tm-plan.md`.
 
-The work for one ticket leaves four sibling artifacts, and together they are the state the `/flow` scan reads:
+The work for one ticket leaves four sibling artifacts, and together they are the state the `/tm-flow` scan reads:
 
 | File | Written by | Means |
 |---|---|---|
 | `.scratch/<feature-slug>/design/<NN>-<slug>.md` | `design` | the node map exists |
-| `plans/<NN>-<slug>/plan.md` | `plan` | the work is sliced |
+| `plans/<NN>-<slug>/tm-plan.md` | `plan` | the work is sliced |
 | `plans/<NN>-<slug>/validation.md` | `plan-validate` | the verdict, `clean` or `dirty` |
 | `plans/<NN>-<slug>/progress.md` | `implement` | how many SIs are done |
 
@@ -17,6 +17,8 @@ The work for one ticket leaves four sibling artifacts, and together they are the
 ---
 kind: plan
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 design: .scratch/<feature-slug>/design/<NN>-<slug>.md
@@ -65,7 +67,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 ```
 
 ## The frontmatter is what gets counted
-`gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose; `/retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
+`gear` is copied from the ticket's frontmatter `gear` (in a ticket that predates it, the `Gear` Metadata line; absent → `full`). `sis_planned` and `revision` are plain integers, not prose; `/tm-retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
 
 ## Rules for a good plan
 - **Coarse by default.** Propose the fewest SIs that clear the floor below and the ceiling in this rule list; merge what touches the same file, function, node or screen, what one check verifies, and what has only one consumer (`SKILL.md` §2). At `gear: small`, 1 to 3 SIs.
@@ -76,7 +78,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 - **The plan encodes the node map.** Modules, interfaces and seams come from the map; a plan that invents one has diverged from the design contract.
 - **Prefactoring SIs lead.** Reshape first, then build on the easy shape. A prefactoring SI names the AC it makes easy (`enables AC-2`) in place of an AC it owns.
 - **An SI has a floor.** It changes production code, changes something observable at its seam, and owns at least one AC. "Write the test for X" and "change the value" are steps of an SI, not SIs. If the plan has more SIs than the ticket has ACs, check that each one clears the floor before you present it.
-- **A bugfix plan starts from the diagnosis.** For `type: bugfix`: the ticket's Source is a `/diagnose` file with `status: cause-found`. The first SI writes the pinned and flipped tests at **every level** the diagnosis lists (`levels`), and the flipped tests are its red step; the fix is the green. The flipped tests are sealed: no later SI edits them. A level in the diagnosis's `seam_gaps` has no test SI; the plan names it as a known gap instead. The final verification also runs the diagnosis's `loop` command against the original scenario, and it must go green; the commit or PR message names the hypothesis that held.
+- **A bugfix plan starts from the diagnosis.** For `type: bugfix`: the ticket's Source is a `/tm-diagnose` file with `status: cause-found`. The first SI writes the pinned and flipped tests at **every level** the diagnosis lists (`levels`), and the flipped tests are its red step; the fix is the green. The flipped tests are sealed: no later SI edits them. A level in the diagnosis's `seam_gaps` has no test SI; the plan names it as a known gap instead. The final verification also runs the diagnosis's `loop` command against the original scenario, and it must go green; the commit or PR message names the hypothesis that held.
 - **A structural plan changes no behavior.** For `type: structural`: existing tests are not modified and stay green, and no SI has a red step for behavior it does not add.
 - **Deliverables carry real commands.** Discover the repo's test / type-check / lint / build commands (`package.json` scripts, Makefile, the guidelines router's commands table) and name them; the final verification runs exactly these.
 - **Mark the decisions the sources do not give.** A threshold, a failure behavior or a visibility rule that the ticket, node map and FDD are silent on is written with `> Assumed:` under the SI that depends on it (the `asking` skill §4 and §6). Facts are not assumptions: if the repo can answer it, look it up.

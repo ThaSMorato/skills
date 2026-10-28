@@ -2,12 +2,13 @@
 name: implement
 description: Execute a validated plan one Step Implementation at a time, test-first (red → green → refactor), run the SI's tests, then STOP and wait before the next SI. Use on "implement / build / execute the plan", "implement SI-N", or after $thasmorato-skills:tm-plan-validate reports clean.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Execute a plan **SI by SI**. The plan is the contract; this skill follows the technical decisions, it does not make them. An SI is done only when its code exists **and** (if it has a Tests section) its tests pass. The next SI never starts until the current one is done and the user says go.
 
 ## Input
-`$thasmorato-skills:tm-implement <slug> [continuous]` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`. If missing, abort: *"No plan at <path>. Run $thasmorato-skills:tm-plan then $thasmorato-skills:tm-plan-validate first."*
+`$thasmorato-skills:tm-implement <slug> [continuous]` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/tm-plan.md`. If missing, abort: *"No plan at <path>. Run $thasmorato-skills:tm-plan then $thasmorato-skills:tm-plan-validate first."*
 
 Default mode **pauses after every SI** (this is what lets the user `/compact` between steps). Continuous mode (only when the user asks for it upfront: "run all", "autopilot", "don't pause") skips the pause.
 
@@ -26,18 +27,22 @@ Then load the **project's own guides**, resolved deterministically rather than r
 If the plan's `type` is `structural`, the loop changes shape: there is no red step, because no behavior is being added. **Existing tests are not modified**, and they must stay green after every SI. Refactor production code freely; changing a test to accommodate a structural change means the change was not structural, and that is a stop-and-report, not something to work around.
 
 ## Task list + progress file
-Before the first SI, create one task per SI (in Dependency-Map order) so the user sees the whole plan. Then create `progress.md` (all SIs `pending`) or, on resume, mark already-done SIs complete.
+Before the first SI, create one task per SI (in Dependency-Map order) so the user sees the whole plan. Then create `progress.md` (all SIs `pending`) with **every frontmatter field below filled from SI-1**, or, on resume, mark already-done SIs complete. `$thasmorato-skills:tm-retro` sums these fields and never reads a count out of prose, so a field left out is a "not measured" cell in every retro: rewrite the frontmatter at every close-out (each SI, the final verification, and the close-out of `$thasmorato-skills:tm-review`'s fixes).
 
 ```markdown
 ---
 kind: progress
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+codex_thread: <the Codex thread id, to resume with `codex resume`; omit when the harness is claude-code>
 slug: <NN>-<slug>
 status: in_progress | completed
 sis_done: <X>
 sis_total: <Y>
 escalations: <count, see step 5 and Final verification>
 unverified: <count, see Final verification>
+failed_deliverables: <count of Deliverables commands that failed on their first run in Final verification, fixed or not>
 ---
 
 # Progress: <NN> <Ticket title>
@@ -73,13 +78,13 @@ Run SIs in Dependency-Map order. Never skip ahead; never run two SIs in one pass
 Treat the stop as a terminator, not a rhetorical question; starting the next SI without approval is this skill's most common failure.
 
 ## Final verification: after the last SI
-Run the plan's **Deliverables** checklist: the full test suite, then type-check, lint, and build (whichever the repo has). Apply the same 3-attempt fix discipline, shared across all failing checks; hitting the limit here is an escalation too.
+Run the plan's **Deliverables** checklist: the full test suite, then type-check, lint, and build (whichever the repo has). Count every command that fails on its first run into `failed_deliverables`, whether you then fix it or not. Apply the same 3-attempt fix discipline, shared across all failing checks; hitting the limit here is an escalation too.
 
 Then write `## Not verified`: every acceptance criterion or deliverable that **no command in this run actually checked**. Examples: a UI behavior with no E2E tool in the repo, a migration never run against a real database, an integration exercised only through a fake, a performance claim with no measurement. One line each, with what would verify it. Set `unverified` to their count (`0`, and the section says `none`, when everything was checked). Claiming done for what was never run is the failure this section prevents; a short honest list is worth more than a clean-looking report.
 
 **A suite that is only green when its tests run alone is not green.** A test that fails or times out in the full run and passes on its own is a defect (shared state, a leak, a missing setup, a slow path in the code), and it stops the run: read `references/skills/diagnose/index.md` and follow it. Rerunning, blaming machine load, or skipping the hook are not options to offer before the cause is found.
 
-Then set `status: completed` in `progress.md`'s frontmatter and report the results, the **Not verified** list, and the aggregated out-of-scope notes as follow-ups. A UI behavior in the **Not verified** list is open work, not a footnote: the report says the ticket is not done until `$thasmorato-skills:tm-acceptance` has checked it. Version control (commit/PR) is the user's call; hand back to `$thasmorato-skills:tm-review` first.
+Then set `status: completed` (the only finished value) in `progress.md`'s frontmatter and report the results, the **Not verified** list, and the aggregated out-of-scope notes as follow-ups. A UI behavior in the **Not verified** list is open work, not a footnote: the report says the ticket is not done until `$thasmorato-skills:tm-acceptance` has checked it. Version control (commit/PR) is the user's call; hand back to `$thasmorato-skills:tm-review` first.
 
 ## Rules
 - The plan is the contract: don't add, drop, or reshape SIs mid-run. If it's wrong, stop and send the user back to `$thasmorato-skills:tm-plan`.

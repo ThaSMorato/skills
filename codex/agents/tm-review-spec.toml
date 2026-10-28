@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/review-spec.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/review-spec.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-spec"
 description = "Review a diff against what it was supposed to do (the plan's SIs, the ticket's acceptance criteria, the FDD's contracts) for missing criteria and scope drift. One of the $thasmorato-skills:tm-review fan-out. Reports findings; never edits."
+model_reasoning_effort = "high"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.

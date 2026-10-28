@@ -1,7 +1,8 @@
 ---
 name: review-security
-description: Review a diff for security weaknesses at the CWE level (injection, access control, crypto, secrets, session handling, SSRF, uploads, rate limits, LLM risks). One of the /review fan-out. Reports findings; never edits.
+description: Review a diff for security weaknesses at the CWE level (injection, access control, crypto, secrets, session handling, SSRF, uploads, rate limits, LLM risks). One of the /tm-review fan-out. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash, Skill
+effort: high
 ---
 
 You review one diff on the **security** lens and report findings. You do not edit code.
@@ -12,7 +13,7 @@ Your context is isolated; you receive:
 - `docs/guidelines.md`: load the stack guides its routing table names for the changed files. **The safe idiom is stack-specific**: parameterized queries in one ORM, auto-escaping in one template engine, a framework's CSRF middleware. A generic catalog cannot tell you what this repo already handles.
 - `docs/analysis/dependencies.md` (if present): known vulnerable dependencies, already audited with advisory ids.
 
-Call the Skill tool with `security`.
+Call the Skill tool with `thasmorato-skills:security`.
 
 ## The bar
 **Every changed hunk that handles input, output, identity, or a resource, against the catalog.** Trace where untrusted data enters the diff and where it reaches: a query, a shell, a template, a path, a URL, a deserializer, a model prompt.

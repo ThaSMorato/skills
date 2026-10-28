@@ -6,7 +6,7 @@
 
 **Failure scenario.** A widely used parser has a remote-code-execution advisory. The application never calls the vulnerable path directly, but a transitive dependency does, and the request path reaches it. The exploit is public, so the window between disclosure and mass scanning is measured in days.
 
-**The fix.** Run the ecosystem's own audit tooling in CI and fail the build on advisories above a chosen severity. Keep the lockfile committed and current. `/audit-deps` runs this properly; the native tool is authoritative and offline, and no reviewer's memory should be substituted for it.
+**The fix.** Run the ecosystem's own audit tooling in CI and fail the build on advisories above a chosen severity. Keep the lockfile committed and current. `/tm-audit-deps` runs this properly; the native tool is authoritative and offline, and no reviewer's memory should be substituted for it.
 
 **Every vulnerability finding must cite an advisory id** (`CVE-…`, `GHSA-…`, `OSV-…`). A model's recollection of which versions are affected is exactly the kind of claim that is confidently wrong, and an uncited CVE is worse than silence because it looks verified.
 

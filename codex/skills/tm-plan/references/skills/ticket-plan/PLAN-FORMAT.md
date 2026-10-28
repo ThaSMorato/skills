@@ -2,21 +2,23 @@
 
 # Plan document format
 
-Location: `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`.
+Location: `.scratch/<feature-slug>/plans/<NN>-<slug>/tm-plan.md`.
 
 The work for one ticket leaves four sibling artifacts, and together they are the state the `$thasmorato-skills:tm-flow` scan reads:
 
 | File | Written by | Means |
 |---|---|---|
 | `.scratch/<feature-slug>/design/<NN>-<slug>.md` | `design` | the node map exists |
-| `plans/<NN>-<slug>/plan.md` | `plan` | the work is sliced |
+| `plans/<NN>-<slug>/tm-plan.md` | `plan` | the work is sliced |
 | `plans/<NN>-<slug>/validation.md` | `plan-validate` | the verdict, `clean` or `dirty` |
 | `plans/<NN>-<slug>/progress.md` | `implement` | how many SIs are done |
 
 ```markdown
 ---
 kind: plan
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 design: .scratch/<feature-slug>/design/<NN>-<slug>.md
@@ -65,7 +67,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 ```
 
 ## The frontmatter is what gets counted
-`gear` is copied from the ticket's `Gear` field (absent → `full`). `sis_planned` and `revision` are plain integers, not prose; `$thasmorato-skills:tm-retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
+`gear` is copied from the ticket's frontmatter `gear` (in a ticket that predates it, the `Gear` Metadata line; absent → `full`). `sis_planned` and `revision` are plain integers, not prose; `$thasmorato-skills:tm-retro` reads them to compare planned against done and to count the rounds a plan took, and a number written as a sentence cannot be summed. Keep the reason for a revision in the body, not in the field.
 
 ## Rules for a good plan
 - **Coarse by default.** Propose the fewest SIs that clear the floor below and the ceiling in this rule list; merge what touches the same file, function, node or screen, what one check verifies, and what has only one consumer (`references/skills/ticket-plan/index.md` §2). At `gear: small`, 1 to 3 SIs.

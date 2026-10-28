@@ -46,7 +46,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/questionnaires/*.md` | questions sent to someone outside the conversation, and their answers (`status: sent / answered / partial`) | `$thasmorato-skills:tm-questionnaire` |
 | `docs/validation/*.md` | doc validation verdicts | `$thasmorato-skills:tm-doc-validate` |
 | `.scratch/<feature>/issues/` | tickets | `$thasmorato-skills:tm-tickets <feature>` |
-| `.scratch/<feature>/tickets-validation.md` | the ticket set's verdict, `clean` or `dirty` | `$thasmorato-skills:tm-tickets-validate <feature>` (the postflight of `$thasmorato-skills:tm-tickets`) |
+| `.scratch/<feature>/tickets-validation.md` | the ticket set's verdict, `clean` or `dirty` | `$thasmorato-skills:tm-tickets-validate <feature>` (the owner runs it after `$thasmorato-skills:tm-tickets`) |
 
 **A missing artifact is not automatically a gap.** Before reporting one as missing, check whether a ticket's `Source` records it as a deliberate skip: small work legitimately has no FDD. Report a skip as a skip; offering to generate a document the user consciously declined is how a coordinator teaches people to stop reading it.
 
@@ -60,7 +60,7 @@ Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which
 | `03-billing` | - | - | - | - | - |
 
 - **design**: `.scratch/<feature>/design/<NN>-<slug>.md` exists
-- **plan**: `plans/<NN>-<slug>/plan.md` exists
+- **plan**: `plans/<NN>-<slug>/tm-plan.md` exists
 - **validate**: `validation.md`'s `status:` frontmatter
 - **implement**: `progress.md`'s `sis_done`/`sis_total` frontmatter (a `progress.md` without frontmatter predates it; read the count from the body and say so)
 - **review**: `.scratch/<feature>/reviews/<NN>-<slug>.md` exists; its `verdicts` say how many findings the verifier confirmed
@@ -70,7 +70,7 @@ The **frontier** is the tickets whose blockers are all `done`, crossed with wher
 ### Then report
 Before reporting a ticket done, its request-trace parts all have a ticket or an owner decision, and its acceptance record's `verified_at` is current (no production change since); say which is missing otherwise.
 
-Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop.
+Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop. The command is the last line, written out with its arguments and "you run it"; it is never one of the options of a question, because an answer to a question is not the owner starting a stage. When the owner's last turn is a command typed as plain text that did not load, say in one line to send it again with the `/` first.
 
 **This command never runs a stage.** Every command and every stage skill is closed to model invocation, so only the owner starts a stage, and each stage ends at its own postflight. A coordinator that ran the next stage itself is how a plan got validated in a loop until it passed, with nobody reading it in between.
 
@@ -88,7 +88,7 @@ Announce, in this order: **where the project stands**, **what is waiting for you
 
 **Record the choice where a later scan can see it.** When a ticket is written without an FDD, its `Source` says so (`direct (small gear, no FDD): single seam, no contract change`) so the scan can tell a deliberate skip from a missing document. An unrecorded skip reads exactly like an omission, and the next run will offer to fill it.
 
-**Record the gear itself, too.** Every ticket carries it in its `Gear` field, and `$thasmorato-skills:tm-plan` copies it into the plan's frontmatter, because the stages below run standalone and cannot ask this command. It is also what lets `$thasmorato-skills:tm-retro` measure each gear separately, and tell whether the gear chosen matched the size the work turned out to be.
+**Record the gear itself, too.** Every ticket carries it in its frontmatter's `gear` field (the small gear's ticket too, with its `type` and `acs`), and `$thasmorato-skills:tm-plan` copies it into the plan's frontmatter, because the stages below run standalone and cannot ask this command. It is also what lets `$thasmorato-skills:tm-retro` measure each gear separately, and tell whether the gear chosen matched the size the work turned out to be.
 
 The instinct to reach for the full chain on everything is the same instinct Shape Up's *appetite* corrects: the question is not "what is the complete process?", it is "how much process does this problem deserve?".
 
@@ -132,7 +132,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
 
 ## Phase 2: Development (per frontier ticket)
 12. `$thasmorato-skills:tm-tickets <feature>` → vertical slices with blocking edges, validated as a set by `$thasmorato-skills:tm-tickets-validate` before the gate. **GATE:** the set must be `clean`, and the tickets-to-seams count is the first thing to read.
-13. Per frontier ticket: `$thasmorato-skills:tm-design` → **GATE** → `$thasmorato-skills:tm-plan` → `$thasmorato-skills:tm-plan-validate` (**GATE:** must be `clean`) → `$thasmorato-skills:tm-implement` (SI by SI, STOP between SIs) → optional `$thasmorato-skills:tm-trim <slug> <fixed-point>`: make the change smaller with the behavior identical, so the review reads less → `$thasmorato-skills:tm-review <fixed-point>` → **GATE** → optional `$thasmorato-skills:tm-tidy <slug> <fixed-point>`: the four rules of Simple Design over what is left → `$thasmorato-skills:tm-acceptance <slug>`: every AC and request part checked in the running software, after the last change to production code → optional `$thasmorato-skills:tm-walkthrough <slug> <fixed-point>`: a lesson over the change with a recall quiz, so the owner understands what merges → `$thasmorato-skills:tm-pr <slug> <fixed-point>`: the PR body (summary as a picture, before/after evidence, merge danger), opened only when the user says so. Both are structural, apply only what the user chooses, and run in every gear that has a review.
+13. Per frontier ticket: `$thasmorato-skills:tm-design` → **GATE** → `$thasmorato-skills:tm-plan` → `$thasmorato-skills:tm-plan-validate` (**GATE:** must be `clean`) → `$thasmorato-skills:tm-implement` (SI by SI, STOP between SIs; recommend `/effort xhigh` before it, the level for demanding agentic code: `max` is not the default, and when `xhigh` falls short the next step is a stronger model, then `max`) → optional `$thasmorato-skills:tm-trim <slug> <fixed-point>`: make the change smaller with the behavior identical, so the review reads less → `$thasmorato-skills:tm-review <fixed-point>` → **GATE** → optional `$thasmorato-skills:tm-tidy <slug> <fixed-point>`: the four rules of Simple Design over what is left → `$thasmorato-skills:tm-acceptance <slug>`: every AC and request part checked in the running software, after the last change to production code → optional `$thasmorato-skills:tm-walkthrough <slug> <fixed-point>`: a lesson over the change with a recall quiz, so the owner understands what merges → `$thasmorato-skills:tm-pr <slug> <fixed-point>`: the PR body (summary as a picture, before/after evidence, merge danger), opened only when the user says so. Both are structural, apply only what the user chooses, and run in every gear that has a review.
     - **Back-edge:** if implementation surfaces a real architectural decision, propose `$thasmorato-skills:tm-adr-identify` and an FDD update, and if it revealed a new axis of change, revisit `$thasmorato-skills:tm-boundaries`. Keep the docs live.
     - **Screens:** a ticket that builds a new screen with nothing to copy (no Figma, prototype, image or existing page) runs `$thasmorato-skills:tm-ui-design <screen>` before `$thasmorato-skills:tm-design`; a redesign runs `$thasmorato-skills:tm-ui-audit <screen>` first, then `$thasmorato-skills:tm-ui-design`. A screen with a spec in `docs/ui/` goes straight to `$thasmorato-skills:tm-design`.
     - **Bugs:** a bug whose cause is not known starts at `$thasmorato-skills:tm-diagnose`, never at a fix. It ends with the cause and the pinned and flipped tests; an obvious fix is then made test-first (Direct), anything larger becomes a `Type: bugfix` ticket whose Source is the diagnosis, through `$thasmorato-skills:tm-design` → `$thasmorato-skills:tm-plan` in the Small gear.

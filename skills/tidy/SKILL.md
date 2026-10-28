@@ -1,12 +1,13 @@
 ---
 name: tidy
-description: 'Make working code simple by Kent Beck''s four rules of Simple Design, as structural changes only: either the code a reviewed ticket changed, or a path of existing code that has tests covering it. Use after /review, or on "tidy / simplify / clean up this ticket", "clean up this file / this area", "leave it cleaner". Not for behavior changes or bug fixes; use tdd for those.'
+description: 'Make working code simple by Kent Beck''s four rules of Simple Design, as structural changes only: either the code a reviewed ticket changed, or a path of existing code that has tests covering it. Use after /tm-review, or on "tidy / simplify / clean up this ticket", "clean up this file / this area", "leave it cleaner". Not for behavior changes or bug fixes; use tdd for those.'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
-Make it work, then make it right. `/implement` made the ticket work, and `/review` checked it; this stage makes it **simple**. It is the *After* in Beck's *Tidy First?* (tidy after the behavior ships), because only once the code works can you see the shape it wanted to have.
+Make it work, then make it right. `/tm-implement` made the ticket work, and `/tm-review` checked it; this stage makes it **simple**. It is the *After* in Beck's *Tidy First?* (tidy after the behavior ships), because only once the code works can you see the shape it wanted to have.
 
 ## The criterion: the four rules, in order
 Kent Beck's four rules of Simple Design, as Robert C. Martin sets them out in *Clean Code* (chapter on Simple Design). **The order is the instruction.** A design is simple when it:
@@ -16,14 +17,14 @@ Kent Beck's four rules of Simple Design, as Robert C. Martin sets them out in *C
 3. **Minimizes duplication**: removing the *essential* duplication (two places that must change together), and leaving the *accidental* kind (code that only looks alike) alone. Collapse the **whole** duplicated unit, not the easy half: deduplicating how two results are assembled while two near-identical queries stay behind still ships the duplication. Rules 2 and 3 are separate checks; passing one says nothing about the other.
 4. **Minimizes size**: fewest elements possible **without compromising** 1–3: remove functions, classes and parameters that nothing needs, and guards an extraction left dead (an `if (x)` that an earlier check already guarantees).
 
-**Rule 1 is already satisfied by `/implement`**, which is test-first. So this stage starts at rule 2, and never runs rule 4 before 2 and 3. Deleting code first is how expressiveness gets destroyed in the name of brevity. If some changed behavior turns out to have **no** test, stop: that is a rule-1 failure and a review finding, not a tidying.
+**Rule 1 is already satisfied by `/tm-implement`**, which is test-first. So this stage starts at rule 2, and never runs rule 4 before 2 and 3. Deleting code first is how expressiveness gets destroyed in the name of brevity. If some changed behavior turns out to have **no** test, stop: that is a rule-1 failure and a review finding, not a tidying.
 
 "Simple" means **untangled**: high-level policy that ignores low-level detail. When a tidying is about that (a framework type in a use case, SQL in a domain object), the `architecture` skill's dependency-rule and detail rules say what the untangled shape is.
 
 ## Scope: a ticket's diff, or a path
-**Ticket mode** (`/tidy <slug> <fixed-point>`): only the code in the ticket's diff (`git diff <fixed-point>...HEAD`), the same fixed point `/review` used. Tidying code the ticket did not touch is a different change, with a different reviewer and a different risk. Note it as a candidate for later, and leave it.
+**Ticket mode** (`/tm-tidy <slug> <fixed-point>`): only the code in the ticket's diff (`git diff <fixed-point>...HEAD`), the same fixed point `/tm-review` used. Tidying code the ticket did not touch is a different change, with a different reviewer and a different risk. Note it as a candidate for later, and leave it.
 
-**Path mode** (`/tidy <path>`): existing code with no ticket, such as a crusty area worth cleaning while you are in it. The scope is the files under the path. There is no review to wait for, so rule 1 is checked here instead: **name the tests that cover the code in scope** and run them green before proposing anything. Code with no covering test cannot be tidied, because nothing can prove its behavior was kept; say so, and suggest covering it first (a ticket, or `tdd`). The fixed point is `HEAD` when the stage starts.
+**Path mode** (`/tm-tidy <path>`): existing code with no ticket, such as a crusty area worth cleaning while you are in it. The scope is the files under the path. There is no review to wait for, so rule 1 is checked here instead: **name the tests that cover the code in scope** and run them green before proposing anything. Code with no covering test cannot be tidied, because nothing can prove its behavior was kept; say so, and suggest covering it first (a ticket, or `tdd`). The fixed point is `HEAD` when the stage starts.
 
 In either mode, a function you touch is read **whole** with the rules, not only its changed lines: having touched it is not evidence that it is clean.
 
@@ -46,9 +47,9 @@ A proposal with no evidence, or one that changes behavior, is not a tidying. Dro
 
 Present the proposals grouped by rule, in order, as a structured choice. Where a proposal moves code between functions or files, show its before and after as the smallest view the `visuals` skill lists (a call tree or file tree diff sketch), next to it. **The user picks which to apply.** None is applied by default.
 
-**When the owner declines a proposal with a reason that will still hold next time**, offer to record it in `docs/declined.md`, so no later run proposes it again. A passing reason ("not now") or a self-evident one is not recorded; a reason that is really an architectural decision is an ADR instead (`/adr-generate`).
+**When the owner declines a proposal with a reason that will still hold next time**, offer to record it in `docs/declined.md`, so no later run proposes it again. A passing reason ("not now") or a self-evident one is not recorded; a reason that is really an architectural decision is an ADR instead (`/tm-adr-generate`).
 
-**In path mode, offer the HTML report** before asking: a path usually yields more proposals than a list carries well. Call the Skill tool with `visuals` and render one card per proposal with `html-report.md`, then ask from the report.
+**In path mode, offer the HTML report** before asking: a path usually yields more proposals than a list carries well. Call the Skill tool with `thasmorato-skills:visuals` and render one card per proposal with `html-report.md`, then ask from the report.
 
 ## 2. Apply, one at a time
 For each chosen tidying, in rule order:
@@ -61,11 +62,11 @@ For each chosen tidying, in rule order:
 Structural changes go in their own commit, separate from the behavioral work, so each can be reviewed and reverted on its own. Version control remains the user's call; say which commits you suggest.
 
 ## 3. Review what the tidying changed
-Green tests prove the behavior the tests cover; they do not prove the code got better, and this stage runs **after** `/review`, so nothing else will read it. Take the diff of the applied tidyings alone (from the commit before the first one to `HEAD`) and call the Agent tool with `review-spec` and with `review-quality` on it, in parallel, the way `/review` dispatches its lenses:
+Green tests prove the behavior the tests cover; they do not prove the code got better, and this stage runs **after** `/tm-review`, so nothing else will read it. Take the diff of the applied tidyings alone (from the commit before the first one to `HEAD`) and call the Agent tool with `review-spec` and with `review-quality` on it, in parallel, the way `/tm-review` dispatches its lenses:
 - **`review-spec`**, told that the change claims to be **structural**: any behavior it finds changed is a finding.
 - **`review-quality`**: a tidying that introduced a smell, or traded one smell for another, is a finding.
 
-Drop findings without a rule and a failure scenario, as `/review`'s synthesis does. For each finding that stands, revert the tidying it points at and record why. A tidying that survives its own review is done.
+Drop findings without a rule and a failure scenario, as `/tm-review`'s synthesis does. For each finding that stands, revert the tidying it points at and record why. A tidying that survives its own review is done.
 
 ## Output
 Write `.scratch/<feature-slug>/tidy/<NN>-<slug>.md` (in path mode, `.scratch/standalone/tidy/<path-slug>.md`, with `slug:` set to the path):
@@ -74,6 +75,8 @@ Write `.scratch/<feature-slug>/tidy/<NN>-<slug>.md` (in path mode, `.scratch/sta
 ---
 kind: tidy
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 fixed_point: <ref>
 proposed: {expression: <n>, duplication: <n>, size: <n>}
@@ -83,4 +86,4 @@ review_findings: <n (findings step 3's review raised and kept)>
 ---
 ```
 
-Then each proposal with its rule, evidence and outcome (`applied`, `declined`, `reverted` and why), and the out-of-scope candidates as notes. `/retro` reads it: many `reverted`, or any `review_findings`, means the proposals were not really structural.
+Then each proposal with its rule, evidence and outcome (`applied`, `declined`, `reverted` and why), and the out-of-scope candidates as notes. `/tm-retro` reads it: many `reverted`, or any `review_findings`, means the proposals were not really structural.

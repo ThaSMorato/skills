@@ -1,7 +1,8 @@
 ---
 name: pr
-description: 'Write the body of a pull request from what the work left on disk: a summary drawn as the smallest view that explains the change, evidence that it works (before and after), and how dangerous the merge is (one-way or two-way door, blast radius). Use after /tidy (or /review) when a ticket is ready to merge, and on "write the PR / PR description / open a PR".'
+description: 'Write the body of a pull request from what the work left on disk: a summary drawn as the smallest view that explains the change, evidence that it works (before and after), and how dangerous the merge is (one-way or two-way door, blast radius). Use after /tm-tidy (or /tm-review) when a ticket is ready to merge, and on "write the PR / PR description / open a PR".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -10,9 +11,9 @@ A reviewer decides in minutes whether to trust a change. A PR body that retells 
 
 ## Sources
 Read, do not recall:
-- the diff: `git diff <fixed-point>...HEAD`, the same fixed point `/review` used;
+- the diff: `git diff <fixed-point>...HEAD`, the same fixed point `/tm-review` used;
 - the ticket (acceptance criteria, `Type`), the plan and its `progress.md` (the test results per SI, the **Not verified** list);
-- the acceptance record, `.scratch/<feature-slug>/acceptance/<NN>-<slug>.md`: its screenshots are the evidence, and when production code changed after its `verified_at`, say it is stale and offer `/acceptance` again;
+- the acceptance record, `.scratch/<feature-slug>/acceptance/<NN>-<slug>.md`: its screenshots are the evidence, and when production code changed after its `verified_at`, say it is stale and offer `/tm-acceptance` again;
 - the review file under `.scratch/<feature-slug>/reviews/`: lenses run, findings and their verdicts;
 - the `trim/` and `tidy/` files, when they exist: which commits are structural;
 - for `Type: bugfix`, the diagnosis: its `loop`, the hypothesis that held, the seam gaps;
@@ -45,7 +46,7 @@ Closes <ticket id: title>
 ```
 
 ### Summary
-Call the Skill tool with `visuals` and pick the smallest view: a diff sketch of the call tree, the component tree or the file tree when the point is what moved; pseudocode when it is logic; a sequence diagram when it is an interaction. One view usually; two when one cannot carry it. Name the structural commits (from `trim/` and `tidy/`) apart from the behavioral ones, so the reviewer can read them separately.
+Call the Skill tool with `thasmorato-skills:visuals` and pick the smallest view: a diff sketch of the call tree, the component tree or the file tree when the point is what moved; pseudocode when it is logic; a sequence diagram when it is an interaction. One view usually; two when one cannot carry it. Name the structural commits (from `trim/` and `tidy/`) apart from the behavioral ones, so the reviewer can read them separately.
 
 **Done when** someone who has not read the ticket can say what the change does from the summary alone.
 
@@ -66,4 +67,4 @@ Everything in the plan's **Not verified** list, and every diagnosis seam gap, go
 **Done when** the door names its reason and the blast radius names who is affected.
 
 ## Output
-Write the body to `.scratch/<feature-slug>/pr.md`. Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/pr.md`).
+Write the body to `.scratch/<feature-slug>/tm-pr.md`. Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/tm-pr.md`).

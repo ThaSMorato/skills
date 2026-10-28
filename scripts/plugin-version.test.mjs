@@ -4,8 +4,9 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-// /retro and /flow-report compare the flow across plugin versions, so every artifact they measure
-// records which version produced it. A producer that drops the field makes its numbers unattributable.
+// /retro and /flow-report compare the flow across plugin versions, models and harnesses, so every
+// artifact they measure records which version, which model and which harness produced it. A producer
+// that drops a field makes its numbers unattributable.
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -16,7 +17,7 @@ const producers = {
   validation: 'skills/plan-validate/SKILL.md',
   'tickets-validation': 'skills/tickets-validate/SKILL.md',
   'doc-validation': 'skills/doc-validate/SKILL.md',
-  review: 'commands/review.md',
+  review: 'commands/tm-review.md',
   trim: 'skills/trim/SKILL.md',
   tidy: 'skills/tidy/SKILL.md',
   diagnosis: 'skills/diagnose/SKILL.md',
@@ -29,9 +30,9 @@ const producers = {
 }
 
 for (const [kind, path] of Object.entries(producers)) {
-  test(`${kind} (${path}) records plugin_version next to its kind`, () => {
+  test(`${kind} (${path}) records plugin_version, model and harness next to its kind`, () => {
     const text = readFileSync(join(root, path), 'utf8')
 
-    assert.match(text, new RegExp(`kind: ${kind}\\nplugin_version: `))
+    assert.match(text, new RegExp(`kind: ${kind}\\nplugin_version: .*\\nmodel: .*\\nharness: `))
   })
 }

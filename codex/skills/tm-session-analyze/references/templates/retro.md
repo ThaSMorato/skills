@@ -27,8 +27,8 @@ findings: {flow: <n>, project: <n>, product: <n>, defect: <n>}
 - **Read from:** <the artifact paths this was built out of>
 
 ## Measurements (required)
-> Numbers only, and only from frontmatter: the ticket's `Gear` and acceptance criteria, `plan.md`'s
-> `sis_planned` and `revision`, `progress.md`'s `sis_done`, `escalations` and `unverified`, `validation.md`'s `run`
+> Numbers only, and only from frontmatter: the ticket's `gear` and `acs`, `plan.md`'s
+> `sis_planned` and `revision`, `progress.md`'s `sis_done`, `escalations`, `unverified` and `failed_deliverables`, `validation.md`'s `run`
 > and `fired`, the review's `findings`, `by_severity`, `by_lens`, `verdicts` and `refuted_by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams` and `dispersion`. Nothing here is estimated. A ticket
 > whose artifacts lack these fields predates them: list it as `not measured (pre-v0.4 frontmatter)`
 > rather than reconstructing its numbers from prose.
@@ -40,6 +40,8 @@ findings: {flow: <n>, project: <n>, product: <n>, defect: <n>}
 |---|---|---|---|---|---|---|---|---|---|---|
 
 **Totals by plugin version:** <per `plugin_version`: tickets, median SIs per AC, escalations, validation runs to `clean`, review findings, lens precision; two versions in one scope are two populations, never one sum>
+
+**Totals by author:** <per `model` and `harness`, and per author × reviewer pair for the reviews: the same measurements; `unknown` for the artifacts that predate the fields>
 
 **Totals by gear:** <per gear: tickets, median ACs, median SIs, SIs per AC, median review findings>
 

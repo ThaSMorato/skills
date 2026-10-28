@@ -3,6 +3,7 @@ name: teach
 description: 'Teach the user a topic over several sessions, in a teaching workspace that keeps the mission, the trusted sources, what has been learned, and short HTML lessons with practice. Use on "teach me / I want to learn / explain X so I really get it" when the goal is to learn, not to get one answer.'
 argument-hint: "<what you want to learn>"
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.

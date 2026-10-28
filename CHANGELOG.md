@@ -1,5 +1,87 @@
 # Changelog
 
+## 0.7.0 (in progress)
+
+Built as a stack, one PR per wave; nothing merges before the release.
+
+### Wave A: foundation
+
+- **Every command carries the `tm-` prefix.** Claude Code ships `/plan`, `/review` and `/pr`, other
+  plugins ship `/implement`, `/retro` and more, and a bare name could be taken by any of them. The
+  old names are gone, with no stub. The stage skills keep their names, gain `user-invocable: false`
+  and leave the menu: the command is the way in. `scripts/command-names.test.mjs` checks the prefix,
+  the flag, and that no file cites a command by its old name.
+- **Skill tool calls use the full name** (`thasmorato-skills:asking`), so no other plugin's skill
+  answers. In Codex the stages already were `tm-<command>`; the build no longer adds a prefix of its
+  own, and a test keeps the names equal in both harnesses.
+- **Every agent declares its `effort`:** `high` for the writers, analysts and reviewers, `medium` for
+  the generators that transcribe a decided document, `low` for `pattern-scout`, which only collects.
+  In Codex it becomes the agent's `model_reasoning_effort`; no agent pins a model, in either harness.
+  `/tm-flow` recommends `/effort xhigh` before `/tm-implement`; `max` is not the default.
+- **Who wrote it.** Every artifact that records `plugin_version` also records `model` and `harness`,
+  and `progress.md` the Codex thread id. `/tm-retro` and `/tm-flow-report` group by model and
+  harness too, and read reviews by author × reviewer pair.
+- **What the retro measures is written.** `progress.md` has every field from SI-1, including the new
+  `failed_deliverables`, one finished value (`completed`; `/tm-retro` still accepts the old `done`),
+  and is rewritten at every close-out, the close-out of `/tm-review`'s fixes included. A ticket
+  carries `type`, `gear` and `acs` in frontmatter.
+- **The next command is a line to type, never an option,** and a stage that authors never runs the
+  stage that verifies it: `/tm-tickets` no longer runs the ticket validation in a loop before
+  showing the set; it names `/tm-tickets-validate` for the owner.
+
+**Migration.** Type the new names; the stage skills, the documents and their paths do not change.
+
+| Before | Now |
+|---|---|
+| `/acceptance` | `/tm-acceptance` |
+| `/adr-generate` | `/tm-adr-generate` |
+| `/adr-identify` | `/tm-adr-identify` |
+| `/adr-link` | `/tm-adr-link` |
+| `/analyze` | `/tm-analyze` |
+| `/audit-deps` | `/tm-audit-deps` |
+| `/boundaries` | `/tm-boundaries` |
+| `/c4-generate` | `/tm-c4-generate` |
+| `/components` | `/tm-components` |
+| `/decompose` | `/tm-decompose` |
+| `/design` | `/tm-design` |
+| `/diagnose` | `/tm-diagnose` |
+| `/doc-validate` | `/tm-doc-validate` |
+| `/fdd` | `/tm-fdd` |
+| `/flow` | `/tm-flow` |
+| `/flow-report` | `/tm-flow-report` |
+| `/generate-stack-guide` | `/tm-generate-stack-guide` |
+| `/generate-test-guide` | `/tm-generate-test-guide` |
+| `/guardrails` | `/tm-guardrails` |
+| `/guidelines` | `/tm-guidelines` |
+| `/handoff` | `/tm-handoff` |
+| `/hld` | `/tm-hld` |
+| `/implement` | `/tm-implement` |
+| `/interview` | `/tm-interview` |
+| `/mermaid-generate` | `/tm-mermaid-generate` |
+| `/plan` | `/tm-plan` |
+| `/plan-validate` | `/tm-plan-validate` |
+| `/pr` | `/tm-pr` |
+| `/prd` | `/tm-prd` |
+| `/prototype` | `/tm-prototype` |
+| `/questionnaire` | `/tm-questionnaire` |
+| `/reconcile` | `/tm-reconcile` |
+| `/research` | `/tm-research` |
+| `/retro` | `/tm-retro` |
+| `/review` | `/tm-review` |
+| `/session-analyze` | `/tm-session-analyze` |
+| `/teach` | `/tm-teach` |
+| `/tickets` | `/tm-tickets` |
+| `/tickets-validate` | `/tm-tickets-validate` |
+| `/tidy` | `/tm-tidy` |
+| `/trim` | `/tm-trim` |
+| `/ui-audit` | `/tm-ui-audit` |
+| `/ui-design` | `/tm-ui-design` |
+| `/wait-what` | `/tm-wait-what` |
+| `/walkthrough` | `/tm-walkthrough` |
+| `/writing-beats` | `/tm-writing-beats` |
+| `/writing-fragments` | `/tm-writing-fragments` |
+| `/writing-shape` | `/tm-writing-shape` |
+
 ## 0.6.7 (beta)
 
 The flow runs in Codex too, and a stage never starts another, in either harness. Same commands, same

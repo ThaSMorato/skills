@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/adr-analyzer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/adr-analyzer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-adr-analyzer"
 description = "Sweep the design docs (HLD/FDD/boundaries) for architectural decisions that merit an ADR and propose them as Potential ADRs for the user to confirm. Delegate after $thasmorato-skills:tm-hld or $thasmorato-skills:tm-fdd, or when the user runs $thasmorato-skills:tm-adr-identify. It identifies and justifies; it does NOT write formal ADRs."
+model_reasoning_effort = "high"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.

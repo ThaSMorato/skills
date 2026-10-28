@@ -1,7 +1,8 @@
 ---
 name: diagnose
-description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, on "debug / why does this fail / find the bug / this broke", for a performance regression, and inside /implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
+description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, on "debug / why does this fail / find the bug / this broke", for a performance regression, and inside /tm-implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -71,7 +72,7 @@ With the cause at `file:line`:
 ## 6. Clean up
 **Done when** a search for the debug prefix finds nothing, the throwaway scripts and prototypes are deleted (or kept on purpose under a clearly named debug path), and the loop command is written in the output so the fix step can re-run it. After the fix, the loop runs again against the original, un-reduced scenario, and **the hypothesis that held goes in the commit or PR message**, so the next person debugging this area learns from it.
 
-## When fix attempts are running (inside `/implement`)
+## When fix attempts are running (inside `/tm-implement`)
 Each attempt **names the hypothesis it tests and its kind** (code, environment/data, measurement). **Three attempts in a row of the same kind stop the loop**: go back to step 2 and look at the other kinds. That is what keeps three tries from being spent on one guess (three timeout tweaks, three variations of one conditional).
 
 ## Output
@@ -81,6 +82,8 @@ Write `.scratch/<feature-slug>/diagnoses/<slug>.md`, or `.scratch/standalone/dia
 ---
 kind: diagnosis
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <slug>
 status: cause-found | unresolved | no-loop
 loop: <the one command that goes red, or `none`>

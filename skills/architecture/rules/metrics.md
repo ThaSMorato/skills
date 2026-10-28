@@ -28,4 +28,4 @@ Run a depth-first search over the component graph and report **every** cycle as 
 ## Scope and honesty
 - **Declare the extraction method.** Static import parsing misses dynamic loading, dependency injection by string key, and reflection. Those are real edges the graph will not show.
 - **Declare what you skipped.** Generated code, vendored directories, and files that failed to parse. A metric computed over 60% of the repo and reported as if it covered all of it is worse than no metric.
-- **The graph is an input, not a report.** `/components` uses it for metrics, `/boundaries` for divergence against the contract, and `/decompose` to decide which epics are parallel-safe.
+- **The graph is an input, not a report.** `/tm-components` uses it for metrics, `/tm-boundaries` for divergence against the contract, and `/tm-decompose` to decide which epics are parallel-safe.

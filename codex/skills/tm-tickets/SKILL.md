@@ -47,7 +47,7 @@ Each slice cuts a **narrow but complete** path through every layer (schema, API,
 
 **Wide-refactor exception:** a single mechanical change whose blast radius breaks thousands of call sites can't land green as a vertical slice. Sequence it **expand → migrate (batches, each blocked by expand) → contract (blocked by every batch)**, all structural; if batches can't stay green alone, share an integration branch that all block a final integrate-and-verify ticket. The **contract** ticket, the one that removes the old shape, carries an acceptance criterion of **zero remaining consumers**, with the evidence named: no calls in the logs over an agreed window, no import in any consumer, no failing consumer contract test. Removing on the belief that nobody uses it is how a published contract breaks.
 
-## 4. Write the set, then validate it
+## 4. Write the set
 Write **local files** first, always, even when the tickets will end up in a tracker: one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order, each filling `references/templates/ticket.md`. Number the acceptance criteria `AC-1`, `AC-2`. `$thasmorato-skills:tm-plan` maps each to an SI and `$thasmorato-skills:tm-plan-validate` checks the coverage by id, which it cannot do against unlabelled bullets.
 
 Write `.scratch/<feature-slug>/request-trace.md` beside them: one row per part of the owner's request (their message, `task.md`, the brief, an image or document they supplied), quoted, with the ticket and AC that cover it:
@@ -61,23 +61,23 @@ Write `.scratch/<feature-slug>/request-trace.md` beside them: one row per part o
 
 A part is `covered`, or `excluded`/`deferred` only with the owner's `> Decided:`. An AC that goes wider than the part it covers, or a part dropped, rewritten or deferred, is raised at the gate, never settled in the draft. Copy the owner supplied (text in an image, a document) enters the ticket as `> Decided:` with its source, never as `> Assumed:`.
 
-Then read `references/skills/tickets-validate/index.md` and follow it over the set. This is the postflight, and it is not optional: it checks coverage against the FDD, invention, tickets too big or too small, several tickets on one seam, blocking cycles and dispersion, and writes `.scratch/<feature-slug>/tickets-validation.md`. If it comes back `dirty`, fix the set and re-run it **before** showing the user anything. A set the user sees should already have a verdict, so their attention goes to judgment, not to catching a cycle.
+The set is validated by `$thasmorato-skills:tm-tickets-validate`, which the owner runs: coverage against the FDD, invention, tickets too big or too small, several tickets on one seam, blocking cycles and dispersion. This stage never runs it, and never loops until a set passes: authoring and verification stay apart, as in the code phase.
 
 ## 5. Quiz the user
-Present the breakdown as a numbered list (per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers**, **estimated SIs**), headed by the verdict, the **tickets-to-seams count**, the number of tickets in words, and any request part not `covered`. The follow-ups are listed after, as their own question. Ask (merges and splits as a multi-select):
+Present the breakdown as a numbered list (per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers**, **estimated SIs**), headed by the **tickets-to-seams count**, the number of tickets in words, and any request part not `covered`. The follow-ups are listed after, as their own question. Ask (merges and splits as a multi-select):
 1. Is the granularity right?
 2. **Are these comparable to each other?** Show the sizes side by side. This is the question that catches dispersion; asking only about the set as a whole never does.
 3. Are the blocking edges genuine gates?
 4. Should any be merged or split?
 
-Every change edits the files and re-runs the validation. Iterate until the user approves a `clean` set.
+Every change edits the files. Iterate until the user approves the set, then stop and tell them the next command, which they run: **`$thasmorato-skills:tm-tickets-validate <feature>`**. The set is not ready for `$thasmorato-skills:tm-design` until it reports `clean`.
 
 ## 6. Publish (blockers first)
-The local files are the default and are already written. If the user asks for a real tracker (GitHub, etc.) and a remote exists, publish one issue per ticket in dependency order using native blocking links. Never close or modify a parent issue.
+The local files are the default and are already written. If the user asks for a real tracker (GitHub, etc.) and a remote exists, publish only a set that `.scratch/<feature-slug>/tickets-validation.md` reports `clean` for (when it does not, say that `$thasmorato-skills:tm-tickets-validate <feature>` comes first, for the owner to run), one issue per ticket in dependency order using native blocking links. Never close or modify a parent issue.
 
 Avoid file paths and code snippets: they go stale; the exception is a decision-encoding snippet from a prototype, trimmed to the decision.
 
-`Gear` is the gear `$thasmorato-skills:tm-flow` confirmed for this feature (`full` or `feature`, since this command needs an FDD), or `full` when this runs standalone.
+The frontmatter's `gear` is the gear `$thasmorato-skills:tm-flow` confirmed for this feature (`full` or `feature`, since this command needs an FDD), or `full` when this runs standalone; `type` is the ticket's type, and `acs` the number of its AC-N lines, rewritten whenever a criterion is added or removed.
 
 `Status` starts `ready` for unblocked tickets and `blocked` for the rest. It records **readiness, not who executes**: the old `ready-for-agent` presumed the executor, and the owner picking the ticket up made the field a lie.
 

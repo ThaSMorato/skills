@@ -2,6 +2,7 @@
 name: retro
 description: Look back over a finished epic, feature or cycle by reading what the work left on disk (plans, validations, progress notes, review findings) and record what it taught about the process and about the product. Use after a set of tickets completes, at the end of a cycle, or on "retro / look back / what did we learn".
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Every stage in this flow writes forward. Nothing writes back: the documents freeze at approval, and what the work taught lives in progress notes nobody reopens and in a conversation that is gone after `/compact`. This stage closes that loop: once, over a finished chunk, from the artifacts.
@@ -9,7 +10,7 @@ Every stage in this flow writes forward. Nothing writes back: the documents free
 ## Input
 `$thasmorato-skills:tm-retro <epic | feature | cycle>`: a set of **completed** tickets. Resolve them to their `.scratch/<feature-slug>/` directories.
 
-If nothing in scope has a `progress.md` with `status: completed` (or, in one that predates the frontmatter, `**Status:** completed` in the body), abort: *"Nothing finished in `<scope>` yet. A retro over unfinished work reads the plan, not the outcome."*
+If nothing in scope has a `progress.md` with `status: completed` (or `done`, the second value older versions wrote; or, in one that predates the frontmatter, `**Status:** completed` in the body), abort: *"Nothing finished in `<scope>` yet. A retro over unfinished work reads the plan, not the outcome."*
 
 ## The one rule
 **Every claim cites the artifact it came from.** You are reading files, not remembering a project. This is the difference between a retro that is worth writing down and one that manufactures plausible observations, and the second kind is worse than none, because it reads as verified.
@@ -21,7 +22,7 @@ Concretely: you may not write that something was hard, that a decision was debat
 |---|---|
 | `.scratch/<slug>/issues/<NN>-*.md` | what was asked for: acceptance criteria, exclusions, the declared type |
 | `.scratch/<slug>/design/<NN>-*.md` | the node map, the interfaces intended |
-| `plans/<NN>-*/plan.md` | how it was sliced, and the deliverable commands |
+| `plans/<NN>-*/tm-plan.md` | how it was sliced, and the deliverable commands |
 | `plans/<NN>-*/validation.md` | **the gate's history**: the `## Resolved` section keeps every issue cleared on a re-run, with its id |
 | `plans/<NN>-*/progress.md` | what actually happened per SI: test results, escalations, out-of-scope notes |
 | `.scratch/<slug>/reviews/<NN>-*.md` | the findings each lens produced |
@@ -32,9 +33,9 @@ Concretely: you may not write that something was hard, that a decision was debat
 `validation.md`'s `Resolved` section is the most underused file in the suite: it is a per-ticket record of which category of mistake this project actually makes. Read it across the whole scope before writing anything.
 
 ## Measure from frontmatter, never from prose
-The counts come from fields each stage writes for exactly this purpose: the ticket's `Gear`, `plan.md`'s `sis_planned` and `revision`, `progress.md`'s `sis_done`/`sis_total`, `escalations` and `unverified`, `validation.md`'s `run` and `fired`, the review's `findings`, `by_severity`, `by_lens`, `verdicts` and `refuted_by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams`, `dispersion` and `fired`, each `trim/*.md`'s `before`, `after`, `proposed`, `applied`, `reverted` and `unrequested`, each `tidy/*.md`'s `proposed`, `applied`, `reverted` and `review_findings`, each `walkthrough/*.md`'s `questions`, `missed` and `unclear_after`, each `acceptance/*.md`'s `items`, `by_verdict`, `failed`, `friction` and `mocked`, and each `diagnoses/*.md`'s `status`, `hypotheses`, `probes` and `levels`. Sum them; do not re-derive them from the body. A ticket whose artifacts lack the fields predates them; report it as not measured instead of reading a count out of a sentence, because a number reconstructed from prose looks exactly like a measured one and is not.
+The counts come from fields each stage writes for exactly this purpose: the ticket's `gear`, `type` and `acs` (frontmatter; Metadata lines in a ticket that predates it), `plan.md`'s `sis_planned` and `revision`, `progress.md`'s `sis_done`/`sis_total`, `escalations`, `unverified` and `failed_deliverables`, `validation.md`'s `run` and `fired`, the review's `findings`, `by_severity`, `by_lens`, `verdicts` and `refuted_by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams`, `dispersion` and `fired`, each `trim/*.md`'s `before`, `after`, `proposed`, `applied`, `reverted` and `unrequested`, each `tidy/*.md`'s `proposed`, `applied`, `reverted` and `review_findings`, each `walkthrough/*.md`'s `questions`, `missed` and `unclear_after`, each `acceptance/*.md`'s `items`, `by_verdict`, `failed`, `friction` and `mocked`, and each `diagnoses/*.md`'s `status`, `hypotheses`, `probes` and `levels`. Sum them; do not re-derive them from the body. A ticket whose artifacts lack the fields predates them; report it as not measured instead of reading a count out of a sentence, because a number reconstructed from prose looks exactly like a measured one and is not.
 
-**Group the measurements by `plugin_version`**, the field every measured artifact records. Work done on two versions of the plugin is two populations: summing them hides exactly the change a new version was meant to make. An artifact without the field predates it; group it as `unknown`.
+**Group the measurements by `plugin_version`**, the field every measured artifact records. Work done on two versions of the plugin is two populations: summing them hides exactly the change a new version was meant to make. An artifact without the field predates it; group it as `unknown`. **Then by `model` and `harness`**, the same way: who wrote a plan, an implementation or a review is a population too, and a review is read against the pair it closes (the `progress.md`'s author, the review's reviewer), so a cross-harness review is never summed with a same-model one. An artifact without them predates them; group it as `unknown`.
 
 Then read the **Measurements** section of the most recent earlier `docs/retro/*.md` and put its totals beside this one's, version by version. One retro is a snapshot; the comparison, on the same version or across versions, is what shows whether a change to the flow did anything.
 

@@ -1,8 +1,9 @@
 ---
 name: writing-shape
-description: 'Writing, exploit phase: shape a pile of raw material into an argued article, paragraph by paragraph, from a chosen opening, pushing back on every block that does not earn its place. Use with a fragments file, notes or a transcript, on "/writing-shape" or "make this into an article".'
+description: 'Writing, exploit phase: shape a pile of raw material into an argued article, paragraph by paragraph, from a chosen opening, pushing back on every block that does not earn its place. Use with a fragments file, notes or a transcript, on "/tm-writing-shape" or "make this into an article".'
 argument-hint: "<path to the raw material> [path to the article]"
 disable-model-invocation: true
+user-invocable: false
 ---
 
 This is **exploit**: the pile is fixed; commit to a structure and mine the pile to fill it. The pile can be anything (tidy fragments, a wall of prose, a transcript); read it end to end before doing anything else. It is read-only here; the article goes to its own file. If no article path was given, ask once and keep it.

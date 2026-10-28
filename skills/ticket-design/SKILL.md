@@ -2,6 +2,7 @@
 name: ticket-design
 description: Design the node map for a piece of work before coding (deep modules behind small interfaces at clean seams) and persist it as the design contract. Use before implementing a ticket, or when designing/improving a module's interface.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -16,7 +17,7 @@ Read, in this order:
 - `docs/boundaries.md` (if present): which components this work may touch and which dependency edges are legal.
 - `docs/adr/*.md` and `docs/guidelines.md`: binding in the area you're touching; load the stack guide the router names for the files involved.
 - `CONTEXT.md`: the vocabulary.
-- `docs/ui/<screen>.md` (if the ticket builds a screen that has one): the screen spec `/ui-design` wrote. Its states, copy, widths and components are decided: the UI nodes implement them, and a node that needs something the spec does not say is an open decision for the owner, not a value to fill in.
+- `docs/ui/<screen>.md` (if the ticket builds a screen that has one): the screen spec `/tm-ui-design` wrote. Its states, copy, widths and components are decided: the UI nodes implement them, and a node that needs something the spec does not say is an open decision for the owner, not a value to fill in.
 
 ## 2. Read the repository before drawing anything
 Everything above this line is a **document derived from another document**. The chain from the brief down to this map never touches the code, so a wrong assumption made early is elaborated by each stage rather than caught, and every gate downstream checks consistency, which a wrong-but-consistent map passes perfectly.
@@ -51,7 +52,7 @@ Then, for each capability the ticket needs, **search before you assume it must b
 The map is complete when **every acceptance criterion in the ticket has a node that satisfies it**. Walk the ACs by id and name the node for each. An AC with no node is the gap this check exists to find; a node serving no AC is either scope creep or a missing AC.
 
 ## 5. Confirm, then persist
-Present the map and **confirm uncertain decisions with the user** before coding. When a decision cannot be settled on paper (whether a state model holds up, what a screen should look like), offer `/prototype` for it; its answer comes back as a `> Decided:` citing the prototype file.
+Present the map and **confirm uncertain decisions with the user** before coding. When a decision cannot be settled on paper (whether a state model holds up, what a screen should look like), offer `/tm-prototype` for it; its answer comes back as a `> Decided:` citing the prototype file.
 
 Then write it to `.scratch/<feature-slug>/design/<NN>-<slug>.md`:
 
@@ -59,6 +60,8 @@ Then write it to `.scratch/<feature-slug>/design/<NN>-<slug>.md`:
 ---
 kind: node-map
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 ---
@@ -82,7 +85,7 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 
 ## Conventions to mirror
 > From `pattern-scout`, one row per category this ticket touches. The plan's SIs point here (`Mirror:`),
-> `/trim`'s reuse criterion and `review-standards` read it. A `new` node that departs from a row says
+> `/tm-trim`'s reuse criterion and `review-standards` read it. A `new` node that departs from a row says
 > why under Open decisions.
 
 | Category | Mirror | Pattern |
@@ -115,7 +118,7 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 <anything confirmed with the user (`> Decided:`), and anything still uncertain (`> Assumed:` or `> Needs Input:`, per the `asking` skill §4)>
 ```
 
-The node map is the authoritative contract between design and code; every implementation decision traces back to it. **That is only true if it exists as a file.** Left in the conversation it dies at the next `/compact`, it is invisible to `/flow`'s scan, `/plan-validate` cannot check the plan against it, and `/review` can only reach the design decisions the plan happened to capture.
+The node map is the authoritative contract between design and code; every implementation decision traces back to it. **That is only true if it exists as a file.** Left in the conversation it dies at the next `/compact`, it is invisible to `/tm-flow`'s scan, `/tm-plan-validate` cannot check the plan against it, and `/tm-review` can only reach the design decisions the plan happened to capture.
 
 ## When the map shrinks the ticket
 The search will sometimes show that most of what the ticket asked for already exists. **That is the best possible outcome of this stage, not a problem with the ticket.** Say so plainly, restate what the work actually is (usually wiring what exists plus one genuinely new piece) and let the user decide whether to amend the ticket before planning. A ticket that grew because nobody looked is cheaper to shrink here than anywhere downstream.

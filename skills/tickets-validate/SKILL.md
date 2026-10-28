@@ -1,7 +1,8 @@
 ---
 name: tickets-validate
-description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Runs as the postflight of /tickets, or on "validate the tickets".
+description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Runs as the postflight of /tm-tickets, or on "validate the tickets".
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -11,7 +12,7 @@ Read one feature's tickets **as a set** and decide whether they are sliced right
 It exists because the ticket set was the one artifact in the flow with no validator. `doc-validate` stops at the FDD and `plan-validate` starts at one ticket; between them, the slicing was checked only by asking the user whether it looked right. And every size rule was a ceiling. "Write a test" and "change a constant" fit under any ceiling, so a set could be split into seven tickets that were each far too small and still pass. It could also be cut into five tickets that were each far too big, pass the side-by-side comparison, and drift as a whole because they were comparable to each other.
 
 ## Input
-`/tickets-validate <feature>` → the tickets under `.scratch/<feature-slug>/issues/*.md`. If there are none, abort: *"No tickets for <feature>. Run /tickets <feature> first."*
+`/tm-tickets-validate <feature>` → the tickets under `.scratch/<feature-slug>/issues/*.md`. If there are none, abort: *"No tickets for <feature>. Run /tm-tickets <feature> first."*
 
 ## Sources
 - **The tickets**, all of them, together.
@@ -60,6 +61,8 @@ Write `.scratch/<feature-slug>/tickets-validation.md`. It sits outside `issues/`
 ---
 kind: tickets-validation
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 feature: <feature-slug>
 status: clean | dirty
 open_issues: <count of open issues>
@@ -85,5 +88,5 @@ dispersion: <max ACs / min ACs, one decimal>
 Every id uses a prefix from the Checks table. `fired` is cumulative, as in `plan-validate`.
 
 ## Gate
-- **dirty** → report the findings, merges and splits first, with each ticket resolved to its title. The fix goes back to `/tickets`. Never rewrite the tickets here.
-- **clean** → hand back to `/tickets`' gate: the user approves the set.
+- **dirty** → report the findings, merges and splits first, with each ticket resolved to its title. The fix goes back to `/tm-tickets`. Never rewrite the tickets here.
+- **clean** → hand back to `/tm-tickets`' gate: the user approves the set.

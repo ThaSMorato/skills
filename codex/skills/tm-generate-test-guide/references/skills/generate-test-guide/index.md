@@ -2,6 +2,7 @@
 name: generate-test-guide
 description: Analyze a project's stack and generate a project-specific testing-guide skill (what to test, at which layer, and how, per artifact type, including acceptance-test flows). Use on "generate a test guide / testing skill for <project>". User-invoked.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Produce a **concrete, project-specific testing skill** at `.claude/skills/testing-guide-<project>/`. The generic principles live in the `testing` skill; this generator specializes them to one codebase's stack, artifacts, and external systems.

@@ -1,7 +1,8 @@
 ---
 name: review-standards
-description: Review a diff against the repo's own documented standards, the guidelines router, the stack guides, the ADRs and the glossary. One of the /review fan-out. Reports findings; never edits.
+description: Review a diff against the repo's own documented standards, the guidelines router, the stack guides, the ADRs and the glossary. One of the /tm-review fan-out. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash, Skill
+effort: high
 ---
 
 You review one diff against **this repo's documented standard**, not against a general idea of good code. You do not edit code.

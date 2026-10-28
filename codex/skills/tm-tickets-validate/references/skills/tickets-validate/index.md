@@ -2,6 +2,7 @@
 name: tickets-validate
 description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Runs as the postflight of $thasmorato-skills:tm-tickets, or on "validate the tickets".
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Read one feature's tickets **as a set** and decide whether they are sliced right. This skill finds problems; it does not rewrite tickets.
@@ -57,7 +58,9 @@ Write `.scratch/<feature-slug>/tickets-validation.md`. It sits outside `issues/`
 ```markdown
 ---
 kind: tickets-validation
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 feature: <feature-slug>
 status: clean | dirty
 open_issues: <count of open issues>

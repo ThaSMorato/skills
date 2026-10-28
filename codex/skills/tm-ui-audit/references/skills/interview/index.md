@@ -2,6 +2,7 @@
 name: interview
 description: Relentlessly interview the user, in rounds of questions, to elicit requirements before documenting. Use at the start of a feature or project, or on any "interview / grill / gather requirements" trigger. Composes with the domain-model skill, which sharpens the vocabulary while this one drives the conversation.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Interview the user relentlessly until you reach a shared understanding rich enough to write a PRD. Walk the decision tree in **rounds**, as the `asking` skill describes: each round asks the **frontier**, every open decision whose prerequisites are already settled, and holds back any question whose answer depends on another one still open. The answers move the frontier outward; recompute it and ask the next round.

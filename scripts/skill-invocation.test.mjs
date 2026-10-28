@@ -11,7 +11,7 @@ import { KNOWLEDGE_SKILLS, STAGE_ROOT_NOTE } from './skill-kinds.mjs'
 // without the Skill tool, fails only at the moment of use.
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const SKILL_CALL = /[Cc]all the Skill tool with (?:each of: )?`([a-z0-9-]+)`/g
+const SKILL_CALL = /[Cc]all the Skill tool with (?:each of: )?`(?:thasmorato-skills:)?([a-z0-9-]+)`/g
 const AGENT_CALL = /[Cc]all the Agent tool with `([a-z0-9-]+)`/g
 const SOFT_DISPATCH = /\b[Dd]ispatch (?:one |a |an |two )?`[a-z0-9-]+`/g
 const SOFT_LOAD = /\b(?:Load|load|Use|use|Run|run|Dispatch|dispatch) (?:\*\*both\*\* |both )?the `[a-z0-9-]+` (?:skill|agent)\b(?!')/g
@@ -60,6 +60,21 @@ test('no skill is named like a Claude Code built-in skill', () => {
   const shadowed = skillNames.filter((name) => CLAUDE_CODE_BUILT_INS.includes(name))
 
   assert.deepEqual(shadowed, [])
+})
+
+// A short name in a Skill tool call resolves to whatever answers to it first: a Claude Code built-in, or
+// another plugin's skill (mattpocock's `implement` took ours). The full name reaches this plugin's skill.
+test('every Skill tool call names the skill with the plugin prefix', () => {
+  const short = sources.flatMap((path) =>
+    read(path)
+      .split('\n')
+      .filter((line) => /Skill tool with/.test(line))
+      .flatMap((line) => [...line.matchAll(/`([a-z0-9-]+)`/g)].map(([, name]) => name))
+      .filter((name) => skillNames.includes(name))
+      .map((name) => `${path}: ${name}`),
+  )
+
+  assert.deepEqual(short, [])
 })
 
 test('every agent called through the Agent tool exists', () => {

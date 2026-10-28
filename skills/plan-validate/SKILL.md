@@ -1,7 +1,8 @@
 ---
 name: plan-validate
-description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates /implement. Use after /plan, on "validate the plan / is this plan ready".
+description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates /tm-implement. Use after /tm-plan, on "validate the plan / is this plan ready".
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -9,7 +10,7 @@ disable-model-invocation: true
 Read the plan and decide whether it is safe to implement. This skill **finds problems**; it does not fix them and it does not write code.
 
 ## Input
-`/plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`. If it does not exist, abort: *"No plan at <path>. Run /plan <ticket> first."*
+`/tm-plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/tm-plan.md`. If it does not exist, abort: *"No plan at <path>. Run /tm-plan <ticket> first."*
 
 ## Sources
 Read the plan, and everything it is accountable to:
@@ -49,7 +50,7 @@ For a plan with `type: structural`, also check that no SI modifies an existing t
 
 `CV` and `SZ` are the two the author cannot reliably catch alone: coverage because omission is invisible from inside, and size because the author who wrote the slice believes it is one thing. `DM` exists because the plan claims to encode the node map and nothing used to check that claim.
 
-**`GR` is the only check in this suite that leaves the documents.** Every other category (here and in `/doc-validate`) compares one artifact against another, which means a wrong assumption made early passes every gate, because it is internally consistent all the way down. Run the map's searches yourself: take each node marked `new`, grep the terms it says it searched for, and see whether the repository agrees. A node that turns out to already exist is the highest-value finding this stage can produce, because everything below it was about to be built twice.
+**`GR` is the only check in this suite that leaves the documents.** Every other category (here and in `/tm-doc-validate`) compares one artifact against another, which means a wrong assumption made early passes every gate, because it is internally consistent all the way down. Run the map's searches yourself: take each node marked `new`, grep the terms it says it searched for, and see whether the repository agrees. A node that turns out to already exist is the highest-value finding this stage can produce, because everything below it was about to be built twice.
 
 **`PM` is the one check that reads the plan from the outside.** Every other category asks whether the plan is well-formed; this one asks whether it would survive. Assume the plan was implemented exactly as written, shipped, and failed. Then name the failure: a concrete input, state or sequence (an empty list, a retry after a partial write, two requests at once, the row that is not there, the dependency that times out) that no SI's actions or tests handle. Keep it inside the ticket's scope: a scenario only matters if an AC, the FDD or the node map implies the system must survive it; one outside that is a new requirement, which is scope, not a finding. **At most 3 per run, ranked by consequence.** A pre-mortem asked for failures will always produce some, and past three it is inventing them. A scenario an SI already handles is not a finding; name the SI and drop it.
 
@@ -62,6 +63,8 @@ Write `.scratch/<feature-slug>/plans/<NN>-<slug>/validation.md`:
 ---
 kind: validation
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 status: clean | dirty
 open_issues: <count of open issues>
@@ -89,7 +92,7 @@ fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by 
 **Every id uses a prefix from the Checks table**, never a generic numbering (`PV-1`, `F-3`). The prefix is the finding's category, and `fired` is the per-project record of which mistakes this flow actually catches; a finding with no category is invisible to it. `fired` is cumulative: a re-run adds its new ids and never drops resolved ones.
 
 ## Gate
-- **dirty** → tell the user exactly what to fix: *"validation.md has N open issues. Revise the plan (edit it or re-run /plan <slug>), then re-run /plan-validate <slug>."* Never auto-fix; never partially proceed.
-- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Run /implement <slug> to build it SI by SI."* Starting `/implement` is the owner's call. Name both modes (`/implement <slug>` pauses after each SI, `/implement <slug> continuous` does not), say that either begins writing code, and stop.
+- **dirty** → tell the user exactly what to fix: *"validation.md has N open issues. Revise the plan (edit it or re-run /tm-plan <slug>), then re-run /tm-plan-validate <slug>."* Never auto-fix; never partially proceed.
+- **clean** → when the plan's `revision` is above 1, it changed after the owner approved its slicing: first show the SIs as they stand now next to the ones approved (added, merged, split, moved), so the owner sees what will be built. Then: *"Plan is clean. Run /tm-implement <slug> to build it SI by SI."* Starting `/tm-implement` is the owner's call. Name both modes (`/tm-implement <slug>` pauses after each SI, `/tm-implement <slug> continuous` does not), say that either begins writing code, and stop.
 
 `implement` reads this verdict and refuses to start on a `dirty` (or missing) validation. That refusal is the whole point of this stage.

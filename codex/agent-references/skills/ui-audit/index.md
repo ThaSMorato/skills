@@ -2,6 +2,7 @@
 name: ui-audit
 description: 'Evaluate an existing screen in the running software and list its problems, numbered, with evidence and a severity: a design critique by an isolated agent (usability heuristics scored 0 to 4, cognitive load, personas), a technical pass (design-system drift, responsiveness, integrity, missing states), and the screen under worst-case real data. Reports; never edits. Use before a redesign, or on "audit / critique this screen".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 A redesign that starts from taste replaces one set of problems with another. This stage names what is wrong with a screen as it runs today, with the evidence for each problem, so `$thasmorato-skills:tm-ui-design` has numbered problems to solve and the owner can judge each proposal by the problem it closes. It **finds**; it changes no product code.
@@ -44,7 +45,9 @@ Write `.scratch/ui-audit/<screen-slug>/audit.md`, numbered `UA-1`, `UA-2` in sev
 ```markdown
 ---
 kind: ui-audit
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 screen: <screen-slug>
 mode: operate | read | persuade | experience
 audited_at: <git rev-parse HEAD>

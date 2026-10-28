@@ -1,7 +1,8 @@
 ---
 name: adr-linker
-description: Maintain the ADR link graph (supersedes/superseded-by/amends edges and a timeline index). Delegate when the user runs /adr-link, or after new ADRs are generated.
+description: Maintain the ADR link graph (supersedes/superseded-by/amends edges and a timeline index). Delegate when the user runs /tm-adr-link, or after new ADRs are generated.
 tools: Read, Edit, Write, Glob
+effort: medium
 ---
 
 You maintain the ADR relationship graph across `docs/adr/*.md`.

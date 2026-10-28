@@ -1,7 +1,8 @@
 ---
 name: acceptance
-description: 'Check every acceptance criterion and every part of the owner''s request against the running software before the work is called done: each one verified in the browser (with a screenshot), by a named test only, or not verified with the reason, recorded in one index the pull request reads. Use after the last /review fix and /tidy, before /walkthrough and /pr, or on "test it in the browser / were all the ACs checked".'
+description: 'Check every acceptance criterion and every part of the owner''s request against the running software before the work is called done: each one verified in the browser (with a screenshot), by a named test only, or not verified with the reason, recorded in one index the pull request reads. Use after the last /tm-review fix and /tm-tidy, before /tm-walkthrough and /tm-pr, or on "test it in the browser / were all the ACs checked".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -36,7 +37,7 @@ For each item, one verdict:
 
 Walk a whole-scenario item **as its persona**: with only what they would know, through the way they would find the feature, never by typing a URL only the team knows. Write down every point where you hesitated, searched, read a message twice or took a step the scenario did not have: that is **friction**. Friction is not a failure (the persona got there) and goes in its own section, with a screenshot and the step it happened on, for the owner to judge.
 
-A visual item (layout, copy, a state the user sees) is **browser** or **not verified**; a test does not see the screen. An item that fails is a defect: report it and stop, and the fix goes back through `/implement`'s loop before this stage runs again.
+A visual item (layout, copy, a state the user sees) is **browser** or **not verified**; a test does not see the screen. An item that fails is a defect: report it and stop, and the fix goes back through `/tm-implement`'s loop before this stage runs again.
 
 **Done when** every item has a verdict, every browser verdict has its screenshot, and every failure is reported.
 
@@ -47,6 +48,8 @@ Write `.scratch/<feature-slug>/acceptance/<NN>-<slug>.md`:
 ---
 kind: acceptance
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 verified_at: <the commit checked, git rev-parse HEAD>
 items: <count>
@@ -69,7 +72,7 @@ mocked: <true | false>
 | GS-1.3 | looked for the export under Reports; it is under Settings | `gs-1-3.png` |
 ```
 
-**The record is valid at `verified_at` only.** Any later change to production code (a review fix, a tidying) makes it stale: `/pr` and `/flow` compare `verified_at` with `HEAD` and ask for a re-run when non-test files changed in between.
+**The record is valid at `verified_at` only.** Any later change to production code (a review fix, a tidying) makes it stale: `/tm-pr` and `/tm-flow` compare `verified_at` with `HEAD` and ask for a re-run when non-test files changed in between.
 
 ## Gate
-Report the counts, every failure, every **not verified** item resolved to its words, and the friction notes. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/walkthrough` or `/pr`.
+Report the counts, every failure, every **not verified** item resolved to its words, and the friction notes. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/tm-walkthrough` or `/tm-pr`.

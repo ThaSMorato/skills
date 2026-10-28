@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/pattern-scout.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/pattern-scout.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-pattern-scout"
 description = "Before a node map is drawn, find how this repository already does what a ticket needs (the analogous implementations, the conventions to mirror, and where new code gets wired in), each at file:line with the real code. Documents what exists; never critiques. Dispatched by $thasmorato-skills:tm-design. Returns tables; never edits."
+model_reasoning_effort = "low"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.

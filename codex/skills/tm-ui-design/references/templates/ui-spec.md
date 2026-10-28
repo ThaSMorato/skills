@@ -10,7 +10,9 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 
 ---
 kind: ui-spec
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 screen: <screen-slug>
 situation: extend | new-in-established-world | redesign | no-visual-authority
 mode: operate | read | persuade | experience

@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/c4-generator.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/c4-generator.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-c4-generator"
 description = "Generate C4 diagrams (PlantUML) from the design docs (C1/C2 from the HLD, the system-wide C3 from the component map, and per-feature C3/C4 from the FDD). Delegate after $thasmorato-skills:tm-hld, $thasmorato-skills:tm-components or $thasmorato-skills:tm-fdd, or when the user runs $thasmorato-skills:tm-c4-generate."
+model_reasoning_effort = "medium"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.

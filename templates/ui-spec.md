@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: ui-spec (one screen's design, the source of truth for building and checking it)
-Filled by /ui-design. /design builds the node map from it; /acceptance checks the running screen
+Filled by /tm-ui-design. /tm-design builds the node map from it; /tm-acceptance checks the running screen
 against its states and widths; the next redesign starts from it.
 Every value a builder would otherwise invent is here, decided or marked: `> Decided:` for what the
 owner chose or supplied (with its source), `> Assumed:` for what nobody could answer, per the
@@ -11,6 +11,8 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 ---
 kind: ui-spec
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 screen: <screen-slug>
 situation: extend | new-in-established-world | redesign | no-visual-authority
 mode: operate | read | persuade | experience

@@ -2,6 +2,7 @@
 name: ui-design
 description: 'Design a new screen or redesign an existing one before it is built: classify what is already true (redesign, an established visual world, or none), write the screen brief in rounds, propose three genuinely different directions as HTML with captures, refine the chosen one through every state and width with an isolated critic, and write the screen spec that $thasmorato-skills:tm-design builds from and $thasmorato-skills:tm-acceptance checks against. Use when a screen has no design to copy, or on "design / redesign this screen".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 The rest of the flow builds and checks what a design says. When there is no design, someone still decides the hierarchy, the layout, the states and the copy, usually in the middle of implementing, one component at a time. This stage makes those decisions first, with the owner, and writes them down.

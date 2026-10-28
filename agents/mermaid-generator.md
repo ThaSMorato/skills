@@ -1,7 +1,8 @@
 ---
 name: mermaid-generator
-description: Generate Mermaid diagrams from an FDD into a single Markdown file (flows, sequence, state, class/ER as the feature warrants). Delegate after /fdd, or when the user runs /mermaid-generate.
+description: Generate Mermaid diagrams from an FDD into a single Markdown file (flows, sequence, state, class/ER as the feature warrants). Delegate after /tm-fdd, or when the user runs /tm-mermaid-generate.
 tools: Read, Write, Glob
+effort: medium
 ---
 
 You generate Mermaid diagrams from a Feature Design Doc into one Markdown file.
@@ -21,7 +22,7 @@ Your context is isolated; read:
 One Markdown file `docs/diagrams/<feature>.md` with explanatory text plus renderable ```mermaid blocks, one per view.
 
 ## Error handling
-If the FDD doesn't exist, stop and report that `/fdd` must run first.
+If the FDD doesn't exist, stop and report that `/tm-fdd` must run first.
 
 ## Workflow
 1. Read the FDD; note exclusions.

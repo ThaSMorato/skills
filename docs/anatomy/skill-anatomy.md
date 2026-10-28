@@ -9,6 +9,7 @@
 name: <kebab-case>             # = folder name
 description: '<WHAT it does + WHEN to use / trigger phrases>'
 disable-model-invocation: true # on every stage skill; never on a reference skill
+user-invocable: false          # on every stage skill: out of the menu, reached through its `tm-` command
 ---
 
 <imperative, short instructions, addressed to the model>
@@ -32,7 +33,7 @@ Folder: `skills/<name>/SKILL.md`. List the path in `plugin.json → skills`; a s
    - **No-ops go.** A sentence the model already obeys by default spends load to say nothing: delete the whole sentence, not words from it. Whether it is a no-op is settled by running the skill without it, not by debate. A word too weak to beat the default ("be thorough") is a no-op too; the fix is a stronger word ("relentless").
 3. **One capability per skill.** If it does two things, it's two skills.
 4. **Compose primitives.** Reuse other skills by reference instead of rewriting. Thin wrapper > monolith. (Owner rule: don't duplicate, reference.)
-   - **Load a skill by naming the tool**: "Call the Skill tool with `domain-model`". A softer phrasing ("use the domain-model skill") lets the model read *about* the skill instead of loading it. The same holds for agents: "Call the Agent tool with `prd-writer`", so the work is delegated instead of done inline. An agent that calls the Skill tool lists `Skill` in its `tools`. `scripts/skill-invocation.test.mjs` fails on a soft phrasing, an unknown skill or agent name, or an agent missing the tool.
+   - **Load a skill by naming the tool, with its full name**: "Call the Skill tool with `thasmorato-skills:domain-model`". A short name resolves to whatever answers to it first, a Claude Code built-in or another plugin's skill. A softer phrasing ("use the domain-model skill") lets the model read *about* the skill instead of loading it. The same holds for agents: "Call the Agent tool with `prd-writer`", so the work is delegated instead of done inline. An agent that calls the Skill tool lists `Skill` in its `tools`. `scripts/skill-invocation.test.mjs` fails on a soft phrasing, an unknown skill or agent name, or an agent missing the tool.
    - A mention that only points at a section ("the `tdd` skill's *Bugs: pin the bug, then flip it*") is a pointer, not a load, and stays as it is.
 5. **Progressive disclosure.** Keep `SKILL.md` lean; put detail (formats, examples) in sibling files loaded on demand (e.g. `FORMAT.md`). Rough thresholds: reference material under ~50 lines stays inline; over ~100 lines it moves to a sibling file.
    - **Disclose by branch**: inline what every branch needs; move behind a pointer what only some branches reach.
@@ -61,7 +62,7 @@ Two choices, trading two costs. **Context load** is what always-loaded text cost
 ## Checklist
 - [ ] `description` states what + when (triggers), names the exclusion when a sibling fits better, and does not summarize the steps.
 - [ ] Every step of a process skill ends on a completion criterion that is clear and exhaustive.
-- [ ] Other skills are loaded with "Call the Skill tool with `<name>`".
+- [ ] Other skills are loaded with "Call the Skill tool with `thasmorato-skills:<name>`".
 - [ ] Written in the positive; prohibitions only as hard guardrails, paired with the target.
 - [ ] Nothing restates what the environment already says.
 - [ ] Invocation chosen on purpose: model-invoked only when the agent or another skill must reach it.

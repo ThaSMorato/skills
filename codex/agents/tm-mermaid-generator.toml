@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/mermaid-generator.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/mermaid-generator.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-mermaid-generator"
 description = "Generate Mermaid diagrams from an FDD into a single Markdown file (flows, sequence, state, class/ER as the feature warrants). Delegate after $thasmorato-skills:tm-fdd, or when the user runs $thasmorato-skills:tm-mermaid-generate."
+model_reasoning_effort = "medium"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.

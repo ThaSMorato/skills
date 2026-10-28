@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: dependency-graph (the measured import graph between components)
-Written by whoever measures the graph (/analyze the first time, /reconcile after that), always by the
+Written by whoever measures the graph (/tm-analyze the first time, /tm-reconcile after that), always by the
 method in the architecture skill's import-graph.md, so two measurements are comparable.
 FACTS ONLY. What the edges SHOULD be is docs/boundaries.md; this file says what they ARE, at one commit.
 Overwritten on every measurement: the previous state lives in git history and in the reconcile report.

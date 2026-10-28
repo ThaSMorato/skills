@@ -2,6 +2,7 @@
 name: ticket-design
 description: Design the node map for a piece of work before coding (deep modules behind small interfaces at clean seams) and persist it as the design contract. Use before implementing a ticket, or when designing/improving a module's interface.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Before writing code, build the **node map** (the design contract) and write it down.
@@ -56,7 +57,9 @@ Then write it to `.scratch/<feature-slug>/design/<NN>-<slug>.md`:
 ```markdown
 ---
 kind: node-map
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 ---

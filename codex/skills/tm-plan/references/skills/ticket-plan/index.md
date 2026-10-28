@@ -2,6 +2,7 @@
 name: ticket-plan
 description: Break one ticket into a validated implementation plan, vertical Step Implementations (SIs) with tests, dependencies, and acceptance criteria, ready for the SI-by-SI implement loop. Use before implementing a ticket, on "plan this ticket / break this into steps", or right after $thasmorato-skills:tm-design.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Turn one ticket into a **plan** the `implement` loop can execute SI by SI. This skill decides *how* the work is sliced; it does not write production code and it does not make the design decisions.
@@ -31,7 +32,7 @@ The SIs implement the node map's nodes: an SI that introduces a module the map d
 Prefactoring SIs go first ("make the change easy, then make the easy change"). Then build the **Dependency Map** and the **Deliverables** checklist. The full format is in `references/skills/ticket-plan/PLAN-FORMAT.md`; follow it exactly.
 
 ## 3. Confirm, then emit
-Present the SI breakdown to the user (per SI: name, what it delivers, its blockers), with the coarsest slicing that clears the floor and the ceiling as the recommended answer. Ask whether the granularity and the seams are right as a structured choice; when the options are merges that can combine ("SI-2 into SI-1", "SI-5 with SI-6"), make it multi-select, so the owner picks several instead of typing "2 and 3". Iterate until they approve, then record the approved slicing in the plan's `## Slicing` section as `> Decided: <value> — owner, <YYYY-MM-DD>`: that marker is how `$thasmorato-skills:tm-plan-validate` knows the size question is settled. Then write the plan to `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`.
+Present the SI breakdown to the user (per SI: name, what it delivers, its blockers), with the coarsest slicing that clears the floor and the ceiling as the recommended answer. Ask whether the granularity and the seams are right as a structured choice; when the options are merges that can combine ("SI-2 into SI-1", "SI-5 with SI-6"), make it multi-select, so the owner picks several instead of typing "2 and 3". Iterate until they approve, then record the approved slicing in the plan's `## Slicing` section as `> Decided: <value> — owner, <YYYY-MM-DD>`: that marker is how `$thasmorato-skills:tm-plan-validate` knows the size question is settled. Then write the plan to `.scratch/<feature-slug>/plans/<NN>-<slug>/tm-plan.md`.
 
 Every acceptance criterion in the ticket must be owned by at least one SI, **by id**, and every SI's tests must make its acceptance criteria observable. If either fails, the slicing is wrong; fix it before writing.
 

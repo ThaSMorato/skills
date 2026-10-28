@@ -41,18 +41,18 @@ An unmarked one is a validation finding (AS-N).
 | **E1**: <name> | <the outcome, one line> | <from components.md> | <epic ids, or none> | <epic ids> | <epic ids, or none> | <ADR id / HLD section, or none> |
 
 ## Features (required)
-> The unit an FDD specs and `/tickets` breaks down. Every feature belongs to exactly one epic and
+> The unit an FDD specs and `/tm-tickets` breaks down. Every feature belongs to exactly one epic and
 > traces to at least one PRD requirement: that trace is what makes the 1:N coverage check computable.
 > Keep features comparable in size within an epic.
 >
 > **`Depends on`** records cross-feature blocking: F4 cannot start until F2's schema lands. These
-> edges are **coarse and advisory**: `/tickets` owns the authoritative blocking graph at ticket
+> edges are **coarse and advisory**: `/tm-tickets` owns the authoritative blocking graph at ticket
 > level. What they exist for is the product-wide view, which ticket edges cannot give because
-> `/tickets` reads one FDD at a time and can never see across features.
+> `/tm-tickets` reads one FDD at a time and can never see across features.
 >
 > **`Not delivering`** is the boundary between this feature and its neighbours: what a reader might
 > reasonably assume is inside and isn't. It is a scope decision, knowable now, and it is what stops
-> `/fdd` inferring the bound and inferring it differently each run.
+> `/tm-fdd` inferring the bound and inferring it differently each run.
 >
 > **`Milestone`** is the PRD's: a feature is `M1` when it delivers an `M1` requirement. The `M1`
 > features together must let the persona of the first milestone's scenario reach their goal end to

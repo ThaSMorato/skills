@@ -2,6 +2,7 @@
 name: tidy
 description: 'Make working code simple by Kent Beck''s four rules of Simple Design, as structural changes only: either the code a reviewed ticket changed, or a path of existing code that has tests covering it. Use after $thasmorato-skills:tm-review, or on "tidy / simplify / clean up this ticket", "clean up this file / this area", "leave it cleaner". Not for behavior changes or bug fixes; use tdd for those.'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Make it work, then make it right. `$thasmorato-skills:tm-implement` made the ticket work, and `$thasmorato-skills:tm-review` checked it; this stage makes it **simple**. It is the *After* in Beck's *Tidy First?* (tidy after the behavior ships), because only once the code works can you see the shape it wanted to have.
@@ -71,7 +72,9 @@ Write `.scratch/<feature-slug>/tidy/<NN>-<slug>.md` (in path mode, `.scratch/sta
 ```markdown
 ---
 kind: tidy
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 fixed_point: <ref>
 proposed: {expression: <n>, duplication: <n>, size: <n>}

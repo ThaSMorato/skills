@@ -9,7 +9,7 @@ description: "Review the diff since a fixed point across narrow lenses in parall
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
-> is not `0.6.7`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
+> is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
 **Argument** (the text after the skill name): <fixed point: commit/branch/tag, e.g. main or HEAD~5>
@@ -61,7 +61,9 @@ Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md`, m
 ```markdown
 ---
 kind: review
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
 slug: <NN>-<slug>
 fixed_point: <ref>
 lenses_run: [quality, tests, security, spec, standards, architecture, data, docs, ui]
@@ -88,4 +90,4 @@ The user decides what to fix. Ask it as one structured choice, the cut by severi
 
 **A finding the user declines with a reason that will still hold next time** (a deliberate trade-off, a convention the lens did not know) is offered for `docs/declined.md`, in the format of `references/templates/declined.md`, so the next review does not raise it again. A passing reason is not recorded, and a reason that is really an architectural decision is an ADR (`$thasmorato-skills:tm-adr-generate`). Nothing here edits code: persisting the findings and their verdicts is a record of what was reported, not a change to the work.
 
-Once the findings the user chose are fixed, the next steps are the optional `$thasmorato-skills:tm-tidy <slug> <fixed point>`, then `$thasmorato-skills:tm-acceptance <slug>` (after the last production change), then `$thasmorato-skills:tm-pr <slug> <fixed point>` for the pull request body.
+Once the findings the user chose are fixed, rewrite the ticket's `progress.md` frontmatter for the ticket as it now stands (`unverified`, `failed_deliverables` and `status`, as `$thasmorato-skills:tm-implement` defines them), so `$thasmorato-skills:tm-retro` measures the fixed work and not the work before review. Then the next steps are the optional `$thasmorato-skills:tm-tidy <slug> <fixed point>`, then `$thasmorato-skills:tm-acceptance <slug>` (after the last production change), then `$thasmorato-skills:tm-pr <slug> <fixed point>` for the pull request body.

@@ -1,7 +1,8 @@
 ---
 name: adr-generator
-description: Write a formal ADR (MADR) from a confirmed Potential ADR. Delegate when the user runs /adr-generate <potential> or confirms a Potential ADR to formalize.
+description: Write a formal ADR (MADR) from a confirmed Potential ADR. Delegate when the user runs /tm-adr-generate <potential> or confirms a Potential ADR to formalize.
 tools: Read, Write, Edit, Glob
+effort: medium
 ---
 
 You write one formal ADR in MADR format from a confirmed Potential ADR.
@@ -17,7 +18,7 @@ Your context is isolated; read:
 - `CONTEXT.md` (if present): the glossary.
 
 ## You own the numbering
-This agent is the **only** allocator of ADR numbers. The number is the lowest unused four-digit value across `docs/adr/*.md`: `0001`, `0002`, … Potential ADRs are deliberately unnumbered, so there is one sequence and nothing to reconcile. (`/interview` writes inline ADRs straight into `docs/adr/` and follows the same rule: next free number, four digits.)
+This agent is the **only** allocator of ADR numbers. The number is the lowest unused four-digit value across `docs/adr/*.md`: `0001`, `0002`, … Potential ADRs are deliberately unnumbered, so there is one sequence and nothing to reconcile. (`/tm-interview` writes inline ADRs straight into `docs/adr/` and follows the same rule: next free number, four digits.)
 
 Read the directory immediately before writing, so two runs in the same session do not collide.
 
@@ -35,7 +36,7 @@ Read the directory immediately before writing, so two runs in the same session d
 - If the outcome is undecided, set `status: proposed` and mark `> Needs Input`.
 
 ## Error handling
-If the referenced Potential ADR doesn't exist, stop and report that `/adr-identify` must run first.
+If the referenced Potential ADR doesn't exist, stop and report that `/tm-adr-identify` must run first.
 
 ## Workflow
 1. Read the Potential ADR, existing ADRs, and the template.
