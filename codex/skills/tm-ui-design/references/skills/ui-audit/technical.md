@@ -5,7 +5,7 @@
 Each check reads the running screen and its code. A finding carries what produced the evidence (a capture, a computed value, `file:line`) and what stayed untested.
 
 ## Design-system drift
-Against `docs/design-system.md` when it exists, else against the tokens and components the codebase already defines:
+Against `docs/product/design-system.md` when it exists, else against the tokens and components the codebase already defines:
 - **Hardcoded values** where a token exists: colors, spacing, radii, font sizes, shadows.
 - **The wrong token**: a semantic token used for another meaning (an error color on a brand accent).
 - **A reimplemented component**: a local button, input or modal where the library has one.

@@ -39,7 +39,7 @@ test('every stage skill is out of the menu', () => {
 // plugin's. The CHANGELOG keeps the old names on purpose: it is the history and the migration table.
 test('no file cites a command by its name without the prefix', () => {
   const unprefixed = commandNames.map((name) => name.replace(/^tm-/, ''))
-  const OLD_NAME = new RegExp(`(?<![\\w.:/-])/(${unprefixed.join('|')})(?![\\w/-])`, 'g')
+  const OLD_NAME = new RegExp(`(?<![\\w.:/*>-])/(${unprefixed.join('|')})(?![\\w/-])`, 'g')
   const sources = [
     ...markdownFiles('commands'), ...markdownFiles('skills'), ...markdownFiles('agents'), ...markdownFiles('templates'),
     ...markdownFiles('docs'), ...markdownFiles('adapters'), 'README.md',

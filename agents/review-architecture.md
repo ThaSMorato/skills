@@ -12,8 +12,8 @@ Your input is different from the other reviewers': a dependency cycle is not vis
 ## Inputs
 Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
-- **`docs/boundaries.md`**: the allow-list of edges and the manifest. Without it, most of this lens has nothing to judge against; say so rather than inventing a contract.
-- `docs/components.md`: the component map and the path globs each component owns.
+- **`docs/architecture/boundaries.md`**: the allow-list of edges and the manifest. Without it, most of this lens has nothing to judge against; say so rather than inventing a contract.
+- `docs/architecture/components.md`: the component map and the path globs each component owns.
 - `docs/analysis/dependency-graph.md` (if present): the previous import graph and its `measured_commit`, for comparison. If commits by others landed after that commit, the baseline is stale; say so, and suggest `/tm-reconcile`, rather than blaming this diff for someone else's edge.
 - `docs/guidelines.md`'s routing table → load the stack guide for the files the diff touches. The `architecture` skill tells you to read it before asserting that something should be its own component, and this lens is where that assertion gets made.
 
@@ -25,7 +25,7 @@ Call the Skill tool with `thasmorato-skills:architecture`.
 3. **Direction.** Does the new edge point from a lower level to a higher one, or the reverse? A policy component reaching for a detail is the classic erosion, and it usually arrives one convenient import at a time.
 4. **Detail leaking into policy.** A framework type, an ORM row, an HTTP object or a driver type appearing inside a component marked `policy`.
 5. **Plug points bypassed.** Code reaching around an interface to a concrete implementation the boundary contract deferred.
-6. **Contract compatibility.** Every published contract the diff touches (an API, an event or message schema, a public interface another component or package uses, a CLI's flags or output; the FDD's Public contracts names the feature's own) changes only compatibly, per the `architecture` skill's `contract-compatibility.md`. A removal needs its expand and migrate steps done, and evidence of zero remaining consumers. **This check runs even without `docs/boundaries.md`**: it judges against what consumers depend on, not against the edge contract.
+6. **Contract compatibility.** Every published contract the diff touches (an API, an event or message schema, a public interface another component or package uses, a CLI's flags or output; the FDD's Public contracts names the feature's own) changes only compatibly, per the `architecture` skill's `contract-compatibility.md`. A removal needs its expand and migrate steps done, and evidence of zero remaining consumers. **This check runs even without `docs/architecture/boundaries.md`**: it judges against what consumers depend on, not against the edge contract.
 
 ## Calibration
 These are directions, not scores. A working system violates several structural ideals at once, and listing them all is noise. Report what **this change** made worse, or what it entrenches, not the pre-existing state, unless the diff is what turns it from tolerable into load-bearing.

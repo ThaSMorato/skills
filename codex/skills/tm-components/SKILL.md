@@ -15,13 +15,13 @@ description: "Build the system component map from the HLD, the named parts every
 **Argument** (the text after the skill name): (none): runs once per system; re-run when the HLD changes or $thasmorato-skills:tm-reconcile reports drift
 
 
-Call the `spawn_agent` tool with `agent_type = "tm-component-mapper"` to write `docs/components.md` from `docs/hld.md`.
+Call the `spawn_agent` tool with `agent_type = "tm-component-mapper"` to write `docs/architecture/components.md` from `docs/architecture/hld.md`.
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
 This is the step that closes a real gap in the chain: the HLD is **required** to list components, and until now nothing turned that list into a shared map, so each FDD invented its own carve-up and nobody owned the cross-feature picture.
 
-If `docs/hld.md` doesn't exist, tell the user to run `$thasmorato-skills:tm-hld` first instead of delegating.
+If `docs/architecture/hld.md` doesn't exist, tell the user to run `$thasmorato-skills:tm-hld` first instead of delegating.
 
 After the agent returns, show: the component inventory, which are policy and which are detail, any gaps or overlaps the owns/does-not-own pass surfaced, and, in brownfield, the metrics table, any dependency cycles, and where the code's structure diverges from the HLD's. On a re-run, show what was amended and what moved to `Retired`, with the reconcile item behind each.
 

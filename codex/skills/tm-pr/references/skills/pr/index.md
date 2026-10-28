@@ -15,7 +15,7 @@ Read, do not recall:
 - the review file under `.scratch/<feature-slug>/reviews/`: lenses run, findings and their verdicts;
 - the `trim/` and `tidy/` files, when they exist: which commits are structural;
 - for `Type: bugfix`, the diagnosis: its `loop`, the hypothesis that held, the seam gaps;
-- for consumers of what changed: `docs/components.md`, the review's contract-compatibility findings, and, when dependencies changed, the blast radius in `docs/analysis/dependencies.md`.
+- for consumers of what changed: `docs/architecture/components.md`, the review's contract-compatibility findings, and, when dependencies changed, the blast radius in `docs/analysis/dependencies.md`.
 
 Use the glossary's terms (`CONTEXT.md`), and resolve every id as the `asking` skill says: a reviewer does not have the ticket open.
 

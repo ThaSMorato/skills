@@ -21,17 +21,18 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/analysis/system-profile.md`, `docs/analysis/architecture.md` | brownfield analysis | `/tm-analyze` |
 | `docs/analysis/dependencies.md` | dependency audit | `/tm-audit-deps` |
 | `docs/analysis/dependency-graph.md`, `docs/analysis/reconcile.md` | the measured import graph, and the drift since the documents | `/tm-analyze` first, `/tm-reconcile` after |
-| `docs/requirements-brief.md` + `CONTEXT.md` | interview | `/tm-interview` |
+| `.scratch/<effort>/brief.md` + `CONTEXT.md` | interview | `/tm-interview` |
 | `docs/research/*.md` | research (optional) | `/tm-research` |
-| `docs/prd.md` | PRD | `/tm-prd` |
-| `docs/hld.md` | HLD | `/tm-hld` |
-| `docs/components.md` | component map | `/tm-components` |
-| `docs/features.md` | decomposition | `/tm-decompose` |
+| `docs/product/prd.md` | PRD | `/tm-prd` |
+| `docs/architecture/hld.md` | HLD | `/tm-hld` |
+| `docs/architecture/components.md` | component map | `/tm-components` |
+| `docs/features/README.md` | the feature index: what the system has, and where each feature's living docs are | `/tm-decompose` |
+| `.scratch/<effort>/decomposition.md` | this effort's cut: epics, order, dependencies | `/tm-decompose` |
 | `docs/evolutions.md` | findings kept but traced to no requirement; read it when scope is next revisited | `/tm-decompose`, `/tm-retro` append |
 | `docs/retro/*.md` | what finished work taught about the process | `/tm-retro` |
 | `docs/meta-retro/*.md` | what a working session taught: where the owner corrected, rejected or repeated | `/tm-session-analyze` |
-| `docs/fdd/<feature>.md` | FDD, per feature | `/tm-fdd <feature>` |
-| `docs/boundaries.md` | boundary contract | `/tm-boundaries` |
+| `docs/features/<feature>/fdd.md` | FDD, per feature | `/tm-fdd <feature>` |
+| `docs/architecture/boundaries.md` | boundary contract | `/tm-boundaries` |
 | `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `/tm-adr-identify` → `/tm-adr-generate` |
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `/tm-guidelines`, `/tm-generate-stack-guide` |
 | `docs/guardrails.md` | the repo's installed checks (pre-commit, CI, git guard, dependency linter) and how each was proven | `/tm-guardrails` |
@@ -41,6 +42,8 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/validation/*.md` | doc validation verdicts | `/tm-doc-validate` |
 | `.scratch/<feature>/issues/` | tickets | `/tm-tickets <feature>` |
 | `.scratch/<feature>/tickets-validation.md` | the ticket set's verdict, `clean` or `dirty` | `/tm-tickets-validate <feature>` (the owner runs it after `/tm-tickets`) |
+
+**The old layout.** When the project still has a document at a path `/tm-docs-migrate` lists (a PRD or HLD at the root of `docs/`, an FDD folder, a single features file), it predates the living docs: say so, and name `/tm-docs-migrate` for the owner to run before any stage that writes a document.
 
 **A missing artifact is not automatically a gap.** Before reporting one as missing, check whether a ticket's `Source` records it as a deliberate skip: small work legitimately has no FDD. Report a skip as a skip; offering to generate a document the user consciously declined is how a coordinator teaches people to stop reading it.
 
@@ -96,7 +99,7 @@ Some artifacts are true when written and drift without anyone touching them. The
 
 Say which signal fired, and what it means. A changed lockfile means the audit describes dependencies the project no longer has. An old date means new advisories may exist against the same lockfile, because dependencies drift when the world changes, not only when the code does. An audit without these fields predates them: report its age as unknown and offer the re-run once.
 
-Offer `/tm-reconcile` only when `docs/components.md` exists. A project that does not have its structure documents yet has nothing to reconcile against, and a missing artifact is not automatically a gap.
+Offer `/tm-reconcile` only when `docs/architecture/components.md` exists. A project that does not have its structure documents yet has nothing to reconcile against, and a missing artifact is not automatically a gap.
 
 ## Resolving the argument
 - **No argument** → the whole project. Report what's missing and what's pending approval. This is the most frequent use.
@@ -128,7 +131,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `/tm-analyze` runs fi
 12. `/tm-tickets <feature>` → vertical slices with blocking edges, validated as a set by `/tm-tickets-validate` before the gate. **GATE:** the set must be `clean`, and the tickets-to-seams count is the first thing to read.
 13. Per frontier ticket: `/tm-design` → **GATE** → `/tm-plan` → `/tm-plan-validate` (**GATE:** must be `clean`) → `/tm-implement` (SI by SI, STOP between SIs; recommend `/effort xhigh` before it, the level for demanding agentic code: `max` is not the default, and when `xhigh` falls short the next step is a stronger model, then `max`) → optional `/tm-trim <slug> <fixed-point>`: make the change smaller with the behavior identical, so the review reads less → `/tm-review <fixed-point>` → **GATE** → optional `/tm-tidy <slug> <fixed-point>`: the four rules of Simple Design over what is left → `/tm-acceptance <slug>`: every AC and request part checked in the running software, after the last change to production code → optional `/tm-walkthrough <slug> <fixed-point>`: a lesson over the change with a recall quiz, so the owner understands what merges → `/tm-pr <slug> <fixed-point>`: the PR body (summary as a picture, before/after evidence, merge danger), opened only when the user says so. Both are structural, apply only what the user chooses, and run in every gear that has a review.
     - **Back-edge:** if implementation surfaces a real architectural decision, propose `/tm-adr-identify` and an FDD update, and if it revealed a new axis of change, revisit `/tm-boundaries`. Keep the docs live.
-    - **Screens:** a ticket that builds a new screen with nothing to copy (no Figma, prototype, image or existing page) runs `/tm-ui-design <screen>` before `/tm-design`; a redesign runs `/tm-ui-audit <screen>` first, then `/tm-ui-design`. A screen with a spec in `docs/ui/` goes straight to `/tm-design`.
+    - **Screens:** a ticket that builds a new screen with nothing to copy (no Figma, prototype, image or existing page) runs `/tm-ui-design <screen>` before `/tm-design`; a redesign runs `/tm-ui-audit <screen>` first, then `/tm-ui-design`. A screen with a spec in its feature's `ui/` goes straight to `/tm-design`.
     - **Bugs:** a bug whose cause is not known starts at `/tm-diagnose`, never at a fix. It ends with the cause and the pinned and flipped tests; an obvious fix is then made test-first (Direct), anything larger becomes a `Type: bugfix` ticket whose Source is the diagnosis, through `/tm-design` → `/tm-plan` in the Small gear.
 14. When an epic or a cycle finishes: `/tm-retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught: process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
 15. When a working session ends, whether a whole flow driven through several `/compact`s or a long stretch of work: `/tm-session-analyze`. `/tm-retro` reads the artifacts; this reads what only the conversation holds (the owner correcting, rejecting, repeating), across every compaction segment, and tags each finding `flow` (improve the plugin) or `project` (a skill or guide here). It owns the environment lens: what got in the way (navigation, tool economy, missing information, instructions that did not hold).
@@ -137,6 +140,6 @@ Brownfield is a **modifier on every stage**, not a prefix. `/tm-analyze` runs fi
 ## Parallelism: fan out on reads, stay serial on writes
 - ✅ **Fan out** for documentation, codebase exploration and review: read-only work where agents don't collide and results add up. Already the case for `/tm-review`, independent FDDs, and the `/tm-analyze` component pass.
 - ❌ **Implementation is serial in the main context.** Writes conflict, and the code deserves supervision.
-- 🔀 **Real parallelism happens per epic, in worktrees.** `docs/features.md` carries each epic's parallel-safe set, derived from component overlap, so "can these two run at once" is a lookup, not a guess.
+- 🔀 **Real parallelism happens per epic, in worktrees.** The effort's `decomposition.md` carries each epic's parallel-safe set, derived from component overlap, so "can these two run at once" is a lookup, not a guess.
 
 Each stage reports when it ends, and `/tm-flow` again shows where the project stands and what comes next; the user can stop, redirect, or jump stages at any gate.

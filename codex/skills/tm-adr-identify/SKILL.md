@@ -17,7 +17,7 @@ description: "Sweep the design docs (HLD/FDD/boundaries) for architectural decis
 
 Call the `spawn_agent` tool with `agent_type = "tm-adr-analyzer"` to sweep the design docs for ADR-worthy decisions and write Potential ADRs under `docs/adr/potential/`. Focus: the text after the skill name
 
-If neither `docs/hld.md` nor `docs/fdd/*.md` exists (and this isn't a `--brownfield` run), tell the user to run `$thasmorato-skills:tm-hld` or `$thasmorato-skills:tm-fdd` first.
+If neither `docs/architecture/hld.md` nor `docs/features/*/fdd.md` exists (and this isn't a `--brownfield` run), tell the user to run `$thasmorato-skills:tm-hld` or `$thasmorato-skills:tm-fdd` first.
 
 After the agent returns, show a short summary: the Potential ADRs found (with their Step-0 category or 3-E justification), which came from re-examining the brief's recorded decisions, and any `> Needs Input`.
 

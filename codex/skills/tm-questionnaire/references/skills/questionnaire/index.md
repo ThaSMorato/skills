@@ -20,7 +20,7 @@ Some answers are not with the owner: they are with a PM, another team, legal, a 
 kind: questionnaire
 to: <role or name>
 status: sent
-asks: [<each source it answers: docs/requirements-brief.md#open-questions, docs/prd.md (Needs Input: RF-004), …>]
+asks: [<each source it answers: .scratch/<effort>/brief.md#open-questions, docs/product/prd.md (Needs Input: RF-004), …>]
 ---
 
 # <title>

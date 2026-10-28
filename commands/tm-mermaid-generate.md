@@ -4,7 +4,7 @@ argument-hint: "<feature name or slug>"
 disable-model-invocation: true
 ---
 
-Call the Agent tool with `mermaid-generator` to generate Mermaid diagrams into `docs/diagrams/<feature>.md` from `docs/fdd/<feature>.md` for the feature: $ARGUMENTS
+Call the Agent tool with `mermaid-generator` to generate Mermaid diagrams into `docs/features/<feature>/diagrams/flows.md` from `docs/features/<feature>/fdd.md` for the feature: $ARGUMENTS
 
 If the FDD doesn't exist, tell the user to run `/tm-fdd` first.
 

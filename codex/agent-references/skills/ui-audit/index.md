@@ -14,7 +14,7 @@ Name one screen or one task (a URL or route, the user group, the device class), 
 - **persuade**: a landing or pricing page; attention, belief and one action;
 - **experience**: a portfolio or showcase; the work leads.
 
-Read the context that says what the screen is for: the PRD or FDD and the tickets that built it, `CONTEXT.md` for the domain words, `docs/design-system.md` when it exists, and the stack guide for the UI code.
+Read the context that says what the screen is for: the PRD or FDD and the tickets that built it, `CONTEXT.md` for the domain words, `docs/product/design-system.md` when it exists, and the stack guide for the UI code.
 
 **Done when** the screen, the task, the users, the device classes and the mode are named, and the owner has confirmed the scope.
 

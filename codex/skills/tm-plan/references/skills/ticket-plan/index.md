@@ -8,7 +8,7 @@ user-invocable: false
 Turn one ticket into a **plan** the `implement` loop can execute SI by SI. This skill decides *how* the work is sliced; it does not write production code and it does not make the design decisions.
 
 ## 1. Gather context
-Read the ticket (`.scratch/<feature-slug>/issues/<NN>-<slug>.md` or the reference passed as an argument) plus the docs that constrain it: the **node map** (`.scratch/<feature-slug>/design/<NN>-<slug>.md`), the feature spec (`docs/fdd/*.md`), the boundary contract (`docs/boundaries.md`), the decisions (`docs/adr/*.md`), the repo standard (`docs/guidelines.md`, plus the stack guides its routing table names for the files involved), and the glossary (`CONTEXT.md`). SI names and interface vocabulary come from the glossary; the ADRs, the boundary contract and the guidelines are binding in the area you touch.
+Read the ticket (`.scratch/<feature-slug>/issues/<NN>-<slug>.md` or the reference passed as an argument) plus the docs that constrain it: the **node map** (`.scratch/<feature-slug>/design/<NN>-<slug>.md`), the feature spec (`docs/features/*/fdd.md`), the boundary contract (`docs/architecture/boundaries.md`), the decisions (`docs/adr/*.md`), the repo standard (`docs/guidelines.md`, plus the stack guides its routing table names for the files involved), and the glossary (`CONTEXT.md`). SI names and interface vocabulary come from the glossary; the ADRs, the boundary contract and the guidelines are binding in the area you touch.
 
 **If there is no node map, stop** and tell the user to run `$thasmorato-skills:tm-design <ticket>` first. Do not design inside this skill: the two stages have separate gates, and collapsing them means the user confirms the map and the slicing in one breath, with the map never written down.
 

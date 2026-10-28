@@ -60,4 +60,4 @@ critic_verdict: ship | fix | rebuild
 > What is still undecided, each with who decides.
 
 ## Captures (required)
-> The final captures under docs/ui/<screen-slug>/, by state and width.
+> The final captures under docs/features/<feature>/ui/<screen-slug>/, by state and width.

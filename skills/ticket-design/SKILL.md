@@ -14,10 +14,10 @@ Read, in this order:
 - **The ticket** (`.scratch/<feature-slug>/issues/<NN>-<slug>.md`): what is being built, its acceptance criteria, its exclusions, its seam. One ticket per fresh context, so it will not already be in view.
 - **The FDD** it names: the public contracts, the declared test seams, the error and concurrency behavior.
 - `docs/analysis/components/*.md` (if present): the existing primitives in the components this work touches. This is the file that answers "what already exists" before you design something new.
-- `docs/boundaries.md` (if present): which components this work may touch and which dependency edges are legal.
+- `docs/architecture/boundaries.md` (if present): which components this work may touch and which dependency edges are legal.
 - `docs/adr/*.md` and `docs/guidelines.md`: binding in the area you're touching; load the stack guide the router names for the files involved.
 - `CONTEXT.md`: the vocabulary.
-- `docs/ui/<screen>.md` (if the ticket builds a screen that has one): the screen spec `/tm-ui-design` wrote. Its states, copy, widths and components are decided: the UI nodes implement them, and a node that needs something the spec does not say is an open decision for the owner, not a value to fill in.
+- `docs/features/<feature>/ui/<screen>.md` (if the ticket builds a screen that has one): the screen spec `/tm-ui-design` wrote. Its states, copy, widths and components are decided: the UI nodes implement them, and a node that needs something the spec does not say is an open decision for the owner, not a value to fill in.
 
 ## 2. Read the repository before drawing anything
 Everything above this line is a **document derived from another document**. The chain from the brief down to this map never touches the code, so a wrong assumption made early is elaborated by each stage rather than caught, and every gate downstream checks consistency, which a wrong-but-consistent map passes perfectly.
@@ -71,7 +71,7 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 ## Nodes
 ### <node name>
 - **Kind:** function | class | module | package | slice
-- **Component:** <from docs/components.md>
+- **Component:** <from docs/architecture/components.md>
 - **Interface:** <signature, invariants, ordering, error modes, config, performance>
 - **Depth:** <what it hides>
 - **Grounding:** `reuses <path:line>` · `extends <path:line>` · `new: searched <terms> in <paths>; found nothing`

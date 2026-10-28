@@ -12,8 +12,8 @@ Read, and number every item:
 - the owner's request, from `.scratch/<feature-slug>/request-trace.md` when it exists (every row marked `covered`), or else the request itself (`task.md`, the brief, the message that started the work);
 - every acceptance criterion of the ticket, by id;
 - the plan's **Not verified** list in `progress.md`;
-- when the ticket builds a screen with a spec in `docs/ui/<screen>.md`: each state and each width it lists, checked against its capture;
-- when this ticket delivers the last requirement a **guiding scenario** in `docs/prd.md` was waiting on (every requirement on its steps is now built): **the whole scenario**, as one item, walked from its first step to the persona's goal (`references/skills/interview/scenarios.md`). Separate checks can each pass on a path no user can walk.
+- when the ticket builds a screen with a spec in `docs/features/<feature>/ui/<screen>.md`: each state and each width it lists, checked against its capture;
+- when this ticket delivers the last requirement a **guiding scenario** in `docs/product/prd.md` was waiting on (every requirement on its steps is now built): **the whole scenario**, as one item, walked from its first step to the persona's goal (`references/skills/interview/scenarios.md`). Separate checks can each pass on a path no user can walk.
 
 An item in the request and in an AC is one item: write it once, with both references.
 

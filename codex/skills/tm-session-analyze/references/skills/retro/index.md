@@ -61,7 +61,7 @@ Before proposing that a pattern move into a stack guide, a rule, a check or a sk
 A review finding with the verdict `pre-existing` is real, but in code the diff did not change, so it is nobody's work and it vanishes after the review. Across an epic, those are the most honest map of technical debt the project has: found by the lenses, confirmed by the verifier, and located to `file:line`.
 
 1. **Collect** every `pre-existing` finding in the scope's review files.
-2. **Group them by area**: the component that owns the path (`docs/components.md`), or the directory when there is no component map.
+2. **Group them by area**: the component that owns the path (`docs/architecture/components.md`), or the directory when there is no component map.
 3. **An area is a hotspot** when its findings come from **two or more tickets**. The repetition rule applies here as everywhere: one ticket's `pre-existing` finding is an incident. Where `docs/analysis/components/<c>.md` lists debt for the same area, cite it as corroboration. Where `docs/declined.md` has a `declined` entry covering the area, list the hotspot with that entry instead of proposing it, unless the entry's **Revisit when** has happened; then propose it and cite the entry.
 4. **Propose at most 3 structural tickets**, ranked by **benefit against cost**. Benefit is the severity of the findings times the number of tickets that ran into them; cost is how much the fix touches (files, and whether the use is encapsulated or spread). Each proposal cites the findings it would close (review file and finding) and says why it is structural. The rest of the hotspots are listed, not proposed.
 
@@ -79,7 +79,7 @@ The environment lens belongs to `$thasmorato-skills:tm-session-analyze`, which r
 ## The boundaries of this stage
 - **It reads and records.** Every change it recommends names the stage that owns the file, and that stage makes it.
 - **It describes the work.** The artifacts record what was done, not how well anyone did it; findings are about steps, gates and files.
-- **A wrong decomposition is recorded**, here and in `evolutions.md`; `$thasmorato-skills:tm-decompose` amends `features.md` on its next run.
+- **A wrong decomposition is recorded**, here and in `evolutions.md`; `$thasmorato-skills:tm-decompose` amends the feature index and the effort's decomposition on its next run.
 - **What happened is stated; why, only when written down.** That a slice shipped differently than planned is a fact on disk; its reason is quoted from where it was written, or named as not written down.
 
 ## Workflow

@@ -15,7 +15,7 @@ description: "Generate Mermaid diagrams from an FDD into a single Markdown file.
 **Argument** (the text after the skill name): <feature name or slug>
 
 
-Call the `spawn_agent` tool with `agent_type = "tm-mermaid-generator"` to generate Mermaid diagrams into `docs/diagrams/<feature>.md` from `docs/fdd/<feature>.md` for the feature: the text after the skill name
+Call the `spawn_agent` tool with `agent_type = "tm-mermaid-generator"` to generate Mermaid diagrams into `docs/features/<feature>/diagrams/flows.md` from `docs/features/<feature>/fdd.md` for the feature: the text after the skill name
 
 If the FDD doesn't exist, tell the user to run `$thasmorato-skills:tm-fdd` first.
 

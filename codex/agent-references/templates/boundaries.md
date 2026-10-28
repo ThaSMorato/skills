@@ -58,7 +58,7 @@ An unmarked one is a validation finding (AS-N).
 
 ## Manifest (required)
 > The same contract as a graph, for mechanical checking. Component names must match
-> `docs/components.md` exactly. `allow` is exhaustive: an edge absent from it is a violation.
+> `docs/architecture/components.md` exactly. `allow` is exhaustive: an edge absent from it is a violation.
 
 ```yaml
 components:

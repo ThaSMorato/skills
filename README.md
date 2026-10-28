@@ -27,6 +27,25 @@ A Claude Code plugin implementing an **AI Doc-Dev flow**: from the requirements 
 
 **The dev loop is test-first and gated.** `/tm-design` writes the node map to a file, `/tm-plan` slices a ticket into vertical SIs, `/tm-plan-validate` must report `clean`, and `/tm-implement` runs each SI red → green → refactor (production *and* tests), stopping between SIs so you can `/compact` and resume.
 
+## Where the documents live
+
+The documents describe the **system**, not the task that changed it. A task edits them on its branch, so `main` says what the system does now and the merge applies the change; what belongs to one effort is temporary.
+
+```
+CONTEXT.md                    the glossary
+docs/
+  product/                    prd.md, design-system.md
+  architecture/               hld.md, components.md, boundaries.md, c4/
+  features/README.md          the feature index: what the system has, and where each feature's docs are
+  features/<feature>/         fdd.md, diagrams/, ui/  (living, one folder per feature)
+  adr/                        records: changed only by a new ADR
+  guidelines.md, guardrails.md, analysis/, research/, retro/, …
+.scratch/<effort>/            brief.md, decomposition.md  (die with the effort)
+.scratch/<feature>/           tickets, plans, progress, reviews
+```
+
+A project from before 0.7.0 moves with `/tm-docs-migrate` (temporary), which proposes the map and moves nothing until you approve it.
+
 ## Install
 
 ```bash
@@ -60,7 +79,7 @@ Every command carries the `tm-` prefix (since 0.7.0), so no Claude Code built-in
 
 | Stage | Commands |
 |---|---|
-| Orchestration | `/tm-flow` |
+| Orchestration | `/tm-flow` · `/tm-docs-migrate` (temporary) |
 | Brownfield analysis | `/tm-analyze` · `/tm-audit-deps` |
 | Requirements | `/tm-interview` · `/tm-questionnaire` · `/tm-research` |
 | Documentation | `/tm-prd` · `/tm-hld` · `/tm-fdd` · `/tm-doc-validate` |

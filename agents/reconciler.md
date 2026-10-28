@@ -10,8 +10,8 @@ You measure the structure **as it is now** and compare it with what the document
 ## Inputs
 Your context is isolated; read:
 - `docs/analysis/dependency-graph.md` (if present): the **previous** measurement and its `measured_commit`.
-- `docs/components.md`: the component map, with its permanent ids.
-- `docs/boundaries.md` (if present): the allow-list and the manifest.
+- `docs/architecture/components.md`: the component map, with its permanent ids.
+- `docs/architecture/boundaries.md` (if present): the allow-list and the manifest.
 - `docs/guidelines.md` → the stack guide for each language, for what the packaging unit is.
 - The repository and its history, read-only (`git log`, `git diff`, `git blame`).
 - `${CLAUDE_PLUGIN_ROOT}/templates/dependency-graph.md`: the skeleton for the new measurement.
