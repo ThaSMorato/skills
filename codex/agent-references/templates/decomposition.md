@@ -48,7 +48,10 @@ of the marker starts with `> `.
 > The features this effort builds or changes, by their index id. Every feature belongs to exactly one
 > epic. Keep features comparable in size within an epic.
 >
-> **`Depends on`** records cross-feature blocking: F4 cannot start until F2's schema lands. These
+> **`Depends on`** records cross-feature blocking: F4 cannot start until F2's schema lands. Each edge
+> says **what crosses it**, `F2 (consumes: video file path, duration)`: every consumed item becomes an
+> integration criterion in the consumer's criteria, with its own test, so the contract between the two
+> features is checked rather than assumed. These
 > edges are **coarse and advisory**: `$thasmorato-skills:tm-tickets` owns the authoritative blocking graph at ticket
 > level. What they exist for is the effort-wide view, which ticket edges cannot give because
 > `$thasmorato-skills:tm-tickets` reads one FDD at a time and can never see across features.
@@ -60,7 +63,7 @@ of the marker starts with `> `.
 
 | Feature | Epic | Milestone | Depends on | New or changed |
 |---|---|---|---|---|
-| **F1**: <slug> | E1 | M1 | <feature ids, or none> | new \| changes F1's living docs |
+| **F1**: <slug> | E1 | M1 | <F2 (consumes: <what F1 reads from F2>), or none> | new \| changes F1's living docs |
 
 ## Requirement coverage (required)
 > The omission direction: every RF/RNF in this effort's scope (the requirements `scope.md` lists as

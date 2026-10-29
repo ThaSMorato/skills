@@ -127,6 +127,30 @@ Built as a stack, one PR per wave; nothing merges before the release.
 - **Research trigger** (item 11): two plausible ways and no source that chooses stop the plan with a
   `> Needs Input:` that names `/tm-research`. `scripts/plan-loop.test.mjs` holds the wave.
 
+### Wave C1b: what goes into the plan
+
+- **The docs of the installed version** (items 5, 13): one rule, `skills/ticket-design/library-docs.md`,
+  read by `ticket-design`, `ticket-plan`, `researcher` and `generate-stack-guide`: the version comes from
+  the lockfile, a reference already kept for it is reused, then a documentation tool that takes a
+  version, then the installed package's own files. What was read is kept per project and per version
+  in `docs/research/libraries/<library>@<version>.md` (`templates/library-reference.md`).
+- **`researcher` reads the ADRs and the lockfile before searching** (item 12).
+- **The contract between features** (item 76): each `Depends on` edge says what it consumes; every
+  consumed item becomes an integration criterion of the consumer; `tickets-validate` reports an edge
+  with nothing consumed, or a consumed item no AC checks.
+- **`/tm-design` and `pattern-scout`** (item 104): no parallel search or backup wake-up while the
+  scout runs; the scout brings the layout technique and the closest sibling rule; every new import is
+  a dependency edge checked against the boundaries; a missing component id stops at `/tm-components`;
+  inherited behavior is an explicit decision; the gate shows the main artifact's skeleton.
+- **Scope drift** (item 105): `request-trace.md` pins the request's `source_sha256` and mtime, and
+  `/tm-flow`, `review-spec` and `plan-validate` check it; the trace is walked both ways; `fdd-writer`
+  marks a rule the task does not ask for; a `Decided` on an approved document rewrites every mention.
+- **`bugfix` means a cause to find** (item 106): visual conformity and QA are behavioral; `ticket-plan`
+  stops on a bugfix with no diagnosis; `/tm-flow` picks the gear after `/tm-diagnose`.
+- **Findings that come back** (item 107): the plan reads earlier tickets' unresolved findings in the
+  files it touches, and `/tm-review` hands the lenses the confirmed, unfixed ones.
+  `scripts/plan-inputs.test.mjs` holds the wave.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |

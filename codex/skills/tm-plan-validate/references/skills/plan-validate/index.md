@@ -16,6 +16,7 @@ Read the plan, and everything it is accountable to:
 - **the node map** at the `design:` path: the modules, interfaces and seams the plan is supposed to encode;
 - **the FDD** the ticket names: the declared test seams and the public contracts;
 - **the ADRs, the boundary contract and the guidelines** binding in the area;
+- **the request trace** (`.scratch/<feature-slug>/request-trace.md`), when it exists: every part this ticket covers is owned by an SI through its AC, and every SI traces back to a part or a criterion; a gap either way is `CV` or `IV`, and a source whose hash moved is `IC`;
 - **the repository**: the scripts and the CI the Deliverables name, the installed source of every framework or library a test relies on, and the existing tests the plan cites as proof. This stage judges the plan against the code, not only against the documents above it.
 
 ## Checks

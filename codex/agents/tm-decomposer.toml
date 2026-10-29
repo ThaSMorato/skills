@@ -47,7 +47,7 @@ These are two different questions, and only one of them is about components.
 Keep epics comparable in size to each other, and features comparable within an epic. Size drift starts here: a ticket is sized relative to its feature, so a feature three times its neighbours produces tickets that look inconsistent no matter how carefully they are written.
 
 ## Features: cross-feature edges, and whose graph is authoritative
-Fill `Depends on` when a feature genuinely cannot start until another lands. These edges exist for one reason: **nothing else in the flow can see across features.** `$thasmorato-skills:tm-tickets` reads one FDD at a time, so its blocking graph (which is the authoritative one, at ticket level) is necessarily per-feature. A dependency between F2 and F4 has nowhere else to be written down.
+Fill `Depends on` when a feature genuinely cannot start until another lands, and name what crosses the edge: `F2 (consumes: video file path, duration)`. An edge that names nothing consumed is a blocker nobody can check. These edges exist for one reason: **nothing else in the flow can see across features.** `$thasmorato-skills:tm-tickets` reads one FDD at a time, so its blocking graph (which is the authoritative one, at ticket level) is necessarily per-feature. A dependency between F2 and F4 has nowhere else to be written down.
 
 Say plainly, in the table's intro, that these edges are coarse and advisory. Two graphs stating one rule agree right up until they don't, and the ticket graph is the one the code phase acts on.
 

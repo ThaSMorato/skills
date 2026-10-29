@@ -8,7 +8,9 @@ user-invocable: false
 Turn one ticket into a **plan** the `implement` loop can execute SI by SI. This skill decides *how* the work is sliced; it does not write production code and it does not make the design decisions.
 
 ## 1. Gather context
-Read the ticket (`.scratch/<feature-slug>/issues/<NN>-<slug>.md` or the reference passed as an argument) plus the docs that constrain it: the **node map** (`.scratch/<feature-slug>/design/<NN>-<slug>.md`), the feature spec (`docs/features/*/fdd.md`), the boundary contract (`docs/architecture/boundaries.md`), the decisions (`docs/adr/*.md`), the repo standard (`docs/guidelines.md`, plus the stack guides its routing table names for the files involved), and the glossary (`CONTEXT.md`). SI names and interface vocabulary come from the glossary; the ADRs, the boundary contract and the guidelines are binding in the area you touch.
+Read the ticket (`.scratch/<feature-slug>/issues/<NN>-<slug>.md` or the reference passed as an argument) plus the docs that constrain it: the **node map** (`.scratch/<feature-slug>/design/<NN>-<slug>.md`), the feature spec (`docs/features/*/fdd.md`), the boundary contract (`docs/architecture/boundaries.md`), the decisions (`docs/adr/*.md`), the repo standard (`docs/guidelines.md`, plus the stack guides its routing table names for the files involved), and the glossary (`CONTEXT.md`). A library or framework behavior the plan leans on is read in the version the repo installs, by `references/skills/ticket-design/library-docs.md`. SI names and interface vocabulary come from the glossary; the ADRs, the boundary contract and the guidelines are binding in the area you touch.
+
+**Read what earlier tickets left open.** For every earlier ticket of this feature with a review (`.scratch/<feature-slug>/reviews/*.md`), read its Resolutions and the findings deferred or left unfixed: one that lands in a file this plan touches is handled by an SI here or named as still deferred, never rediscovered by the next review.
 
 **When `plan.md` already exists**, this is a re-entry. Read its `validation.md` first:
 - `dirty`: revise the plan against the open findings, without asking whether to; that is what the verdict is for.
@@ -16,6 +18,8 @@ Read the ticket (`.scratch/<feature-slug>/issues/<NN>-<slug>.md` or the referenc
 - `progress.md` shows SIs done: the plan is **in execution**. Done SIs are frozen: never renumber, rewrite or delete them. An amendment adds an SI after the last id (`SI-5`) or edits a pending one, the Dependency Map and the AC coverage follow, and `revision` goes up by one. A change a done SI would need is a new SI that changes that code again.
 
 Every amendment invalidates the verdict (its `plan_sha256` stops matching), so the next step is `$thasmorato-skills:tm-plan-validate` again.
+
+**A `bugfix` ticket with no diagnosis stops here:** when its `type` is `bugfix` and no `.scratch/<feature-slug>/diagnoses/` file with `status: cause-found` is its Source, tell the owner to run `$thasmorato-skills:tm-diagnose` first; planning a fix for an unknown cause plans a guess.
 
 **If there is no node map, stop** and tell the user to run `$thasmorato-skills:tm-design <ticket>` first. Do not design inside this skill: the two stages have separate gates, and collapsing them means the user confirms the map and the slicing in one breath, with the map never written down.
 

@@ -7,6 +7,11 @@ description: "Break one ticket into a validated implementation plan, vertical SI
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
 
+> **Codex setup.** This stage spawns plugin subagents. Before anything else, read
+> `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
+> is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
+> Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
+
 **Argument** (the text after the skill name): <ticket file/number, or the work to plan> [amend "<the change>"]
 
 
