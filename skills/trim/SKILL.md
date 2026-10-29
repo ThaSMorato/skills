@@ -34,6 +34,8 @@ Each criterion shrinks what the next one has to look at, so walk them in this or
 ## 1. Propose
 **Read `docs/declined.md` first**, when it exists (`${CLAUDE_PLUGIN_ROOT}/templates/declined.md` has its format). A proposal that matches a `declined` entry (the same kind of move, over a scope the entry covers) is not proposed again unless its **Revisit when** has happened; say which entries suppressed what (*"skipped 2, per D-004 and D-011"*), so a suppression is never silent.
 
+**Before proposing**, run the checks the `tidy` skill's Propose step lists (the complexity gate, the owner's written rules, the schema's nulls, the helper in its proposed form, no visible output change, no function only the tests call). Reuse has one more: when the primitive lives where the new code cannot import it (inside another module, below a boundary), consider **moving the value down so both import it** before dropping the reuse; it is a cut only when the diff ends smaller.
+
 Measure the diff first (files created, files modified, lines added and removed), then walk the criteria. Each proposal carries:
 - **the criterion**;
 - **the evidence**: `file:line` of the hunk; for trace, which SIs and ACs were checked and why none covers it; for reuse, the existing primitive's `file:line` and why its contract matches;

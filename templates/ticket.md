@@ -26,6 +26,7 @@ acs: <the number of AC-N lines below>
 
 ## Metadata (required)
 - **Status:** ready | blocked | in progress | done
+- **Tracker:** <the issue's id or URL in the tracker, or `none (local only)`>
 - **Source:** <[FDD](../../../docs/features/<feature>/fdd.md) + [criteria](../../<effort>/criteria/<feature>.md): the FDD and the criteria this slice comes from, as relative links; or `direct (<gear> gear, no FDD): <why>` when the flow deliberately skipped one; for a bugfix, the diagnosis: `.scratch/.../diagnoses/<slug>.md`>
 - **Components touched:** <names from docs/architecture/components.md, or `unknown, no component map`>
 

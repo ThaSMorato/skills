@@ -21,8 +21,8 @@ Read the ticket (or the work the user points to) plus the node map, the FDD, the
 
 **Re-entry:** when the plan exists, read its `validation.md` first: a `dirty` one is revised against its findings without asking. With `amend "<the change>"`, or when `progress.md` shows SIs done, the plan is amended in place: done SIs are frozen, a new SI takes the next id, `revision` goes up.
 
-**Preflight:** the node map must exist at `.scratch/<feature-slug>/design/<NN>-<slug>.md`. If it doesn't, stop and tell the user to run `$thasmorato-skills:tm-design <ticket>` first; designing inside this command collapses two gates into one and leaves the design contract unwritten.
+**Preflight:** the node map must exist at `.scratch/<feature-slug>/design/<NN>-<slug>.md`. If it doesn't, stop and tell the user to run `$thasmorato-skills:tm-design <ticket>` first; designing inside this command collapses two gates into one and leaves the design contract unwritten. Then run `node "references/scripts/blocker-state.mjs" <ticket file>`: a blocker that is not `merged` or `done` is said before slicing, with its state.
 
 Slice the work into vertical Step Implementations, coarse by default (1 to 3 at small gear), each acceptance criterion owned by id, confirm the granularity and seams with the user (record their choice in `## Slicing`), and write the plan to `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`.
 
-Then tell the user to run `$thasmorato-skills:tm-plan-validate <slug>` before implementing.
+Then tell the user to run `$thasmorato-skills:tm-plan-validate <slug>` before implementing. The report names one next command: a plan of one SI has one start, not one for the plan and another for its SI.
