@@ -1455,6 +1455,23 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
 
 - `agents/reviewer.md` — replaced by the six `review-*` lenses.
 - The self-contained constraint on `docs/guidelines.md`. It was decided before per-technology guides existed; referencing them is now the point. Generated project artifacts still reference nothing outside the project, and the plugin as shipped remains self-contained.
+### Wave H: parallel sessions
+
+- **A second copy of the project has a page.** `/tm-guidelines` also writes
+  `docs/parallel-sessions.md` (new template): the ports each session takes, one database per session,
+  an env file per worktree (variable names only, never a value), the automations that must take the
+  port or the name, and how `.scratch` reaches a worktree. What the repo does not show is asked, row
+  by row. `/tm-implement` in a linked worktree records its port and database from it.
+- **`/tm-flow` reads every worktree.** `scripts/worktrees.mjs` lists them with the `progress.md` each
+  holds, and tells a `.scratch` linked to the main one (read once) from a copy (read from the copy).
+  The ticket matrix gains a worktree column.
+- **Worktrees are printed only when the owner asks.** Before an epic's parallel-safe tickets, the
+  coordinator asks: print the commands, the owner's own tool, or one at a time. Printing gives the
+  `git worktree add -b` line per ticket and the `.scratch` step (none, a link, or a copy to bring back),
+  and runs nothing.
+- **After a merge that resolved a conflict** (`skills/implement/after-merge.md`): install what the
+  other branch brought, regenerate what is generated, rerun the area, and recheck the acceptance of
+  every criterion it touched. The implement preflight, the `/tm-pr` preflight and `/tm-flow` cite it.
 
 ## 0.2.0
 

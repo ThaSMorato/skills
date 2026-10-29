@@ -7,6 +7,11 @@ description: "Drive the Doc-Dev flow; scan where the project stands, report what
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
 
+> **Codex setup.** This stage spawns plugin subagents. Before anything else, read
+> `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
+> is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
+> Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
+
 **Argument** (the text after the skill name): (none): whole project · or <feature/ticket/goal> to scope to one thing
 
 
@@ -55,13 +60,17 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 **A missing artifact is not automatically a gap.** Before reporting one as missing, check whether a ticket's `Source` records it as a deliberate skip: small work legitimately has no FDD. Report a skip as a skip; offering to generate a document the user consciously declined is how a coordinator teaches people to stop reading it.
 
 ### Phase 2: a matrix, not a stage
-Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which sub-stage it stopped at*. Build this table from the sibling artifacts:
+Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which sub-stage it stopped at*.
 
-| ticket | design | plan | validate | implement | review |
-|---|---|---|---|---|---|
-| `01-auth` | ✅ | ✅ | ✅ clean | 3/5 SIs | - |
-| `02-profile` | ✅ | ✅ | ⚠️ dirty | - | - |
-| `03-billing` | - | - | - | - | - |
+**Every worktree first.** Run `node "references/scripts/worktrees.mjs"`: it lists the repository's worktrees, each with its branch, how its `.scratch` got there (`tracked`, `shared` through a link to the main one, `copy`, `none`) and the `progress.md` files it holds. A ticket in progress in another worktree is in progress there, not `not started` here: its cells come from that worktree's `.scratch`, and the worktree column names it (`main` for the main one). A `copy` that is ahead of the main `.scratch` says so: its ticket's `plans/<NN>-<slug>/` returns to the main worktree when the ticket ends.
+
+Build this table from the sibling artifacts:
+
+| ticket | worktree | design | plan | validate | implement | review |
+|---|---|---|---|---|---|---|
+| `01-auth` | main | ✅ | ✅ | ✅ clean | 3/5 SIs | - |
+| `02-profile` | `../app-02-profile` | ✅ | ✅ | ⚠️ dirty | - | - |
+| `03-billing` | - | - | - | - | - | - |
 
 - **design**: `.scratch/<feature>/design/<NN>-<slug>.md` exists
 - **plan**: `plans/<NN>-<slug>/plan.md` exists
@@ -69,7 +78,9 @@ Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which
 - **implement**: `progress.md`'s `sis_done`/`sis_total` frontmatter (a `progress.md` without frontmatter predates it; read the count from the body and say so)
 - **review**: `.scratch/<feature>/reviews/<NN>-<slug>.md` exists; its `verdicts` say how many findings the verifier confirmed
 
-The **frontier** is the tickets whose blockers are all `done`, crossed with where each stopped.
+The **frontier** is the tickets whose blockers are all `done`, crossed with where each stopped. When two or more frontier tickets sit in epics that are parallel-safe with each other, the report ends with the worktree question of the Parallelism section below, asked as a structured choice, before the next stage.
+
+The worktree column is kept whenever the repository has more than one worktree, even when every ticket lives in the main one: it is how the owner sees that nothing runs elsewhere.
 
 ### Then report
 **The request may have moved.** At every gate, compare the trace's `source_sha256` with the source's hash now; when it changed, show what changed (`git diff` of the source when it is tracked, else the two texts side by side) and ask whether the tickets follow it, before anything else. Before reporting a ticket done, its request-trace parts all have a ticket or an owner decision, and its acceptance record's `verified_at` is current (no change outside the tests and `docs/` since); say which is missing otherwise.
@@ -148,6 +159,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
 ## Parallelism: fan out on reads, stay serial on writes
 - ✅ **Fan out** for documentation, codebase exploration and review: read-only work where agents don't collide and results add up. Already the case for `$thasmorato-skills:tm-review`, independent FDDs, and the `$thasmorato-skills:tm-analyze` component pass.
 - ❌ **Implementation is serial in the main context.** Writes conflict, and the code deserves supervision.
-- 🔀 **Real parallelism happens per epic, in worktrees.** The effort's `decomposition.md` carries each epic's parallel-safe set, derived from component overlap, so "can these two run at once" is a lookup, not a guess.
+- 🔀 **Real parallelism happens per epic, in worktrees.** The effort's `decomposition.md` carries each epic's parallel-safe set, derived from component overlap, so "can these two run at once" is a lookup, not a guess. When the frontier holds unblocked tickets (by `blocker-state.mjs`) in epics that are parallel-safe with each other, say so and ask, with a structured choice, whether to prepare their worktrees: **print the commands**, **I make worktrees with my own tool** (an owner may manage worktrees of their own, with another tool that also opens the sessions), or **one ticket at a time, here**. Only on the first, run `node "references/scripts/worktrees.mjs" add <ticket file>... [--base <ref>]` and print what it returns: per ticket, the `git worktree add -b <feature>/<NN>-<slug> <path> <base>` line and the `.scratch` step (none when tracked, a link, or a copy whose folder comes back when the ticket ends); then the per-session steps of `docs/parallel-sessions.md` (env file, port, database), or a line that the page is missing and `$thasmorato-skills:tm-guidelines` writes it. **Print, never run.** The owner runs them, opens a session in each worktree and types `$thasmorato-skills:tm-implement` there; this command stops.
+- 🔁 **Isolation moves the conflict to the merge; it does not remove it.** A ticket whose branch merged or rebased with a resolved conflict owes the steps of `references/skills/implement/after-merge.md` (install, regenerate, rerun the area, recheck acceptance) before it is reported done: name the ones still owed.
 
 Each stage reports when it ends, and `$thasmorato-skills:tm-flow` again shows where the project stands and what comes next; the user can stop, redirect, or jump stages at any gate.

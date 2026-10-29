@@ -20,6 +20,7 @@
 | `boundaries.md` | `boundary-architect` | `docs/architecture/boundaries.md` |
 | `adr.md` | `adr-generator` | `docs/adr/NNNN-<slug>.md` |
 | `guidelines.md` | `guideline-generator` | `docs/guidelines.md` (a **router**, ≤150 lines) |
+| `parallel-sessions.md` | `guideline-generator` | `docs/parallel-sessions.md` (how a second session runs at once: ports, database, env file, `.scratch`) |
 | `ui-spec.md` | `/tm-ui-design` | `docs/features/<feature>/ui/<screen>.md` |
 | `design-system.md` | `/tm-ui-design` (only when the project has a design system) | `docs/product/design-system.md` |
 | `ticket.md` | `/tm-tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
