@@ -42,6 +42,7 @@ kind: progress
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 model: <the model id your harness reports for this session; `unknown` when it does not say>
 harness: <claude-code | codex>
+effort: <the effort level your harness reports for this session (`/effort`); `unknown` when it does not say>
 codex_thread: <the Codex thread id, to resume with `codex resume`; omit when the harness is claude-code>
 slug: <NN>-<slug>
 status: in_progress | completed

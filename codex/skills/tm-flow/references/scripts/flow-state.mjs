@@ -69,6 +69,7 @@ function readTicket({ feature, slug, path, root, copies }) {
     review: frontmatterOf(at('reviews', `${slug}.md`)),
     acceptance: frontmatterOf(at('acceptance', `${slug}.md`)),
     pr: existsSync(at('prs', `${slug}.md`)),
+    pr_record: frontmatterOf(at('prs', `${slug}.record.md`)),
   }
 }
 

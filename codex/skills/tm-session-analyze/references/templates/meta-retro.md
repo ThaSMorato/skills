@@ -18,6 +18,7 @@ owner_turns: <n read>
 findings: {flow: <n>, repo-skill: <n>, repo-code: <n>}
 promotable: <n repo-skill findings that passed the promotion filter>
 repeated: <n findings seen in more than one segment>
+cost: {minutes: <n>, idle_minutes: <n>, tool_calls: <n>, invocations: <n>, other_answers: <n>, clarifications: <n>, overrules: <n>}
 ---
 
 # Meta-retro: session <session id>
@@ -52,6 +53,16 @@ repeated: <n findings seen in more than one segment>
 
 | Category | Evidence (segment · tool calls or owner turn) | Tactical cost | Strategic change | Mechanical / judgement | Where it lands |
 |---|---|---|---|---|---|
+
+## Cost by stage (required)
+> From the extract's `index.md`, copied, not estimated: per stage (the owner's invocation to the next),
+> active minutes (pauses over 30 minutes are idle), tool calls, invocations (a stage re-run is the owner
+> restarting it), answers outside the options, questions rejected to clarify, overruled recommendations.
+> Wasted calls come from the segment analysts' tool-economy signals, with their segment. In Codex, the
+> answer columns are `not measured`.
+
+| Stage | Minutes | Idle | Tool calls | Invocations | Other answers | Clarifications | Overrules | Wasted calls (segment) |
+|---|---|---|---|---|---|---|---|---|
 
 ## What the conversation couldn't tell me (required)
 > Segments too thin to judge, tool results that were dropped by design, anything a reader might

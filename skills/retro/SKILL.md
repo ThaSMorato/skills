@@ -41,6 +41,8 @@ The counts come from fields each stage writes for exactly this purpose: the tick
 
 **Group the measurements by `plugin_version`**, the field every measured artifact records. Work done on two versions of the plugin is two populations: summing them hides exactly the change a new version was meant to make. An artifact without the field predates it; group it as `unknown`. **Then by `model` and `harness`**, the same way: who wrote a plan, an implementation or a review is a population too, and a review is read against the pair it closes (the `progress.md`'s author, the review's reviewer), so a cross-harness review is never summed with a same-model one. An artifact without them predates them; group it as `unknown`.
 
+**The cost of each ticket.** Sum the minutes and tool calls per ticket from the **Cost by stage** rows of the `docs/meta-retro/` reports in scope: a row belongs to the ticket its invocation names (`tm-implement 02-export`), and a row that names no ticket stays a session total. Beside it, the `model` and `effort` the ticket's `progress.md` records, and `ci_red_after_open` from its pull request record (`prs/<NN>-<slug>.record.md`; `pending` is said as pending). A ticket no analyzed session covers has its cost `not measured`.
+
 Then read the **Measurements** section of the most recent earlier `docs/retro/*.md` and put its totals beside this one's, version by version. One retro is a snapshot; the comparison, on the same version or across versions, is what shows whether a change to the flow did anything.
 
 ## Two outputs, two subjects

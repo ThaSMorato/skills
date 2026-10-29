@@ -29,6 +29,7 @@ const producers = {
   'ui-spec': 'templates/ui-spec.md',
   'design-system': 'templates/design-system.md',
   'meta-retro': 'templates/meta-retro.md',
+  pr: 'skills/pr/SKILL.md',
 }
 
 for (const [kind, path] of Object.entries(producers)) {
