@@ -151,6 +151,28 @@ Built as a stack, one PR per wave; nothing merges before the release.
   files it touches, and `/tm-review` hands the lenses the confirmed, unfixed ones.
   `scripts/plan-inputs.test.mjs` holds the wave.
 
+### Wave C2a: the implement loop
+
+- **`test-runner`** (new agent, effort low; item 1): `/tm-implement` runs every test, type-check, lint
+  and build command through it and reads only the summary (counts, each failure with its assertion
+  and first project stack line, `new` or `already failing`, the rerun command).
+- **A baseline before the first SI** (items 74, 108): the type check and the suites run once,
+  their failures go to `progress.md` (`## Baseline`, `baseline_failures`), and they never spend an
+  SI's attempts or count as `failed_deliverables`.
+- **Preflight** (items 3, 108): the dependencies match the lockfile; the branch is current with its
+  base (one named stash when the base touched the same files); what the owner allows this run is
+  recorded under `## Workspace`.
+- **Each SI** keeps the diff to what it asks and ends only at its close-out, never at a status message
+  (item 96); a small adaptation goes on its `Deviation:` line, which `review-spec` reads (item 75); the
+  stop suggests the `/compact keep: … drop: …` text (item 4).
+- **Escalation** (item 108) classifies the block (`doc`, `SI`, `environment`), names a failing tool or
+  MCP server, and does not count a diagnostic probe as an attempt; a wait outside the run has a
+  deadline; a message from the owner mid-run gets a one-line answer.
+- **Final verification** (items 2, 108) runs every test file the plan names, reruns only what was
+  edited since the last green, sends a test green only on the rerun to `diagnose`, and runs a **build
+  smoke test** of the built artifact with its runtime files. `scripts/implement-loop.test.mjs` holds the
+  wave.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |
