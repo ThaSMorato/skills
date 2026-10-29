@@ -57,8 +57,8 @@ Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which
 | `03-billing` | - | - | - | - | - |
 
 - **design**: `.scratch/<feature>/design/<NN>-<slug>.md` exists
-- **plan**: `plans/<NN>-<slug>/tm-plan.md` exists
-- **validate**: `validation.md`'s `status:` frontmatter
+- **plan**: `plans/<NN>-<slug>/plan.md` exists
+- **validate**: `validation.md`'s `status:` frontmatter, and its `plan_sha256` against the plan's current hash (`shasum -a 256 plan.md`): a mismatch shows as ⚠️ stale, because the plan changed after the verdict
 - **implement**: `progress.md`'s `sis_done`/`sis_total` frontmatter (a `progress.md` without frontmatter predates it; read the count from the body and say so)
 - **review**: `.scratch/<feature>/reviews/<NN>-<slug>.md` exists; its `verdicts` say how many findings the verifier confirmed
 

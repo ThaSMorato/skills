@@ -40,6 +40,8 @@ A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)
 ## The anchor: tickets ≈ seams
 **The number of tickets should be close to the number of distinct seams they cross.** Seven tickets over two seams means five of them are slicing *within* a seam, and that is the plan's job, one level down. This is a count, not a judgment, and it is the check that catches the over-split set that every ceiling lets through. Report the two numbers in the verdict even when they match.
 
+**A slicing the owner decided is settled.** When `request-trace.md` carries a `## Slicing` with a `> Decided:`, `SZ`, `SM` and `DS` do not raise an issue that would undo it: write what they would have said under `## Notes`, without an id. `DS` never runs at `gear: small`. The other checks apply in full.
+
 `SM` and `DS` cover the two directions. `SM` catches a set cut too fine. `DS` catches a set that is out of scale with itself, including five huge tickets on five distinct seams, which `SM` alone would pass.
 
 ## The floor, stated as rejection tests

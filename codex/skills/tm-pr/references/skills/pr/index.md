@@ -65,4 +65,4 @@ Everything in the plan's **Not verified** list, and every diagnosis seam gap, go
 **Done when** the door names its reason and the blast radius names who is affected.
 
 ## Output
-Write the body to `.scratch/<feature-slug>/tm-pr.md`. Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/tm-pr.md`).
+Write the body to `.scratch/<feature-slug>/pr.md`. Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/pr.md`).

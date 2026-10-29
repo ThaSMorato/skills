@@ -8,12 +8,12 @@ user-invocable: false
 Execute a plan **SI by SI**. The plan is the contract; this skill follows the technical decisions, it does not make them. An SI is done only when its code exists **and** (if it has a Tests section) its tests pass. The next SI never starts until the current one is done and the user says go.
 
 ## Input
-`$thasmorato-skills:tm-implement <slug> [continuous]` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/tm-plan.md`. If missing, abort: *"No plan at <path>. Run $thasmorato-skills:tm-plan then $thasmorato-skills:tm-plan-validate first."*
+`$thasmorato-skills:tm-implement <slug> [continuous]` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`. If missing, abort: *"No plan at <path>. Run $thasmorato-skills:tm-plan then $thasmorato-skills:tm-plan-validate first."*
 
 Default mode **pauses after every SI** (this is what lets the user `/compact` between steps). Continuous mode (only when the user asks for it upfront: "run all", "autopilot", "don't pause") skips the pause.
 
 ## Preflight: before touching code
-- **Validation gate:** read the sibling `validation.md`. If it is missing or `status: dirty`, abort: *"Plan is not clean. Run $thasmorato-skills:tm-plan-validate <slug>."* This gate is non-negotiable.
+- **Validation gate:** read the sibling `validation.md`. If it is missing or `status: dirty`, abort: *"Plan is not clean. Run $thasmorato-skills:tm-plan-validate <slug>."* Then compare its `plan_sha256` with `shasum -a 256 plan.md`: a mismatch means the plan changed after it was validated, so abort the same way, naming the change (*"plan.md changed since validation (revision <validated> → <now>)"*). A `validation.md` with no `plan_sha256` predates the check: say so and continue. This gate is non-negotiable.
 - **Branch check:** `git status` + current branch. If on the trunk (`main`/`master`/`dev`) or the tree is dirty with unrelated changes, stop and ask the user to set up the branch.
 - **Plan sanity:** the plan has Step Implementations, a Dependency Map, and Deliverables. If malformed, stop and report.
 - **Resume check:** look for the sibling `progress.md`. If present, read `sis_done` / `sis_total` from its frontmatter and which SIs are marked done, and tell the user: *"Found progress: X/Y SIs done. Resuming at SI-Z."* Then read its `## Learned` section: it is what earlier SIs found out about this codebase, and a fresh context after `/compact` has no other way to know it.
