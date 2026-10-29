@@ -48,15 +48,16 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 
 ## 5. Commands (required)
 > The real commands this repo runs, discovered from its own manifests, not the ecosystem's defaults.
-> Plans reference these verbatim in their Deliverables.
+> Plans reference these verbatim in their Deliverables. `Runs in` says where each works; a
+> container-only command is written as its full call from the host (`docker compose exec api pnpm test`).
 
-| Purpose | Command |
-|---|---|
-| Test | |
-| Type-check | |
-| Lint | |
-| Build | |
-| Run locally | |
+| Purpose | Command | Runs in |
+|---|---|---|
+| Test | | <host \| container <service> \| either> |
+| Type-check | | |
+| Lint | | |
+| Build | | |
+| Run locally | | |
 
 ## 6. Project documents (required)
 > The rest of the docs, and when each one is worth loading.

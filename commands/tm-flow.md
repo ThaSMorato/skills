@@ -35,6 +35,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/architecture/boundaries.md` | boundary contract | `/tm-boundaries` |
 | `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `/tm-adr-identify` or `/tm-adr-propose` → `/tm-adr-generate` |
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `/tm-guidelines`, `/tm-generate-stack-guide` |
+| `docs/validation/steering.md` | whether the repo's instruction files (CLAUDE.md, AGENTS.md, rules, guides, router) agree with each other, `clean` or `dirty` | `/tm-steering-validate` |
 | `docs/guardrails.md` | the repo's installed checks (pre-commit, CI, git guard, dependency linter) and how each was proven | `/tm-guardrails` |
 | `docs/analysis/test-audit.md` | the whole suite's audit: tests missing, tests carried for nothing, surviving mutants | `/tm-test-audit <path>` |
 | `docs/declined.md` | proposals the owner turned down for a lasting reason, read before `/tm-tidy`, `/tm-trim` and `/tm-review` propose again | `/tm-tidy`, `/tm-trim`, `/tm-review` (append-only) |

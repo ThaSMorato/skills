@@ -30,6 +30,7 @@ const producers = {
   'design-system': 'templates/design-system.md',
   'meta-retro': 'templates/meta-retro.md',
   pr: 'skills/pr/SKILL.md',
+  'steering-validation': 'skills/steering-validate/SKILL.md',
 }
 
 for (const [kind, path] of Object.entries(producers)) {

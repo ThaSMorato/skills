@@ -46,6 +46,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/architecture/boundaries.md` | boundary contract | `$thasmorato-skills:tm-boundaries` |
 | `docs/adr/*.md`, `docs/adr/potential/*.md` | ADRs (pending ones are `state: proposed`) | `$thasmorato-skills:tm-adr-identify` or `$thasmorato-skills:tm-adr-propose` → `$thasmorato-skills:tm-adr-generate` |
 | `docs/guidelines.md`, `.claude/skills/*-guide/` | guidelines router + stack guides | `$thasmorato-skills:tm-guidelines`, `$thasmorato-skills:tm-generate-stack-guide` |
+| `docs/validation/steering.md` | whether the repo's instruction files (CLAUDE.md, AGENTS.md, rules, guides, router) agree with each other, `clean` or `dirty` | `$thasmorato-skills:tm-steering-validate` |
 | `docs/guardrails.md` | the repo's installed checks (pre-commit, CI, git guard, dependency linter) and how each was proven | `$thasmorato-skills:tm-guardrails` |
 | `docs/analysis/test-audit.md` | the whole suite's audit: tests missing, tests carried for nothing, surviving mutants | `$thasmorato-skills:tm-test-audit <path>` |
 | `docs/declined.md` | proposals the owner turned down for a lasting reason, read before `$thasmorato-skills:tm-tidy`, `$thasmorato-skills:tm-trim` and `$thasmorato-skills:tm-review` propose again | `$thasmorato-skills:tm-tidy`, `$thasmorato-skills:tm-trim`, `$thasmorato-skills:tm-review` (append-only) |
