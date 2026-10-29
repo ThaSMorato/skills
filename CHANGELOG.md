@@ -233,6 +233,33 @@ Built as a stack, one PR per wave; nothing merges before the release.
   `## Suggested cases`. The report opens with one line per AC. `scripts/acceptance-verdicts.test.mjs`
   holds the wave.
 
+### Wave D2: the tests
+
+- **A case is trusted once it has failed** (item 116): after green, `/tm-implement` breaks the
+  behavior each new case names with `scripts/mutate-once.mjs` (new): the text must occur exactly once,
+  the file is put back whatever happens, the run goes to a log, and the exit status is the verdict
+  (0 killed, 1 survived, 2 could not run). The SI records it on its `Mutation:` line; a
+  characterization case does not close the SI without its kill. The plan names the behavior that
+  turns each case red; `tdd` says why a guard, a mode, a count, a type or source text need it most.
+- **Mutation testing** (items 62, 63): explained once in `testing/fundamentals.md` (reading a
+  survivor, equivalent mutants, never a percentage target); the tool per stack goes in the stack
+  guide; `review-tests` runs it on the diff's files and reports each surviving mutant.
+- **`/tm-test-audit <path> [report | confirm | full]`** (new command and skill; item 20): what the
+  suite lacks and what it carries for nothing, conservative removal with evidence, mutation over the
+  scope at `report`, removals one at a time at `confirm`, missing tests test-first at `full`; it
+  writes `docs/analysis/test-audit.md`.
+- **Worth a test, and not**, and **about three mocks per test** (item 21) in the fundamentals;
+  `review-tests` asks that an error test asserts the reason (item 22).
+- **The testing guide knows what it came from** (item 23): it ends with `## Provenance`; `/tm-flow`
+  flags it when those files changed; the next run updates only those sections; a project with no
+  tests reads the decisions already taken.
+- **`/tm-diagnose` sweeps for the same defect** (item 24) once the cause is known; the confirmed
+  siblings become follow-ups, counted in `siblings`.
+- **The end-to-end spec per AC** (items 9, 51): `/tm-plan` writes `e2e.md` (template `e2e-spec.md`)
+  when the repo has an E2E runner, and reconciles it on re-plan (`new`, `preserved`, `manual`,
+  `updated`, `deleted`); `/tm-implement` writes the tests from it and never edits a `manual` one.
+  `scripts/test-quality.test.mjs` and `scripts/mutate-once.test.mjs` hold the wave.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |

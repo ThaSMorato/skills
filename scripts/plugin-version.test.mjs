@@ -23,6 +23,8 @@ const producers = {
   diagnosis: 'skills/diagnose/SKILL.md',
   walkthrough: 'skills/walkthrough/SKILL.md',
   acceptance: 'skills/acceptance/SKILL.md',
+  'test-audit': 'skills/test-audit/SKILL.md',
+  'e2e-spec': 'templates/e2e-spec.md',
   'ui-audit': 'skills/ui-audit/SKILL.md',
   'ui-spec': 'templates/ui-spec.md',
   'design-system': 'templates/design-system.md',
