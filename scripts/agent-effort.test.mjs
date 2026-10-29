@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max']
 const MECHANICAL = ['adr-generator', 'adr-linker', 'c4-generator', 'mermaid-generator', 'guideline-generator']
-const COLLECTORS = ['pattern-scout']
+const COLLECTORS = ['pattern-scout', 'test-runner']
 
 const agents = readdirSync(join(root, 'agents')).map((file) => file.replace(/\.md$/, ''))
 const effortOf = (agent) =>

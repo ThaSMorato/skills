@@ -25,7 +25,7 @@ Acceptance criteria exist in three places and they will not always agree. Apply 
    When the trace's `source_sha256` no longer matches the source, the request moved after the tickets were cut: report that first. A part covered by this ticket must be in the diff; anything narrower or wider than it needs the owner's `> Decided:` in the trace.
 1. **The feature's criteria** are the authority for what this effort changes in the feature, and the **FDD** for how the feature behaves (its contracts and rules).
 2. **The ticket** refines the criteria for this slice; it may narrow, never contradict.
-3. **The plan's SIs** decompose the ticket; they may not add scope.
+3. **The plan's SIs** decompose the ticket; they may not add scope. A `Deviation:` line in `progress.md` is a small adaptation the implementer recorded (a name, a path, a compatible type): check it is that small; one that changes an interface, a node or what an AC observes is a finding (the deviation should have gone back to `$thasmorato-skills:tm-plan`).
 
 A contradiction between levels is a finding in its own right: it means two documents are telling different implementers different things.
 

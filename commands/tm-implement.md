@@ -6,6 +6,6 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/implement/SKILL.md` and follow it to build the plan: $ARGUMENTS
 
-Resolve the plan under `.scratch/<feature-slug>/plans/`, run preflight (validation must be `clean`, branch must be set up), and execute SI by SI: red → green → refactor (production **and** tests), run the SI's tests, record progress, then STOP and wait for the user, unless they asked for continuous mode.
+Resolve the plan under `.scratch/<feature-slug>/plans/`, run preflight (validation must be `clean` for this version of the plan, branch set up and current with its base, dependencies installed, the owner's workspace recorded, the baseline taken), and execute SI by SI, every test run through the `test-runner` agent: red → green → refactor (production **and** tests), run the SI's tests, record progress, then STOP and wait for the user, unless they asked for continuous mode.
 
 Default is to pause after every SI so the user can `/compact` and resume by re-running this command. When done, tell the user to run `/tm-review` before any commit, and stop.
