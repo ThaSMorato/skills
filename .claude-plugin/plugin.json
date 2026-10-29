@@ -37,6 +37,7 @@
     "./skills/plan-validate",
     "./skills/tickets-validate",
     "./skills/doc-validate",
+    "./skills/steering-validate",
     "./skills/tdd",
     "./skills/diagnose",
     "./skills/test-audit",

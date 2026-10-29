@@ -90,7 +90,7 @@ Every command carries the `tm-` prefix (since 0.7.0), so no Claude Code built-in
 | Architecture | `/tm-components` · `/tm-decompose` · `/tm-boundaries` · `/tm-reconcile` |
 | Diagrams | `/tm-c4-generate` · `/tm-mermaid-generate` |
 | Decisions (ADR) | `/tm-adr-identify` · `/tm-adr-propose` · `/tm-adr-generate` · `/tm-adr-link` |
-| Standards | `/tm-guidelines` · `/tm-generate-stack-guide` · `/tm-generate-test-guide` · `/tm-guardrails` |
+| Standards | `/tm-guidelines` · `/tm-generate-stack-guide` · `/tm-generate-test-guide` · `/tm-steering-validate` · `/tm-guardrails` |
 | Development | `/tm-tickets` · `/tm-tickets-validate` · `/tm-ui-audit` · `/tm-ui-design` · `/tm-design` · `/tm-prototype` · `/tm-plan` · `/tm-plan-validate` · `/tm-implement` · `/tm-trim` · `/tm-review` · `/tm-tidy` · `/tm-acceptance` · `/tm-walkthrough` · `/tm-pr` · `/tm-diagnose` · `/tm-test-audit` |
 | Looking back | `/tm-retro` · `/tm-session-analyze` · `/tm-flow-report` |
 | Learning | `/tm-teach` |

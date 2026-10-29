@@ -31,8 +31,17 @@ Map **file patterns to guides**, so a stage that touches `.rb` loads the Ruby gu
 
 For a technology with no guide yet, still list the row and mark it missing, naming `/tm-generate-stack-guide <tech>` as the fix. A missing entry is invisible; a row marked missing is a to-do.
 
+## Pointing every harness at the guides
+A stage about to create `apps/web/src/cart.tsx` has no file to match yet, and a harness loads a guide only when its trigger fires. So, beside the router, write the pointers each harness reads on its own:
+- **Claude Code:** one `.claude/rules/<tech>.md` per stack guide, with `paths:` set (as a YAML list) to that guide's file patterns from the routing table, and a body that names the guide to load and points back at `docs/guidelines.md`. Claude Code loads a rule when it works on a matching file.
+- **Subprojects:** in a repo with several apps or packages, one `CLAUDE.md` (for Claude Code) and one `AGENTS.md` (for Codex) per subproject directory, each naming that subproject's guides and commands and pointing back at the router; at the root, an `AGENTS.md` when there is none. A `CLAUDE.md` or `AGENTS.md` the owner wrote is never overwritten: add a marked section to it, or propose the lines.
+
+Every one of them is a pointer, never the rule copied: a copy drifts from the guide, and `/tm-steering-validate` reports it as a duplicate.
+
 ## Commands come from the repo, not the ecosystem
 Fill the commands table from what this repo actually runs. Plans copy these verbatim into their Deliverables, so a plausible-but-wrong command (`npm test` where the repo uses `pnpm test:unit`) fails at the last step of an implementation, which is the most expensive place to find out.
+
+Fill `Runs in` for each: `host`, `container <service>` or `either`, from the compose file's services (`docker-compose.yml`, `compose.yaml`), `.devcontainer/`, the Makefile targets that wrap `docker compose exec`, and the container the CI job runs in. A command that runs only in a container is written as its full call from the host (`docker compose exec api pnpm test`), so a plan can copy it as written.
 
 ## The parallel-sessions page
 Two sessions of the project at once, each in its own worktree, collide on the first thing they share: the port the dev server binds, the database the tests reset, the env file, a container name. Fill `docs/parallel-sessions.md` from what the repo shows: the base ports and where each is read, the database names and how they are created, the variables that would change per session, and every automation that has a port or a name fixed in it. A row the repo does not show (all of them, in greenfield) says `to be established`: `/tm-guidelines` asks the owner for those. A project with nothing to isolate says so in its first section. For `.scratch` in a worktree: `tracked` when the repo versions it; `link` when it is ignored by a rule that also matches a file (`.scratch`, not `.scratch/`); `copy` otherwise.
@@ -42,7 +51,7 @@ The router lists the page in its documents table; the page is not part of the 15
 ## Rules (negative)
 - **Index, don't teach.** No tutorials, no long code samples, no good-vs-bad walkthroughs; those belong in a stack guide. Every entry is a pointer with a trigger.
 - **Point only at things that exist.** Verify each path before listing it, except rows you explicitly mark missing.
-- **Read-only**: never modify the codebase; `Bash` is for inspection.
+- **Never modify code**; `Bash` is for inspection. What it writes is the router, the parallel-sessions page, the rules and the pointers.
 - No emojis, no `TODO`/`TBD`.
 
 ## Ambiguity (you cannot ask, isolated)
@@ -54,3 +63,4 @@ Where a convention is genuinely inconsistent across the repo, record the **domin
 3. Fill the router: stack, routing table, non-negotiables, structure, commands, documents, checklist.
 4. Self-review: under 150 lines, every path verified, every command taken from the repo, no tutorial content.
 5. Write `docs/guidelines.md`, then fill and write `docs/parallel-sessions.md`.
+6. Write the pointers: a `.claude/rules/<tech>.md` per guide, and the `CLAUDE.md` and `AGENTS.md` of each subproject.

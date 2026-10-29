@@ -1502,6 +1502,23 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
   minutes and tool calls per ticket beside the `model` and the new `effort` of `progress.md`.
 - **`ci_red_after_open`** in a record beside the PR body (`prs/<NN>-<slug>.record.md`, `kind: pr`),
   `pending` until the owner runs `/tm-pr` again after CI. `/tm-flow-report` gains the cost rows.
+### Wave I3: steering and guardrails
+
+- **The guides reach files that do not exist yet.** `/tm-guidelines` also writes a
+  `.claude/rules/<tech>.md` per stack guide, scoped with `paths:` to the guide's file patterns, and a
+  `CLAUDE.md` and an `AGENTS.md` per subproject, each a pointer, never the rule copied; one the owner
+  wrote is never overwritten. `/tm-plan` and `/tm-design` match the planned paths against the
+  routing table, so a file still to be created gets its guide.
+- **Where a command runs:** the router's commands table gains `Runs in` (host, container, either),
+  detected from compose, devcontainer, Makefile and CI; a container-only command is its full call
+  from the host, and plans copy it so.
+- **`/tm-steering-validate`** (new command and skill): reads every steering file
+  (`scripts/steering-files.mjs` finds them and the references that point at nothing) and reports
+  contradictions, stale references, duplicates and silent overrides, `clean` or `dirty`, in
+  `docs/validation/steering.md`. A repo guide that contradicts a plugin skill is listed apart and
+  never makes it dirty: the project's guide wins.
+- **`/tm-guardrails`** inventories dead code (`knip`, `vulture`, `deadcode`), cycles (`madge`) and
+  warnings as errors, and every dependency-linter rule's message names the fix, not only the boundary.
 
 ## 0.2.0
 

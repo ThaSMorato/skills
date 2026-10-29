@@ -15,7 +15,7 @@ Read, in this order:
 - **The FDD** it names: the public contracts, the declared test seams, the error and concurrency behavior.
 - `docs/analysis/components/*.md` (if present): the existing primitives in the components this work touches. This is the file that answers "what already exists" before you design something new.
 - `docs/architecture/boundaries.md` (if present): which components this work may touch and which dependency edges are legal.
-- `docs/adr/*.md` and `docs/guidelines.md`: binding in the area you're touching; load the stack guide the router names for the files involved.
+- `docs/adr/*.md` and `docs/guidelines.md`: binding in the area you're touching; load the stack guide the router names for the files involved, the files it will create included: match their planned paths against the routing table, since no rule fires for a file that does not exist yet.
 - `CONTEXT.md`: the vocabulary.
 - `docs/features/<feature>/ui/<screen>.md` (if the ticket builds a screen that has one): the screen spec `/tm-ui-design` wrote. Its states, copy, widths and components are decided: the UI nodes implement them, and a node that needs something the spec does not say is an open decision for the owner, not a value to fill in.
 
