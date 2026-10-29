@@ -42,6 +42,21 @@ Every vulnerability finding cites `CVE-…`, `GHSA-…` or `OSV-…`, from the a
 
 A report that flags healthy libraries teaches the reader to ignore it.
 
+## Agent extensions are dependencies too
+The MCP servers, plugins, marketplaces, hooks and skills the repo declares run code or put text in front of the agent on every teammate's machine, and no package audit sees them. List them with:
+
+```
+node "${CLAUDE_PLUGIN_ROOT}/scripts/agent-extensions.mjs" --root .
+```
+
+It reads `.mcp.json`, `.codex/config.toml`, `.claude/settings.json` and the skills under `.claude/skills/` and `.agents/skills/`. It never reads `.claude/settings.local.json` and returns env **names**, never values. Read none of these files yourself: an env block can hold a live credential, and the script is what keeps it out of your context and out of the report. Each extension carries `source`, `pinned` (`true`, `false`, or `null` when there is nothing to pin) and `runs`, the command it starts, and every path in the script's `files` goes into `lockfiles`.
+
+- **Act now**: a server or a hook that starts an unpinned package or image (`pinned: false`): each start fetches whatever was published last, so one compromised release reaches everyone at once. The action is the exact version or digest to pin. So is a plugin from a marketplace with no fixed commit.
+- **Worth planning**: a repo skill that ships scripts (`scripts` is not empty) with no named origin; a remote server (`pinned: null` with a URL), whose code you cannot pin, so name its owner; a plugin whose marketplace the repo does not declare (`pinned: null`).
+- An advisory against a server's package follows the rule above: an id, or no finding.
+
+Write them in their own section, `## Agent extensions`, between **Worth planning** and the appendix, each row as `<kind> <name> · <file> · <source> · pinned <yes|no|n/a>`.
+
 ## License risk needs the project's own position
 Read the project's `LICENSE` and determine how it is distributed: internal service, distributed binary, SaaS, published library. Copyleft in an internal tool is usually irrelevant; the same license in a distributed proprietary product is fatal. Without that context you can only emit a generic warning, so if the distribution model cannot be determined, **say so and scope the finding** rather than issuing one anyway.
 
@@ -53,7 +68,7 @@ Write `docs/analysis/dependencies.md`, opening with this frontmatter:
 kind: dependency-audit
 audited_at: <YYYY-MM-DD>
 audited_commit: <git rev-parse HEAD>
-lockfiles: [<every manifest and lockfile read, repo-relative>]
+lockfiles: [<every manifest, lockfile and agent-extension file read, repo-relative>]
 ---
 ```
 
@@ -65,7 +80,8 @@ Then the body:
 2. **Worth planning**: outdated by a major version, unmaintained by the signals above, or a maintenance burden.
 
 For every item in these two sections, measure its **blast radius** in this project: how many files import it (a read-only grep of imports, or `docs/analysis/dependency-graph.md` when present), and whether that use is **encapsulated** (one adapter module wraps it and everything else calls the adapter) or **spread** (imported directly across the codebase). Write it as `imported by <n> files · encapsulated in <path>` or `imported by <n> files · spread`. It decides the action: replacing an encapsulated dependency is a change to one adapter; replacing a spread one is an expand / migrate / contract sequence of tickets. For a transitive dependency, measure the direct one that pulls it in.
-3. **Appendix: inventory**: the full table, for lookup.
+3. **Agent extensions**: the section above.
+4. **Appendix: inventory**: the full table, for lookup.
 
 A row-per-dependency table with hundreds of rows and no ranking is unreadable at real scale, and it recreates in the reader exactly the problem the audit was meant to solve.
 
@@ -76,7 +92,7 @@ A row-per-dependency table with hundreds of rows and no ranking is unreadable at
 
 ## Workflow
 1. Read the manifests and lockfiles; detect ecosystems. Read `docs/analysis/system-profile.md` if present, so the stack isn't rediscovered.
-2. Run the native outdated/audit commands per ecosystem; fall back to web/Context7 where none exists.
+2. Run the native outdated/audit commands per ecosystem; fall back to web/Context7 where none exists. Run `agent-extensions.mjs` for the agent extensions.
 3. Split direct from transitive; assess maintenance health on the direct ones by the signals above.
 4. Read the project's `LICENSE` and distribution model; evaluate license risk in that context.
 5. Rank by required action; write the report with the catalog as an appendix, and the frontmatter above.

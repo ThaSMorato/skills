@@ -1520,6 +1520,23 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
 - **`/tm-guardrails`** inventories dead code (`knip`, `vulture`, `deadcode`), cycles (`madge`) and
   warnings as errors, and every dependency-linter rule's message names the fix, not only the boundary.
 
+### Wave I4: the plugin itself
+
+- **`/tm-audit-deps` covers agent extensions.** `scripts/agent-extensions.mjs` lists the MCP servers
+  (`.mcp.json`, `.codex/config.toml`), marketplaces, plugins and hooks (`.claude/settings.json`) and
+  the skills the repo declares, each with its source and whether it is pinned (exact version, fixed
+  image tag or digest, marketplace at a commit). It returns env names, never values, and never reads
+  `settings.local.json`. The report gains an `## Agent extensions` section: an unpinned server or
+  hook is act-now, and the extension files join `lockfiles`, so the `/tm-flow` stale check covers them.
+- **Description evals.** `evals/` holds a `-fires` and a `-near-miss` case for each open skill, run
+  isolated by `claude plugin eval`. `scripts/skill-evals.mjs plan` prints one command per model for
+  the owner to run (local report, no baseline arm); `summarize` makes the case-by-model table.
+- **Testing a skill**, a new section of the skill anatomy: a test passes for the wrong reason when the
+  harness context (the tester's `CLAUDE.md`, memory, other plugins, MCP servers) or a file that
+  already holds the answer (the plugin's own source, a fixture naming the result) told the model what
+  to do. Triggering goes to the evals; a live test runs with `--setting-sources project,local` and
+  `--strict-mcp-config`, in a toy repo outside the plugin's source.
+
 ## 0.2.0
 
 Rebuilt the code phase as a validated, test-first loop: `/tickets → /design → /plan → /plan-validate → /implement → /review`. Vendored the testing and code-quality references so the plugin ships self-contained.

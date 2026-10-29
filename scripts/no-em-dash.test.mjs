@@ -18,10 +18,10 @@ function filesUnder(path) {
   if (statSync(join(root, path)).isFile()) return [path]
   return readdirSync(join(root, path), { recursive: true })
     .map((entry) => join(path, entry))
-    .filter((entry) => /\.(md|mjs|json|sh)$/.test(entry) && statSync(join(root, entry)).isFile())
+    .filter((entry) => /\.(md|mjs|json|sh)$/.test(entry) && !entry.startsWith('evals/results/') && statSync(join(root, entry)).isFile())
 }
 
-const files = ['skills', 'agents', 'commands', 'docs', 'templates', 'scripts', 'adapters', 'README.md'].flatMap(filesUnder)
+const files = ['skills', 'agents', 'commands', 'docs', 'templates', 'scripts', 'adapters', 'evals', 'README.md'].flatMap(filesUnder)
 
 test('no em dash outside the marker separator', () => {
   const found = files.flatMap((path) =>

@@ -59,6 +59,20 @@ Two choices, trading two costs. **Context load** is what always-loaded text cost
 - **A reference skill stays open.** The skills in `KNOWLEDGE_SKILLS` (`scripts/skill-kinds.mjs`: `testing`, `tdd`, `security`, `asking`...) carry no flag and are called through the Skill tool. A new skill is one or the other, and `scripts/skill-invocation.test.mjs` fails on a skill that is neither listed nor closed.
 - Reference that two user-invoked skills both need can live in neither: neither can load the other. Put it in a plain file both point at.
 
+## Testing a skill
+
+A skill test passes for the wrong reason when something other than the skill told the model what to do. Two kinds of file do that, and both come out of the test's context.
+
+- **The harness context.** The tester's own `CLAUDE.md`, memory, other installed plugins (another copy of this one included) and MCP servers sit in front of the model too. A global rule that says "load the testing skill" makes every trigger test pass.
+- **Files that already hold the answer.** The model reads what it can reach. A test run inside the plugin's source can grep the skill's own text and copy the expected output; a fixture that states the result (a comment naming the bug, a file called `expected.md`) does the same.
+
+**Does an open skill fire on its description?** That is a property of the description and of the model reading it, so it is measured per model, by `claude plugin eval`, which runs each case in an empty workspace with none of the harness context above and hides the suite from the agent. Every open skill has two cases under `evals/`: `<skill>-fires`, a request the description should catch, graded by a `tool_used` call to the Skill tool with its name, and `<skill>-near-miss`, a nearby request it should leave alone, graded by the same call with `min: 0` and `max: 0`. A near miss is what catches a description that fires on everything. A prompt never names the skill or the plugin. `node scripts/skill-evals.mjs plan` prints one command per model (local report, no baseline arm) for the owner to run; `node scripts/skill-evals.mjs summarize` turns the results into one table, case by model. One run per case is a smoke test; judge a description on the default three.
+
+**Does a stage do its job?** That is a live test: `claude -p "/thasmorato-skills:<command>" --plugin-dir <this repo>` in a toy repo.
+- Run it with `--setting-sources project,local`, which drops the user's `CLAUDE.md` and settings, and with `--strict-mcp-config`, which drops every MCP server not passed with `--mcp-config`. `--bare` drops more, but it authenticates only by API key.
+- Build the toy repo in a temp folder, outside the plugin's source and with no `CLAUDE.md` in any folder above it.
+- Plant the problems in code and docs the way a real repo has them, never in a fixture that names them, and grade the run on what it wrote and which tool calls it made (`--output-format stream-json --verbose`).
+
 ## Checklist
 - [ ] `description` states what + when (triggers), names the exclusion when a sibling fits better, and does not summarize the steps.
 - [ ] Every step of a process skill ends on a completion criterion that is clear and exhaustive.
@@ -70,6 +84,7 @@ Two choices, trading two costs. **Context load** is what always-loaded text cost
 - [ ] Reuses primitives instead of duplicating.
 - [ ] Heavy detail moved to a sibling file.
 - [ ] No stray `- ` / empty sections.
+- [ ] An open skill has a `-fires` and a `-near-miss` case under `evals/`, and a live test ran without the harness context or a file holding the answer.
 
 ## Red flags
 - A skill that does "X **and** Y" → split it.
