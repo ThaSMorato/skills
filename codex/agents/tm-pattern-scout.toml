@@ -35,6 +35,8 @@ Your context is isolated; you receive:
    | Logging / observability | what is logged, how, with which context |
    | Configuration | how settings and secrets reach the code |
    | Tests | where the analogues' tests live, which seam, which fakes and factories |
+   | Layout | for UI work: the layout technique the analogues use (grid, flex, the layout component, the spacing tokens) |
+   | Closest sibling rule | the nearest existing rule of the same kind as the one the ticket adds (another validation, permission check, limit or state transition), at `file:line`: the new one should read like it |
 
 3. **Integration points**: where new code of this kind is wired in: route registration, DI or container setup, job schedules, migrations, feature flags, menus. The file that has to change so the new thing is reachable.
 

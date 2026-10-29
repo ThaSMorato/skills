@@ -43,7 +43,7 @@ Each slice cuts a **narrow but complete** path through every layer (schema, API,
 
 **Follow-ups stay out of the set.** Work the drafting finds outside the request (a placeholder for later, an improvement next door) goes to `.scratch/<feature-slug>/follow-ups.md`, one line each with why, unnumbered and outside `issues/`. The set holds only what was asked; the gate names the follow-ups separately.
 
-**Mark the type.** A **structural** ticket (prefactoring, expand/migrate/contract) changes shape and not behavior: existing tests stay unchanged and stay green, and that is verifiable at review. A **behavioral** ticket changes what the system does.
+**Mark the type.** A **structural** ticket (prefactoring, expand/migrate/contract) changes shape and not behavior: existing tests stay unchanged and stay green, and that is verifiable at review. A **behavioral** ticket changes what the system does: visual conformity to a spec and QA findings included. **`bugfix`** is only for a regression whose cause still has to be found: its Source is a `$thasmorato-skills:tm-diagnose` file. A defect whose fix is already known is behavioral.
 
 **Wide-refactor exception:** a single mechanical change whose blast radius breaks thousands of call sites can't land green as a vertical slice. Sequence it **expand → migrate (batches, each blocked by expand) → contract (blocked by every batch)**, all structural; if batches can't stay green alone, share an integration branch that all block a final integrate-and-verify ticket. The **contract** ticket, the one that removes the old shape, carries an acceptance criterion of **zero remaining consumers**, with the evidence named: no calls in the logs over an agreed window, no import in any consumer, no failing consumer contract test. Removing on the belief that nobody uses it is how a published contract breaks.
 
@@ -52,7 +52,7 @@ Every reference a ticket makes to another document (the FDD and criteria in `Sou
 
 Write **local files** first, always, even when the tickets will end up in a tracker: one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order, each filling `references/templates/ticket.md`. Number the acceptance criteria `AC-1`, `AC-2`. `$thasmorato-skills:tm-plan` maps each to an SI and `$thasmorato-skills:tm-plan-validate` checks the coverage by id, which it cannot do against unlabelled bullets.
 
-Write `.scratch/<feature-slug>/request-trace.md` beside them: one row per part of the owner's request (their message, `task.md`, the brief, an image or document they supplied), quoted, with the ticket and AC that cover it:
+Write `.scratch/<feature-slug>/request-trace.md` beside them, starting with a frontmatter that pins the request it traced: `source` (the file, or `message` for a request typed in the conversation, copied into the trace's `## Request` section), `source_sha256` (`shasum -a 256` of the file, or of the copied text) and `source_mtime`. A request edited after the tickets were cut is the drift the later stages check for. Then one row per part of the owner's request (their message, `task.md`, the brief, an image or document they supplied), quoted, with the ticket and AC that cover it:
 
 ```markdown
 | # | Part of the request (quoted) | From | Covered by | Status |

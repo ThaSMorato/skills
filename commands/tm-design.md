@@ -18,6 +18,7 @@ After the map is written, show (**grounding first**):
 - **How the repo already does this**: the analogues and conventions `pattern-scout` found, and where the new code gets wired in.
 - **What already exists** that this ticket can reuse, with paths, and **what the map claims is new**, with the search that justifies each claim. This is the part the human gate should actually read: everything upstream of here is one document derived from another, and this is the first time the repository got a vote.
 - If the search shrank the work, say so and offer to amend the ticket before planning.
+- **The skeleton of the main artifact** this ticket builds: the endpoint's signature and response, the component's structure, the schema, the job's entry point. One look at the shape is the fastest way for the owner to catch a wrong design.
 - Then the nodes with their interfaces, the seams, any **new dependency edge** and whether the boundary contract allows it, the AC-to-node coverage table, and anything left open.
 
 Then tell the user to run `/tm-plan <ticket>`.

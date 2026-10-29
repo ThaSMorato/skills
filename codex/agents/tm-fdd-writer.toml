@@ -34,7 +34,7 @@ The FDD and the feature's `README.md` describe the feature as it is, and every e
 
 ## Output
 - **The FDD**, `docs/features/<feature-slug>/fdd.md` (create the feature's folder if needed). On a new FDD, prune and renumber the optional sections that don't apply. Set `status: draft` and `feature` in the frontmatter.
-- **The criteria**, `.scratch/<effort>/criteria/<feature-slug>.md`: the verifiable conditions under which this effort's change to the feature is correct, numbered `AC-1…`, each naming the product criterion or requirement it refines, every state `open`. `$thasmorato-skills:tm-tickets` copies them down and the coverage checks follow the ids.
+- **The criteria**, `.scratch/<effort>/criteria/<feature-slug>.md`: the verifiable conditions under which this effort's change to the feature is correct, numbered `AC-1…`, each naming the product criterion or requirement it refines, every state `open`. `$thasmorato-skills:tm-tickets` copies them down and the coverage checks follow the ids. Every item the decomposition's `Depends on` says this feature consumes from another (`consumes: …`) is an **integration criterion** of its own: the item arrives in the shape the provider's FDD states, tested at this feature's seam.
 - **The feature README**, `docs/features/<feature-slug>/README.md`: created with the first FDD, amended when what it lists changes. `State` is the index row's.
 
 ## Completeness is countable
@@ -52,6 +52,9 @@ Before writing the contracts, identify the **test seams**: the highest, most sta
 
 ## Components touched
 Record in Metadata every component from `docs/architecture/components.md` this feature crosses. Two FDDs written in parallel can specify contradictory contracts for a component they share, and this field is what makes that detectable. If the feature needs a component the map does not have, put it in `Open questions` rather than naming something new; the map is corrected in one place, not per feature.
+
+## Only what the task asks
+A rule the effort's sources (the brief, the scope, the request) do not ask for, and that you add because the feature seems to need it (a limit, a permission, a retention), is marked `> Assumed: the task does not speak of <X>; <the rule>`, with where the idea came from. The command offers the owner "only what the task says" for it. Unmarked, it reaches the tickets as if someone had asked for it.
 
 ## Ambiguity (you cannot ask, isolated)
 If an input is undefined, choose the most reasonable default and mark it `> Assumed:` with the value, what you looked at, and what changes if it is wrong. Where no value is defensible, mark `> Needs Input: <what's missing (name the thing, don't just cite its id)>` instead; that one blocks the gate. The `asking` skill (§4, §6) says which values count. Errors, fallbacks, and concurrency are never "left to the implementer"; specify them, marking assumptions.

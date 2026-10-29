@@ -7,6 +7,7 @@
 | `requirements-brief.md` | `$thasmorato-skills:tm-interview` | `.scratch/<effort>/brief.md` |
 | `context.md` | `domain-model` skill | `CONTEXT.md` |
 | `research-report.md` | `researcher` | `docs/research/<slug>.md` |
+| `library-reference.md` | `ticket-design`, `ticket-plan`, `researcher`, `generate-stack-guide` | `docs/research/libraries/<library>@<version>.md` |
 | `prd.md` | `prd-writer` | `docs/product/prd.md`, or `docs/features/<feature>/prd.md` at `Level: feature` |
 | `scope.md` | `prd-writer` | `.scratch/<effort>/scope.md` |
 | `hld.md` | `hld-writer` | `docs/architecture/hld.md` |

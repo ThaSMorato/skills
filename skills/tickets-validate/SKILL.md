@@ -32,7 +32,7 @@ A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)
 | `SZ-N` | Oversized ticket | A ticket that crosses two seams |
 | `UZ-N` | Undersized ticket | A ticket with no behavior observable through its own seam, or with no AC that traces to a feature criterion |
 | `SM-N` | Same seam | Two or more tickets on the same seam: they are slicing inside it, which is the job of SIs |
-| `DG-N` | Dependency graph | A cycle in the `Blocked by` edges, a blocker that names no existing ticket, or a cross-feature blocker from the decomposition that no ticket carries |
+| `DG-N` | Dependency graph | A cycle in the `Blocked by` edges, a blocker that names no existing ticket, a cross-feature blocker from the decomposition that no ticket carries, a cross-feature edge that names nothing consumed, or a consumed item no ticket AC checks |
 | `DS-N` | Dispersion | The ticket with the most ACs has more than **3×** as many as the one with the fewest |
 | `RQ-N` | Request | A part of the request trace with no ticket and no owner `> Decided:` for leaving it out; an AC wider than the part it covers; or copy the owner supplied written as `> Assumed:` |
 | `AS-N` | Unmarked assumption | A scope decision (an `Exclusion`, an in/out call) that the FDD does not give, with no `> Assumed:` marker, per the `asking` skill §6 |

@@ -29,6 +29,8 @@ Call the Agent tool once per lens below, all **in a single message** so they run
 | `review-docs` | documentation the diff made false: README steps, env vars, flags, described behavior |
 | `review-ui` | **only when the diff touches UI code**: keyboard, focus, accessible names, contrast, loading/empty/error states, layout shift, slow interactions |
 
+**Pass the findings earlier tickets left open.** From the feature's earlier reviews (`.scratch/<feature-slug>/reviews/*.md`), the findings the verifier confirmed and not fixed (deferred, or left for later) that sit in files this diff touches go to the lens that raised them, as leads: whether this diff fixed, kept or worsened each one. A finding confirmed and not fixed that nobody passes on is rediscovered as new, or never again.
+
 If `/tm-trim` ran, `.scratch/<feature-slug>/trim/<NN>-<slug>.md` has an **Unrequested behavior** section: hand it to `review-spec` as leads (behavior in the diff that no AC asked for, which trimming could not cut because cutting it changes behavior). Leads, not findings: the lens confirms each against the plan and the ticket like anything else.
 
 When `docs/architecture/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the Agent tool with `review-ui` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.

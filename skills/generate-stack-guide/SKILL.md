@@ -24,7 +24,7 @@ Ask where the good practices should come from. The generator is only as good as 
 Be honest about the limits: options 1 and 2 are the ones this generator does well. If the user has no clean source, say that the guide will be thin and worth seeding by hand, rather than producing something confident and generic.
 
 ## Phase 2: Mine
-Extract from the chosen source, filtered to the **versions this repo actually uses** (read the manifests first; advice for a newer major is worse than no advice):
+Extract from the chosen source, filtered to the **versions this repo actually uses** (the lockfile's, by `${CLAUDE_PLUGIN_ROOT}/skills/ticket-design/library-docs.md`; advice for a newer major is worse than no advice):
 - **Conventions:** naming, file and module layout, typing, signatures.
 - **Idioms:** the way this ecosystem does the common things, and the way it should not.
 - **Error handling and concurrency** as the language expresses them.
