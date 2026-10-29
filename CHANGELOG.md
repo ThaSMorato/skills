@@ -173,6 +173,40 @@ Built as a stack, one PR per wave; nothing merges before the release.
   smoke test** of the built artifact with its runtime files. `scripts/implement-loop.test.mjs` holds the
   wave.
 
+### Wave C2b: handoffs, `/tm-pr` and `asking`
+
+- **`scripts/blocker-state.mjs`** (new; item 113): from git, the disk and `gh`, prints as JSON the
+  branch, whether it is a linked worktree, how far it is from the base, and each blocker's state
+  (`merged`, `in review` with its PR, `implemented, no PR`, `in progress`, `not started`).
+  `/tm-design`, `/tm-plan`, `/tm-implement` and `/tm-pr` run it; without `gh`, it says so and judges
+  from the disk.
+- **`asking`** (item 113): a round opens with the feature and the ticket; the recommendation never
+  widens the request, the minimal variant is always an option, one option per independent choice,
+  each says what it creates and what deferring costs; an objecting "Other" is answered first; the
+  cheap premises are checked and the question says where it looked; a gate on the stage's own work
+  has no recommended "approve", and a blocking decision is never left in prose. A new §7, **Hand off
+  to the next stage** (item 109): read the disk first, open a stop report with the AC → state →
+  blocker table, repeat an open prerequisite (`## Open prerequisites` in `progress.md`) in every
+  report until it is resolved, recommend `/compact` before code when the context carries the design
+  and the plan.
+- **The third `dirty` run** (item 94) of `/tm-plan-validate`, `/tm-tickets-validate`,
+  `/tm-doc-validate` or `/tm-review` hands the decision to the owner instead of another round;
+  `run:` is counted in the doc validation and the review too.
+- **The gear** (items 109, 112) is its own question, asked again when the work outgrows it; the
+  order trim → review → tidy → acceptance holds, and a production change after the review gets a
+  second pass or a stated skip. A plan's report names one start.
+- **`/tm-pr`** (items 110, 112) gets a Preflight (blockers and branch, signing, host and tracker auth,
+  the ticket's new `Tracker:` line, acceptance after the last change, a change after the review, a
+  visible `Decided (supersedes …)` in the Direct gear, files the branch did not touch, the repo's
+  obligations), a required **Decisions that change the request** section, a Postflight (sibling
+  placeholders, tracker fields, the remaining tickets), and one body per ticket at
+  `.scratch/<feature>/prs/<NN>-<slug>.md`. Committing, pushing and following CI stay with the owner.
+  `/tm-tickets` asks whether to create the tracker issues as its own question.
+- **`/tm-trim` and `/tm-tidy` check before proposing** (item 111): the repo's complexity gate, the
+  owner's written rules, the schema's nulls, the helper in its proposed form; never a visible output
+  change or a function only the tests call; trim considers moving a value down so both sides import
+  it. `scripts/handoffs.test.mjs` and `scripts/blocker-state.test.mjs` hold the wave.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |

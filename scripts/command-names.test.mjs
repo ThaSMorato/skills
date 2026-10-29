@@ -50,7 +50,7 @@ test('no file cites a command by its name without the prefix', () => {
 })
 
 // The rename to `tm-` rewrote `/plan` to `/tm-plan` wherever it appeared, including inside the paths of
-// files a stage writes (`.scratch/<feature>/plans/<NN>-<slug>/plan.md`, `.scratch/<feature>/pr.md`).
+// files a stage writes (`.scratch/<feature>/plans/<NN>-<slug>/plan.md`, `.scratch/<feature>/prs/<NN>-<slug>.md`).
 // Those are artifact names, not commands: a stage writing `tm-plan.md` leaves `/tm-implement` and
 // `/tm-flow` looking for a file that is never there.
 test('no artifact path carries the command prefix', () => {

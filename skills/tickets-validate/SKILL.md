@@ -92,4 +92,5 @@ Every id uses a prefix from the Checks table. `fired` is cumulative, as in `plan
 
 ## Gate
 - **dirty** → report the findings, merges and splits first, with each ticket resolved to its title. The fix goes back to `/tm-tickets`. Never rewrite the tickets here.
+  **The third `dirty` run stops the loop.** When `run` reaches 3 and the verdict is still `dirty`, say so at the top of the report and hand the decision to the owner as one structured choice: approve with the findings listed, amend what is upstream of the set (the finding may come from the document it was derived from), or one more round, saying what changes this time. Agreement between models, or of one model with itself, does not prove the set right: a round with nothing new repeats the last one.
 - **clean** → hand back to `/tm-tickets`' gate: the user approves the set.

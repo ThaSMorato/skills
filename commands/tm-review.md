@@ -57,6 +57,7 @@ model: <the model id your harness reports for this session; `unknown` when it do
 harness: <claude-code | codex>
 slug: <NN>-<slug>
 fixed_point: <ref>
+run: <1 on the first review of this ticket; +1 on every re-run>
 lenses_run: [quality, tests, security, spec, standards, architecture, data, docs, ui]
 lenses_skipped: [<lens>: <reason>]
 findings: <count>
@@ -78,6 +79,8 @@ Synthesis filters findings by what they say about themselves; this filters them 
 Show the findings **ordered by verdict, then severity**: `confirmed` first, then `pre-existing` (real, but not this change's work), then the refuted ones and duplicates last, each with its one line of evidence. Nothing is hidden: the user may disagree with a verdict, and the finding is still there to act on. Then add a one-line note per lens saying what it covered, and name any lens that was skipped or that reported having no standard to apply.
 
 The user decides what to fix. Ask it as one structured choice, the cut by severity first: **fix every confirmed critical, high and medium, docs included** (recommended), **also the lows**, **choose per finding**, **none now**. A confirmed finding left out of the recommended cut, inside a severity it covers, is named with the reason.
+
+**The third `dirty` run stops the loop.** A review is `dirty` while it has confirmed findings inside the recommended cut. When `run` reaches 3 and it still is, say so before the findings and hand the decision to the owner as one structured choice: merge with the findings listed, amend what is upstream of the change (the plan or the ticket, when the findings keep coming from them), or one more round, saying what changes this time. Agreement between models, or of one model with itself, does not prove the change right: a round with nothing new repeats the last one.
 
 **A finding the user declines with a reason that will still hold next time** (a deliberate trade-off, a convention the lens did not know) is offered for `docs/declined.md`, in the format of `${CLAUDE_PLUGIN_ROOT}/templates/declined.md`, so the next review does not raise it again. A passing reason is not recorded, and a reason that is really an architectural decision is an ADR (`/tm-adr-generate`). Nothing here edits code: persisting the findings and their verdicts is a record of what was reported, not a change to the work.
 

@@ -10,6 +10,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/ticket-design/SKILL.md` and follow it to buil
 
 ## Preflight
 - Resolve the ticket under `.scratch/<feature-slug>/issues/`. If there is none and the user pointed at no other work, stop and tell them to run `/tm-tickets <feature>` first.
+- Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/blocker-state.mjs" <ticket file>` and report each blocker's state from what it prints, per the `asking` skill (§7). A blocker that is not `merged` or `done` is said before the map is built: a design can be drawn against a blocker's planned interface, but that is the owner's call.
 - If a node map already exists at `.scratch/<feature-slug>/design/<NN>-<slug>.md`, read it and ask whether to revise it or proceed to `/tm-plan`; silently regenerating it discards decisions the user already confirmed.
 
 ## Postflight

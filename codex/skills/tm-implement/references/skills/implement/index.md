@@ -17,6 +17,7 @@ Default mode **pauses after every SI** (this is what lets the user `/compact` be
 - **Branch check:** `git status` + current branch. If on the trunk (`main`/`master`/`dev`) or the tree is dirty with unrelated changes, stop and ask the user to set up the branch.
 - **Plan sanity:** the plan has Step Implementations, a Dependency Map, and Deliverables. If malformed, stop and report.
 - **Up to date with the base:** `git fetch`, then compare with `origin/<base>`. When the base is ahead and its changes touch files with uncommitted work here, put that work aside in **one** named stash of exactly those files, update, and pop it; never a pile of stashes.
+- **Blockers:** run `node "references/scripts/blocker-state.mjs" <ticket file>`. A blocker that is not `merged` or `done` is said before the first SI, with its state; building on one `in review` means this branch stacks on its branch, and that is the owner's call.
 - **Dependencies installed:** the installed dependencies match the lockfile (`npm ls` / `pnpm install --frozen-lockfile --offline` dry run, `bundle check`, `pip check`, `go mod verify`, whichever the repo uses). When they do not, stop and ask the owner to install: a test that fails because a package is missing is not a red step.
 - **What the owner allows here:** record in `progress.md` under `## Workspace` what this run may do beyond editing files (install packages, start a server or a container, run a migration, reach the network), as the owner said it or the guidelines state it. Anything outside it is asked, once, when it comes up.
 - **Baseline:** before the first SI of a fresh run, call the `spawn_agent` tool with `agent_type = "tm-test-runner"`, passing the type check and the test commands the Deliverables name. Record every failure in `progress.md` under `## Baseline` and its count in `baseline_failures`: they were failing before this ticket touched anything. A baseline failure is not this run's to fix, does not spend an SI's attempts and is never blamed on an SI; on resume, the recorded baseline stands.
@@ -57,6 +58,9 @@ baseline_failures: <count of failures recorded under Baseline, before the first 
 
 ## Baseline
 - <each failure before the first SI: the test or `file:line`, one line; or `none`>
+
+## Open prerequisites
+- <what this run needs and does not have yet (a tracker id, a server, a validation still `dirty`) and what it blocks; repeated in every report until resolved; or `none`>
 
 ### SI-N: <name>
 - **Status:** done | pending | escalated

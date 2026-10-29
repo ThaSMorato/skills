@@ -80,6 +80,7 @@ harness: <claude-code | codex>
 pair: <from> → <to>
 status: clean | dirty
 open_issues: <count of open issues>
+run: <1 on the first validation of this pair; +1 on every re-run>
 ---
 
 # Doc validation: <from> → <to>
@@ -98,6 +99,7 @@ open_issues: <count of open issues>
 
 ## Gate
 - **dirty** → report exactly what to fix: *"`<path>` has N open issues. Fix the document (edit it or re-run `/<stage>`), then re-run `$thasmorato-skills:tm-doc-validate <from> <to>`."* **Never auto-fix**, and never partially proceed: a validator that edits the thing it judges has stopped being a second opinion.
+  **The third `dirty` run stops the loop.** When `run` reaches 3 and the verdict is still `dirty`, say so at the top of the report and hand the decision to the owner as one structured choice: approve with the findings listed, amend what is upstream of the document (the finding may come from the document it was derived from), or one more round, saying what changes this time. Agreement between models, or of one model with itself, does not prove the document right: a round with nothing new repeats the last one.
 - **clean** → *"`<from> → <to>` is clean. The gate is now: approve `<to>` and set its `status: approved` (the frontmatter of a living document or an ADR, the Metadata line of an effort file)."*
 
 The human gate reads this verdict first. A `dirty` verdict is not a veto over the user's judgement (they may approve anyway), but it means they are approving something with named, listed problems rather than approving in the dark.
