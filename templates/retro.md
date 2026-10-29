@@ -16,7 +16,7 @@ kind: retro
 scope: <epic / feature / cycle>
 date: <YYYY-MM-DD>
 plugin_versions: [<each plugin_version the measured artifacts record; `unknown` for those without it>]
-findings: {flow: <n>, project: <n>, product: <n>, defect: <n>}
+findings: {flow: <n>, repo-skill: <n>, repo-code: <n>, product: <n>, defect: <n>}
 ---
 
 # Retro: <epic / feature / cycle>
@@ -113,10 +113,12 @@ by side, or `first measured retro` when none has a Measurements section>
 > a stack guide, a template, a stage's instructions. An item with no source is an opinion; put it in
 > Open questions instead.
 
-> Tag each change: `flow` (the plugin's own stages, gates, templates or agents would do this wrong on any
-> project; `/tm-flow-report` gathers these) or `project` (this repo's guides, rules or checks). When unsure, `project`.
+> Give each change its level (`skills/retro/levels.md`): `flow` (the plugin's own stages, gates, templates or
+> agents would do this wrong on any project; `/tm-flow-report` gathers these, and nothing here applies them),
+> `repo-skill` (this repo's skills, guides, rules or `CLAUDE.md`) or `repo-code` (this repo's code or
+> configuration). When unsure, the lowest level that resolves it.
 
-| Change | Tag | Motivated by | Where it lands |
+| Change | Level | Motivated by | Where it lands |
 |---|---|---|---|
 
 ## What the artifacts couldn't tell me (required)

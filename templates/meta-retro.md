@@ -15,8 +15,8 @@ session: <session id>
 analyzed_at: <YYYY-MM-DD>
 segments: <n>
 owner_turns: <n read>
-findings: {flow: <n>, project: <n>}
-promotable: <n project findings that passed the promotion filter>
+findings: {flow: <n>, repo-skill: <n>, repo-code: <n>}
+promotable: <n repo-skill findings that passed the promotion filter>
 repeated: <n findings seen in more than one segment>
 ---
 
@@ -35,12 +35,14 @@ repeated: <n findings seen in more than one segment>
 | Pattern | Owner turn | Stage | Change |
 |---|---|---|---|
 
-## Project findings (required)
-> Specific to this codebase or this owner. Same columns, plus the promotion filter (`skills/retro/promotion-filter.md`):
-> `passes`, or the question it failed. Only a finding that passes is proposed as a skill or a guide in this project.
+## Repo findings (required)
+> Specific to this codebase or this owner, by level (`skills/retro/levels.md`): `repo-skill` (its skills,
+> guides and `CLAUDE.md`) or `repo-code` (its code and configuration). Same columns, plus the promotion
+> filter (`skills/retro/promotion-filter.md`) for a `repo-skill` one: `passes`, or the question it failed.
+> Only a finding that passes is proposed as a skill or a guide in this project.
 
-| Pattern | Owner turn | Stage | Change | Filter |
-|---|---|---|---|---|
+| Level | Pattern | Owner turn | Stage | Change | Filter |
+|---|---|---|---|---|---|
 
 ## Environment (required when any signal or repeated correction exists)
 > From `skills/retro/environment.md`: navigation, tool economy and information access, which only a

@@ -110,6 +110,8 @@ Then write `## Not verified`: every acceptance criterion or deliverable that **n
 
 Then set `status: completed` (the only finished value) in `progress.md`'s frontmatter and report the results, the **Not verified** list, and the aggregated out-of-scope notes as follow-ups. A UI behavior in the **Not verified** list is open work, not a footnote: the report says the ticket is not done until `/tm-acceptance` has checked it. Version control (commit/PR) is the user's call; hand back to `/tm-review` first. Write `manifest.txt` beside `progress.md`: every file this ticket created or modified, one path per line, from the SIs' changes checked against `git status --porcelain` (a changed file no SI touched is someone else's, and stays out). Name both ways to review: `/tm-review <fixed point>` once committed, or `/tm-review <fixed point> --worktree .scratch/<feature-slug>/plans/<NN>-<slug>/manifest.txt` before.
 
+Then run `node "${CLAUDE_PLUGIN_ROOT}/scripts/flow-state.mjs"`: when this ticket's feature is now `awaiting-retro` (its last ticket completed), say that `.scratch/<feature-slug>/` is the input of `/tm-retro <feature>` and of `/tm-session-analyze`, and that the owner runs `/tm-retro` once the reviews are done.
+
 ## Rules
 - **Waiting has a deadline.** A wait on something outside the run (a server starting, a container, a long job) states how long it waits and what it does when the time is up; an open wait is a stalled run.
 - **A message from the owner mid-run gets a one-line answer first**, then the work goes on or stops as the message says. Running on as if nothing was said is the failure.
