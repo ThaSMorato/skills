@@ -1,6 +1,6 @@
 ---
 description: Review the diff since a fixed point across narrow lenses in parallel (quality, tests, security, spec, standards, architecture, data, docs, and UI when the diff touches it), then synthesize, and verify every finding against the code before you decide.
-argument-hint: "<fixed point: commit/branch/tag, e.g. main or HEAD~5>"
+argument-hint: "<fixed point: commit/branch/tag, e.g. main or HEAD~5> [--worktree <manifest>]"
 disable-model-invocation: true
 ---
 
@@ -11,8 +11,10 @@ Review the diff between `HEAD` and the fixed point: $ARGUMENTS
 ## 1. Preflight
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty: a bad ref or an empty diff fails here, not inside six agents.
 
+**Uncommitted work.** With `--worktree <manifest>` (the list of files `/tm-implement` wrote to `.scratch/<feature-slug>/plans/<NN>-<slug>/manifest.txt`), the review compares the working tree with the fixed point for exactly the manifest's files: `git diff <fixed-point> -- <files>` for the tracked ones, and `git diff --no-index /dev/null <file>` for each new one. A change outside the manifest is someone else's (another session, the owner's own edit): it stays out of the diff and out of the findings, as it does in the committed mode; tell every lens so, and name it once in the report as outside this review. Without the flag, when the ticket's files have uncommitted changes, say so and offer the mode. **Never commit to satisfy this preflight**: committing is the owner's call, and a commit made to get a non-empty diff takes it from them.
+
 ## 2. Compute the diff once
-Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list. Every reviewer receives **the path to that file**, not the instruction to compute it: nine agents each running the same diff is nine times the cost for one result, and the same work redone by every lens.
+Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list; in worktree mode, write the manifest's diff from the preflight instead, and say there are no commits yet. Every reviewer receives **the path to that file**, not the instruction to compute it: nine agents each running the same diff is nine times the cost for one result, and the same work redone by every lens.
 
 ## 3. Fan out
 Call the Agent tool once per lens below, all **in a single message** so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the fixed point, and the artifacts its own definition names.
@@ -57,6 +59,7 @@ model: <the model id your harness reports for this session; `unknown` when it do
 harness: <claude-code | codex>
 slug: <NN>-<slug>
 fixed_point: <ref>
+mode: committed | worktree
 run: <1 on the first review of this ticket; +1 on every re-run>
 lenses_run: [quality, tests, security, spec, standards, architecture, data, docs, ui]
 lenses_skipped: [<lens>: <reason>]
@@ -78,7 +81,17 @@ Synthesis filters findings by what they say about themselves; this filters them 
 ## 7. Report
 Show the findings **ordered by verdict, then severity**: `confirmed` first, then `pre-existing` (real, but not this change's work), then the refuted ones and duplicates last, each with its one line of evidence. Nothing is hidden: the user may disagree with a verdict, and the finding is still there to act on. Then add a one-line note per lens saying what it covered, and name any lens that was skipped or that reported having no standard to apply.
 
-The user decides what to fix. Ask it as one structured choice, the cut by severity first: **fix every confirmed critical, high and medium, docs included** (recommended), **also the lows**, **choose per finding**, **none now**. A confirmed finding left out of the recommended cut, inside a severity it covers, is named with the reason.
+The user decides what to fix. Ask it as one structured choice, the cut by severity first: **fix every confirmed critical, high and medium, docs included** (recommended), **also the lows**, **choose per finding**, **none now**. A confirmed finding left out of the recommended cut, inside a severity it covers, is named with the reason. Then, per finding where they apply:
+- **A fix that changes what a caller or the user observes** (a limit, a control, a text, a contract, a new acceptance criterion) is its own question, before any code: the review found the problem, and the owner decides what the system does about it.
+- **A value no source gives** (the new limit, the words of a message) is asked without a recommendation: a recommended value is an assumption in disguise.
+- **A finding that cites a rule the project wrote** (a guideline, a stack guide, an ADR) recommends complying; deviating is the other option, and an ADR if it should last.
+- **A finding against a decision approved above this ticket** (the FDD, the plan) that changed after the approval: the recommended option is to deliver as approved, with a follow-up for the change; reopening the approved design is the other.
+- **A pre-existing defect that blocks one of this ticket's ACs** is offered as fix in this ticket: an AC this ticket cannot pass is this ticket's to fix, however old the cause.
+
+### Fixing what was chosen
+Choosing the fixes starts the loop: fix them now, most severe first, each test-first through the `tdd` loop when it changes behavior. A fix that adds an acceptance criterion names the SI that owns it, or a new SI the owner adds with `/tm-plan <slug> amend "<the change>"`; a criterion nobody owns is not checked by anyone. A fix to UI or CSS is measured in the browser (the computed style of the element, the checks in `${CLAUDE_PLUGIN_ROOT}/skills/acceptance/visual-checks.md`) before it counts as fixed: a style that looks right in the diff can lose to a rule above it in the cascade.
+
+Every finding leaves this phase with a line in the review file, under its verdict: `- **Outcome:** fixed (<file:line or commit>)`, `declined (<the reason>)` or `deferred (<the follow-up>)`. The phase ends with a structured question: close the review, with every outcome written, or another round (`run` + 1).
 
 **The third `dirty` run stops the loop.** A review is `dirty` while it has confirmed findings inside the recommended cut. When `run` reaches 3 and it still is, say so before the findings and hand the decision to the owner as one structured choice: merge with the findings listed, amend what is upstream of the change (the plan or the ticket, when the findings keep coming from them), or one more round, saying what changes this time. Agreement between models, or of one model with itself, does not prove the change right: a round with nothing new repeats the last one.
 

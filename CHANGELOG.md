@@ -260,6 +260,23 @@ Built as a stack, one PR per wave; nothing merges before the release.
   `updated`, `deleted`); `/tm-implement` writes the tests from it and never edits a `manual` one.
   `scripts/test-quality.test.mjs` and `scripts/mutate-once.test.mjs` hold the wave.
 
+### Wave D3: review and implement
+
+- **The fix question of `/tm-review`** (item 115): a fix that changes what a caller or the user
+  observes is its own question before any code; a value no source gives is asked without a
+  recommendation; a finding that cites the project's written rule recommends complying; a decision
+  that changed after approval defaults to delivering as approved with a follow-up; a pre-existing
+  defect that blocks an AC is offered as this ticket's. A new **Fixing what was chosen** phase:
+  every finding leaves with an `Outcome:` line, a new AC names its SI, a UI or CSS fix is measured in
+  the browser, and the phase closes with a structured question.
+- **A visual AC** (item 117): the node map names its layer in the cascade, the plan checks its
+  computed style in the browser at the SI's seam, and `/tm-implement` treats a missing browser as an
+  `environment` block, never a unit test in its place.
+- **Reviewing uncommitted work** (item 118): `/tm-implement` writes `manifest.txt` with the ticket's
+  files; `/tm-review <fixed point> --worktree <manifest>` diffs the working tree for exactly those
+  files, keeps everyone else's changes out, records `mode:`, and never commits to pass its own
+  preflight. `scripts/review-fixes.test.mjs` holds the wave.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |
