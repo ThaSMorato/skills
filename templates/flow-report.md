@@ -45,6 +45,9 @@ findings: {cross_project: <n>, single_project: <n>, single: <n>, untagged_judged
 | Trim and tidy reverted / applied | | | |
 | Diagnoses cause-found / all | | | |
 | Walkthrough missed / questions | | | |
+| Cost per ticket (minutes, tool calls) | | | |
+| Other answers, clarifications and overrules per stage | | | |
+| Pull requests with CI red after open | | | |
 
 ## Untagged findings judged here (optional)
 > From reports older than the flow / project tag: each with the judgement made and why.

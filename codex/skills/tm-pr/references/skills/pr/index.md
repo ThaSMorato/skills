@@ -87,7 +87,23 @@ Everything in the plan's **Not verified** list, and every diagnosis seam gap, go
 Required, even when it says `none`. Read the `> Decided` markers in the ticket, the node map, the plan and the documents the diff edits, and list each one that changes what the request asked for (a criterion dropped or rewritten, a behavior the owner chose differently, a `supersedes`). A reviewer who approves the diff approves the request as changed, and should see the change rather than infer it.
 
 ## Output
-Write the body to `.scratch/<feature-slug>/prs/<NN>-<slug>.md`, one file per ticket. Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/prs/<NN>-<slug>.md`).
+Write the body to `.scratch/<feature-slug>/prs/<NN>-<slug>.md`, one file per ticket. The body is the pull request's text, so it carries no frontmatter; beside it, write `.scratch/<feature-slug>/prs/<NN>-<slug>.record.md`:
+
+```markdown
+---
+kind: pr
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+slug: <NN>-<slug>
+url: <the pull request's URL, or `not opened`>
+ci_red_after_open: pending | true | false
+---
+```
+
+`ci_red_after_open` stays `pending` until CI has run on the opened pull request. On a later run of this stage (the owner runs it again after CI), read the first CI run that started after the pull request opened (`gh pr view <url> --json createdAt,headRefName`, then `gh run list --branch <head> --json createdAt,conclusion,status`): `true` when it failed, `false` when it passed, still `pending` while it runs. It is how `$thasmorato-skills:tm-retro` measures what reached CI broken.
+
+ Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/prs/<NN>-<slug>.md`).
 
 ## Postflight
 After the body is written, and again after the pull request opens:

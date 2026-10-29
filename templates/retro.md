@@ -36,8 +36,8 @@ findings: {flow: <n>, repo-skill: <n>, repo-code: <n>, product: <n>, defect: <n>
 > This section is the series. Keep its shape identical between retros, so the next one can put its
 > numbers beside this one's.
 
-| Ticket | Plugin version | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Unverified | Review findings |
-|---|---|---|---|---|---|---|---|---|---|---|
+| Ticket | Plugin version | Model | Effort | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Unverified | Review findings | Minutes | Tool calls | CI red after open |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 
 **Totals by plugin version:** <per `plugin_version`: tickets, median SIs per AC, escalations, validation runs to `clean`, review findings, lens precision; two versions in one scope are two populations, never one sum>
 

@@ -1489,6 +1489,19 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
   `/tm-flow-report` read it; `/tm-implement` names the retro when the feature's last ticket closes.
 - **Precedents:** the review verifier marks a `pre-existing` finding that a confirmed one copies as
   `pre-existing (precedent of <n>)`, counted in `precedents`; `/tm-retro` ranks it first among the debt.
+### Wave I2: measuring
+
+- **The extractor keeps what the owner sent mid-turn.** A message queued while the assistant worked
+  (`queued_command`, `commandMode: prompt`) was recorded nowhere else and was lost; it is now a
+  `queued` owner turn (an `invoked` one when it is a slash command). In Codex, the generic `exec`
+  wrapper and `multi_tool_use.parallel` are named with the tools they called inside, or `opaque`;
+  no argument is ever kept, which a fixture with a secret pins.
+- **Cost by stage, counted by the extractor:** active and idle minutes, tool calls, invocations,
+  answers outside the options, clarifications and overruled recommendations, in the index and the
+  meta-retro (`cost:` and a new section); wasted calls stay with the analysts. `/tm-retro` sums
+  minutes and tool calls per ticket beside the `model` and the new `effort` of `progress.md`.
+- **`ci_red_after_open`** in a record beside the PR body (`prs/<NN>-<slug>.record.md`, `kind: pr`),
+  `pending` until the owner runs `/tm-pr` again after CI. `/tm-flow-report` gains the cost rows.
 
 ## 0.2.0
 

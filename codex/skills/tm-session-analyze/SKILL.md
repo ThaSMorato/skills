@@ -30,7 +30,9 @@ Run:
 node "references/scripts/session-extract.mjs" --harness codex [--session <id>]
 ```
 
-With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected, the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the **names** of the tools it called. It drops file snapshots, tool results and the other tools' arguments (where file contents and secrets live), thinking, subagent turns and the compaction summaries. In Codex the extractor reads the Codex rollout instead (`--harness codex`) and keeps the same, except denied approvals and answers to structured questions, which a rollout does not record in a form it can rely on yet: say so in the report when the session ran in Codex.
+With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected (a message sent mid-turn included, as a `queued` turn), the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the **names** of the tools it called. It drops file snapshots, tool results and the other tools' arguments (where file contents and secrets live), thinking, subagent turns and the compaction summaries. In Codex the extractor reads the Codex rollout instead (`--harness codex`) and keeps the same, except denied approvals and answers to structured questions, which a rollout does not record in a form it can rely on yet: say so in the report when the session ran in Codex. A Codex wrapper is named with the tools it called inside (`exec(exec_command, apply_patch)`), or `exec(opaque)` when they cannot be named safely.
+
+The index also carries a **Cost by stage** table, computed from the turns: per stage (from the owner's invocation to the next), the active minutes (a pause over 30 minutes is idle, kept apart), the tool calls, the invocations, the answers outside the options offered (`Other`), the questions rejected to clarify, and the answers that overruled a `(Recommended)` option. In Codex the last three are `not measured`.
 
 ## 2. Fan out, one agent per segment
 Call the `spawn_agent` tool with `agent_type = "tm-session-segment-analyst"` for **every** segment **at once** (at most 6 running together; wait for every one), so they run in parallel, each with its segment's path and the index path. A segment fits one agent whole, so there is no chunking and no summarizing, and each agent reads the original conversation rather than a summary of a summary.
@@ -50,6 +52,9 @@ A session shows what no artifact records, so this is where the environment lens 
 - Order the environment findings most severe first, as the lens says.
 
 `$thasmorato-skills:tm-retro` reads these sections for the session side of its environment, so write them even when they are short.
+
+## 3c. The cost
+Copy the Cost by stage table from the index.md into the report, and sum it into the frontmatter's `cost`. The one column the extract cannot count is the wasted calls: take them from the segment analysts' tool-economy signals (a costly call repeated, a chain one command would replace), per stage, citing the segment. The extract counts; the analysts judge; nothing in this table is estimated.
 
 ## 4. Write
 Write `docs/meta-retro/<YYYY-MM-DD>-<session-id>.md`, filling `references/templates/meta-retro.md`. It lives in the project: a finding can be specific to it.
