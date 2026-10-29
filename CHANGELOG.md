@@ -207,6 +207,32 @@ Built as a stack, one PR per wave; nothing merges before the release.
   change or a function only the tests call; trim considers moving a value down so both sides import
   it. `scripts/handoffs.test.mjs` and `scripts/blocker-state.test.mjs` hold the wave.
 
+### Wave D1: `/tm-acceptance`
+
+- **`acceptance-checker`** (new agent, effort high; item 79): the checks run in a context that did
+  not write the code. It has every tool but `Edit` and `NotebookEdit` (`disallowedTools`), so it
+  reaches the owner's browser MCP server whatever its name, writes only the evidence, and returns
+  the verdicts; `/tm-acceptance` writes the record and absorbs.
+- **New verdicts** (items 17, 50, 82, 114): `http` (the request in a reproducible `requests.http`,
+  the response saved), `run` (a command and its output; a ticket with no screen gets one real local
+  run) and `measured` (a non-functional requirement, with its threshold and the value from a load
+  test, log, metric or trace). `browser` means an interactive tool on the real controls; a script
+  that only takes a picture is not one.
+- **Every browser verdict has a Check** (items 80, 81): `mechanical: <what>` or `⚠️ capture only`,
+  counted in `capture_only`. `skills/acceptance/visual-checks.md` asks the page whether the media
+  loaded, the element is in the viewport, nothing clips it and it is clickable at its center; an
+  element that meets the AC's words but cannot be seen fails, and the AC is proposed for amendment.
+  The `ui-audit` technical pass runs the same checks.
+- **Items** (items 18, 114): one per variant; `Depends on:` makes an item whose dependency failed
+  `blocked`, not failed; the last ticket of a story checks every `covered` row of the request trace;
+  a deferred item becomes a linked follow-up.
+- **Means** (item 114): migrations and the server first; the repo's own capture recipe; an obstacle
+  removable locally (a flag, a migration, a seed, a worker, a server the workspace allows) is
+  provided, recorded under `## Means provided` and put back, never a verdict. `mocked` is defined.
+- **An optional exploratory pass** (items 19, 52) after the checks only suggests, under
+  `## Suggested cases`. The report opens with one line per AC. `scripts/acceptance-verdicts.test.mjs`
+  holds the wave.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |
