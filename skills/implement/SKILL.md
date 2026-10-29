@@ -108,7 +108,7 @@ Then write `## Not verified`: every acceptance criterion or deliverable that **n
 
 **A suite that is only green when its tests run alone is not green.** A test that fails or times out in the full run and passes on its own is a defect (shared state, a leak, a missing setup, a slow path in the code), and it stops the run: read `${CLAUDE_PLUGIN_ROOT}/skills/diagnose/SKILL.md` and follow it. Rerunning, blaming machine load, or skipping the hook are not options to offer before the cause is found.
 
-Then set `status: completed` (the only finished value) in `progress.md`'s frontmatter and report the results, the **Not verified** list, and the aggregated out-of-scope notes as follow-ups. A UI behavior in the **Not verified** list is open work, not a footnote: the report says the ticket is not done until `/tm-acceptance` has checked it. Version control (commit/PR) is the user's call; hand back to `/tm-review` first.
+Then set `status: completed` (the only finished value) in `progress.md`'s frontmatter and report the results, the **Not verified** list, and the aggregated out-of-scope notes as follow-ups. A UI behavior in the **Not verified** list is open work, not a footnote: the report says the ticket is not done until `/tm-acceptance` has checked it. Version control (commit/PR) is the user's call; hand back to `/tm-review` first. Write `manifest.txt` beside `progress.md`: every file this ticket created or modified, one path per line, from the SIs' changes checked against `git status --porcelain` (a changed file no SI touched is someone else's, and stays out). Name both ways to review: `/tm-review <fixed point>` once committed, or `/tm-review <fixed point> --worktree .scratch/<feature-slug>/plans/<NN>-<slug>/manifest.txt` before.
 
 ## Rules
 - **Waiting has a deadline.** A wait on something outside the run (a server starting, a container, a long job) states how long it waits and what it does when the time is up; an open wait is a stalled run.
@@ -116,5 +116,6 @@ Then set `status: completed` (the only finished value) in `progress.md`'s frontm
 - The plan is the contract: don't add, drop, or reshape SIs mid-run. If it's wrong, stop and send the user back to `/tm-plan`.
 - One SI at a time, in dependency order. SI tests during the loop; full suite only at the end.
 - Stay in the current SI's scope: note unrelated issues, don't act on them.
+- **A visual check needs a browser.** When an SI's Tests names a check in the browser (a computed style, a visual check) and there is no browser tool (searched as `/tm-acceptance` searches for one), the SI is blocked: an `environment` escalation that names the missing tool, never a unit test asserting a class name in its place.
 - Never weaken tests, never bypass hooks, never swallow errors.
 - **Never suppress a check to get green.** No new `eslint-disable`, `@ts-ignore` / `@ts-expect-error`, `# noqa`, `# type: ignore`, `rubocop:disable`, `//nolint`, skipped or focused tests. A suppression added to pass is the same bypass as a weakened test. When one is genuinely right (a false positive, a generated file), stop, say why, and add it only on the user's OK, with the reason in the SI's Notes.
