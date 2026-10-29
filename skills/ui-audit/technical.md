@@ -23,6 +23,7 @@ Name the pattern when it repeats: one systemic finding ("hardcoded colors in 15 
 - Tables and multi-column layouts with no narrow-screen form.
 
 ## Integrity
+- What should be seen and is not: media that did not load, an element outside the viewport or clipped by an `overflow`, a control covered by another at its center. Run the mechanical checks in `${CLAUDE_PLUGIN_ROOT}/skills/acceptance/visual-checks.md` on every image and primary control of the screen; a capture alone misses a broken thumbnail.
 - Copy that misleads: a label that says one thing and does another; a count that is not the count.
 - Content that is filler: lorem ipsum, "John Doe", round fake numbers, placeholder images in production.
 - Structure interchangeable with any product (the design-specificity verdict, from the technical side).
