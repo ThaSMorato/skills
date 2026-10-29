@@ -1,7 +1,7 @@
 ---
 name: flow-report
 description: 'Gather what several projects learned about the plugin itself: read their /tm-retro and /tm-session-analyze reports, keep the findings tagged flow, group them by the stage they would change, put the flow measurements side by side per plugin version, and rank what the next version should change. Use when planning the next version of the plugin, on "/tm-flow-report" or "what should the next version fix".'
-argument-hint: "<project paths, or a file listing them one per line>"
+argument-hint: "(none): the reports registry · or <project paths, or a file listing them one per line>"
 disable-model-invocation: true
 user-invocable: false
 ---
@@ -11,11 +11,13 @@ user-invocable: false
 `/tm-retro` and `/tm-session-analyze` run inside a project and write there. Each tags the findings that are about the plugin's own process as `flow`. This stage reads those reports **across projects** and turns them into the input for the next version: which stages, gates and templates keep going wrong, and whether the last version moved the numbers it was meant to move.
 
 ## 1. Collect
-Resolve the projects: the paths given, or the lines of the file given (one path per line). For each project, read
+Resolve the projects: the paths given, or the lines of the file given (one path per line). With no argument, read the registry every retro and meta-retro records itself in: `node "${CLAUDE_PLUGIN_ROOT}/scripts/report-registry.mjs" list` prints each report with its repo, date, plugin versions, model, harness and counts by level, and `found: false` when its repo moved or was deleted, which is listed as not found and never an error. A report whose `findings.flow` is 0 has no flow finding to read; its measurements still count. For each project, read
 - `docs/retro/*.md` (`kind: retro`): the **What to change in the process** rows tagged `flow`, the **Measurements** with their `plugin_version` column, and the `plugin_versions` in the frontmatter;
 - `docs/meta-retro/*.md` (`kind: meta-retro`): the **Flow findings**, the **Repeated across segments** items, and the **Environment** rows tagged `flow`, with the report's `plugin_version`.
 
-A retro from before the `flow` / `project` tag has untagged changes: list them apart, as **untagged**, and judge each by the tag rule (would it recur on any project?), saying it was judged here.
+Only `flow` findings are read (`${CLAUDE_PLUGIN_ROOT}/skills/retro/levels.md`): a `repo-skill`, `repo-code` or older `project` finding is about its own repo. A retro from before any tag has untagged changes: list them apart, as **untagged**, and judge each by the level rule (would it recur on any project?), saying it was judged here.
+
+The measurements come from each project's artifacts, read mechanically: `node "${CLAUDE_PLUGIN_ROOT}/scripts/flow-state.mjs" --root <project>` prints every ticket's frontmatter fields. Agents read only the prose findings.
 
 With more than three projects, call the Agent tool once per project, all in a single message, each told to return exactly the items above with their file and section; the synthesis stays here.
 

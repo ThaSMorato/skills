@@ -1,5 +1,5 @@
 ---
-description: Read a whole working session (every compaction segment) and report where the owner had to correct, reject or repeat something and what in the environment got in the way, each tagged as a problem of the flow or of this project, with the repeats across segments first.
+description: Read a whole working session (every compaction segment) and report where the owner had to correct, reject or repeat something and what in the environment got in the way, each tagged with the level it would change (the plugin's flow, this repo's skills, or its code), with the repeats across segments first.
 argument-hint: "(optional) session id, default: the most recent session of this directory"
 disable-model-invocation: true
 ---
@@ -28,14 +28,14 @@ Call the Agent tool with `session-segment-analyst` for **every** segment **in a 
 - **Merge** findings that are the same problem seen twice.
 - **Put repetition first.** A finding whose owner turns appear in two or more segments is the strongest evidence this suite can get that a stage is wrong: the owner said it once, the flow did not learn, and they had to say it again.
 - **Drop any finding without an owner turn** (uuid, timestamp, quote). This is the rule that keeps the report from becoming narrative. The one exception is the **Environment** section below, whose evidence can be the segment and the tool-call names the extract kept.
-- Keep each finding's `flow` / `project` tag. When two agents tagged the same problem differently, `project` wins unless the evidence shows it would recur on any project.
-- **Filter what gets promoted.** Before a `project` finding's change says "make it a skill" or "add it to a guide", run it through `${CLAUDE_PLUGIN_ROOT}/skills/retro/promotion-filter.md`: not findable in five minutes, specific to this codebase, cost real effort, and a trigger the task will actually contain. One that fails stays a finding, marked with the question it failed; it is not proposed as a skill or guide.
+- Keep each finding's level (`${CLAUDE_PLUGIN_ROOT}/skills/retro/levels.md`). When two agents gave the same problem different levels, the lower one wins unless the evidence shows it would recur on any project.
+- **Filter what gets promoted.** Before a `repo-skill` finding's change says "make it a skill" or "add it to a guide", run it through `${CLAUDE_PLUGIN_ROOT}/skills/retro/promotion-filter.md`: not findable in five minutes, specific to this codebase, cost real effort, and a trigger the task will actually contain. One that fails stays a finding, marked with the question it failed; it is not proposed as a skill or guide.
 
 ## 3b. The environment: this stage owns it
 A session shows what no artifact records, so this is where the environment lens (`${CLAUDE_PLUGIN_ROOT}/skills/retro/environment.md`) runs in full, on its two tracks: what each problem cost this session, and what change to the environment prevents it next time.
 - **From the segment analysts' environment signals** (tool-call names, the one exception to the owner-turn rule): navigation (a run of searches before the file was found), tool economy (a costly call repeated), information access (something the agent could not see).
 - **From owner turns**: a correction the owner had to make twice about the same convention is a standard; classify it **mechanical** (propose the lint rule, hook or CI job that would catch it) or **judgement** (a line in the stack guide or the review standard). A `CLAUDE.md` instruction the owner had to repeat is not working where it is: say what should replace it (a check, a pointer, a skill).
-- Tag each environment finding `flow` or `project` like every other finding: a gap in the plugin's own stages is `flow`.
+- Give each environment finding its level like every other finding: a gap in the plugin's own stages is `flow`.
 - Order the environment findings most severe first, as the lens says.
 
 `/tm-retro` reads these sections for the session side of its environment, so write them even when they are short.
@@ -43,4 +43,6 @@ A session shows what no artifact records, so this is where the environment lens 
 ## 4. Write
 Write `docs/meta-retro/<YYYY-MM-DD>-<session-id>.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/meta-retro.md`. It lives in the project: a finding can be specific to it.
 
-Then show the repeated findings first, then the counts by tag, and ask what to act on. This stage records; it changes nothing. A `flow` finding is an improvement to propose to the plugin, and a `project` finding is a skill or guide for this project, each made by whoever owns that file.
+Record the report: `node "${CLAUDE_PLUGIN_ROOT}/scripts/report-registry.mjs" record docs/meta-retro/<YYYY-MM-DD>-<session-id>.md` adds it, with its counts by level, to the registry `/tm-flow-report` reads.
+
+**Then stop.** Show the repeated findings first, then the findings by level. A `flow` finding is never applied here: it waits for `/tm-flow-report`. Each `repo-skill` and `repo-code` finding names the stage that owns its file, for the owner to run if they choose. This stage records; it changes nothing.

@@ -1472,6 +1472,23 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
 - **After a merge that resolved a conflict** (`skills/implement/after-merge.md`): install what the
   other branch brought, regenerate what is generated, rerun the area, and recheck the acceptance of
   every criterion it touched. The implement preflight, the `/tm-pr` preflight and `/tm-flow` cite it.
+### Wave I1: retro and reports
+
+- **Three levels, and the looking-back stages stop.** `skills/retro/levels.md` (new): a finding is
+  `flow` (the plugin, on any project), `repo-skill` (this repo's skills, guides and `CLAUDE.md`) or
+  `repo-code` (its code and configuration); in doubt, the lowest level that resolves it, and a repo
+  convention extends the plugin's stage without copying it. `/tm-retro` and `/tm-session-analyze` write
+  the report and stop: no more "ask what to act on", `flow` is never applied from inside a project.
+  The templates count by level; an old `project` tag is read as one of the two repo levels.
+- **A registry of reports** (`scripts/report-registry.mjs`): each retro and meta-retro records itself
+  in `~/.thasmorato-skills/reports.json`, one file for both harnesses, with its counts by level. With no
+  argument, `/tm-flow-report` reads it; a repo that moved is listed as not found.
+- **`scripts/flow-state.mjs`**: the per-ticket matrix from the artifacts' frontmatter, from the worktree
+  that holds each ticket, with a stale validation, each feature's state (`awaiting-retro` when every
+  ticket completed and no retro covers it) and `resolve` for a loose slug. `/tm-flow`, `/tm-retro` and
+  `/tm-flow-report` read it; `/tm-implement` names the retro when the feature's last ticket closes.
+- **Precedents:** the review verifier marks a `pre-existing` finding that a confirmed one copies as
+  `pre-existing (precedent of <n>)`, counted in `precedents`; `/tm-retro` ranks it first among the debt.
 
 ## 0.2.0
 

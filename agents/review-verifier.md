@@ -31,6 +31,8 @@ Give **every** finding exactly one, with the evidence it requires:
 | `duplicate` | the same defect as another finding in this file | that finding's number |
 | `pre-existing` | real, but in code the diff did not change | `git blame` or the commit that introduced it |
 
+**A precedent.** When a `confirmed` finding breaks the same rule as a `pre-existing` one nearby (the same file, or the same component), the old code is the likely origin of the copy: give the old one the verdict `pre-existing (precedent of <n>)`, where `<n>` is the confirmed finding's number. `/tm-retro` ranks precedents first among the debt.
+
 `pre-existing` follows from the review being scoped to a diff. A finding about unchanged code is true, but it is not this change's work. Killing it would be wrong; mixing it in with the rest would be wrong too.
 
 ## The asymmetry: when in doubt, keep it
@@ -50,6 +52,7 @@ Then the counts:
 ```yaml
 verdicts: {confirmed: <n>, wrong location: <n>, rule does not apply: <n>, impossible scenario: <n>, already handled: <n>, duplicate: <n>, pre-existing: <n>}
 refuted_by_lens: {<lens>: <n>, ...}   # findings a lens raised whose verdict is wrong location, rule does not apply, impossible scenario or already handled
+precedents: <n>   # pre-existing findings marked as the precedent of a confirmed one
 ```
 
 `refuted_by_lens` is how `/tm-retro` measures each lens's precision over time. A lens that is refuted often is one whose instructions need tightening.
