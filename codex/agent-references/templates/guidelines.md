@@ -68,6 +68,7 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 | `docs/architecture/components.md` | you need the component map |
 | `docs/architecture/boundaries.md` | you are adding a dependency between components |
 | `docs/architecture/hld.md` · `docs/features/*/fdd.md` | specifying or verifying behavior |
+| `docs/parallel-sessions.md` | running a second copy at once (a worktree, a parallel session): its ports, database and env file |
 
 ## 7. External references (optional)
 > Authoritative external sources, with what each one answers. Links, not summaries.

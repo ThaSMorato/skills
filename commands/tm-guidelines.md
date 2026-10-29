@@ -4,10 +4,12 @@ argument-hint: "(none): detected from the repo; re-run when the stack changes"
 disable-model-invocation: true
 ---
 
-Call the Agent tool with `guideline-generator` to generate `docs/guidelines.md` for this project.
+Call the Agent tool with `guideline-generator` to generate `docs/guidelines.md` and `docs/parallel-sessions.md` for this project.
 
 The output is a **router**: which guide covers which files, where the project's documents are, and what the repo's real commands are. The depth per technology lives in `.claude/skills/<tech>-guide/`; generate those with `/tm-generate-stack-guide <tech>`.
 
 After the agent returns, show: the detected stack, the routing table, which technologies have a guide and which are marked missing, the commands it found, and the final line count. Then offer to run `/tm-generate-stack-guide` for each missing technology.
+
+For every row of `docs/parallel-sessions.md` marked `to be established`, ask the owner (call the Skill tool with `thasmorato-skills:asking` first), one structured question per row with what the repo suggests as the options, and write each answer into the page. A project that will never run two sessions at once is answered once, and the page says so.
 
 This is a generate-once document; re-run it when the stack changes, not per feature.
