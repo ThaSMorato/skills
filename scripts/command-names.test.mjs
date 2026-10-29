@@ -48,3 +48,18 @@ test('no file cites a command by its name without the prefix', () => {
 
   assert.deepEqual(stale, [])
 })
+
+// The rename to `tm-` rewrote `/plan` to `/tm-plan` wherever it appeared, including inside the paths of
+// files a stage writes (`.scratch/<feature>/plans/<NN>-<slug>/plan.md`, `.scratch/<feature>/pr.md`).
+// Those are artifact names, not commands: a stage writing `tm-plan.md` leaves `/tm-implement` and
+// `/tm-flow` looking for a file that is never there.
+test('no artifact path carries the command prefix', () => {
+  const ARTIFACT_WITH_PREFIX = /[>*\]]\/tm-[a-z-]+\.md/g
+  const sources = [
+    ...markdownFiles('commands'), ...markdownFiles('skills'), ...markdownFiles('agents'), ...markdownFiles('templates'),
+    ...markdownFiles('docs'), ...markdownFiles('adapters'), 'README.md',
+  ]
+  const prefixed = sources.flatMap((path) => (read(path).match(ARTIFACT_WITH_PREFIX) ?? []).map((found) => `${path}: ${found}`))
+
+  assert.deepEqual(prefixed, [])
+})

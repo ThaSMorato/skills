@@ -12,6 +12,7 @@ Read, and number every item:
 - the owner's request, from `.scratch/<feature-slug>/request-trace.md` when it exists (every row marked `covered`), or else the request itself (`task.md`, the brief, the message that started the work);
 - every acceptance criterion of the ticket, by id;
 - the plan's **Not verified** list in `progress.md`;
+- the plan's **Verification prerequisites**: each one the checks need, to confirm it exists before checking;
 - when the ticket builds a screen with a spec in `docs/features/<feature>/ui/<screen>.md`: each state and each width it lists, checked against its capture;
 - when this ticket delivers the last requirement a **guiding scenario** in `docs/product/prd.md` was waiting on (every requirement on its steps is now built): **the whole scenario**, as one item, walked from its first step to the persona's goal (`references/skills/interview/scenarios.md`). Separate checks can each pass on a path no user can walk.
 
@@ -32,6 +33,7 @@ For each item, one verdict:
 - **browser**: performed in the running software. Save a screenshot to `.scratch/<feature-slug>/acceptance/<NN>-<slug>/<item>.png` and say what it shows.
 - **test**: no screen shows it (a rule deep in a service, an error path the UI cannot reach), and a test covers it: name the test, `file:line`.
 - **not verified**: neither was possible. Say why, and what would verify it.
+- **blocked**: a prerequisite the plan declares (`## Verification prerequisites`) is missing: the state, fixture or config it names is not there. Name it and the SI that was to produce it; nothing about the feature was learned, so this is neither a pass nor a failure.
 
 Walk a whole-scenario item **as its persona**: with only what they would know, through the way they would find the feature, never by typing a URL only the team knows. Write down every point where you hesitated, searched, read a message twice or took a step the scenario did not have: that is **friction**. Friction is not a failure (the persona got there) and goes in its own section, with a screenshot and the step it happened on, for the owner to judge.
 
@@ -51,7 +53,7 @@ harness: <claude-code | codex>
 slug: <NN>-<slug>
 verified_at: <the commit checked, git rev-parse HEAD>
 items: <count>
-by_verdict: {browser: <n>, test: <n>, not_verified: <n>}
+by_verdict: {browser: <n>, test: <n>, not_verified: <n>, blocked: <n>}
 failed: <count>
 friction: <count of friction notes>
 mocked: <true | false>

@@ -22,7 +22,7 @@ Concretely: you may not write that something was hard, that a decision was debat
 |---|---|
 | `.scratch/<slug>/issues/<NN>-*.md` | what was asked for: acceptance criteria, exclusions, the declared type |
 | `.scratch/<slug>/design/<NN>-*.md` | the node map, the interfaces intended |
-| `plans/<NN>-*/tm-plan.md` | how it was sliced, and the deliverable commands |
+| `plans/<NN>-*/plan.md` | how it was sliced, and the deliverable commands |
 | `plans/<NN>-*/validation.md` | **the gate's history**: the `## Resolved` section keeps every issue cleared on a re-run, with its id |
 | `plans/<NN>-*/progress.md` | what actually happened per SI: test results, escalations, out-of-scope notes |
 | `.scratch/<slug>/reviews/<NN>-*.md` | the findings each lens produced |

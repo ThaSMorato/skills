@@ -24,7 +24,7 @@ Everything above this line is a **document derived from another document**. The 
 
 The repository is the only independent source in the chain. Consult it here, while a correction still costs a paragraph.
 
-**First, call the Agent tool with `pattern-scout`**, passing the ticket path. It searches in an isolated context and returns how the repository already does this kind of work: at least three **analogues**, the **conventions to mirror** per category (errors, validation, data access, logging, config, tests), and the **integration points** where new code gets wired in, each at `path:line` with the real code. It documents what exists and judges nothing. Read what it returns before drawing a node: an analogue is the first candidate for `reuses` or `extends`, and a convention is how a `new` node should look.
+**First, call the Agent tool with `pattern-scout`**, passing the ticket path. It searches in an isolated context and returns how the repository already does this kind of work: at least three **analogues**, the **conventions to mirror** per category (errors, validation, data access, logging, config, tests), and the **integration points** where new code gets wired in, each at `path:line` with the real code. It documents what exists and judges nothing. Read what it returns before drawing a node: an analogue is the first candidate for `reuses` or `extends`, and a convention is how a `new` node should look. When an analogue you mirror leans on framework or library behavior (a lifecycle hook, a default, a middleware order), read that behavior in the installed source or the docs of the installed version, not from memory: the mirror copies what the analogue does, and only the framework's code says why it works.
 
 Then, for each capability the ticket needs, **search before you assume it must be built**:
 - grep the domain nouns and verbs from the ticket and the glossary;
@@ -90,6 +90,15 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 
 | Category | Mirror | Pattern |
 |---|---|---|
+| commit and CI gates | <the hook and CI files> | <what they run on a change like this one: lint of the changed lines or all, the paths excluded, type-check, build, the test command> |
+
+## Observers
+> The specs and checks that assert on what this ticket changes: a route, a URL, an event name, a
+> message text, a schema. Grep each changed name across the tests (E2E included) and the CI config.
+> Each observer is updated by the SI that changes what it observes, or it breaks a later SI.
+
+| Changed | Observed by |
+|---|---|
 
 ## Integration points
 | To make it reachable | Change | Example |

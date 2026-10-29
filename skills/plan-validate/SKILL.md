@@ -10,14 +10,15 @@ user-invocable: false
 Read the plan and decide whether it is safe to implement. This skill **finds problems**; it does not fix them and it does not write code.
 
 ## Input
-`/tm-plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/tm-plan.md`. If it does not exist, abort: *"No plan at <path>. Run /tm-plan <ticket> first."*
+`/tm-plan-validate <slug>` → resolve `.scratch/<feature-slug>/plans/<NN>-<slug>/plan.md`. If it does not exist, abort: *"No plan at <path>. Run /tm-plan <ticket> first."*
 
 ## Sources
 Read the plan, and everything it is accountable to:
 - **the ticket** it points to: the acceptance criteria and exclusions;
 - **the node map** at the `design:` path: the modules, interfaces and seams the plan is supposed to encode;
 - **the FDD** the ticket names: the declared test seams and the public contracts;
-- **the ADRs, the boundary contract and the guidelines** binding in the area.
+- **the ADRs, the boundary contract and the guidelines** binding in the area;
+- **the repository**: the scripts and the CI the Deliverables name, the installed source of every framework or library a test relies on, and the existing tests the plan cites as proof. This stage judges the plan against the code, not only against the documents above it.
 
 ## Checks
 
@@ -34,9 +35,23 @@ Read the plan, and everything it is accountable to:
 | `DS-N` | Dispersion | The SI owning the most ACs owns more than **3×** as many as the one owning the fewest: the slicing is out of scale with itself |
 | `DM-N` | Design divergence | An SI that introduces a module the node map doesn't have, changes an interface the map declares, attaches tests at a seam the map and FDD don't name, or has a `Mirror:` that is not a row of the map's Conventions to mirror |
 | `GR-N` | Grounding | A node the map calls `new` with no recorded search, or with a search a grep contradicts, because the thing already exists |
-| `DL-N` | Deliverables | Deliverables missing the repo's real test / type-check / build commands |
+| `DL-N` | Deliverables | Deliverables missing the repo's real test / type-check / lint / build commands; a command that exists in neither the scripts nor the CI; a command whose scope differs from what the repo's own runner checks (the hook's exclusions, lint of the changed lines) with no reason given; no frozen-lockfile install when a manifest changes |
+| `RC-N` | Requirement consequence | A consequence of what the ticket asks that no SI handles: a derived value that can collide, a UNIQUE the new data can break, a race between two writers, a sequence that must be atomic, a partial failure that leaves state half-written |
+| `VB-N` | Verification blocked | An acceptance criterion that cannot be checked with this ticket and its blockers alone (it needs a login, data or a screen another ticket delivers and this one is not blocked by); the resolution is that this ticket delivers a stub, a flag or an override for it, or that the missing ticket becomes a blocker |
 | `PM-N` | Pre-mortem | A concrete failure scenario inside the ticket's scope that no SI handles, found by assuming the plan shipped exactly as written and failed (see below) |
 | `AS-N` | Unmarked assumption | A decision in one of the `asking` skill's assumption classes (§6: a threshold, a failure behavior, a visibility rule) that the ticket, node map and FDD do not give, written into an SI with no `> Assumed:` marker, and that would change what the SI builds if it were different |
+
+**`RC` reads the requirement for what it implies, not what it says.** A ticket that asks for a slug derived from the title implies two titles that make the same slug; one that adds a column under a UNIQUE implies the rows that already break it; one that decrements a balance implies two requests at once. A consequence an SI handles, by its actions or its tests, is not a finding: name the SI and drop it. A consequence outside what the ticket implies is scope.
+
+**`VB` is checked against the dependency graph.** For each AC, ask what must already exist to observe it (a logged-in user, a record, a screen) and whether this ticket or a ticket in its `Blocked by` produces it. If neither does, the AC passes every test in this plan and still cannot be accepted.
+
+**Proof comes from the repository** (with `GR`):
+- every framework or library behavior a test depends on is grounded in the installed source or the version's docs, or in a recorded grep; a behavior taken from memory is `GR`;
+- every fact about the repo's data a test depends on (a seed, a fixture, a row that exists) is grounded the same way;
+- an existing test cited as covering a criterion counts only when the plan shows it failing without the change; otherwise it is `UT`;
+- a "checked and clear" note that describes a mechanism able to defeat its own assertion (a mock that returns what the test expects, a retry that hides the failure) is `UT`;
+- a resolution that prescribes a mock is checked against the project's mock rule (the testing guide, `docs/guidelines.md`) before it is suggested;
+- a plan that builds one half of a round trip (the write and not the read, the request and not the response handling) and defers the other half with no ticket for it is `CV`.
 
 For a plan with `type: bugfix`, also check that the ticket's Source is a diagnosis with `status: cause-found` (otherwise `IC`: the cause is not known, so the fix is a guess), that every level in the diagnosis's `levels` has its pinned and flipped tests in an SI, unless the level is in `seam_gaps` and the plan names it as a gap (a missing level is `UT`), that the final verification runs the diagnosis's `loop` command (`UT` when it does not), and that no SI modifies a flipped test (`IC`).
 
@@ -44,7 +59,7 @@ For a plan with `type: structural`, also check that no SI modifies an existing t
 
 **`SZ` is a ceiling; `UZ` and `IV` are the floor.** Every size rule used to be a ceiling, and a ceiling cannot stop over-splitting: "write a test" fits comfortably under any of them. An SI is too small when **either** test fails. The first is **observable behavior**: its own red step fails because something a caller can see is missing. That rules out "write the test", since a test is how an SI verifies behavior, not an SI. The second is **trace**: it owns at least one ticket AC. That rules out "change the value", unless an AC asks for it. The quickest place to look is the count. **A plan with more SIs than the ticket has ACs** is where over-splitting lives, so read those SIs first. A prefactoring SI adds no behavior by definition; for it, the tests become *existing tests stay green, and it names the AC it makes easy* (`enables AC-2`). One that enables nothing is refactoring for its own sake.
 
-`DS`'s 3× is a starting value, recalibrated from real plans; record the ratio in the finding. `DS` runs only above `gear: small`: across 1 to 3 SIs a ratio says nothing.
+`DS`'s 3× is a starting value, recalibrated from real plans; record the ratio in the finding. `DS` runs only above `gear: small`: across 1 to 3 SIs a ratio says nothing. `SZ` does not fire on an SI that is one red-green-refactor cycle at one seam because the slicing chose to verify it with one check, however many ACs it closes.
 
 **A slicing the owner decided is settled.** When the plan's `## Slicing` carries a `> Decided:` marker, `SZ` and `DS` do not raise an issue that would undo it: write what they would have said under `## Notes`, without an id, so the owner sees it and nothing is blocked. The other checks still apply in full: a merge that leaves an AC unowned (`CV`), untestable (`UT`) or off the node map (`DM`) is an issue whoever chose it. When a fix to another finding forces a new slicing, the plan goes back to the owner's slicing question; it is not re-sliced silently.
 
@@ -66,6 +81,8 @@ plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.js
 model: <the model id your harness reports for this session; `unknown` when it does not say>
 harness: <claude-code | codex>
 slug: <NN>-<slug>
+plan_sha256: <shasum -a 256 of plan.md as validated; a plan edited afterwards no longer matches>
+plan_revision: <the plan's revision as validated>
 status: clean | dirty
 open_issues: <count of open issues>
 run: <1 on the first validation; +1 on every re-run>
@@ -88,6 +105,10 @@ fired: {<prefix>: <count>, ...}   # every id ever raised, open and resolved, by 
 ```
 
 `status: clean` only when every finding is resolved: no open issues. Otherwise `status: dirty`.
+
+**The verdict is for one version of the plan.** Compute `plan_sha256` (`shasum -a 256 plan.md`, or `sha256sum`) right before writing this file. An edit to the plan afterwards, by hand or by `/tm-plan`, changes the hash, and `/tm-implement` and `/tm-flow` read a mismatch as no validation at all.
+
+**When the gate corrects the plan in the same session** (the owner accepts a resolution and the plan is edited before this file is written), check the node map node behind the corrected SI in the same pass, and when an owner's `> Decided:` changes a value, rewrite the text around it in the plan too, not only the marker.
 
 **Every id uses a prefix from the Checks table**, never a generic numbering (`PV-1`, `F-3`). The prefix is the finding's category, and `fired` is the per-project record of which mistakes this flow actually catches; a finding with no category is invisible to it. `fired` is cumulative: a re-run adds its new ids and never drops resolved ones.
 

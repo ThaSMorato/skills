@@ -99,6 +99,34 @@ Built as a stack, one PR per wave; nothing merges before the release.
 - **`/tm-docs-migrate`** adds the callout lines and moves Status and Level into the frontmatter.
   `scripts/adr-links.test.mjs` holds the wave.
 
+### Wave C1a: the plan and its validation
+
+- **Fixed (from wave A):** the rename to `tm-` had also rewritten two artifact paths, so the plan was
+  written to `plans/<NN>-<slug>/tm-plan.md` and the PR body to `.scratch/<feature>/tm-pr.md`. Back
+  to `plan.md` and `pr.md`; `command-names.test.mjs` pins it.
+- **The verdict belongs to one version of the plan** (item 7): `validation.md` records `plan_sha256`
+  and `plan_revision`; `/tm-implement` refuses a plan whose hash changed, and `/tm-flow` shows it stale.
+- **Re-entry and amendment** (items 8, 101): with a plan in place, a `dirty` validation is revised
+  against its findings without asking; a plan in execution freezes its done SIs, and an amendment
+  takes the next SI id (`/tm-plan <ticket> amend "<change>"`). The plan checks itself before it is
+  handed over and after each amendment, and it is written section by section (item 10).
+- **Sliced coarser** (item 100): `ticket-plan` weighs the node map first and slices by how each part
+  is verified; `/tm-tickets` estimates SIs at the plan's grain and says the totals at the gate, and
+  records the owner's slicing in `request-trace.md`, which `tickets-validate` then treats as
+  information.
+- **`plan-validate` reads the repository** (items 6, 77, 102, 103): `RC-N` for a consequence of a
+  requirement no SI handles (collision, UNIQUE, race, atomicity, partial failure), `VB-N` for a
+  criterion that cannot be checked with the ticket and its blockers, `DL` against the repo's own
+  scripts and CI, framework behavior and repo data grounded in the installed source, an existing test
+  counted as proof only when shown red.
+- **The plan declares** each SI's `Contracts changed` and their consumers, whether each test starts red
+  or green, and the `Verification prerequisites` an AC check needs (item 78); `/tm-acceptance` has a
+  `blocked` verdict for a missing one.
+- **The node map** reads the `commit and CI gates` and lists the `Observers` of every name the ticket
+  changes, and an analogue's framework behavior is read in the installed source (items 102, 103).
+- **Research trigger** (item 11): two plausible ways and no source that chooses stop the plan with a
+  `> Needs Input:` that names `/tm-research`. `scripts/plan-loop.test.mjs` holds the wave.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |

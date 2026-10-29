@@ -66,13 +66,13 @@ A part is `covered`, or `excluded`/`deferred` only with the owner's `> Decided:`
 The set is validated by `$thasmorato-skills:tm-tickets-validate`, which the owner runs: coverage against the FDD, invention, tickets too big or too small, several tickets on one seam, blocking cycles and dispersion. This stage never runs it, and never loops until a set passes: authoring and verification stay apart, as in the code phase.
 
 ## 5. Quiz the user
-Present the breakdown as a numbered list (per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers**, **estimated SIs**), headed by the **tickets-to-seams count**, the number of tickets in words, and any request part not `covered`. The follow-ups are listed after, as their own question. Ask (merges and splits as a multi-select):
+Present the breakdown as a numbered list (per ticket: **Title**, **Type**, **Seam**, **Blocked by**, **What it delivers**, **estimated SIs** at `$thasmorato-skills:tm-plan`'s grain, which is one SI per check at one seam, merged as coarsely as `ticket-plan` merges them), headed by the **tickets-to-seams count**, the number of tickets and the total of SIs this will create, both in words, and any request part not `covered`. The coarsest set that clears the floor is the `(Recommended)` answer. The follow-ups are listed after, as their own question. Ask (merges and splits as a multi-select):
 1. Is the granularity right?
 2. **Are these comparable to each other?** Show the sizes side by side. This is the question that catches dispersion; asking only about the set as a whole never does.
 3. Are the blocking edges genuine gates?
 4. Should any be merged or split?
 
-Every change edits the files. Iterate until the user approves the set, then stop and tell them the next command, which they run: **`$thasmorato-skills:tm-tickets-validate <feature>`**. The set is not ready for `$thasmorato-skills:tm-design` until it reports `clean`.
+Every change edits the files. Iterate until the user approves the set, record it in `request-trace.md` under `## Slicing` as `> Decided: <the ticket count and the merges or splits the owner chose> — owner, <YYYY-MM-DD>`, then stop and tell them the next command, which they run: **`$thasmorato-skills:tm-tickets-validate <feature>`**. The set is not ready for `$thasmorato-skills:tm-design` until it reports `clean`.
 
 ## 6. Publish (blockers first)
 The local files are the default and are already written. If the user asks for a real tracker (GitHub, etc.) and a remote exists, publish only a set that `.scratch/<feature-slug>/tickets-validation.md` reports `clean` for (when it does not, say that `$thasmorato-skills:tm-tickets-validate <feature>` comes first, for the owner to run), one issue per ticket in dependency order using native blocking links. Never close or modify a parent issue.
