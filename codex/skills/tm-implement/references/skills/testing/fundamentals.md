@@ -84,6 +84,28 @@ afterEach(()  => { useRealClock() })        // always, even when the test fails
 | **Testing the framework** | asserting that the ORM saves or the router routes proves nothing about your code | test only the behavior you wrote |
 | **Magic values** | a bare `42` hides why the test exists | name it, or build it through a factory override that says what it is about |
 
+## Worth a test, and not
+
+| Worth a test | Not worth one |
+|---|---|
+| a rule the domain states: a threshold, a rounding, who may do what | the framework doing its job: the ORM saves, the router routes |
+| an error path the code chooses: what it returns, raises, retries | a trivial accessor, a constant, a re-export |
+| a boundary: the value at the limit and the one past it | a private helper the public interface already reaches |
+| a contract others consume: a route's shape, an event's payload | the exact copy of a message, beyond the one test that asserts the format |
+| a bug that happened, pinned and flipped | generated code, unless the generator is yours |
+| a state the user can reach: empty, loading, error | a third party's behavior, beyond the part of its contract you rely on |
+
+**Mocks: about three per test.** A test that needs more than about three test doubles is saying the unit talks to too many collaborators. The fix is the design (a deeper module, a seam further out), not a fourth double. Doubles stand at the boundary (the network, the clock, the filesystem, another service), never in place of the unit's own internals.
+
+## Mutation testing
+
+Coverage says a line ran under a test; mutation says a test would notice if the line were wrong. A mutation tool changes the code one small way at a time (a `>` into `>=`, a call removed, a constant flipped) and runs the tests: a mutant the tests catch is **killed**, one they do not is **survived**.
+
+- **Reading a survivor.** It points at one of three things: a **missing assertion** (a test runs the line and checks nothing about it), a **missing boundary** (no case sits at the limit the mutation moved), or **dead code** (nothing depends on the line, so changing it changes nothing: delete it).
+- **Equivalent mutants** change the code without changing behavior (a `>=` where the two values can never be equal). Mark each with why it is equivalent; never write a test to kill one.
+- **Never a percentage target.** A mutation score turned into a goal is met by tests that assert everything about nothing. The survivors are findings, read one by one.
+- **Where it runs:** on the diff's files during review (`review-tests`), over a whole suite on demand or in a nightly CI job (`$thasmorato-skills:tm-test-audit`), and once per new case in the red step (`$thasmorato-skills:tm-implement`, one mutation made by hand). The tool for each stack is named in its stack guide, never here.
+
 Group by scenario (`describe('Success')` / `describe('Failure')`) and name each test after the behavior it expects (`it('should …')`); the file-naming convention is the project's, and belongs in its generated test guide.
 
 ## Tests are first-class code (living documentation)

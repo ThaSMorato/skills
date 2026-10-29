@@ -23,6 +23,7 @@
 | `ui-spec.md` | `/tm-ui-design` | `docs/features/<feature>/ui/<screen>.md` |
 | `design-system.md` | `/tm-ui-design` (only when the project has a design system) | `docs/product/design-system.md` |
 | `ticket.md` | `/tm-tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
+| `e2e-spec.md` | `/tm-plan`, when the repo has an E2E runner | `.scratch/<feature>/plans/<NN>-<slug>/e2e.md` |
 | `system-profile.md` | `architectural-analyzer` | `docs/analysis/system-profile.md` |
 | `declined.md` | `/tm-tidy`, `/tm-trim`, `/tm-review` (append-only) | `docs/declined.md` |
 | `component-analysis.md` | `component-analyzer` | `docs/analysis/components/<component>.md` |

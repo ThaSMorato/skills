@@ -5,7 +5,7 @@
 | Kind | Skills |
 |---|---|
 | Doc & design | `interview`, `questionnaire`, `domain-model`, `ui-audit`, `ui-design`, `design`, `prototype` |
-| Dev loop | `plan`, `implement`, `tdd`, `trim`, `tidy`, `acceptance`, `walkthrough`, `pr`, `diagnose` |
+| Dev loop | `plan`, `implement`, `tdd`, `trim`, `tidy`, `acceptance`, `walkthrough`, `pr`, `diagnose`, `test-audit` |
 | Verification | `doc-validate`, `tickets-validate`, `plan-validate` |
 | Generators | `generate-test-guide`, `generate-stack-guide` |
 | Repository setup | `guardrails` |

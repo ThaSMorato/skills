@@ -29,6 +29,7 @@ Extract from the chosen source, filtered to the **versions this repo actually us
 - **Framework specifics:** lifecycle, dependency injection, configuration, the escape hatches and when they are legitimate.
 - **Gotchas:** the things that are correct-looking and wrong here.
 - **Security idioms:** the safe way to do the dangerous things in this stack; the `security` skill's catalog is generic on purpose, and the safe idiom is not.
+- **The mutation tool** this stack uses (Stryker, mutmut, mutant, go-mutesting, PIT, …), its per-file or incremental mode and its command, for `review-tests` and `$thasmorato-skills:tm-test-audit`; `none` when the ecosystem has none.
 - **Component boundaries:** what an independently releasable unit *is* in this ecosystem (a gem, a workspace package, a module, a crate); the `architecture` skill cannot know this.
 
 Where the repo and the external source disagree, the **repo wins** and the divergence is noted; a guide that contradicts the code it governs will be ignored.

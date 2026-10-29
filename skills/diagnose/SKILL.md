@@ -72,6 +72,9 @@ With the cause at `file:line`:
 ## 6. Clean up
 **Done when** a search for the debug prefix finds nothing, the throwaway scripts and prototypes are deleted (or kept on purpose under a clearly named debug path), and the loop command is written in the output so the fix step can re-run it. After the fix, the loop runs again against the original, un-reduced scenario, and **the hypothesis that held goes in the commit or PR message**, so the next person debugging this area learns from it.
 
+## 7. Sweep for the same defect
+The cause is a pattern, not only a line: the same unchecked null, the same missing `await`, the same query built by concatenation. Once the cause is known, write the search that finds the pattern (a grep, an AST query, a linter rule) and run it over the repository. Read each hit, since a match is not a defect, and list every confirmed one by `file:line`; their count is `siblings`. They are not fixed in this ticket: each becomes a line in `.scratch/<feature-slug>/follow-ups.md`, or a ticket when the owner says so. When the search could run on every change (a lint rule, a guardrail), say so.
+
 ## When fix attempts are running (inside `/tm-implement`)
 Each attempt **names the hypothesis it tests and its kind** (code, environment/data, measurement). **Three attempts in a row of the same kind stop the loop**: go back to step 2 and look at the other kinds. That is what keeps three tries from being spent on one guess (three timeout tweaks, three variations of one conditional).
 
@@ -92,6 +95,7 @@ probes: <n run>
 levels: [<each level the bug crosses, e.g. e2e, integration, unit>]
 seam_gaps: [<each level with no seam that reproduces the bug>]
 cause: <path:line, or `unknown`>
+siblings: <count of the same defect confirmed elsewhere, by section 7>
 ---
 ```
 

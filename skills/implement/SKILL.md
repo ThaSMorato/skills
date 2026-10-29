@@ -68,6 +68,7 @@ baseline_failures: <count of failures recorded under Baseline, before the first 
 - **Status:** done | pending | escalated
 - **Tests:** <result, or "no tests">
 - **Deviation:** <a small adaptation the plan did not spell out: a name, a path, a compatible type; `none` when there was none>
+- **Mutation:** <per new case: the file, the text broken, `killed`, the log; `none (structural)` for a structural SI>
 - **Notes:** <out-of-scope observations, or "none">
 
 ## Learned
@@ -85,8 +86,8 @@ Run SIs in Dependency-Map order. Never skip ahead; never run two SIs in one pass
 **The SI ends at step 6.** A status message is not an end: until the SI is recorded and its tests pass, keep working through the steps in this turn. And keep the diff to what the SI asks: a point fix changes the lines it fixes, not the module around them. No new abstraction, option or layer the SI does not name; the refactor step cleans what this SI touched, nothing wider.
 
 1. **Read only this SI** (Description, Technical actions, Tests, Mirror, Dependencies, Acceptance criteria). If it has a `Mirror:`, open those lines before writing anything: the new code should read like them. Keep a short checklist in working memory: one item per technical action, one per test file, plus "run tests".
-2. **Red**: write the failing test(s) first, at the seam(s) the SI names. Each test verifies real behavior through the public interface; expected values come from an independent source, never recomputed the way the code does. Run them; watch them fail for the right reason.
-3. **Green**: write the minimum code to pass. No speculative features.
+2. **Red**: write the failing test(s) first, at the seam(s) the SI names. Each test verifies real behavior through the public interface; expected values come from an independent source, never recomputed the way the code does. Run them; watch them fail for the right reason. When the plan has an `e2e.md`, the SI that owns an AC writes its end-to-end test from the entry (`new` or `updated`), and fills its `Test` and `Written at`; a `manual` entry's test is never edited.
+3. **Green**: write the minimum code to pass. No speculative features. **Then show each new case can fail:** break the behavior its Tests line names, at one place, with `node "${CLAUDE_PLUGIN_ROOT}/scripts/mutate-once.mjs" --file <path> --from <text> --to <text> --log .scratch/<feature-slug>/plans/<NN>-<slug>/mutations/<case>.log -- <the case's test command>`. It refuses a text that does not occur exactly once, puts the file back whatever happens, and its exit status is the verdict: 0 killed, 1 survived, 2 could not run. A survivor means the case asserts nothing about that behavior: fix the case, never the code. A characterization case (one that started green) does not close the SI without its kill.
 4. **Refactor: production _and_ tests.** With tests green, clean both:
    - *Production:* run the `code-smells` checklist; leave it cleaner than you found it.
    - *Tests:* they are first-class code and the low-level documentation of this behavior; refactor them too. Enforce F.I.R.S.T. and the single-act rule (one Act per test), and grow the **test DSL** (builders / mother objects, custom matchers, composed results) so each test reads like a spec. Never weaken a test to make it pass.

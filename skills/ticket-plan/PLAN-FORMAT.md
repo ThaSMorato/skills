@@ -38,7 +38,7 @@ revision: <1 when first written; +1 every time the plan is revised after a dirty
 ### SI-1: <name>
 - **Description:** <what this vertical slice delivers>
 - **Technical actions:** <ordered steps; intent-level, not stale full paths>
-- **Tests:** <seam(s) + layer(s) to cover, per the `testing` skill, or `none (<reason>)`; each case says whether it **starts red or green**, decided after grepping the existing assertions it touches>
+- **Tests:** <seam(s) + layer(s) to cover, per the `testing` skill, or `none (<reason>)`; each case says whether it **starts red or green**, decided after grepping the existing assertions it touches, and the behavior that turns it red (what, broken, would make it fail), leaving the exact mutation to the red step>
 - **Contracts changed:** <every interface, route, event, message or schema this SI changes, with its consumers (callers, specs, observers); `none` when it changes none>
 - **Mirror:** <optional: `path:line` rows from the node map's Conventions to mirror that this SI's code should look like>
 - **Dependencies:** <SI ids that must complete first, or `none`>

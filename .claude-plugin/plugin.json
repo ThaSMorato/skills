@@ -39,6 +39,7 @@
     "./skills/doc-validate",
     "./skills/tdd",
     "./skills/diagnose",
+    "./skills/test-audit",
     "./skills/testing",
     "./skills/implement",
     "./skills/trim",
