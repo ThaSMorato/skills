@@ -16,6 +16,7 @@ Your context is isolated; read:
 ## Rules
 - **Type by question.** Choose each diagram by the technical question it answers: temporal interaction → **sequence**; decision flow/algorithm → **flowchart**; state-dependent behavior → **state**; structure/contracts → **class**; data model → **ER**.
 - **Density control.** 6–8 diagrams (cap ~10); no duplicated views; short labels, clean syntax, no emojis; split a diagram over ~10 nodes into complementary views.
+- **Quote a label** that holds `/`, `(`, `[`, `{` or `|`: `A["POST /orders (retry)"]`. Unquoted, those characters open a shape or an edge label and the diagram fails to render.
 - **Language matching**; keep technology names in English.
 - **No fabrication**: only what the FDD supports; note any inference.
 

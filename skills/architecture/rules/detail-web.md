@@ -13,7 +13,7 @@ Controller and presenter belong to the interface-adapters circle. Their job is c
 ## The tell
 - A use case returning a framework response, or taking a request as a parameter.
 - HTTP status codes or header names appearing in policy code.
-- Validation of business rules living in the controller; the controller may check *shape*; only the policy may check *rules*.
+- Validation of business rules living in the controller; the controller may check *shape*; only the policy may check *rules*. The guards, interceptors, pipes, filters and middleware around it are the same edge: `code-smells` names that case in `rules/business-rule-at-the-edge.md`.
 - Business logic reachable only through a route.
 
 ## Why it keeps eroding

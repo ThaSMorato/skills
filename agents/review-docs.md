@@ -26,6 +26,7 @@ Setup and usage docs a person or an agent follows: `README*`, `CONTRIBUTING*`, `
 For every changed hunk, find the documentation that talks about what it changed: grep the changed names (commands, flags, env vars, endpoints, config keys, function names) across the doc files. Then, for each statement you find:
 - **Is it still true?** A renamed command, a removed flag, a new required env var not in the sample, a changed default, an endpoint whose shape moved, a doc comment whose parameters no longer match.
 - **Is something now missing?** A new required configuration, a new setup step, or a new public command that the docs a user follows do not mention at all.
+- **Is a generated spec empty where it matters?** When the repo generates an OpenAPI spec from the code, every schema a route references has `properties` (a DTO the generator cannot read comes out as a bare `{ "type": "object" }`, and every client typed from it gets an empty type), and every status the handler returns, the error ones included, is in its `responses`. The fix is in the code that produces the spec, never in the consumer.
 
 **Skip** a diff that only touches tests, only touches docs, only fixes typos, or only changes CI configuration: there is nothing in it for documentation to disagree with. Say you skipped it.
 

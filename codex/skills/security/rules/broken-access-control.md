@@ -1,4 +1,4 @@
-> Part of the `security` skill. CWE-639 / CWE-862 / CWE-863 · OWASP A01.
+> Part of the `security` skill. CWE-639 / CWE-862 / CWE-863 / CWE-204 · OWASP A01.
 
 # Broken access control
 
@@ -19,3 +19,10 @@ The most common and most damaging class, and the one least visible in a diff, be
 **The fix.** Deny by default: the framework requires an explicit permission declaration per route, and a route without one does not serve. Check on the server for every state change, never only where the UI decides what to render.
 
 **Watch for.** Access checked on the read path and not the write path, bulk endpoints that skip the per-item check, and second-order access: an id nested inside a payload that is trusted because the top-level id was verified.
+
+## Existence disclosure: 404 or 403
+**The tell.** A sensitive area answers `403` to a caller who may not see it. "It exists, and it is not yours" is information: with predictable ids it becomes enumeration, and a `403` on an admin route confirms the route is worth attacking.
+
+**The fix.** Decide per feature, because it changes the API contract and what support can diagnose: transparent (`404` for missing, `403` for forbidden) by default, masked (the same `404` and the same body for both) where existence itself is sensitive. The query scoped by `(id, owner)` gives the masked `404` for free: the record of another is simply not found.
+
+**Masking is not authorizing.** The check still runs on every path, and a forbidden path that takes longer than a missing one leaks through the clock.

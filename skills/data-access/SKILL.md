@@ -33,4 +33,5 @@ Read a rule file **only when its row matches**. Every finding carries **the rule
 | Weakness | Tell | Rule |
 |---|---|---|
 | Wide transaction | a transaction that spans remote calls, user think-time, or a loop over many rows | `rules/wide-transaction.md` |
+| Compensation inside one database | steps in one database, each in its own transaction, undone by a compensating delete | `rules/same-database-compensation.md` |
 | Cache invalidation | a write path that changes data a cache holds, with no invalidation or expiry | `rules/cache-invalidation.md` |
