@@ -2,6 +2,7 @@
 name: diagnose
 description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, on "debug / why does this fail / find the bug / this broke", for a performance regression, and inside $thasmorato-skills:tm-implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 A bug whose cause is unknown is not fixed by trying things. Each try that fails teaches almost nothing, because it tested the guess you already believed. This stage replaces guessing with a small loop that can only end in evidence: a cause at `file:line`, and tests that prove it.
@@ -69,6 +70,9 @@ With the cause at `file:line`:
 ## 6. Clean up
 **Done when** a search for the debug prefix finds nothing, the throwaway scripts and prototypes are deleted (or kept on purpose under a clearly named debug path), and the loop command is written in the output so the fix step can re-run it. After the fix, the loop runs again against the original, un-reduced scenario, and **the hypothesis that held goes in the commit or PR message**, so the next person debugging this area learns from it.
 
+## 7. Sweep for the same defect
+The cause is a pattern, not only a line: the same unchecked null, the same missing `await`, the same query built by concatenation. Once the cause is known, write the search that finds the pattern (a grep, an AST query, a linter rule) and run it over the repository. Read each hit, since a match is not a defect, and list every confirmed one by `file:line`; their count is `siblings`. They are not fixed in this ticket: each becomes a line in `.scratch/<feature-slug>/follow-ups.md`, or a ticket when the owner says so. When the search could run on every change (a lint rule, a guardrail), say so.
+
 ## When fix attempts are running (inside `$thasmorato-skills:tm-implement`)
 Each attempt **names the hypothesis it tests and its kind** (code, environment/data, measurement). **Three attempts in a row of the same kind stop the loop**: go back to step 2 and look at the other kinds. That is what keeps three tries from being spent on one guess (three timeout tweaks, three variations of one conditional).
 
@@ -78,7 +82,10 @@ Write `.scratch/<feature-slug>/diagnoses/<slug>.md`, or `.scratch/standalone/dia
 ```markdown
 ---
 kind: diagnosis
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <slug>
 status: cause-found | unresolved | no-loop
 loop: <the one command that goes red, or `none`>
@@ -87,6 +94,7 @@ probes: <n run>
 levels: [<each level the bug crosses, e.g. e2e, integration, unit>]
 seam_gaps: [<each level with no seam that reproduces the bug>]
 cause: <path:line, or `unknown`>
+siblings: <count of the same defect confirmed elsewhere, by section 7>
 ---
 ```
 

@@ -2,6 +2,7 @@
 name: ui-audit
 description: 'Evaluate an existing screen in the running software and list its problems, numbered, with evidence and a severity: a design critique by an isolated agent (usability heuristics scored 0 to 4, cognitive load, personas), a technical pass (design-system drift, responsiveness, integrity, missing states), and the screen under worst-case real data. Reports; never edits. Use before a redesign, or on "audit / critique this screen".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 A redesign that starts from taste replaces one set of problems with another. This stage names what is wrong with a screen as it runs today, with the evidence for each problem, so `$thasmorato-skills:tm-ui-design` has numbered problems to solve and the owner can judge each proposal by the problem it closes. It **finds**; it changes no product code.
@@ -13,7 +14,7 @@ Name one screen or one task (a URL or route, the user group, the device class), 
 - **persuade**: a landing or pricing page; attention, belief and one action;
 - **experience**: a portfolio or showcase; the work leads.
 
-Read the context that says what the screen is for: the PRD or FDD and the tickets that built it, `CONTEXT.md` for the domain words, `docs/design-system.md` when it exists, and the stack guide for the UI code.
+Read the context that says what the screen is for: the PRD or FDD and the tickets that built it, `CONTEXT.md` for the domain words, `docs/product/design-system.md` when it exists, and the stack guide for the UI code.
 
 **Done when** the screen, the task, the users, the device classes and the mode are named, and the owner has confirmed the scope.
 
@@ -44,7 +45,10 @@ Write `.scratch/ui-audit/<screen-slug>/audit.md`, numbered `UA-1`, `UA-2` in sev
 ```markdown
 ---
 kind: ui-audit
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 screen: <screen-slug>
 mode: operate | read | persuade | experience
 audited_at: <git rev-parse HEAD>

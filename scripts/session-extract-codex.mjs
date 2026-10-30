@@ -5,7 +5,9 @@
 //
 // Kept: what the owner typed (`item_completed` with a `UserMessage`), the plugin stages they invoked
 // (`$thasmorato-skills:tm-<stage>`), the assistant's text (`AgentMessage`) and the names of the tools
-// it called. Dropped: the context Codex injects as user messages (AGENTS.md, environment, skill bodies),
+// it called. A generic wrapper (`exec`, which runs code that calls tools, and `multi_tool_use.parallel`)
+// is named with the tools it called inside, when their names can be read safely, and `opaque` when not;
+// no other tool's text is scanned, and no argument is ever kept. Dropped: the context Codex injects as user messages (AGENTS.md, environment, skill bodies),
 // tool arguments and outputs, reasoning, and other agents. Not yet extracted, because the format does
 // not show them reliably: denied approvals and answers to structured questions.
 
@@ -16,6 +18,12 @@ import { join, resolve } from 'node:path'
 const STAGE_MENTION = /^\$thasmorato-skills:(tm-[a-z0-9-]+)\b\s*([\s\S]*)$/
 const TOOL_CALLS = new Set(['function_call', 'custom_tool_call', 'local_shell_call', 'web_search_call', 'tool_search_call'])
 const SESSION_DIRS = ['sessions', 'archived_sessions']
+const INNER_CALL = /\btools\.([A-Za-z_][A-Za-z0-9_]*)\s*\(/g
+const TOOL_NAME = /^[A-Za-z_][A-Za-z0-9_.]*$/
+const WRAPPERS = {
+  exec: (payload) => [...String(payload.input ?? '').matchAll(INNER_CALL)].map(([, name]) => name),
+  'multi_tool_use.parallel': (payload) => recipientsOf(payload.arguments),
+}
 
 export function createCodexSegmenter() {
   const segments = [{ compaction: null, turns: [] }]
@@ -26,7 +34,7 @@ export function createCodexSegmenter() {
   function accept(record) {
     if (record.type === 'compacted') return openSegment(record)
     if (record.type === 'response_item' && TOOL_CALLS.has(record.payload?.type)) {
-      pendingTools.push(record.payload.name ?? record.payload.type)
+      pendingTools.push(toolNameOf(record.payload))
       return
     }
     const item = record.type === 'event_msg' && record.payload?.type === 'item_completed' ? record.payload.item : null
@@ -67,6 +75,22 @@ export function createCodexSegmenter() {
   }
 
   return { accept, segments: segmentsSoFar }
+}
+
+function toolNameOf(payload) {
+  const name = payload.name ?? payload.type
+  const inner = WRAPPERS[name]?.(payload)
+  if (!inner) return name
+  return `${name}(${inner.length ? inner.join(', ') : 'opaque'})`
+}
+
+function recipientsOf(args) {
+  try {
+    const uses = JSON.parse(args ?? '{}').tool_uses ?? []
+    return uses.map((use) => String(use.recipient_name ?? '').replace(/^functions\./, '')).filter((name) => TOOL_NAME.test(name))
+  } catch {
+    return []
+  }
 }
 
 function toolOnlyTurn(timestamp, tools) {

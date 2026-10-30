@@ -6,11 +6,11 @@
 
 Two families:
 
-**Generation**: one artifact each, from the templates: `prd-writer`, `hld-writer`, `component-mapper`, `decomposer`, `fdd-writer`, `boundary-architect`, `adr-analyzer`, `adr-generator`, `adr-linker`, `c4-generator`, `mermaid-generator`, `guideline-generator`, `researcher`, `source-reader`.
+**Generation**: one artifact each, from the templates: `prd-writer`, `hld-writer`, `component-mapper`, `decomposer`, `fdd-writer`, `boundary-architect`, `adr-analyzer`, `adr-generator`, `adr-linker`, `c4-generator`, `mermaid-generator`, `guideline-generator`, `researcher`, `source-reader`. `test-runner` runs commands for `/tm-implement` and returns only the summary, so the log never enters the conversation. The writers of the living documents (`prd-writer`, `hld-writer`, `component-mapper`, `decomposer`, `fdd-writer`, `boundary-architect`) also amend: when the document exists they change it section by section with `Edit`, never rewrite it, and return every decision the amendment changed (`skills/doc-validate/living.md`); the effort's own part goes beside it in `.scratch/<effort>/` (the scope, the criteria).
 
-**Analysis and review**: read-only, reporting only: `architectural-analyzer`, `component-analyzer`, `dependency-auditor`, `reconciler` (which writes only its measurement and report, under `docs/analysis/`), the seven `review-*` lenses fanned out by `/review`, and `review-verifier`, which checks their synthesized findings against the code. Like the lenses it is read-only: it returns a verdict per finding, and `/review` writes them into its own file. It never drops a finding.
+**Analysis and review**: read-only, reporting only: `architectural-analyzer`, `component-analyzer`, `dependency-auditor`, `reconciler` (which writes only its measurement and report, under `docs/analysis/`), the seven `review-*` lenses fanned out by `/tm-review`, and `review-verifier`, which checks their synthesized findings against the code. Like the lenses it is read-only: it returns a verdict per finding, and `/tm-review` writes them into its own file. It never drops a finding. `acceptance-checker` checks a ticket's acceptance items against the running software for `/tm-acceptance`, so the verdicts come from a context that did not write the code; it writes only its evidence (screenshots, requests, outputs) and returns the verdicts.
 
-The `review-*` agents are deliberately narrow. A narrow lens can be held to *"every rule, against every changed hunk"*, a bar no agent doing five jobs can meet. The cost is precision: each is primed to find its own subject, so every finding must carry a **named rule** and a **concrete failure scenario**, and `/review`'s synthesis step drops the ones that don't. Synthesis can only judge a finding by what it says about itself; `review-verifier` then judges it by what the repository says, citing code for every verdict.
+The `review-*` agents are deliberately narrow. A narrow lens can be held to *"every rule, against every changed hunk"*, a bar no agent doing five jobs can meet. The cost is precision: each is primed to find its own subject, so every finding must carry a **named rule** and a **concrete failure scenario**, and `/tm-review`'s synthesis step drops the ones that don't. Synthesis can only judge a finding by what it says about itself; `review-verifier` then judges it by what the repository says, citing code for every verdict.
 
 **Every `.md` in this directory is loaded as an agent.** There is no ignore convention, and a file without valid frontmatter is either rejected with a warning or (worse) accepted as a malformed agent. Prose about the directory belongs here in `docs/`, not beside the agents.
 
@@ -21,13 +21,16 @@ The `review-*` agents are deliberately narrow. A narrow lens can be held to *"ev
 name: <kebab-case>
 description: <WHEN to delegate to this agent; the main agent uses this to decide>
 tools: Read, Grep, Glob, Write        # allowlist; omit to inherit all. Add Skill if the prompt calls the Skill tool
-model: sonnet                          # optional
+disallowedTools: Edit, NotebookEdit   # optional denylist: inherit everything else, MCP tools included (a browser server whose name varies per install)
+effort: high                           # required: low (collects for another to synthesize), medium (transcribes a decided document), high (writes, analyzes, reviews)
 ---
 
 <the agent's system prompt; see the blocks below>
 ```
 
 File: `agents/<name>.md`. Auto-discovered.
+
+No `model`: a model id ages in weeks and the plugin is for anyone, so the agent runs on the owner's model. The `effort` travels with the agent instead, in both harnesses (`model_reasoning_effort` in its Codex TOML); a misspelled value is ignored without a warning, which is why `scripts/agent-effort.test.mjs` checks every agent.
 
 ## The system prompt (blocks)
 Inherited from the agent-prompt anatomy (persona → workflow). Not all are mandatory, but **Inputs** and **Output** are non-negotiable for an isolated agent.

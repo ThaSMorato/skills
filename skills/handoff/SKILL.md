@@ -3,11 +3,12 @@ name: handoff
 description: 'Write what only this conversation knows into a handoff file, so a fresh session can continue the work without re-asking: the direction, the decisions said only in chat, what is in flight, and the next step, pointing at the artifacts for everything else. Use before ending a long session, on "handoff / continue in a new session / pass this to another agent".'
 argument-hint: "[what the next session will do]"
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
 
-A new session starts with the files and nothing else. The flow's artifacts already carry most of the state: `/flow` derives where each feature stands from them, and `/implement` resumes from `progress.md`. What they do not carry is what was said only here. That is what a handoff is for, and all it is for.
+A new session starts with the files and nothing else. The flow's artifacts already carry most of the state: `/tm-flow` derives where each feature stands from them, and `/tm-implement` resumes from `progress.md`. What they do not carry is what was said only here. That is what a handoff is for, and all it is for.
 
 ## What goes in
 - **The goal of the next session**: the argument, when one was given, or the obvious next step.

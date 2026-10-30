@@ -10,7 +10,10 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 
 ---
 kind: ui-spec
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 screen: <screen-slug>
 situation: extend | new-in-established-world | redesign | no-visual-authority
 mode: operate | read | persuade | experience
@@ -58,4 +61,4 @@ critic_verdict: ship | fix | rebuild
 > What is still undecided, each with who decides.
 
 ## Captures (required)
-> The final captures under docs/ui/<screen-slug>/, by state and width.
+> The final captures under docs/features/<feature>/ui/<screen-slug>/, by state and width.

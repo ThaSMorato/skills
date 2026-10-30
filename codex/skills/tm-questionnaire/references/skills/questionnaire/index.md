@@ -2,6 +2,7 @@
 name: questionnaire
 description: 'Turn decisions the owner cannot answer alone into a questionnaire for the person who can, and later fold the filled answers back into the documents that were waiting on them. Use when an interview, a design or a gate is blocked on someone outside the conversation (a PM, another team, legal), or on "questionnaire / send these questions to / ask the PM".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Some answers are not with the owner: they are with a PM, another team, legal, a client. Guessing them produces an `> Assumed:` nobody can confirm; leaving them as open questions in a document nobody sends produces nothing. This stage writes the questions down for that person, and brings their answers back.
@@ -19,7 +20,7 @@ Some answers are not with the owner: they are with a PM, another team, legal, a 
 kind: questionnaire
 to: <role or name>
 status: sent
-asks: [<each source it answers: docs/requirements-brief.md#open-questions, docs/prd.md (Needs Input: RF-004), …>]
+asks: [<each source it answers: .scratch/<effort>/brief.md#open-questions, docs/product/prd.md (Needs Input: RF-004), …>]
 ---
 
 # <title>

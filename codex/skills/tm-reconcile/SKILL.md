@@ -9,7 +9,7 @@ description: "Re-measure the dependency graph and reconcile it with the componen
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
-> is not `0.6.7`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
+> is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
 **Argument** (the text after the skill name): (none)
@@ -19,7 +19,7 @@ Call the `spawn_agent` tool with `agent_type = "tm-reconciler"` to reconcile the
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
-Preflight: `docs/components.md` must exist. Without a component map there is nothing to reconcile against. Say so and point at `$thasmorato-skills:tm-components` (or `$thasmorato-skills:tm-analyze` in brownfield) instead of delegating.
+Preflight: `docs/architecture/components.md` must exist. Without a component map there is nothing to reconcile against. Say so and point at `$thasmorato-skills:tm-components` (or `$thasmorato-skills:tm-analyze` in brownfield) instead of delegating.
 
 After it returns, show:
 - **the drift**, grouped by the stage that owns the fix: what `$thasmorato-skills:tm-components` should amend, then what `$thasmorato-skills:tm-boundaries` should. Each item comes with the commits that introduced it.

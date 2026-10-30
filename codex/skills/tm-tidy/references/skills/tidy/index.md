@@ -2,6 +2,7 @@
 name: tidy
 description: 'Make working code simple by Kent Beck''s four rules of Simple Design, as structural changes only: either the code a reviewed ticket changed, or a path of existing code that has tests covering it. Use after $thasmorato-skills:tm-review, or on "tidy / simplify / clean up this ticket", "clean up this file / this area", "leave it cleaner". Not for behavior changes or bug fixes; use tdd for those.'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Make it work, then make it right. `$thasmorato-skills:tm-implement` made the ticket work, and `$thasmorato-skills:tm-review` checked it; this stage makes it **simple**. It is the *After* in Beck's *Tidy First?* (tidy after the behavior ships), because only once the code works can you see the shape it wanted to have.
@@ -27,6 +28,13 @@ In either mode, a function you touch is read **whole** with the rules, not only 
 
 ## 1. Propose
 **Read `docs/declined.md` first**, when it exists (`references/templates/declined.md` has its format). A proposal that matches a `declined` entry (the same kind of move, over a scope the entry covers) is not proposed again unless its **Revisit when** has happened; say which entries suppressed what (*"skipped 2, per D-004 and D-011"*), so a suppression is never silent.
+
+**Before proposing**, check each candidate against what the repo already says about it:
+- **the repo's complexity gate**, when it has one (a lint rule, a CI threshold): score the code with it before and after; a proposal that moves no number the repo measures needs a stronger case than taste;
+- **the owner's written rules** (the guidelines, the stack guides, `CLAUDE.md` or `AGENTS.md`): a proposal that contradicts one is not offered;
+- **the schema's nulls**: a guard called dead because the value is never null holds only when the column, the type or the contract says so; cite it;
+- **the helper in its proposed form**: write the extraction out and read it under rules 2 and 3 before offering it (step 2 reads it again once applied);
+- never offer a tidying that **changes visible output** (a message, a format, an order the user sees) or that **leaves a function only the tests call**: the first is a behavior change, the second undoes rule 4.
 
 Walk the diff rule by rule, 2 → 3 → 4, and propose each tidying with:
 - **the rule** it serves, and for rule 2 the smell it removes (from the `code-smells` and `clean-code` skills);
@@ -71,7 +79,10 @@ Write `.scratch/<feature-slug>/tidy/<NN>-<slug>.md` (in path mode, `.scratch/sta
 ```markdown
 ---
 kind: tidy
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
 fixed_point: <ref>
 proposed: {expression: <n>, duplication: <n>, size: <n>}

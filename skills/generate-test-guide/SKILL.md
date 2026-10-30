@@ -2,6 +2,7 @@
 name: generate-test-guide
 description: Analyze a project's stack and generate a project-specific testing-guide skill (what to test, at which layer, and how, per artifact type, including acceptance-test flows). Use on "generate a test guide / testing skill for <project>". User-invoked.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -19,6 +20,9 @@ First read the `testing` skill's `fundamentals.md`: it is the baseline you speci
 - **Artifact types:** how this ecosystem names/organizes units (suffix like `*.service.ts`, filename like `views.py`, decorator/signature, directory). Group instances by type; note the dominant test layer per type and the exceptions.
 - **External systems:** databases, caches, queues, mail, object storage, third-party HTTP, from compose files, env, config.
 - **Existing tests + conventions:** naming, colocated vs `tests/`, current coverage. Note any existing testing skill/rules to avoid contradicting them.
+- **A project with no tests yet:** read the decisions already taken instead (the ADRs, `docs/guidelines.md`, the stack guides, the HLD, `docs/guardrails.md`), and say that the guide starts from them, not from a suite.
+
+**When the guide already exists**, this is an update, not a generation. Read its `## Provenance`, and `git log <its commit>..HEAD -- <its files>`: only the sections those changed files feed are rewritten, and the rest, the owner's edits included, stays as it is.
 
 ## Phase 2: Research (version-aware)
 For each major framework/runner, search the web for current best practices, how to test each artifact type, real-vs-fake strategy for each external system, and common pitfalls. **Filter by the versions detected in Phase 1**: discard advice referencing APIs newer than the project uses. Keep only what goes beyond the generic fundamentals.
@@ -52,6 +56,7 @@ Rules for the generated skill:
 - **Concrete, not generic.** Every bullet anchors to an artifact type or code pattern in *this* project. The setup templates are reusable, not instance-specific. Layer assignments trace back to `fundamentals.md`.
 - **Acceptance flows are first-class**: the `flows/` files capture the user-facing behavior as business-readable scenarios, name the tool, and state the definition of done. This is what the generic guide can't know: which flows this product must never break.
 - The generated guide is a **reference only**: no workflow/orchestration sections.
+- **It ends with `## Provenance`**: the files it was generated from (the test init and setup files, the rules and the guidelines it honors, each runner's config) and the commit it read them at. That is how `/tm-flow` tells a guide older than its sources, and how the next run updates only what changed.
 
 ## Constraints
 - Only write inside `.claude/skills/testing-guide-<project>/`. Don't create test files. Don't modify other skills or rules.

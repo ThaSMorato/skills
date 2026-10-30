@@ -1,7 +1,8 @@
 ---
 name: tickets-validate
-description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Runs as the postflight of /tickets, or on "validate the tickets".
+description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Runs as the postflight of /tm-tickets, or on "validate the tickets".
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -11,26 +12,27 @@ Read one feature's tickets **as a set** and decide whether they are sliced right
 It exists because the ticket set was the one artifact in the flow with no validator. `doc-validate` stops at the FDD and `plan-validate` starts at one ticket; between them, the slicing was checked only by asking the user whether it looked right. And every size rule was a ceiling. "Write a test" and "change a constant" fit under any ceiling, so a set could be split into seven tickets that were each far too small and still pass. It could also be cut into five tickets that were each far too big, pass the side-by-side comparison, and drift as a whole because they were comparable to each other.
 
 ## Input
-`/tickets-validate <feature>` → the tickets under `.scratch/<feature-slug>/issues/*.md`. If there are none, abort: *"No tickets for <feature>. Run /tickets <feature> first."*
+`/tm-tickets-validate <feature>` → the tickets under `.scratch/<feature-slug>/issues/*.md`. If there are none, abort: *"No tickets for <feature>. Run /tm-tickets <feature> first."*
 
 ## Sources
 - **The tickets**, all of them, together.
-- **The FDD** named in their `Source`: its acceptance criteria and its declared **test seams**.
-- `docs/features.md`, this feature's row: the `Depends on` column holds the cross-feature blockers.
+- **The FDD** named in their `Source`: its declared **test seams**.
+- **The criteria** named in their `Source` (`.scratch/<effort>/criteria/<feature>.md`): the acceptance criteria this effort sets for the feature, which the tickets' ACs trace to by `(from <F-id> AC-n)`.
+- the decomposition that lists this feature (`.scratch/*/decomposition.md`), its row: the `Depends on` column holds the cross-feature blockers.
 - `.scratch/<feature-slug>/request-trace.md`, when it exists: the owner's request, part by part.
 
-A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)`) has no FDD to check coverage against. Skip `SC` for it, and run everything else, since its seam is in its own `Test seam` field.
+A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)`) has no FDD or criteria to check coverage against. Skip `SC` for it, and run everything else, since its seam is in its own `Test seam` field.
 
 ## Checks
 
 | ID prefix | Category | The problem it catches |
 |---|---|---|
-| `SC-N` | Seam / criterion coverage | An FDD acceptance criterion or declared test seam that no ticket owns |
-| `IV-N` | Invention | A ticket, or a ticket AC, that traces to nothing in the FDD |
+| `SC-N` | Seam / criterion coverage | A feature criterion or an FDD test seam that no ticket owns |
+| `IV-N` | Invention | A ticket, or a ticket AC, that traces to no feature criterion and nothing in the FDD; or an AC that names no criterion |
 | `SZ-N` | Oversized ticket | A ticket that crosses two seams |
-| `UZ-N` | Undersized ticket | A ticket with no behavior observable through its own seam, or with no AC that traces to the FDD |
+| `UZ-N` | Undersized ticket | A ticket with no behavior observable through its own seam, or with no AC that traces to a feature criterion |
 | `SM-N` | Same seam | Two or more tickets on the same seam: they are slicing inside it, which is the job of SIs |
-| `DG-N` | Dependency graph | A cycle in the `Blocked by` edges, a blocker that names no existing ticket, or a cross-feature blocker from `features.md` that no ticket carries |
+| `DG-N` | Dependency graph | A cycle in the `Blocked by` edges, a blocker that names no existing ticket, a cross-feature blocker from the decomposition that no ticket carries, a cross-feature edge that names nothing consumed, or a consumed item no ticket AC checks |
 | `DS-N` | Dispersion | The ticket with the most ACs has more than **3×** as many as the one with the fewest |
 | `RQ-N` | Request | A part of the request trace with no ticket and no owner `> Decided:` for leaving it out; an AC wider than the part it covers; or copy the owner supplied written as `> Assumed:` |
 | `AS-N` | Unmarked assumption | A scope decision (an `Exclusion`, an in/out call) that the FDD does not give, with no `> Assumed:` marker, per the `asking` skill §6 |
@@ -38,17 +40,19 @@ A ticket whose `Source` records a deliberate skip (`direct (<gear> gear, no FDD)
 ## The anchor: tickets ≈ seams
 **The number of tickets should be close to the number of distinct seams they cross.** Seven tickets over two seams means five of them are slicing *within* a seam, and that is the plan's job, one level down. This is a count, not a judgment, and it is the check that catches the over-split set that every ceiling lets through. Report the two numbers in the verdict even when they match.
 
+**A slicing the owner decided is settled.** When `request-trace.md` carries a `## Slicing` with a `> Decided:`, `SZ`, `SM` and `DS` do not raise an issue that would undo it: write what they would have said under `## Notes`, without an id. `DS` never runs at `gear: small`. The other checks apply in full.
+
 `SM` and `DS` cover the two directions. `SM` catches a set cut too fine. `DS` catches a set that is out of scale with itself, including five huge tickets on five distinct seams, which `SM` alone would pass.
 
 ## The floor, stated as rejection tests
 A ticket is too small (`UZ`) when **either** test fails:
 1. **Observable behavior.** Through its declared seam, something a user or caller can see changes. "Add a test" fails this: the test is how a behavior is verified, not a behavior.
-2. **Trace.** At least one of its ACs traces to an FDD acceptance criterion. "Change the timeout to 30s" fails this unless an FDD criterion asks for it.
+2. **Trace.** At least one of its ACs traces to a feature criterion. "Change the timeout to 30s" fails this unless a criterion asks for it.
 
 **Structural tickets** (prefactoring, expand/migrate/contract) add no behavior by definition. For them the first test becomes: *existing tests stay green, and at least one behavioral ticket is blocked by this one*. A prefactoring ticket that nothing depends on is refactoring for its own sake. A wide-refactor's batches share a seam legitimately, so do not report them as `SM`.
 
 ## Only the set is counted
-`tickets`, `seams` and `dispersion` count the files under `issues/`. Follow-ups live in `follow-ups.md` and are not tickets; a placeholder ticket inside `issues/` that no request part or FDD criterion needs is `IV`.
+`tickets`, `seams` and `dispersion` count the files under `issues/`. Follow-ups live in `follow-ups.md` and are not tickets; a placeholder ticket inside `issues/` that no request part or feature criterion needs is `IV`.
 
 ## Calibration
 `DS`'s 3× threshold is a starting value, not a law: record the ratio in every verdict so it can be recalibrated from real sets. A set with one ticket has no dispersion to measure.
@@ -60,6 +64,9 @@ Write `.scratch/<feature-slug>/tickets-validation.md`. It sits outside `issues/`
 ---
 kind: tickets-validation
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 feature: <feature-slug>
 status: clean | dirty
 open_issues: <count of open issues>
@@ -85,5 +92,6 @@ dispersion: <max ACs / min ACs, one decimal>
 Every id uses a prefix from the Checks table. `fired` is cumulative, as in `plan-validate`.
 
 ## Gate
-- **dirty** → report the findings, merges and splits first, with each ticket resolved to its title. The fix goes back to `/tickets`. Never rewrite the tickets here.
-- **clean** → hand back to `/tickets`' gate: the user approves the set.
+- **dirty** → report the findings, merges and splits first, with each ticket resolved to its title. The fix goes back to `/tm-tickets`. Never rewrite the tickets here.
+  **The third `dirty` run stops the loop.** When `run` reaches 3 and the verdict is still `dirty`, say so at the top of the report and hand the decision to the owner as one structured choice: approve with the findings listed, amend what is upstream of the set (the finding may come from the document it was derived from), or one more round, saying what changes this time. Agreement between models, or of one model with itself, does not prove the set right: a round with nothing new repeats the last one.
+- **clean** → hand back to `/tm-tickets`' gate: the user approves the set.

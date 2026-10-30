@@ -6,11 +6,11 @@
 
 **User entrypoints**: thin by design: a command orchestrates, delegates heavy generation to agents, composes skills, and makes sure the inputs are on disk before handing off to an isolated context.
 
-Each stage command carries a **preflight** (does the input exist? if not, name the command that produces it) and a **postflight** (what came out, what needs attention, what to run next). That pair is what makes stages composable outside `/flow`.
+Each stage command carries a **preflight** (does the input exist? if not, name the command that produces it) and a **postflight** (what came out, what needs attention, what to run next). That pair is what makes stages composable outside `/tm-flow`.
 
-**A stage ends at its postflight and stops.** It names the next command for the user to type; it never runs it, never re-runs itself until a check passes, and never asks an agent to run the next one. A dirty verdict is a report, not a trigger. Text alone did not hold this (an agent ran `/plan` and `/plan-validate` in a loop until the plan passed), so it is also enforced: every command carries `disable-model-invocation: true`, and `scripts/skill-invocation.test.mjs` fails on a sentence that runs a stage instead of naming it for the user.
+**A stage ends at its postflight and stops.** It names the next command for the user to type; it never runs it, never re-runs itself until a check passes, and never asks an agent to run the next one. A dirty verdict is a report, not a trigger. **The next command is a line to type, never an option.** A structured question is for a decision the owner makes; starting a stage is not one, so the postflight ends with the command written out, arguments included, and who runs it ("you run: `/tm-plan-validate 03-checkout`"), not with a choice whose answer would make the agent run it. When the owner's last turn is a command typed as plain text that did not load, say in one line to send it again with the `/` first. A stage that authors something never runs the stage that verifies it: `/tm-tickets`, `/tm-fdd` and `/tm-plan` name their validator and stop. Text alone did not hold this (an agent ran `/tm-plan` and `/tm-plan-validate` in a loop until the plan passed), so it is also enforced: every command carries `disable-model-invocation: true`, and `scripts/skill-invocation.test.mjs` fails on a sentence that runs a stage instead of naming it for the user.
 
-`/flow` is the coordinator. It reads state from the artifacts on disk rather than from a status file, so every other command runs standalone and none of them owes `/flow` an update. It proposes the next stage; it never runs one.
+`/tm-flow` is the coordinator. It reads state from the artifacts on disk rather than from a status file, so every other command runs standalone and none of them owes `/tm-flow` an update. It proposes the next stage; it never runs one.
 
 **Every `.md` in this directory becomes a command.** There is no ignore convention, so a stray file ships as a real `/name` entry, and under a host that treats commands as description-matched skills, it competes for auto-invocation with a description that describes nothing. Prose about the directory belongs here in `docs/`, not beside the commands.
 
@@ -24,6 +24,8 @@ allowed-tools: Read, Edit, Bash(git*)                       # optional (restrict
 model: sonnet                                               # optional
 disable-model-invocation: true                              # required: only the user starts a stage
 ---
+
+File: `commands/tm-<name>.md`. The `tm-` prefix is required (`scripts/command-names.test.mjs`): Claude Code ships plan, review and pr commands of its own, other plugins ship implement and retro, and a bare name can be taken by any of them. The stage skill behind it keeps the bare name.
 
 <the prompt; use $ARGUMENTS, $1, $2 for the user's arguments>
 <a stage skill is read, not called: Read `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` and follow it>
@@ -40,12 +42,12 @@ Quote `argument-hint` always; it is the field that attracts both. Quote `descrip
 
 ## Golden rules
 
-1. **Thin.** A command is an entrypoint, not the implementation. It orchestrates and **delegates the heavy work to agents** (isolated context, parallelizable). E.g. `/adr-generate` fires the `adr-generator` agent.
-2. **Deterministic entry.** It's an explicit user trigger: name it after the action (`/prd`, `/interview`). Use `argument-hint` to make the input clear.
+1. **Thin.** A command is an entrypoint, not the implementation. It orchestrates and **delegates the heavy work to agents** (isolated context, parallelizable). E.g. `/tm-adr-generate` fires the `adr-generator` agent.
+2. **Deterministic entry.** It's an explicit user trigger: name it after the action (`/tm-prd`, `/tm-interview`). Use `argument-hint` to make the input clear.
 3. **Runs in main → can be interactive.** Unlike an agent, a command sees the conversation and talks to the user. Good for HITL flows that also need a named trigger.
-4. **Composes skills.** A command loads skills instead of rewriting their logic (e.g. `/interview` runs `interview` + `domain-model`), and names the tool that loads them: "Call the Skill tool with `interview` for: $ARGUMENTS", and "Call the Agent tool with `prd-writer`" for an agent (see the skill anatomy, rule 4).
+4. **Composes skills.** A command loads skills instead of rewriting their logic (e.g. `/tm-interview` runs `interview` + `domain-model`), and names the tool that loads them: "Call the Skill tool with `interview` for: $ARGUMENTS", and "Call the Agent tool with `prd-writer`" for an agent (see the skill anatomy, rule 4).
 5. **Handoff via files.** If it delegates to an agent (isolated context), the command ensures the **inputs are on disk** (brief, template) and points the agent at them.
-6. **Preflight and postflight.** On the way in, check the inputs exist, and when one is missing, name the command that produces it, so the failure teaches the user the chain. On the way out, summarize what was produced, what needs their attention, and what to run next. That pair is what makes a stage usable on its own, outside `/flow`.
+6. **Preflight and postflight.** On the way in, check the inputs exist, and when one is missing, name the command that produces it, so the failure teaches the user the chain. On the way out, summarize what was produced, what needs their attention, and what to run next. That pair is what makes a stage usable on its own, outside `/tm-flow`.
 
 ## Checklist
 - [ ] `description` clear (shows in the command menu).

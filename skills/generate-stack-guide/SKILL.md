@@ -2,6 +2,7 @@
 name: generate-stack-guide
 description: Generate a per-technology engineering guide skill (conventions, patterns and gotchas for one language or framework) as a router with lazy-loaded rules. Use on "generate a stack guide / guide for <tech>", or when the guidelines router marks a technology as missing. User-invoked.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -23,13 +24,17 @@ Ask where the good practices should come from. The generator is only as good as 
 Be honest about the limits: options 1 and 2 are the ones this generator does well. If the user has no clean source, say that the guide will be thin and worth seeding by hand, rather than producing something confident and generic.
 
 ## Phase 2: Mine
-Extract from the chosen source, filtered to the **versions this repo actually uses** (read the manifests first; advice for a newer major is worse than no advice):
+Extract from the chosen source, filtered to the **versions this repo actually uses** (the lockfile's, by `${CLAUDE_PLUGIN_ROOT}/skills/ticket-design/library-docs.md`; advice for a newer major is worse than no advice):
 - **Conventions:** naming, file and module layout, typing, signatures.
 - **Idioms:** the way this ecosystem does the common things, and the way it should not.
 - **Error handling and concurrency** as the language expresses them.
 - **Framework specifics:** lifecycle, dependency injection, configuration, the escape hatches and when they are legitimate.
 - **Gotchas:** the things that are correct-looking and wrong here.
+- **Runtime assets:** the files that are not code and are read at runtime (templates, JSON, prompts, schemas), and how the build copies them, since a compiler that emits only code leaves them behind and the app breaks only on the path that loads one. In NestJS, `compilerOptions.assets` in `nest-cli.json`.
+- **Configuration:** the one place the environment is read, and the validation that runs at start. In NestJS, `process.env` only inside a `registerAs` factory, consumed as a typed object; any other read is a review finding.
+- **Migrations:** the conventions the stack's migration tool needs written down, because generated code does not keep them unless a rule says so: a migration already created is never edited (a new one fixes it), one table per migration, the area as a prefix of its name in a monorepo, and a connection config of its own for the CLI, so migrations and seeds run without starting the app.
 - **Security idioms:** the safe way to do the dangerous things in this stack; the `security` skill's catalog is generic on purpose, and the safe idiom is not.
+- **The mutation tool** this stack uses (Stryker, mutmut, mutant, go-mutesting, PIT, …), its per-file or incremental mode and its command, for `review-tests` and `/tm-test-audit`; `none` when the ecosystem has none.
 - **Component boundaries:** what an independently releasable unit *is* in this ecosystem (a gem, a workspace package, a module, a crate); the `architecture` skill cannot know this.
 
 Where the repo and the external source disagree, the **repo wins** and the divergence is noted; a guide that contradicts the code it governs will be ignored.

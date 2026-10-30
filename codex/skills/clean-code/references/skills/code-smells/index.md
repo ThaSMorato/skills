@@ -44,6 +44,7 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 |---|---|---|
 | Inappropriate Intimacy | two classes reach into each other's internals | `references/skills/code-smells/rules/inappropriate-intimacy.md` |
 | Middle Man | class only delegates, adds nothing | `references/skills/code-smells/rules/middle-man.md` |
+| Business Rule at the Edge | a guard, interceptor, pipe, filter or middleware answers a domain question itself | `references/skills/code-smells/rules/business-rule-at-the-edge.md` |
 
 ## Error handling and contracts: the failure nobody sees
 | Smell | Tell | Rule |
@@ -62,6 +63,7 @@ Scan the table below and match what you see to a smell. Read the smell's rule fi
 | Smell | Tell | Rule |
 |---|---|---|
 | Shallow Module | interface as complex as the payoff | `references/skills/code-smells/rules/shallow-module.md` |
+| Apparent Modularization | an extracted module that uses its caller's connection and receives derived values | `references/skills/code-smells/rules/apparent-modularization.md` |
 | Information Leakage | one design decision known to several modules | `references/skills/code-smells/rules/information-leakage.md` |
 | Temporal Decomposition | modules sliced by execution order, not knowledge | `references/skills/code-smells/rules/temporal-decomposition.md` |
 | Overexposure | common case forced to learn rare features | `references/skills/code-smells/rules/overexposure.md` |

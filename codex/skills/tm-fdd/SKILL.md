@@ -1,6 +1,6 @@
 ---
 name: tm-fdd
-description: "Write a Feature Design Doc for one feature, from the HLD (docs/hld.md)."
+description: "Write a Feature Design Doc for one feature, from the HLD (docs/architecture/hld.md)."
 ---
 
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
@@ -9,16 +9,20 @@ description: "Write a Feature Design Doc for one feature, from the HLD (docs/hld
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
-> is not `0.6.7`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
+> is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
-**Argument** (the text after the skill name): <feature name or slug>
+**Argument** (the text after the skill name): <feature name or slug> [effort slug]
 
 
-Call the `spawn_agent` tool with `agent_type = "tm-fdd-writer"` to synthesize a Feature Design Doc into `docs/fdd/<feature-slug>.md` for the feature: the text after the skill name
+Call the `spawn_agent` tool with `agent_type = "tm-fdd-writer"` to write or amend the Feature Design Doc, `docs/features/<feature-slug>/fdd.md`, with the feature's `README.md`, and to write this effort's acceptance criteria for it, `.scratch/<effort>/criteria/<feature-slug>.md`, for: the text after the skill name
+
+The FDD is living: an existing one is amended, never rewritten, and it carries no acceptance criteria. The effort is the slug `$thasmorato-skills:tm-interview` gave this work: take it from the argument, or use the only `.scratch/*/decomposition.md` that lists this feature; with more than one and no argument, ask which. Pass the agent both.
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
 
-If no feature was given, ask which feature to spec. If `docs/hld.md` doesn't exist, tell the user to run `$thasmorato-skills:tm-hld` first instead of delegating.
+If no feature was given, ask which feature to spec. If `docs/architecture/hld.md` doesn't exist, tell the user to run `$thasmorato-skills:tm-hld` first instead of delegating.
 
-After the agent returns, show a short summary: the public contracts, the chosen test seams, the acceptance criteria, and any `> Needs Input` markers (these block approval) and every `> Assumed:` marker, grouped, for the user to confirm or correct. Don't edit the FDD yourself; if changes are needed, re-run the agent with the correction. The one edit you make directly is rewriting a confirmed `> Assumed:` as `> Decided:` (the `asking` skill §5).
+After the agent returns, show a short summary: the public contracts, the chosen test seams, the criteria and what each refines, the legacy FDDs folded in (each for the owner to delete or keep), and any `> Needs Input` markers (these block approval) and every `> Assumed:` marker, grouped, for the user to confirm or correct. Don't edit the FDD yourself; if changes are needed, re-run the agent with the correction. The one edit you make directly is rewriting a confirmed `> Assumed:` as `> Decided:` (the `asking` skill §5).
+
+**Decisions the amendment changed** (the agent returns them, one line each): show every one, then name `$thasmorato-skills:tm-adr-identify`, which records each as an ADR that amends or supersedes the old decision. A changed decision with no ADR is a regression `$thasmorato-skills:tm-doc-validate` reports.

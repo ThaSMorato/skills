@@ -1,7 +1,8 @@
 ---
 name: guardrails
-description: 'Install the barriers that make a repository catch mistakes on its own: a pre-commit hook and a CI job that run the checks the repo already has, a Claude Code hook that stops destructive git commands, and optionally a dependency linter that enforces docs/boundaries.md. Use when /retro reports a missing guardrail, on a new repository, or on "set up pre-commit / CI checks / block git push / guardrails".'
+description: 'Install the barriers that make a repository catch mistakes on its own: a pre-commit hook and a CI job that run the checks the repo already has, a Claude Code hook that stops destructive git commands, and optionally a dependency linter that enforces docs/architecture/boundaries.md. Use when /tm-retro reports a missing guardrail, on a new repository, or on "set up pre-commit / CI checks / block git push / guardrails".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -14,18 +15,20 @@ Read, never assume:
 - **The hook manager** already present: `.husky/`, `.pre-commit-config.yaml`, `lefthook.yml`, `.git/hooks/` scripts, `simple-git-hooks` in `package.json`.
 - **The CI**: `.github/workflows/*.yml`, `.gitlab-ci.yml`, or another, and which of the check commands each job runs.
 - **Claude Code hooks** in `.claude/settings.json` and `.claude/settings.local.json`.
-- **`docs/boundaries.md`**, if `/boundaries` wrote one.
+- **`docs/architecture/boundaries.md`**, if `/tm-boundaries` wrote one.
+- **What the stack can also catch**, when it has the tool: **dead code** (`knip` for TypeScript and JavaScript, `vulture` for Python, `deadcode` for Go, `debride` for Ruby), **cycles** in the import graph (`madge` for TypeScript and JavaScript, an `import-linter` independence contract for Python, the dependency linter's own rule where it has one), and **warnings as errors**: whether lint and the compiler fail on a warning (`eslint --max-warnings 0`, `tsc` in strict mode, `-Werror`, `ruff` with the warning rules selected). A warning that passes CI is a warning nobody reads.
 
 Run each check command once and record whether it passes today: a hook that wires in a failing command blocks every commit from the first one.
 
-**Done when** there is a table of the five kinds, each with its command (or `none`), whether it passes now, and where it already runs (hook, CI, both, neither). Show it.
+**Done when** there is a table of the five kinds and the three extra checks, each with its command (or `none`), whether it passes now, and where it already runs (hook, CI, both, neither). Show it.
 
 ## 2. Propose, then ask
 From the table, propose only what is missing, as a structured choice the owner picks from:
 - **Pre-commit hook**: format and lint on the **staged files only**, plus the type check. Tests go in the hook only when they run in seconds; otherwise they belong to CI. Use the hook manager the repo already has; when it has none, propose the one its ecosystem uses (`husky` + `lint-staged` for Node, the `pre-commit` framework for Python, `lefthook` as the language-neutral choice) and say why.
 - **CI job**: lint, type check and tests on every pull request, on the CI platform the repo already uses, with the same commands the table names.
 - **Git guard for Claude Code**: `git-guard.sh` as a `PreToolUse` hook on `Bash`, blocking `push`, `reset --hard`, `clean -f`, `branch -D`, `checkout --`, `restore <path>` and `stash drop`/`clear`. The owner picks which rules stay (they are named at the top of the script) and whether it goes in the project (`.claude/settings.json`, shared with the team) or only on this machine (`.claude/settings.local.json`).
-- **Dependency linter** (only when `docs/boundaries.md` exists): the rules of `boundaries.md` as forbidden imports, with the tool the stack uses (`dependency-cruiser` for TypeScript and JavaScript, `import-linter` for Python, `depguard` in `golangci-lint` for Go, `packwerk` for Ruby). Propose the config; each rule cites the boundary it enforces.
+- **Dead code, cycles, warnings as errors**: each tool the inventory found for the stack and the repo does not run, as a CI job; report-only while today's count is not zero, blocking once it is.
+- **Dependency linter** (only when `docs/architecture/boundaries.md` exists): the rules of `boundaries.md` as forbidden imports, with the tool the stack uses (`dependency-cruiser` for TypeScript and JavaScript, `import-linter` for Python, `depguard` in `golangci-lint` for Go, `packwerk` for Ruby). Propose the config; each rule cites the boundary it enforces, and its message names the fix, not only the boundary: `ui must not import repository: call the service that owns it (src/services/<x>)` rather than `forbidden`, taken from the allowed edge in `boundaries.md` (`dependency-cruiser`'s `comment`, the `import-linter` contract's name, `depguard`'s `desc`).
 
 A check command that fails today is proposed with a choice: fix it first, or wire it in non-blocking (a CI job that reports without failing) until it is fixed. Never wire a failing command in as blocking.
 
@@ -61,4 +64,4 @@ A guardrail that never fired is not known to work. For each item installed:
 **Done when** every installed item has shown both outcomes: what it lets through and what it stops.
 
 ## Output
-Write `docs/guardrails.md`: the inventory table, what was installed and where, the git guard's rules and scope, the commands left non-blocking and why, and how each was proven. `/retro`'s environment lens reads it to tell an absent guardrail from one that is installed but never fired.
+Write `docs/guardrails.md`: the inventory table, what was installed and where, the git guard's rules and scope, the commands left non-blocking and why, and how each was proven. `/tm-retro`'s environment lens reads it to tell an absent guardrail from one that is installed but never fired.

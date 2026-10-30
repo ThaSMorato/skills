@@ -1,5 +1,495 @@
 # Changelog
 
+## 0.7.0
+
+Built as a stack, one PR per wave (#60 to #79), released together.
+
+### Wave A: foundation
+
+- **Every command carries the `tm-` prefix.** Claude Code ships `/plan`, `/review` and `/pr`, other
+  plugins ship `/implement`, `/retro` and more, and a bare name could be taken by any of them. The
+  old names are gone, with no stub. The stage skills keep their names, gain `user-invocable: false`
+  and leave the menu: the command is the way in. `scripts/command-names.test.mjs` checks the prefix,
+  the flag, and that no file cites a command by its old name.
+- **Skill tool calls use the full name** (`thasmorato-skills:asking`), so no other plugin's skill
+  answers. In Codex the stages already were `tm-<command>`; the build no longer adds a prefix of its
+  own, and a test keeps the names equal in both harnesses.
+- **Every agent declares its `effort`:** `high` for the writers, analysts and reviewers, `medium` for
+  the generators that transcribe a decided document, `low` for `pattern-scout`, which only collects.
+  In Codex it becomes the agent's `model_reasoning_effort`; no agent pins a model, in either harness.
+  `/tm-flow` recommends `/effort xhigh` before `/tm-implement`; `max` is not the default.
+- **Who wrote it.** Every artifact that records `plugin_version` also records `model` and `harness`,
+  and `progress.md` the Codex thread id. `/tm-retro` and `/tm-flow-report` group by model and
+  harness too, and read reviews by author × reviewer pair.
+- **What the retro measures is written.** `progress.md` has every field from SI-1, including the new
+  `failed_deliverables`, one finished value (`completed`; `/tm-retro` still accepts the old `done`),
+  and is rewritten at every close-out, the close-out of `/tm-review`'s fixes included. A ticket
+  carries `type`, `gear` and `acs` in frontmatter.
+- **The next command is a line to type, never an option,** and a stage that authors never runs the
+  stage that verifies it: `/tm-tickets` no longer runs the ticket validation in a loop before
+  showing the set; it names `/tm-tickets-validate` for the owner.
+
+### Wave E1: living docs, the layout
+
+- **The documents describe the system, one folder per feature.** `docs/product/` (the PRD, the
+  design system), `docs/architecture/` (HLD, components, boundaries, the system C4),
+  `docs/features/<feature>/` (`fdd.md`, `diagrams/`, `ui/`), with `docs/features/README.md` as the
+  feature index. `CONTEXT.md` and `docs/adr/` stay. `scripts/docs-layout.test.mjs` fails on any old
+  path outside the migration.
+- **What belongs to one effort is temporary:** `/tm-interview` names the effort, and its brief and
+  its decomposition live in `.scratch/<effort>/`. `features.md` is split into the living index
+  (`templates/features-index.md`) and the effort's cut (`templates/decomposition.md`); `/tm-decompose`
+  amends the first and writes the second.
+- **`/tm-docs-migrate` (temporary)** moves a project from the old layout: it proposes the map,
+  including which feature each per-task FDD belongs to, moves nothing before the owner approves, and
+  rewrites the references. `/tm-flow` names it when it finds the old layout.
+
+### Wave E2: living docs, amended
+
+- **The writers amend.** `prd-writer`, `hld-writer`, `component-mapper`, `boundary-architect`,
+  `decomposer` and `fdd-writer` have `Edit`: an existing document is changed section by section and
+  never rewritten, ids are permanent, the text is in the present tense, and every decision the
+  amendment changed comes back for `/tm-adr-identify`. The rules are one file,
+  `skills/doc-validate/living.md`, read by the writers, `doc-validate` and `acceptance`.
+- **Living documents carry no acceptance criteria and no milestone.** The PRD states the whole system;
+  the effort's requirements, first milestone and product criteria go in `.scratch/<effort>/scope.md`
+  (`templates/scope.md`). The FDD loses `Acceptance criteria` and gains `Rules`; the effort's criteria
+  for a feature go in `.scratch/<effort>/criteria/<feature>.md` (`templates/criteria.md`), and every
+  ticket AC names the criterion it comes from. `/tm-tickets`, `tickets-validate`, `review-spec` and
+  `review-tests` read the criteria there.
+- **`/tm-acceptance` absorbs.** With every item passed, each criterion the ticket finished delivering
+  becomes a rule in the feature's `fdd.md`, with the test that proves it, or leaves when the FDD
+  already says it (`skills/acceptance/absorb.md`). A change to `docs/` alone does not make the
+  acceptance record stale.
+- **A front page per feature:** `docs/features/<feature>/README.md` (`templates/feature-readme.md`),
+  written by `fdd-writer`; at `Level: feature` the PRD is the feature's, `docs/features/<feature>/prd.md`.
+  `fdd-writer` folds the `legacy/` FDDs a migration left.
+- **The docs the diff makes false (item 119).** The node map lists the documents to amend, the plan's
+  Deliverables list every doc citing a renamed or removed symbol, `/tm-implement`'s refactor step fixes
+  them in the same SI (and amends the map when the SI departed from it), and living docs cite symbols,
+  never `path:line`. `review-docs` now reads the living docs, through the feature index.
+- **`doc-validate`** compares an amended document with its base-branch version (`RG-N`), reports a
+  criterion or milestone written into a living document (`LC-N`), checks a feature README against its
+  index row, and has a new pair, `scope → criteria`. `adr-analyzer` reads the diff of the living docs
+  on a branch: a decision changed there is a candidate.
+- **`/tm-docs-migrate`** also moves the PRD's milestone and criteria to the scope and each FDD's
+  criteria to the feature's criteria file. `scripts/living-docs.test.mjs` holds all of this.
+
+### Wave E3: ADRs and links
+
+- **`/tm-adr-propose "<decision>"`** triages one decision the owner announces before anything is
+  planned on it: already decided, not ADR-worthy, `new`, `amends` or `supersedes`, through
+  `adr-analyzer`'s new one-decision mode; it writes the Potential ADR and names `/tm-adr-generate`
+  (items 16, 55).
+- **The ADR says where it applies and what it binds:** `scope` (repo-wide, backend, frontend,
+  cross-layer), `subprojects`, `requirements`, `features`; and when it was found: `retroactive`,
+  `discovered`, `formalized` (items 15, 56, 57). It names components, concepts and technologies, never
+  a file or a class; the paths stay in the Potential (item 58). `doc-validate` checks the bindings both
+  ways (`adr → features`), and `adr-linker` reports a feature row missing its ADR.
+- **The FDD has an `Authorization` matrix** (role × action, denials included), required when the
+  feature has roles or owned data (item 14).
+- **Links:** every reference to another document's id is a relative Markdown link to its file, the id
+  as the text (`skills/doc-validate/links.md`); the templates show it, `doc-validate` reports a broken
+  one or a wikilink (`LK-N`), and a test holds the plugin's own links to it.
+- **Properties:** the living documents and the ADRs start with a frontmatter (`kind`, `status`,
+  `level`, `feature`; `state` on a feature's README), for Obsidian's Bases; `Status` and `Level` left
+  their Metadata lines.
+- **Callouts:** each marker has a callout line above it (`> [!CAUTION]` Needs Input, `> [!WARNING]`
+  Assumed, `> [!NOTE]` Decided); the marker line itself is unchanged, so the validators still find it.
+- **`/tm-docs-migrate`** adds the callout lines and moves Status and Level into the frontmatter.
+  `scripts/adr-links.test.mjs` holds the wave.
+
+### Wave C1a: the plan and its validation
+
+- **Fixed (from wave A):** the rename to `tm-` had also rewritten two artifact paths, so the plan was
+  written to `plans/<NN>-<slug>/tm-plan.md` and the PR body to `.scratch/<feature>/tm-pr.md`. Back
+  to `plan.md` and `pr.md`; `command-names.test.mjs` pins it.
+- **The verdict belongs to one version of the plan** (item 7): `validation.md` records `plan_sha256`
+  and `plan_revision`; `/tm-implement` refuses a plan whose hash changed, and `/tm-flow` shows it stale.
+- **Re-entry and amendment** (items 8, 101): with a plan in place, a `dirty` validation is revised
+  against its findings without asking; a plan in execution freezes its done SIs, and an amendment
+  takes the next SI id (`/tm-plan <ticket> amend "<change>"`). The plan checks itself before it is
+  handed over and after each amendment, and it is written section by section (item 10).
+- **Sliced coarser** (item 100): `ticket-plan` weighs the node map first and slices by how each part
+  is verified; `/tm-tickets` estimates SIs at the plan's grain and says the totals at the gate, and
+  records the owner's slicing in `request-trace.md`, which `tickets-validate` then treats as
+  information.
+- **`plan-validate` reads the repository** (items 6, 77, 102, 103): `RC-N` for a consequence of a
+  requirement no SI handles (collision, UNIQUE, race, atomicity, partial failure), `VB-N` for a
+  criterion that cannot be checked with the ticket and its blockers, `DL` against the repo's own
+  scripts and CI, framework behavior and repo data grounded in the installed source, an existing test
+  counted as proof only when shown red.
+- **The plan declares** each SI's `Contracts changed` and their consumers, whether each test starts red
+  or green, and the `Verification prerequisites` an AC check needs (item 78); `/tm-acceptance` has a
+  `blocked` verdict for a missing one.
+- **The node map** reads the `commit and CI gates` and lists the `Observers` of every name the ticket
+  changes, and an analogue's framework behavior is read in the installed source (items 102, 103).
+- **Research trigger** (item 11): two plausible ways and no source that chooses stop the plan with a
+  `> Needs Input:` that names `/tm-research`. `scripts/plan-loop.test.mjs` holds the wave.
+
+### Wave C1b: what goes into the plan
+
+- **The docs of the installed version** (items 5, 13): one rule, `skills/ticket-design/library-docs.md`,
+  read by `ticket-design`, `ticket-plan`, `researcher` and `generate-stack-guide`: the version comes from
+  the lockfile, a reference already kept for it is reused, then a documentation tool that takes a
+  version, then the installed package's own files. What was read is kept per project and per version
+  in `docs/research/libraries/<library>@<version>.md` (`templates/library-reference.md`).
+- **`researcher` reads the ADRs and the lockfile before searching** (item 12).
+- **The contract between features** (item 76): each `Depends on` edge says what it consumes; every
+  consumed item becomes an integration criterion of the consumer; `tickets-validate` reports an edge
+  with nothing consumed, or a consumed item no AC checks.
+- **`/tm-design` and `pattern-scout`** (item 104): no parallel search or backup wake-up while the
+  scout runs; the scout brings the layout technique and the closest sibling rule; every new import is
+  a dependency edge checked against the boundaries; a missing component id stops at `/tm-components`;
+  inherited behavior is an explicit decision; the gate shows the main artifact's skeleton.
+- **Scope drift** (item 105): `request-trace.md` pins the request's `source_sha256` and mtime, and
+  `/tm-flow`, `review-spec` and `plan-validate` check it; the trace is walked both ways; `fdd-writer`
+  marks a rule the task does not ask for; a `Decided` on an approved document rewrites every mention.
+- **`bugfix` means a cause to find** (item 106): visual conformity and QA are behavioral; `ticket-plan`
+  stops on a bugfix with no diagnosis; `/tm-flow` picks the gear after `/tm-diagnose`.
+- **Findings that come back** (item 107): the plan reads earlier tickets' unresolved findings in the
+  files it touches, and `/tm-review` hands the lenses the confirmed, unfixed ones.
+  `scripts/plan-inputs.test.mjs` holds the wave.
+
+### Wave C2a: the implement loop
+
+- **`test-runner`** (new agent, effort low; item 1): `/tm-implement` runs every test, type-check, lint
+  and build command through it and reads only the summary (counts, each failure with its assertion
+  and first project stack line, `new` or `already failing`, the rerun command).
+- **A baseline before the first SI** (items 74, 108): the type check and the suites run once,
+  their failures go to `progress.md` (`## Baseline`, `baseline_failures`), and they never spend an
+  SI's attempts or count as `failed_deliverables`.
+- **Preflight** (items 3, 108): the dependencies match the lockfile; the branch is current with its
+  base (one named stash when the base touched the same files); what the owner allows this run is
+  recorded under `## Workspace`.
+- **Each SI** keeps the diff to what it asks and ends only at its close-out, never at a status message
+  (item 96); a small adaptation goes on its `Deviation:` line, which `review-spec` reads (item 75); the
+  stop suggests the `/compact keep: … drop: …` text (item 4).
+- **Escalation** (item 108) classifies the block (`doc`, `SI`, `environment`), names a failing tool or
+  MCP server, and does not count a diagnostic probe as an attempt; a wait outside the run has a
+  deadline; a message from the owner mid-run gets a one-line answer.
+- **Final verification** (items 2, 108) runs every test file the plan names, reruns only what was
+  edited since the last green, sends a test green only on the rerun to `diagnose`, and runs a **build
+  smoke test** of the built artifact with its runtime files. `scripts/implement-loop.test.mjs` holds the
+  wave.
+
+### Wave C2b: handoffs, `/tm-pr` and `asking`
+
+- **`scripts/blocker-state.mjs`** (new; item 113): from git, the disk and `gh`, prints as JSON the
+  branch, whether it is a linked worktree, how far it is from the base, and each blocker's state
+  (`merged`, `in review` with its PR, `implemented, no PR`, `in progress`, `not started`).
+  `/tm-design`, `/tm-plan`, `/tm-implement` and `/tm-pr` run it; without `gh`, it says so and judges
+  from the disk.
+- **`asking`** (item 113): a round opens with the feature and the ticket; the recommendation never
+  widens the request, the minimal variant is always an option, one option per independent choice,
+  each says what it creates and what deferring costs; an objecting "Other" is answered first; the
+  cheap premises are checked and the question says where it looked; a gate on the stage's own work
+  has no recommended "approve", and a blocking decision is never left in prose. A new §7, **Hand off
+  to the next stage** (item 109): read the disk first, open a stop report with the AC → state →
+  blocker table, repeat an open prerequisite (`## Open prerequisites` in `progress.md`) in every
+  report until it is resolved, recommend `/compact` before code when the context carries the design
+  and the plan.
+- **The third `dirty` run** (item 94) of `/tm-plan-validate`, `/tm-tickets-validate`,
+  `/tm-doc-validate` or `/tm-review` hands the decision to the owner instead of another round;
+  `run:` is counted in the doc validation and the review too.
+- **The gear** (items 109, 112) is its own question, asked again when the work outgrows it; the
+  order trim → review → tidy → acceptance holds, and a production change after the review gets a
+  second pass or a stated skip. A plan's report names one start.
+- **`/tm-pr`** (items 110, 112) gets a Preflight (blockers and branch, signing, host and tracker auth,
+  the ticket's new `Tracker:` line, acceptance after the last change, a change after the review, a
+  visible `Decided (supersedes …)` in the Direct gear, files the branch did not touch, the repo's
+  obligations), a required **Decisions that change the request** section, a Postflight (sibling
+  placeholders, tracker fields, the remaining tickets), and one body per ticket at
+  `.scratch/<feature>/prs/<NN>-<slug>.md`. Committing, pushing and following CI stay with the owner.
+  `/tm-tickets` asks whether to create the tracker issues as its own question.
+- **`/tm-trim` and `/tm-tidy` check before proposing** (item 111): the repo's complexity gate, the
+  owner's written rules, the schema's nulls, the helper in its proposed form; never a visible output
+  change or a function only the tests call; trim considers moving a value down so both sides import
+  it. `scripts/handoffs.test.mjs` and `scripts/blocker-state.test.mjs` hold the wave.
+
+### Wave D1: `/tm-acceptance`
+
+- **`acceptance-checker`** (new agent, effort high; item 79): the checks run in a context that did
+  not write the code. It has every tool but `Edit` and `NotebookEdit` (`disallowedTools`), so it
+  reaches the owner's browser MCP server whatever its name, writes only the evidence, and returns
+  the verdicts; `/tm-acceptance` writes the record and absorbs.
+- **New verdicts** (items 17, 50, 82, 114): `http` (the request in a reproducible `requests.http`,
+  the response saved), `run` (a command and its output; a ticket with no screen gets one real local
+  run) and `measured` (a non-functional requirement, with its threshold and the value from a load
+  test, log, metric or trace). `browser` means an interactive tool on the real controls; a script
+  that only takes a picture is not one.
+- **Every browser verdict has a Check** (items 80, 81): `mechanical: <what>` or `⚠️ capture only`,
+  counted in `capture_only`. `skills/acceptance/visual-checks.md` asks the page whether the media
+  loaded, the element is in the viewport, nothing clips it and it is clickable at its center; an
+  element that meets the AC's words but cannot be seen fails, and the AC is proposed for amendment.
+  The `ui-audit` technical pass runs the same checks.
+- **Items** (items 18, 114): one per variant; `Depends on:` makes an item whose dependency failed
+  `blocked`, not failed; the last ticket of a story checks every `covered` row of the request trace;
+  a deferred item becomes a linked follow-up.
+- **Means** (item 114): migrations and the server first; the repo's own capture recipe; an obstacle
+  removable locally (a flag, a migration, a seed, a worker, a server the workspace allows) is
+  provided, recorded under `## Means provided` and put back, never a verdict. `mocked` is defined.
+- **An optional exploratory pass** (items 19, 52) after the checks only suggests, under
+  `## Suggested cases`. The report opens with one line per AC. `scripts/acceptance-verdicts.test.mjs`
+  holds the wave.
+
+### Wave D2: the tests
+
+- **A case is trusted once it has failed** (item 116): after green, `/tm-implement` breaks the
+  behavior each new case names with `scripts/mutate-once.mjs` (new): the text must occur exactly once,
+  the file is put back whatever happens, the run goes to a log, and the exit status is the verdict
+  (0 killed, 1 survived, 2 could not run). The SI records it on its `Mutation:` line; a
+  characterization case does not close the SI without its kill. The plan names the behavior that
+  turns each case red; `tdd` says why a guard, a mode, a count, a type or source text need it most.
+- **Mutation testing** (items 62, 63): explained once in `testing/fundamentals.md` (reading a
+  survivor, equivalent mutants, never a percentage target); the tool per stack goes in the stack
+  guide; `review-tests` runs it on the diff's files and reports each surviving mutant.
+- **`/tm-test-audit <path> [report | confirm | full]`** (new command and skill; item 20): what the
+  suite lacks and what it carries for nothing, conservative removal with evidence, mutation over the
+  scope at `report`, removals one at a time at `confirm`, missing tests test-first at `full`; it
+  writes `docs/analysis/test-audit.md`.
+- **Worth a test, and not**, and **about three mocks per test** (item 21) in the fundamentals;
+  `review-tests` asks that an error test asserts the reason (item 22).
+- **The testing guide knows what it came from** (item 23): it ends with `## Provenance`; `/tm-flow`
+  flags it when those files changed; the next run updates only those sections; a project with no
+  tests reads the decisions already taken.
+- **`/tm-diagnose` sweeps for the same defect** (item 24) once the cause is known; the confirmed
+  siblings become follow-ups, counted in `siblings`.
+- **The end-to-end spec per AC** (items 9, 51): `/tm-plan` writes `e2e.md` (template `e2e-spec.md`)
+  when the repo has an E2E runner, and reconciles it on re-plan (`new`, `preserved`, `manual`,
+  `updated`, `deleted`); `/tm-implement` writes the tests from it and never edits a `manual` one.
+  `scripts/test-quality.test.mjs` and `scripts/mutate-once.test.mjs` hold the wave.
+
+### Wave D3: review and implement
+
+- **The fix question of `/tm-review`** (item 115): a fix that changes what a caller or the user
+  observes is its own question before any code; a value no source gives is asked without a
+  recommendation; a finding that cites the project's written rule recommends complying; a decision
+  that changed after approval defaults to delivering as approved with a follow-up; a pre-existing
+  defect that blocks an AC is offered as this ticket's. A new **Fixing what was chosen** phase:
+  every finding leaves with an `Outcome:` line, a new AC names its SI, a UI or CSS fix is measured in
+  the browser, and the phase closes with a structured question.
+- **A visual AC** (item 117): the node map names its layer in the cascade, the plan checks its
+  computed style in the browser at the SI's seam, and `/tm-implement` treats a missing browser as an
+  `environment` block, never a unit test in its place.
+- **Reviewing uncommitted work** (item 118): `/tm-implement` writes `manifest.txt` with the ticket's
+  files; `/tm-review <fixed point> --worktree <manifest>` diffs the working tree for exactly those
+  files, keeps everyone else's changes out, records `mode:`, and never commits to pass its own
+  preflight. `scripts/review-fixes.test.mjs` holds the wave.
+
+### Wave H: parallel sessions
+
+- **A second copy of the project has a page.** `/tm-guidelines` also writes
+  `docs/parallel-sessions.md` (new template): the ports each session takes, one database per session,
+  an env file per worktree (variable names only, never a value), the automations that must take the
+  port or the name, and how `.scratch` reaches a worktree. What the repo does not show is asked, row
+  by row. `/tm-implement` in a linked worktree records its port and database from it.
+- **`/tm-flow` reads every worktree.** `scripts/worktrees.mjs` lists them with the `progress.md` each
+  holds, and tells a `.scratch` linked to the main one (read once) from a copy (read from the copy).
+  The ticket matrix gains a worktree column.
+- **Worktrees are printed only when the owner asks.** Before an epic's parallel-safe tickets, the
+  coordinator asks: print the commands, the owner's own tool, or one at a time. Printing gives the
+  `git worktree add -b` line per ticket and the `.scratch` step (none, a link, or a copy to bring back),
+  and runs nothing.
+- **After a merge that resolved a conflict** (`skills/implement/after-merge.md`): install what the
+  other branch brought, regenerate what is generated, rerun the area, and recheck the acceptance of
+  every criterion it touched. The implement preflight, the `/tm-pr` preflight and `/tm-flow` cite it.
+### Wave I1: retro and reports
+
+- **Three levels, and the looking-back stages stop.** `skills/retro/levels.md` (new): a finding is
+  `flow` (the plugin, on any project), `repo-skill` (this repo's skills, guides and `CLAUDE.md`) or
+  `repo-code` (its code and configuration); in doubt, the lowest level that resolves it, and a repo
+  convention extends the plugin's stage without copying it. `/tm-retro` and `/tm-session-analyze` write
+  the report and stop: no more "ask what to act on", `flow` is never applied from inside a project.
+  The templates count by level; an old `project` tag is read as one of the two repo levels.
+- **A registry of reports** (`scripts/report-registry.mjs`): each retro and meta-retro records itself
+  in `~/.thasmorato-skills/reports.json`, one file for both harnesses, with its counts by level. With no
+  argument, `/tm-flow-report` reads it; a repo that moved is listed as not found.
+- **`scripts/flow-state.mjs`**: the per-ticket matrix from the artifacts' frontmatter, from the worktree
+  that holds each ticket, with a stale validation, each feature's state (`awaiting-retro` when every
+  ticket completed and no retro covers it) and `resolve` for a loose slug. `/tm-flow`, `/tm-retro` and
+  `/tm-flow-report` read it; `/tm-implement` names the retro when the feature's last ticket closes.
+- **Precedents:** the review verifier marks a `pre-existing` finding that a confirmed one copies as
+  `pre-existing (precedent of <n>)`, counted in `precedents`; `/tm-retro` ranks it first among the debt.
+### Wave I2: measuring
+
+- **The extractor keeps what the owner sent mid-turn.** A message queued while the assistant worked
+  (`queued_command`, `commandMode: prompt`) was recorded nowhere else and was lost; it is now a
+  `queued` owner turn (an `invoked` one when it is a slash command). In Codex, the generic `exec`
+  wrapper and `multi_tool_use.parallel` are named with the tools they called inside, or `opaque`;
+  no argument is ever kept, which a fixture with a secret pins.
+- **Cost by stage, counted by the extractor:** active and idle minutes, tool calls, invocations,
+  answers outside the options, clarifications and overruled recommendations, in the index and the
+  meta-retro (`cost:` and a new section); wasted calls stay with the analysts. `/tm-retro` sums
+  minutes and tool calls per ticket beside the `model` and the new `effort` of `progress.md`.
+- **`ci_red_after_open`** in a record beside the PR body (`prs/<NN>-<slug>.record.md`, `kind: pr`),
+  `pending` until the owner runs `/tm-pr` again after CI. `/tm-flow-report` gains the cost rows.
+### Wave I3: steering and guardrails
+
+- **The guides reach files that do not exist yet.** `/tm-guidelines` also writes a
+  `.claude/rules/<tech>.md` per stack guide, scoped with `paths:` to the guide's file patterns, and a
+  `CLAUDE.md` and an `AGENTS.md` per subproject, each a pointer, never the rule copied; one the owner
+  wrote is never overwritten. `/tm-plan` and `/tm-design` match the planned paths against the
+  routing table, so a file still to be created gets its guide.
+- **Where a command runs:** the router's commands table gains `Runs in` (host, container, either),
+  detected from compose, devcontainer, Makefile and CI; a container-only command is its full call
+  from the host, and plans copy it so.
+- **`/tm-steering-validate`** (new command and skill): reads every steering file
+  (`scripts/steering-files.mjs` finds them and the references that point at nothing) and reports
+  contradictions, stale references, duplicates and silent overrides, `clean` or `dirty`, in
+  `docs/validation/steering.md`. A repo guide that contradicts a plugin skill is listed apart and
+  never makes it dirty: the project's guide wins.
+- **`/tm-guardrails`** inventories dead code (`knip`, `vulture`, `deadcode`), cycles (`madge`) and
+  warnings as errors, and every dependency-linter rule's message names the fix, not only the boundary.
+
+### Wave I4: the plugin itself
+
+- **`/tm-audit-deps` covers agent extensions.** `scripts/agent-extensions.mjs` lists the MCP servers
+  (`.mcp.json`, `.codex/config.toml`), marketplaces, plugins and hooks (`.claude/settings.json`) and
+  the skills the repo declares, each with its source and whether it is pinned (exact version, fixed
+  image tag or digest, marketplace at a commit). It returns env names, never values, and never reads
+  `settings.local.json`. The report gains an `## Agent extensions` section: an unpinned server or
+  hook is act-now, and the extension files join `lockfiles`, so the `/tm-flow` stale check covers them.
+- **Description evals.** `evals/` holds a `-fires` and a `-near-miss` case for each open skill, run
+  isolated by `claude plugin eval`. `scripts/skill-evals.mjs plan` prints one command per model for
+  the owner to run (local report, no baseline arm); `summarize` makes the case-by-model table.
+- **Testing a skill**, a new section of the skill anatomy: a test passes for the wrong reason when the
+  harness context (the tester's `CLAUDE.md`, memory, other plugins, MCP servers) or a file that
+  already holds the answer (the plugin's own source, a fixture naming the result) told the model what
+  to do. Triggering goes to the evals; a live test runs with `--setting-sources project,local` and
+  `--strict-mcp-config`, in a toy repo outside the plugin's source.
+
+### Wave B: content rules
+
+- **Security.** `crypto-failures`: only Argon2id and scrypt are memory-hard, bcrypt truncates at 72
+  bytes, and the OWASP minimums. `session-management`: a sealed cookie (Iron Session, a cookie session
+  store) has no revocation of its own; refresh rotation consumes atomically, revokes the family on
+  reuse, and survives a concurrent refresh (a short grace window or an idempotent refresh,
+  single-flight on the client or the BFF). `sensitive-data-exposure`: a one-time link in a `GET` is
+  consumed by the mail scanner (read `#token=` and `POST`), and a public build variable (`NEXT_PUBLIC_`,
+  `VITE_`) named like a secret ships to every visitor, with `server-only` on the server env module.
+  `hardcoded-secrets`: the shell history. `authentication`: a login that skips the verify for an
+  unknown user. `broken-access-control`: 404 or 403, and masking is not authorizing.
+- **Lenses.** `review-docs` checks that a generated OpenAPI spec has `properties` on every referenced
+  schema and every returned status in `responses`; `review-architecture` checks that a new module
+  holds its own authority.
+- **Smells and data access.** New `Business Rule at the Edge` (guards, interceptors, pipes, filters,
+  middleware) and `Apparent Modularization` smells; `Swallowed Error` gains the boundary by kind of
+  execution (HTTP, message handler, cron); new `Compensation inside one database` rule.
+- **Stack guides** mine runtime assets, the one place the environment is read, and migration
+  conventions. **Testing:** the case for starting the app outside `webServer`, what `page.route`
+  cannot see behind a BFF, and MSW's E2E mode in the app runtime. **Diagrams:** a Mermaid label with
+  `/`, `(`, `[`, `{` or `|` is quoted.
+
+### Wave G: two harnesses
+
+- **A second opinion from the other harness.** `/tm-review` ends with step 8: when it ran in the
+  harness that wrote the change (the `harness` of the ticket's `progress.md`), it names
+  `--second-opinion` for the owner to run in the other one. The new `scripts/second-opinion.mjs`
+  skips it on a diff under 25 changed lines that touches no risk path (auth, billing, migrations,
+  infra, `.sql`, and the `Risk paths` section the guidelines router gains). The second opinion writes
+  `reviews/<NN>-<slug>.second-opinion.md`, unprimed by the first review, and counts `not_in_first`:
+  the confirmed findings the first did not have. `flow-state.mjs` reads it as `second_opinion`,
+  `/tm-flow` shows it, and `/tm-retro` and `/tm-flow-report` read it per author × reviewer pair.
+- **A read-only review session in Codex.** Codex ignores a subagent's `sandbox_mode`, so `tm-setup`
+  now installs `~/.codex/tm-review.config.toml` beside the agents (owned, never over a file the
+  owner wrote): read-only, every write asked for, the review's effort, no model. The validators and
+  `tm-review` run with `codex -p tm-review`.
+- **The instruction sentinel.** `/tm-guidelines` runs `scripts/instructions-sentinel.mjs write`,
+  which adds one harmless line to the root `CLAUDE.md` and `AGENTS.md` that exist (never creating
+  one) with a value only that file gives. The 20 measured artifacts gain an `instructions` field
+  listing the values the loaded instructions give, never looked up. `/tm-retro` and
+  `/tm-flow-report` run `check` and report per harness which file each stage followed, and which
+  stages ran without the project's rules.
+- Left for 0.7.x: the division of stages between the harnesses (item 90, with the rest of 69) and
+  the UI wave.
+
+### Wave J: the decision map
+
+- **`/tm-decision-map <effort>`**, new, for an effort too big for one session whose path is not clear
+  yet. It keeps `.scratch/<effort>/decision-map.md`: the destination, agreed before any decision; the
+  decisions taken, each pointing at the document it lives in, a revision dated with what it
+  replaced; the open decisions with their type (conversation, prototype, research, someone outside,
+  owner task, as-is), each naming the stage that resolves it; the fog; out of scope; the next step.
+  One decision per session. Every session first records what came back, sweeps the decisions taken
+  elsewhere and reviews every fog item. It never writes code and never becomes the plan: closed, it
+  points at `/tm-prd`, and cutting the work is `/tm-decompose`'s. With no fog, it offers to skip
+  straight to `/tm-interview`.
+- **`scripts/decision-map.mjs`**: `frontier` (the open decisions nothing open blocks) and
+  `elsewhere` (the `Open questions` and `> Needs Input:` still open in the effort's documents and
+  `docs/`, with file and line). The map lists them and never copies them.
+- **`/tm-flow`** lists the map, reports the frontier of an open one, and offers the map before
+  `/tm-interview` when the effort's path is unclear.
+
+### Wave K: seeds and descriptions
+
+- **Seeds, resets and test accounts in the router.** `docs/guidelines.md` gains the `Seed` and
+  `Reset the data` rows in its commands table and a test accounts table (handle, role, where the
+  password comes from, never its value). The `guideline-generator` fills them from the repo's seed
+  tasks and fixtures; `/tm-guidelines` asks the owner for the rows marked `to be established`.
+  `/tm-acceptance` (and the `acceptance-checker` it dispatches) and `/tm-implement` read them there
+  before searching, so a run no longer rediscovers how this project gets to a known state.
+- **Four descriptions that fire.** `architecture`, `clean-code`, `data-access` and `security` almost
+  never loaded on their own: on a familiar problem the model answered alone. Their descriptions now
+  open with the trigger in the asker's words and ask to be loaded even when the problem looks
+  familiar. Measured with `claude plugin eval` (3 runs each, before → after): Sonnet 0/3 → 3/3 on
+  all four but `security` (1/3 → 3/3); Haiku 0/3 → 3/3 on `architecture` and `clean-code`, 2/3 on
+  `data-access`, and still 0/3 on `security`, which it answers alone. Every near miss stayed quiet.
+  The anatomy's description rule records how; `scripts/skill-descriptions.test.mjs` keeps it.
+
+**Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
+
+| Before | Now |
+|---|---|
+| `/acceptance` | `/tm-acceptance` |
+| `/adr-generate` | `/tm-adr-generate` |
+| `/adr-identify` | `/tm-adr-identify` |
+| `/adr-link` | `/tm-adr-link` |
+| `/analyze` | `/tm-analyze` |
+| `/audit-deps` | `/tm-audit-deps` |
+| `/boundaries` | `/tm-boundaries` |
+| `/c4-generate` | `/tm-c4-generate` |
+| `/components` | `/tm-components` |
+| `/decompose` | `/tm-decompose` |
+| `/design` | `/tm-design` |
+| `/diagnose` | `/tm-diagnose` |
+| `/doc-validate` | `/tm-doc-validate` |
+| `/fdd` | `/tm-fdd` |
+| `/flow` | `/tm-flow` |
+| `/flow-report` | `/tm-flow-report` |
+| `/generate-stack-guide` | `/tm-generate-stack-guide` |
+| `/generate-test-guide` | `/tm-generate-test-guide` |
+| `/guardrails` | `/tm-guardrails` |
+| `/guidelines` | `/tm-guidelines` |
+| `/handoff` | `/tm-handoff` |
+| `/hld` | `/tm-hld` |
+| `/implement` | `/tm-implement` |
+| `/interview` | `/tm-interview` |
+| `/mermaid-generate` | `/tm-mermaid-generate` |
+| `/plan` | `/tm-plan` |
+| `/plan-validate` | `/tm-plan-validate` |
+| `/pr` | `/tm-pr` |
+| `/prd` | `/tm-prd` |
+| `/prototype` | `/tm-prototype` |
+| `/questionnaire` | `/tm-questionnaire` |
+| `/reconcile` | `/tm-reconcile` |
+| `/research` | `/tm-research` |
+| `/retro` | `/tm-retro` |
+| `/review` | `/tm-review` |
+| `/session-analyze` | `/tm-session-analyze` |
+| `/teach` | `/tm-teach` |
+| `/tickets` | `/tm-tickets` |
+| `/tickets-validate` | `/tm-tickets-validate` |
+| `/tidy` | `/tm-tidy` |
+| `/trim` | `/tm-trim` |
+| `/ui-audit` | `/tm-ui-audit` |
+| `/ui-design` | `/tm-ui-design` |
+| `/wait-what` | `/tm-wait-what` |
+| `/walkthrough` | `/tm-walkthrough` |
+| `/writing-beats` | `/tm-writing-beats` |
+| `/writing-fragments` | `/tm-writing-fragments` |
+| `/writing-shape` | `/tm-writing-shape` |
+
 ## 0.6.7 (beta)
 
 The flow runs in Codex too, and a stage never starts another, in either harness. Same commands, same

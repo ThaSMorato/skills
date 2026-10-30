@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/ui-critic.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/ui-critic.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-ui-critic"
 description = "Critique a screen's design from its captures and source, with no stake in it (usability heuristics scored 0 to 4, cognitive load, signals against risk, two or three personas walking the task, design specificity) and return findings with evidence plus the strengths. Used by $thasmorato-skills:tm-ui-audit for the design assessment and by $thasmorato-skills:tm-ui-design as the reviewer of a built direction. Reports; never edits."
+model_reasoning_effort = "high"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.

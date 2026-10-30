@@ -2,6 +2,7 @@
 name: questionnaire
 description: 'Turn decisions the owner cannot answer alone into a questionnaire for the person who can, and later fold the filled answers back into the documents that were waiting on them. Use when an interview, a design or a gate is blocked on someone outside the conversation (a PM, another team, legal), or on "questionnaire / send these questions to / ask the PM".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -21,7 +22,7 @@ Some answers are not with the owner: they are with a PM, another team, legal, a 
 kind: questionnaire
 to: <role or name>
 status: sent
-asks: [<each source it answers: docs/requirements-brief.md#open-questions, docs/prd.md (Needs Input: RF-004), …>]
+asks: [<each source it answers: .scratch/<effort>/brief.md#open-questions, docs/product/prd.md (Needs Input: RF-004), …>]
 ---
 
 # <title>
@@ -56,7 +57,7 @@ When the questionnaire goes to a user or a customer to learn what they need (not
 - Close by asking how much the problem costs them today, so the answers can be weighed by **signal strength**, not only collected.
 
 ## Read-back mode
-`/questionnaire <path>` on a file with answers filled in:
+`/tm-questionnaire <path>` on a file with answers filled in:
 1. For each question, find its answer and the source it was asked for (`asks`).
 2. Turn each answer into a `> Decided: <value> — <recipient>, <YYYY-MM-DD>` at its source: the open question, the `> Needs Input:` marker, the assumption it settles. When the answer changes text around the marker, the document's owner stage makes that change (re-run its agent with the decision), as `asking` describes for a corrected assumption.
 3. Questions left unanswered or marked unsure stay open at their source, with a note that they were asked and when.

@@ -1,7 +1,8 @@
 ---
 name: wait-what
-description: 'The last answer did not land: re-pitch it with a little context, in simplified technical English (ASD-STE100), in the glossary''s words. Typed by the user on "/wait-what".'
+description: 'The last answer did not land: re-pitch it with a little context, in simplified technical English (ASD-STE100), in the glossary''s words. Typed by the user on "/tm-wait-what".'
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.

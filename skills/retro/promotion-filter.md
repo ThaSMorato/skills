@@ -1,4 +1,4 @@
-> Part of the `retro` skill (see `SKILL.md`). Also read by `/session-analyze`.
+> Part of the `retro` skill (see `SKILL.md`). Also read by `/tm-session-analyze`.
 
 # Promotion filter: before a finding becomes a skill, a guide or a rule
 

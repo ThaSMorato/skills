@@ -14,6 +14,7 @@
 ├── skills/                # skills (listed in plugin.json)
 ├── templates/             # doc skeletons (optional, this flow)
 ├── scripts/               # code a command runs via ${CLAUDE_PLUGIN_ROOT}/scripts/ (Node stdlib only), with tests
+├── evals/                 # `claude plugin eval` cases: does each open skill fire on its description
 └── docs/                  # authoring/usage guides (not runtime)
 ```
 

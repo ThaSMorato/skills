@@ -4,8 +4,9 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-// /retro and /flow-report compare the flow across plugin versions, so every artifact they measure
-// records which version produced it. A producer that drops the field makes its numbers unattributable.
+// /retro and /flow-report compare the flow across plugin versions, models and harnesses, so every
+// artifact they measure records which version, which model and which harness produced it. A producer
+// that drops a field makes its numbers unattributable.
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -16,22 +17,33 @@ const producers = {
   validation: 'skills/plan-validate/SKILL.md',
   'tickets-validation': 'skills/tickets-validate/SKILL.md',
   'doc-validation': 'skills/doc-validate/SKILL.md',
-  review: 'commands/review.md',
+  review: 'commands/tm-review.md',
   trim: 'skills/trim/SKILL.md',
   tidy: 'skills/tidy/SKILL.md',
   diagnosis: 'skills/diagnose/SKILL.md',
   walkthrough: 'skills/walkthrough/SKILL.md',
   acceptance: 'skills/acceptance/SKILL.md',
+  'test-audit': 'skills/test-audit/SKILL.md',
+  'e2e-spec': 'templates/e2e-spec.md',
   'ui-audit': 'skills/ui-audit/SKILL.md',
   'ui-spec': 'templates/ui-spec.md',
   'design-system': 'templates/design-system.md',
   'meta-retro': 'templates/meta-retro.md',
+  pr: 'skills/pr/SKILL.md',
+  'steering-validation': 'skills/steering-validate/SKILL.md',
+  'decision-map': 'templates/decision-map.md',
 }
 
 for (const [kind, path] of Object.entries(producers)) {
-  test(`${kind} (${path}) records plugin_version next to its kind`, () => {
+  test(`${kind} (${path}) records plugin_version, model and harness next to its kind`, () => {
     const text = readFileSync(join(root, path), 'utf8')
 
-    assert.match(text, new RegExp(`kind: ${kind}\\nplugin_version: `))
+    assert.match(text, new RegExp(`kind: ${kind}\\nplugin_version: .*\\nmodel: .*\\nharness: `))
+  })
+
+  test(`${kind} (${path}) records the instruction sentinels the harness loaded, never looked up`, () => {
+    const text = readFileSync(join(root, path), 'utf8')
+
+    assert.match(text, /\nharness: .*\ninstructions: \[<.*never open a file to find one.*>\]\n/)
   })
 }

@@ -5,7 +5,7 @@
 Each check reads the running screen and its code. A finding carries what produced the evidence (a capture, a computed value, `file:line`) and what stayed untested.
 
 ## Design-system drift
-Against `docs/design-system.md` when it exists, else against the tokens and components the codebase already defines:
+Against `docs/product/design-system.md` when it exists, else against the tokens and components the codebase already defines:
 - **Hardcoded values** where a token exists: colors, spacing, radii, font sizes, shadows.
 - **The wrong token**: a semantic token used for another meaning (an error color on a brand accent).
 - **A reimplemented component**: a local button, input or modal where the library has one.
@@ -23,6 +23,7 @@ Name the pattern when it repeats: one systemic finding ("hardcoded colors in 15 
 - Tables and multi-column layouts with no narrow-screen form.
 
 ## Integrity
+- What should be seen and is not: media that did not load, an element outside the viewport or clipped by an `overflow`, a control covered by another at its center. Run the mechanical checks in `references/skills/acceptance/visual-checks.md` on every image and primary control of the screen; a capture alone misses a broken thumbnail.
 - Copy that misleads: a label that says one thing and does another; a count that is not the count.
 - Content that is filler: lorem ipsum, "John Doe", round fake numbers, placeholder images in production.
 - Structure interchangeable with any product (the design-specificity verdict, from the technical side).

@@ -9,7 +9,7 @@ description: "Build and persist the node map for one ticket (deep modules behind
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
-> is not `0.6.7`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
+> is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
 **Argument** (the text after the skill name): <ticket file/number, or the work to design>
@@ -21,6 +21,7 @@ Read `references/skills/ticket-design/index.md` and follow it to build the node 
 
 ## Preflight
 - Resolve the ticket under `.scratch/<feature-slug>/issues/`. If there is none and the user pointed at no other work, stop and tell them to run `$thasmorato-skills:tm-tickets <feature>` first.
+- Run `node "references/scripts/blocker-state.mjs" <ticket file>` and report each blocker's state from what it prints, per the `asking` skill (§7). A blocker that is not `merged` or `done` is said before the map is built: a design can be drawn against a blocker's planned interface, but that is the owner's call.
 - If a node map already exists at `.scratch/<feature-slug>/design/<NN>-<slug>.md`, read it and ask whether to revise it or proceed to `$thasmorato-skills:tm-plan`; silently regenerating it discards decisions the user already confirmed.
 
 ## Postflight
@@ -29,6 +30,7 @@ After the map is written, show (**grounding first**):
 - **How the repo already does this**: the analogues and conventions `pattern-scout` found, and where the new code gets wired in.
 - **What already exists** that this ticket can reuse, with paths, and **what the map claims is new**, with the search that justifies each claim. This is the part the human gate should actually read: everything upstream of here is one document derived from another, and this is the first time the repository got a vote.
 - If the search shrank the work, say so and offer to amend the ticket before planning.
+- **The skeleton of the main artifact** this ticket builds: the endpoint's signature and response, the component's structure, the schema, the job's entry point. One look at the shape is the fastest way for the owner to catch a wrong design.
 - Then the nodes with their interfaces, the seams, any **new dependency edge** and whether the boundary contract allows it, the AC-to-node coverage table, and anything left open.
 
 Then tell the user to run `$thasmorato-skills:tm-plan <ticket>`.

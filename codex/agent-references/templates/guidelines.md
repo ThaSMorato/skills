@@ -48,15 +48,24 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 
 ## 5. Commands (required)
 > The real commands this repo runs, discovered from its own manifests, not the ecosystem's defaults.
-> Plans reference these verbatim in their Deliverables.
+> Plans reference these verbatim in their Deliverables. `Runs in` says where each works; a
+> container-only command is written as its full call from the host (`docker compose exec api pnpm test`).
 
-| Purpose | Command |
-|---|---|
-| Test | |
-| Type-check | |
-| Lint | |
-| Build | |
-| Run locally | |
+| Purpose | Command | Runs in |
+|---|---|---|
+| Test | | <host \| container <service> \| either> |
+| Type-check | | |
+| Lint | | |
+| Build | | |
+| Run locally | | |
+| Seed | | |
+| Reset the data | | |
+
+> The accounts a test or a check logs in with, on the seeded data. A password is named by where it comes
+> from (the variable, the seed file, the fixture), never by its value.
+
+| Handle | Role | Password from |
+|---|---|---|
 
 ## 6. Project documents (required)
 > The rest of the docs, and when each one is worth loading.
@@ -65,9 +74,10 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 |---|---|
 | `CONTEXT.md` | naming anything: it owns the vocabulary |
 | `docs/adr/index.md` | a decision in the area is binding |
-| `docs/components.md` | you need the component map |
-| `docs/boundaries.md` | you are adding a dependency between components |
-| `docs/hld.md` · `docs/fdd/*.md` | specifying or verifying behavior |
+| `docs/architecture/components.md` | you need the component map |
+| `docs/architecture/boundaries.md` | you are adding a dependency between components |
+| `docs/architecture/hld.md` · `docs/features/*/fdd.md` | specifying or verifying behavior |
+| `docs/parallel-sessions.md` | running a second copy at once (a worktree, a parallel session): its ports, database and env file |
 
 ## 7. External references (optional)
 > Authoritative external sources, with what each one answers. Links, not summaries.
@@ -75,7 +85,14 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 | Source | Answers |
 |---|---|
 
-## 8. Pre-commit checklist (required)
+## 8. Risk paths (optional)
+> Where a mistake costs the most. A change that touches one of these always gets a second review in the
+> other harness, however small. The plugin already counts auth, billing, migrations, infra and `.sql`;
+> list only what this repo adds, one glob per line, with what lives there.
+
+- `<glob>`: <what lives there>
+
+## 9. Pre-commit checklist (required)
 > What must be true before a change lands, as checkable lines, each one either a command from section
 > 5 or an objectively verifiable condition.
 - [ ]

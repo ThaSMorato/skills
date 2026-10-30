@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/adr-linker.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/adr-linker.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-adr-linker"
 description = "Maintain the ADR link graph (supersedes/superseded-by/amends edges and a timeline index). Delegate when the user runs $thasmorato-skills:tm-adr-link, or after new ADRs are generated."
+model_reasoning_effort = "medium"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.
@@ -15,7 +16,8 @@ Your context is isolated; read all `docs/adr/*.md` and their frontmatter (`super
 
 ## Output
 - **Repair inverses:** if A `supersedes` B, ensure B has `superseded-by: A` (and the same for `amends`). Edit the affected ADRs' frontmatter to add missing inverses. When an ADR is superseded, set its `status: superseded`.
-- **Index:** write/refresh `docs/adr/index.md`: a **timeline** (by date) and the **graph** (which supersedes/amends/relates to which), showing each ADR's status.
+- **Index:** write/refresh `docs/adr/index.md`: a **timeline** (by date) and the **graph** (which supersedes/amends/relates to which), showing each ADR's status and scope. Every ADR in it is a relative link to its file (`<TM_ROOT>/agent-references/skills/doc-validate/links.md`), so Obsidian draws the graph from the index too.
+- **Bindings:** for each ADR's `features`, check the feature's row in `docs/features/README.md` lists it under `Constrained by`; report each missing one for `$thasmorato-skills:tm-decompose` to amend (the index is not yours to edit).
 
 ## Rules (negative)
 - **Never delete or rewrite a decision**; only fix/complete link metadata and the index. Don't rewrite the past.

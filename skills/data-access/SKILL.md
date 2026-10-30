@@ -1,6 +1,6 @@
 ---
 name: data-access
-description: 'A self-contained catalog of data-access and I/O weaknesses you can see in code (N+1 queries, queries inside loops, missing indexes, unbounded results, over-wide transactions, chatty remote calls, stale caches, over- and under-fetching), each with its tell, a concrete failure scenario, and the fix. Use when reviewing a diff that reads or writes a database, cache or remote service, or when asking "will this scale" or "why is this slow".'
+description: 'Use when someone asks why code that reads or writes a database, a cache or a remote service is slow, whether it will scale, or to review it. A catalog of the data-access and I/O weaknesses you can see in code (N+1 queries, queries inside loops, missing indexes, unbounded results, over-wide transactions, chatty remote calls, stale caches, over- and under-fetching), each with its tell, a concrete failure scenario and the fix. Load it before answering, even when the problem looks familiar: the answer then follows its standard instead of a generic one.'
 ---
 
 # Data access
@@ -9,7 +9,7 @@ Most of the time a request spends goes to I/O, not to computation, and the expen
 
 Two things make them hard to see in a diff:
 - **The cost lives in the call, not the line.** `order.customer.name` is one line and can be one query per order. You have to know what the call does.
-- **The query is often outside the diff.** The loop was added; the repository method it calls was not changed. Follow the call one hop (see `/review`) or you will not see it.
+- **The query is often outside the diff.** The loop was added; the repository method it calls was not changed. Follow the call one hop (see `/tm-review`) or you will not see it.
 
 **The idiom is stack-specific.** Eager loading, batching, pagination and transaction boundaries each have a different spelling in every ORM and driver. Read the repo's stack guide for the spelling; this catalog tells you what to look for.
 
@@ -33,4 +33,5 @@ Read a rule file **only when its row matches**. Every finding carries **the rule
 | Weakness | Tell | Rule |
 |---|---|---|
 | Wide transaction | a transaction that spans remote calls, user think-time, or a loop over many rows | `rules/wide-transaction.md` |
+| Compensation inside one database | steps in one database, each in its own transaction, undone by a compensating delete | `rules/same-database-compensation.md` |
 | Cache invalidation | a write path that changes data a cache holds, with no invalidation or expiry | `rules/cache-invalidation.md` |
