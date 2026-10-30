@@ -9,6 +9,7 @@
 | `research-report.md` | `researcher` | `docs/research/<slug>.md` |
 | `library-reference.md` | `ticket-design`, `ticket-plan`, `researcher`, `generate-stack-guide` | `docs/research/libraries/<library>@<version>.md` |
 | `prd.md` | `prd-writer` | `docs/product/prd.md`, or `docs/features/<feature>/prd.md` at `Level: feature` |
+| `decision-map.md` | `$thasmorato-skills:tm-decision-map` | `.scratch/<effort>/decision-map.md` |
 | `scope.md` | `prd-writer` | `.scratch/<effort>/scope.md` |
 | `hld.md` | `hld-writer` | `docs/architecture/hld.md` |
 | `components.md` | `component-mapper` | `docs/architecture/components.md` |

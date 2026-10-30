@@ -32,6 +32,7 @@ Presence proves **produced**; the artifact's own `Status:` frontmatter proves **
 | `docs/analysis/system-profile.md`, `docs/analysis/architecture.md` | brownfield analysis | `$thasmorato-skills:tm-analyze` |
 | `docs/analysis/dependencies.md` | dependency audit | `$thasmorato-skills:tm-audit-deps` |
 | `docs/analysis/dependency-graph.md`, `docs/analysis/reconcile.md` | the measured import graph, and the drift since the documents | `$thasmorato-skills:tm-analyze` first, `$thasmorato-skills:tm-reconcile` after |
+| `.scratch/<effort>/decision-map.md` | the decisions an effort needs before its PRD: destination, decided, open with their types, fog (`status: open / closed`) | `$thasmorato-skills:tm-decision-map <effort>` |
 | `.scratch/<effort>/brief.md` + `CONTEXT.md` | interview | `$thasmorato-skills:tm-interview` |
 | `docs/research/*.md` | research (optional) | `$thasmorato-skills:tm-research` |
 | `docs/product/prd.md` + `.scratch/<effort>/scope.md` | PRD (living), and this effort's scope: its requirements, first milestone and product criteria | `$thasmorato-skills:tm-prd` |
@@ -86,6 +87,8 @@ The worktree column is kept whenever the repository has more than one worktree, 
 ### Then report
 **The request may have moved.** At every gate, compare the trace's `source_sha256` with the source's hash now; when it changed, show what changed (`git diff` of the source when it is tracked, else the two texts side by side) and ask whether the tickets follow it, before anything else. Before reporting a ticket done, its request-trace parts all have a ticket or an owner decision, and its acceptance record's `verified_at` is current (no change outside the tests and `docs/` since); say which is missing otherwise.
 
+**An open decision map.** For each `decision-map.md` with `status: open`, run `node "references/scripts/decision-map.mjs" frontier --effort <effort>` and report its frontier: the open decisions nothing open still blocks, each with its type and the stage that resolves it, and what is still open elsewhere. While the map is open, the effort's next stage is the one its `Next step` names, or `$thasmorato-skills:tm-decision-map <effort>` to record what came back.
+
 Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop. The command is the last line, written out with its arguments and "you run it"; it is never one of the options of a question, because an answer to a question is not the owner starting a stage. When the owner's last turn is a command typed as plain text that did not load, say in one line to send it again with the `/` first.
 
 **This command never runs a stage.** Every command and every stage skill is closed to model invocation, so only the owner starts a stage, and each stage ends at its own postflight. A coordinator that ran the next stage itself is how a plan got validated in a loop until it passed, with nobody reading it in between.
@@ -132,7 +135,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
 
 ## Phase 1: Documentation
 1. `$thasmorato-skills:tm-analyze` (+ `$thasmorato-skills:tm-audit-deps`) if brownfield, then `$thasmorato-skills:tm-guidelines` + `$thasmorato-skills:tm-generate-stack-guide <tech>` per technology right away, since the stack is already in the repo, and `$thasmorato-skills:tm-guardrails` when the repo has no pre-commit hook or CI running its checks.
-2. `$thasmorato-skills:tm-interview` → brief + glossary + inline ADRs. **GATE (ambiguity):** every required section filled, and the user confirms the shared understanding.
+2. When the effort does not fit one session and its path is not clear yet (the questions themselves are unknown, each answer changes the next), `$thasmorato-skills:tm-decision-map <effort>` first, one decision per session, until it closes. Otherwise straight to `$thasmorato-skills:tm-interview` → brief + glossary + inline ADRs. **GATE (ambiguity):** every required section filled, and the user confirms the shared understanding.
 3. Optional `$thasmorato-skills:tm-research` for open technical questions.
 4. `$thasmorato-skills:tm-prd` → `$thasmorato-skills:tm-doc-validate brief prd`. **GATE (strong):** a wrong PRD contaminates everything below.
 5. `$thasmorato-skills:tm-hld` (+ `$thasmorato-skills:tm-c4-generate` for C1/C2) → `$thasmorato-skills:tm-doc-validate prd hld`. **GATE (strong).** In greenfield, this is where the stack is decided: propose `$thasmorato-skills:tm-guidelines` + `$thasmorato-skills:tm-generate-stack-guide <tech>` now, before `$thasmorato-skills:tm-components`.

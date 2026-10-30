@@ -28,6 +28,7 @@
   "skills": [
     "./skills/interview",
     "./skills/questionnaire",
+    "./skills/decision-map",
     "./skills/domain-model",
     "./skills/ticket-design",
     "./skills/ui-audit",

@@ -1582,6 +1582,23 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
 - Left for 0.7.x: the division of stages between the harnesses (item 90, with the rest of 69) and
   the UI wave.
 
+### Wave J: the decision map
+
+- **`/tm-decision-map <effort>`**, new, for an effort too big for one session whose path is not clear
+  yet. It keeps `.scratch/<effort>/decision-map.md`: the destination, agreed before any decision; the
+  decisions taken, each pointing at the document it lives in, a revision dated with what it
+  replaced; the open decisions with their type (conversation, prototype, research, someone outside,
+  owner task, as-is), each naming the stage that resolves it; the fog; out of scope; the next step.
+  One decision per session. Every session first records what came back, sweeps the decisions taken
+  elsewhere and reviews every fog item. It never writes code and never becomes the plan: closed, it
+  points at `/tm-prd`, and cutting the work is `/tm-decompose`'s. With no fog, it offers to skip
+  straight to `/tm-interview`.
+- **`scripts/decision-map.mjs`**: `frontier` (the open decisions nothing open blocks) and
+  `elsewhere` (the `Open questions` and `> Needs Input:` still open in the effort's documents and
+  `docs/`, with file and line). The map lists them and never copies them.
+- **`/tm-flow`** lists the map, reports the frontier of an open one, and offers the map before
+  `/tm-interview` when the effort's path is unclear.
+
 ## 0.2.0
 
 Rebuilt the code phase as a validated, test-first loop: `/tickets → /design → /plan → /plan-validate → /implement → /review`. Vendored the testing and code-quality references so the plugin ships self-contained.
