@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.7.0 (in progress)
+## 0.7.0
 
-Built as a stack, one PR per wave; nothing merges before the release.
+Built as a stack, one PR per wave (#60 to #79), released together.
 
 ### Wave A: foundation
 
@@ -276,6 +276,166 @@ Built as a stack, one PR per wave; nothing merges before the release.
   files; `/tm-review <fixed point> --worktree <manifest>` diffs the working tree for exactly those
   files, keeps everyone else's changes out, records `mode:`, and never commits to pass its own
   preflight. `scripts/review-fixes.test.mjs` holds the wave.
+
+### Wave H: parallel sessions
+
+- **A second copy of the project has a page.** `/tm-guidelines` also writes
+  `docs/parallel-sessions.md` (new template): the ports each session takes, one database per session,
+  an env file per worktree (variable names only, never a value), the automations that must take the
+  port or the name, and how `.scratch` reaches a worktree. What the repo does not show is asked, row
+  by row. `/tm-implement` in a linked worktree records its port and database from it.
+- **`/tm-flow` reads every worktree.** `scripts/worktrees.mjs` lists them with the `progress.md` each
+  holds, and tells a `.scratch` linked to the main one (read once) from a copy (read from the copy).
+  The ticket matrix gains a worktree column.
+- **Worktrees are printed only when the owner asks.** Before an epic's parallel-safe tickets, the
+  coordinator asks: print the commands, the owner's own tool, or one at a time. Printing gives the
+  `git worktree add -b` line per ticket and the `.scratch` step (none, a link, or a copy to bring back),
+  and runs nothing.
+- **After a merge that resolved a conflict** (`skills/implement/after-merge.md`): install what the
+  other branch brought, regenerate what is generated, rerun the area, and recheck the acceptance of
+  every criterion it touched. The implement preflight, the `/tm-pr` preflight and `/tm-flow` cite it.
+### Wave I1: retro and reports
+
+- **Three levels, and the looking-back stages stop.** `skills/retro/levels.md` (new): a finding is
+  `flow` (the plugin, on any project), `repo-skill` (this repo's skills, guides and `CLAUDE.md`) or
+  `repo-code` (its code and configuration); in doubt, the lowest level that resolves it, and a repo
+  convention extends the plugin's stage without copying it. `/tm-retro` and `/tm-session-analyze` write
+  the report and stop: no more "ask what to act on", `flow` is never applied from inside a project.
+  The templates count by level; an old `project` tag is read as one of the two repo levels.
+- **A registry of reports** (`scripts/report-registry.mjs`): each retro and meta-retro records itself
+  in `~/.thasmorato-skills/reports.json`, one file for both harnesses, with its counts by level. With no
+  argument, `/tm-flow-report` reads it; a repo that moved is listed as not found.
+- **`scripts/flow-state.mjs`**: the per-ticket matrix from the artifacts' frontmatter, from the worktree
+  that holds each ticket, with a stale validation, each feature's state (`awaiting-retro` when every
+  ticket completed and no retro covers it) and `resolve` for a loose slug. `/tm-flow`, `/tm-retro` and
+  `/tm-flow-report` read it; `/tm-implement` names the retro when the feature's last ticket closes.
+- **Precedents:** the review verifier marks a `pre-existing` finding that a confirmed one copies as
+  `pre-existing (precedent of <n>)`, counted in `precedents`; `/tm-retro` ranks it first among the debt.
+### Wave I2: measuring
+
+- **The extractor keeps what the owner sent mid-turn.** A message queued while the assistant worked
+  (`queued_command`, `commandMode: prompt`) was recorded nowhere else and was lost; it is now a
+  `queued` owner turn (an `invoked` one when it is a slash command). In Codex, the generic `exec`
+  wrapper and `multi_tool_use.parallel` are named with the tools they called inside, or `opaque`;
+  no argument is ever kept, which a fixture with a secret pins.
+- **Cost by stage, counted by the extractor:** active and idle minutes, tool calls, invocations,
+  answers outside the options, clarifications and overruled recommendations, in the index and the
+  meta-retro (`cost:` and a new section); wasted calls stay with the analysts. `/tm-retro` sums
+  minutes and tool calls per ticket beside the `model` and the new `effort` of `progress.md`.
+- **`ci_red_after_open`** in a record beside the PR body (`prs/<NN>-<slug>.record.md`, `kind: pr`),
+  `pending` until the owner runs `/tm-pr` again after CI. `/tm-flow-report` gains the cost rows.
+### Wave I3: steering and guardrails
+
+- **The guides reach files that do not exist yet.** `/tm-guidelines` also writes a
+  `.claude/rules/<tech>.md` per stack guide, scoped with `paths:` to the guide's file patterns, and a
+  `CLAUDE.md` and an `AGENTS.md` per subproject, each a pointer, never the rule copied; one the owner
+  wrote is never overwritten. `/tm-plan` and `/tm-design` match the planned paths against the
+  routing table, so a file still to be created gets its guide.
+- **Where a command runs:** the router's commands table gains `Runs in` (host, container, either),
+  detected from compose, devcontainer, Makefile and CI; a container-only command is its full call
+  from the host, and plans copy it so.
+- **`/tm-steering-validate`** (new command and skill): reads every steering file
+  (`scripts/steering-files.mjs` finds them and the references that point at nothing) and reports
+  contradictions, stale references, duplicates and silent overrides, `clean` or `dirty`, in
+  `docs/validation/steering.md`. A repo guide that contradicts a plugin skill is listed apart and
+  never makes it dirty: the project's guide wins.
+- **`/tm-guardrails`** inventories dead code (`knip`, `vulture`, `deadcode`), cycles (`madge`) and
+  warnings as errors, and every dependency-linter rule's message names the fix, not only the boundary.
+
+### Wave I4: the plugin itself
+
+- **`/tm-audit-deps` covers agent extensions.** `scripts/agent-extensions.mjs` lists the MCP servers
+  (`.mcp.json`, `.codex/config.toml`), marketplaces, plugins and hooks (`.claude/settings.json`) and
+  the skills the repo declares, each with its source and whether it is pinned (exact version, fixed
+  image tag or digest, marketplace at a commit). It returns env names, never values, and never reads
+  `settings.local.json`. The report gains an `## Agent extensions` section: an unpinned server or
+  hook is act-now, and the extension files join `lockfiles`, so the `/tm-flow` stale check covers them.
+- **Description evals.** `evals/` holds a `-fires` and a `-near-miss` case for each open skill, run
+  isolated by `claude plugin eval`. `scripts/skill-evals.mjs plan` prints one command per model for
+  the owner to run (local report, no baseline arm); `summarize` makes the case-by-model table.
+- **Testing a skill**, a new section of the skill anatomy: a test passes for the wrong reason when the
+  harness context (the tester's `CLAUDE.md`, memory, other plugins, MCP servers) or a file that
+  already holds the answer (the plugin's own source, a fixture naming the result) told the model what
+  to do. Triggering goes to the evals; a live test runs with `--setting-sources project,local` and
+  `--strict-mcp-config`, in a toy repo outside the plugin's source.
+
+### Wave B: content rules
+
+- **Security.** `crypto-failures`: only Argon2id and scrypt are memory-hard, bcrypt truncates at 72
+  bytes, and the OWASP minimums. `session-management`: a sealed cookie (Iron Session, a cookie session
+  store) has no revocation of its own; refresh rotation consumes atomically, revokes the family on
+  reuse, and survives a concurrent refresh (a short grace window or an idempotent refresh,
+  single-flight on the client or the BFF). `sensitive-data-exposure`: a one-time link in a `GET` is
+  consumed by the mail scanner (read `#token=` and `POST`), and a public build variable (`NEXT_PUBLIC_`,
+  `VITE_`) named like a secret ships to every visitor, with `server-only` on the server env module.
+  `hardcoded-secrets`: the shell history. `authentication`: a login that skips the verify for an
+  unknown user. `broken-access-control`: 404 or 403, and masking is not authorizing.
+- **Lenses.** `review-docs` checks that a generated OpenAPI spec has `properties` on every referenced
+  schema and every returned status in `responses`; `review-architecture` checks that a new module
+  holds its own authority.
+- **Smells and data access.** New `Business Rule at the Edge` (guards, interceptors, pipes, filters,
+  middleware) and `Apparent Modularization` smells; `Swallowed Error` gains the boundary by kind of
+  execution (HTTP, message handler, cron); new `Compensation inside one database` rule.
+- **Stack guides** mine runtime assets, the one place the environment is read, and migration
+  conventions. **Testing:** the case for starting the app outside `webServer`, what `page.route`
+  cannot see behind a BFF, and MSW's E2E mode in the app runtime. **Diagrams:** a Mermaid label with
+  `/`, `(`, `[`, `{` or `|` is quoted.
+
+### Wave G: two harnesses
+
+- **A second opinion from the other harness.** `/tm-review` ends with step 8: when it ran in the
+  harness that wrote the change (the `harness` of the ticket's `progress.md`), it names
+  `--second-opinion` for the owner to run in the other one. The new `scripts/second-opinion.mjs`
+  skips it on a diff under 25 changed lines that touches no risk path (auth, billing, migrations,
+  infra, `.sql`, and the `Risk paths` section the guidelines router gains). The second opinion writes
+  `reviews/<NN>-<slug>.second-opinion.md`, unprimed by the first review, and counts `not_in_first`:
+  the confirmed findings the first did not have. `flow-state.mjs` reads it as `second_opinion`,
+  `/tm-flow` shows it, and `/tm-retro` and `/tm-flow-report` read it per author × reviewer pair.
+- **A read-only review session in Codex.** Codex ignores a subagent's `sandbox_mode`, so `tm-setup`
+  now installs `~/.codex/tm-review.config.toml` beside the agents (owned, never over a file the
+  owner wrote): read-only, every write asked for, the review's effort, no model. The validators and
+  `tm-review` run with `codex -p tm-review`.
+- **The instruction sentinel.** `/tm-guidelines` runs `scripts/instructions-sentinel.mjs write`,
+  which adds one harmless line to the root `CLAUDE.md` and `AGENTS.md` that exist (never creating
+  one) with a value only that file gives. The 20 measured artifacts gain an `instructions` field
+  listing the values the loaded instructions give, never looked up. `/tm-retro` and
+  `/tm-flow-report` run `check` and report per harness which file each stage followed, and which
+  stages ran without the project's rules.
+- Left for 0.7.x: the division of stages between the harnesses (item 90, with the rest of 69) and
+  the UI wave.
+
+### Wave J: the decision map
+
+- **`/tm-decision-map <effort>`**, new, for an effort too big for one session whose path is not clear
+  yet. It keeps `.scratch/<effort>/decision-map.md`: the destination, agreed before any decision; the
+  decisions taken, each pointing at the document it lives in, a revision dated with what it
+  replaced; the open decisions with their type (conversation, prototype, research, someone outside,
+  owner task, as-is), each naming the stage that resolves it; the fog; out of scope; the next step.
+  One decision per session. Every session first records what came back, sweeps the decisions taken
+  elsewhere and reviews every fog item. It never writes code and never becomes the plan: closed, it
+  points at `/tm-prd`, and cutting the work is `/tm-decompose`'s. With no fog, it offers to skip
+  straight to `/tm-interview`.
+- **`scripts/decision-map.mjs`**: `frontier` (the open decisions nothing open blocks) and
+  `elsewhere` (the `Open questions` and `> Needs Input:` still open in the effort's documents and
+  `docs/`, with file and line). The map lists them and never copies them.
+- **`/tm-flow`** lists the map, reports the frontier of an open one, and offers the map before
+  `/tm-interview` when the effort's path is unclear.
+
+### Wave K: seeds and descriptions
+
+- **Seeds, resets and test accounts in the router.** `docs/guidelines.md` gains the `Seed` and
+  `Reset the data` rows in its commands table and a test accounts table (handle, role, where the
+  password comes from, never its value). The `guideline-generator` fills them from the repo's seed
+  tasks and fixtures; `/tm-guidelines` asks the owner for the rows marked `to be established`.
+  `/tm-acceptance` (and the `acceptance-checker` it dispatches) and `/tm-implement` read them there
+  before searching, so a run no longer rediscovers how this project gets to a known state.
+- **Four descriptions that fire.** `architecture`, `clean-code`, `data-access` and `security` almost
+  never loaded on their own: on a familiar problem the model answered alone. Their descriptions now
+  open with the trigger in the asker's words and ask to be loaded even when the problem looks
+  familiar. Measured with `claude plugin eval` (3 runs each, before → after): Sonnet 0/3 → 3/3 on
+  all four but `security` (1/3 → 3/3); Haiku 0/3 → 3/3 on `architecture` and `clean-code`, 2/3 on
+  `data-access`, and still 0/3 on `security`, which it answers alone. Every near miss stayed quiet.
+  The anatomy's description rule records how; `scripts/skill-descriptions.test.mjs` keeps it.
 
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
@@ -1455,165 +1615,6 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
 
 - `agents/reviewer.md` — replaced by the six `review-*` lenses.
 - The self-contained constraint on `docs/guidelines.md`. It was decided before per-technology guides existed; referencing them is now the point. Generated project artifacts still reference nothing outside the project, and the plugin as shipped remains self-contained.
-### Wave H: parallel sessions
-
-- **A second copy of the project has a page.** `/tm-guidelines` also writes
-  `docs/parallel-sessions.md` (new template): the ports each session takes, one database per session,
-  an env file per worktree (variable names only, never a value), the automations that must take the
-  port or the name, and how `.scratch` reaches a worktree. What the repo does not show is asked, row
-  by row. `/tm-implement` in a linked worktree records its port and database from it.
-- **`/tm-flow` reads every worktree.** `scripts/worktrees.mjs` lists them with the `progress.md` each
-  holds, and tells a `.scratch` linked to the main one (read once) from a copy (read from the copy).
-  The ticket matrix gains a worktree column.
-- **Worktrees are printed only when the owner asks.** Before an epic's parallel-safe tickets, the
-  coordinator asks: print the commands, the owner's own tool, or one at a time. Printing gives the
-  `git worktree add -b` line per ticket and the `.scratch` step (none, a link, or a copy to bring back),
-  and runs nothing.
-- **After a merge that resolved a conflict** (`skills/implement/after-merge.md`): install what the
-  other branch brought, regenerate what is generated, rerun the area, and recheck the acceptance of
-  every criterion it touched. The implement preflight, the `/tm-pr` preflight and `/tm-flow` cite it.
-### Wave I1: retro and reports
-
-- **Three levels, and the looking-back stages stop.** `skills/retro/levels.md` (new): a finding is
-  `flow` (the plugin, on any project), `repo-skill` (this repo's skills, guides and `CLAUDE.md`) or
-  `repo-code` (its code and configuration); in doubt, the lowest level that resolves it, and a repo
-  convention extends the plugin's stage without copying it. `/tm-retro` and `/tm-session-analyze` write
-  the report and stop: no more "ask what to act on", `flow` is never applied from inside a project.
-  The templates count by level; an old `project` tag is read as one of the two repo levels.
-- **A registry of reports** (`scripts/report-registry.mjs`): each retro and meta-retro records itself
-  in `~/.thasmorato-skills/reports.json`, one file for both harnesses, with its counts by level. With no
-  argument, `/tm-flow-report` reads it; a repo that moved is listed as not found.
-- **`scripts/flow-state.mjs`**: the per-ticket matrix from the artifacts' frontmatter, from the worktree
-  that holds each ticket, with a stale validation, each feature's state (`awaiting-retro` when every
-  ticket completed and no retro covers it) and `resolve` for a loose slug. `/tm-flow`, `/tm-retro` and
-  `/tm-flow-report` read it; `/tm-implement` names the retro when the feature's last ticket closes.
-- **Precedents:** the review verifier marks a `pre-existing` finding that a confirmed one copies as
-  `pre-existing (precedent of <n>)`, counted in `precedents`; `/tm-retro` ranks it first among the debt.
-### Wave I2: measuring
-
-- **The extractor keeps what the owner sent mid-turn.** A message queued while the assistant worked
-  (`queued_command`, `commandMode: prompt`) was recorded nowhere else and was lost; it is now a
-  `queued` owner turn (an `invoked` one when it is a slash command). In Codex, the generic `exec`
-  wrapper and `multi_tool_use.parallel` are named with the tools they called inside, or `opaque`;
-  no argument is ever kept, which a fixture with a secret pins.
-- **Cost by stage, counted by the extractor:** active and idle minutes, tool calls, invocations,
-  answers outside the options, clarifications and overruled recommendations, in the index and the
-  meta-retro (`cost:` and a new section); wasted calls stay with the analysts. `/tm-retro` sums
-  minutes and tool calls per ticket beside the `model` and the new `effort` of `progress.md`.
-- **`ci_red_after_open`** in a record beside the PR body (`prs/<NN>-<slug>.record.md`, `kind: pr`),
-  `pending` until the owner runs `/tm-pr` again after CI. `/tm-flow-report` gains the cost rows.
-### Wave I3: steering and guardrails
-
-- **The guides reach files that do not exist yet.** `/tm-guidelines` also writes a
-  `.claude/rules/<tech>.md` per stack guide, scoped with `paths:` to the guide's file patterns, and a
-  `CLAUDE.md` and an `AGENTS.md` per subproject, each a pointer, never the rule copied; one the owner
-  wrote is never overwritten. `/tm-plan` and `/tm-design` match the planned paths against the
-  routing table, so a file still to be created gets its guide.
-- **Where a command runs:** the router's commands table gains `Runs in` (host, container, either),
-  detected from compose, devcontainer, Makefile and CI; a container-only command is its full call
-  from the host, and plans copy it so.
-- **`/tm-steering-validate`** (new command and skill): reads every steering file
-  (`scripts/steering-files.mjs` finds them and the references that point at nothing) and reports
-  contradictions, stale references, duplicates and silent overrides, `clean` or `dirty`, in
-  `docs/validation/steering.md`. A repo guide that contradicts a plugin skill is listed apart and
-  never makes it dirty: the project's guide wins.
-- **`/tm-guardrails`** inventories dead code (`knip`, `vulture`, `deadcode`), cycles (`madge`) and
-  warnings as errors, and every dependency-linter rule's message names the fix, not only the boundary.
-
-### Wave I4: the plugin itself
-
-- **`/tm-audit-deps` covers agent extensions.** `scripts/agent-extensions.mjs` lists the MCP servers
-  (`.mcp.json`, `.codex/config.toml`), marketplaces, plugins and hooks (`.claude/settings.json`) and
-  the skills the repo declares, each with its source and whether it is pinned (exact version, fixed
-  image tag or digest, marketplace at a commit). It returns env names, never values, and never reads
-  `settings.local.json`. The report gains an `## Agent extensions` section: an unpinned server or
-  hook is act-now, and the extension files join `lockfiles`, so the `/tm-flow` stale check covers them.
-- **Description evals.** `evals/` holds a `-fires` and a `-near-miss` case for each open skill, run
-  isolated by `claude plugin eval`. `scripts/skill-evals.mjs plan` prints one command per model for
-  the owner to run (local report, no baseline arm); `summarize` makes the case-by-model table.
-- **Testing a skill**, a new section of the skill anatomy: a test passes for the wrong reason when the
-  harness context (the tester's `CLAUDE.md`, memory, other plugins, MCP servers) or a file that
-  already holds the answer (the plugin's own source, a fixture naming the result) told the model what
-  to do. Triggering goes to the evals; a live test runs with `--setting-sources project,local` and
-  `--strict-mcp-config`, in a toy repo outside the plugin's source.
-
-### Wave B: content rules
-
-- **Security.** `crypto-failures`: only Argon2id and scrypt are memory-hard, bcrypt truncates at 72
-  bytes, and the OWASP minimums. `session-management`: a sealed cookie (Iron Session, a cookie session
-  store) has no revocation of its own; refresh rotation consumes atomically, revokes the family on
-  reuse, and survives a concurrent refresh (a short grace window or an idempotent refresh,
-  single-flight on the client or the BFF). `sensitive-data-exposure`: a one-time link in a `GET` is
-  consumed by the mail scanner (read `#token=` and `POST`), and a public build variable (`NEXT_PUBLIC_`,
-  `VITE_`) named like a secret ships to every visitor, with `server-only` on the server env module.
-  `hardcoded-secrets`: the shell history. `authentication`: a login that skips the verify for an
-  unknown user. `broken-access-control`: 404 or 403, and masking is not authorizing.
-- **Lenses.** `review-docs` checks that a generated OpenAPI spec has `properties` on every referenced
-  schema and every returned status in `responses`; `review-architecture` checks that a new module
-  holds its own authority.
-- **Smells and data access.** New `Business Rule at the Edge` (guards, interceptors, pipes, filters,
-  middleware) and `Apparent Modularization` smells; `Swallowed Error` gains the boundary by kind of
-  execution (HTTP, message handler, cron); new `Compensation inside one database` rule.
-- **Stack guides** mine runtime assets, the one place the environment is read, and migration
-  conventions. **Testing:** the case for starting the app outside `webServer`, what `page.route`
-  cannot see behind a BFF, and MSW's E2E mode in the app runtime. **Diagrams:** a Mermaid label with
-  `/`, `(`, `[`, `{` or `|` is quoted.
-
-### Wave G: two harnesses
-
-- **A second opinion from the other harness.** `/tm-review` ends with step 8: when it ran in the
-  harness that wrote the change (the `harness` of the ticket's `progress.md`), it names
-  `--second-opinion` for the owner to run in the other one. The new `scripts/second-opinion.mjs`
-  skips it on a diff under 25 changed lines that touches no risk path (auth, billing, migrations,
-  infra, `.sql`, and the `Risk paths` section the guidelines router gains). The second opinion writes
-  `reviews/<NN>-<slug>.second-opinion.md`, unprimed by the first review, and counts `not_in_first`:
-  the confirmed findings the first did not have. `flow-state.mjs` reads it as `second_opinion`,
-  `/tm-flow` shows it, and `/tm-retro` and `/tm-flow-report` read it per author × reviewer pair.
-- **A read-only review session in Codex.** Codex ignores a subagent's `sandbox_mode`, so `tm-setup`
-  now installs `~/.codex/tm-review.config.toml` beside the agents (owned, never over a file the
-  owner wrote): read-only, every write asked for, the review's effort, no model. The validators and
-  `tm-review` run with `codex -p tm-review`.
-- **The instruction sentinel.** `/tm-guidelines` runs `scripts/instructions-sentinel.mjs write`,
-  which adds one harmless line to the root `CLAUDE.md` and `AGENTS.md` that exist (never creating
-  one) with a value only that file gives. The 20 measured artifacts gain an `instructions` field
-  listing the values the loaded instructions give, never looked up. `/tm-retro` and
-  `/tm-flow-report` run `check` and report per harness which file each stage followed, and which
-  stages ran without the project's rules.
-- Left for 0.7.x: the division of stages between the harnesses (item 90, with the rest of 69) and
-  the UI wave.
-
-### Wave J: the decision map
-
-- **`/tm-decision-map <effort>`**, new, for an effort too big for one session whose path is not clear
-  yet. It keeps `.scratch/<effort>/decision-map.md`: the destination, agreed before any decision; the
-  decisions taken, each pointing at the document it lives in, a revision dated with what it
-  replaced; the open decisions with their type (conversation, prototype, research, someone outside,
-  owner task, as-is), each naming the stage that resolves it; the fog; out of scope; the next step.
-  One decision per session. Every session first records what came back, sweeps the decisions taken
-  elsewhere and reviews every fog item. It never writes code and never becomes the plan: closed, it
-  points at `/tm-prd`, and cutting the work is `/tm-decompose`'s. With no fog, it offers to skip
-  straight to `/tm-interview`.
-- **`scripts/decision-map.mjs`**: `frontier` (the open decisions nothing open blocks) and
-  `elsewhere` (the `Open questions` and `> Needs Input:` still open in the effort's documents and
-  `docs/`, with file and line). The map lists them and never copies them.
-- **`/tm-flow`** lists the map, reports the frontier of an open one, and offers the map before
-  `/tm-interview` when the effort's path is unclear.
-
-### Wave K: seeds and descriptions
-
-- **Seeds, resets and test accounts in the router.** `docs/guidelines.md` gains the `Seed` and
-  `Reset the data` rows in its commands table and a test accounts table (handle, role, where the
-  password comes from, never its value). The `guideline-generator` fills them from the repo's seed
-  tasks and fixtures; `/tm-guidelines` asks the owner for the rows marked `to be established`.
-  `/tm-acceptance` (and the `acceptance-checker` it dispatches) and `/tm-implement` read them there
-  before searching, so a run no longer rediscovers how this project gets to a known state.
-- **Four descriptions that fire.** `architecture`, `clean-code`, `data-access` and `security` almost
-  never loaded on their own: on a familiar problem the model answered alone. Their descriptions now
-  open with the trigger in the asker's words and ask to be loaded even when the problem looks
-  familiar. Measured with `claude plugin eval` (3 runs each, before → after): Sonnet 0/3 → 3/3 on
-  all four but `security` (1/3 → 3/3); Haiku 0/3 → 3/3 on `architecture` and `clean-code`, 2/3 on
-  `data-access`, and still 0/3 on `security`, which it answers alone. Every near miss stayed quiet.
-  The anatomy's description rule records how; `scripts/skill-descriptions.test.mjs` keeps it.
 
 ## 0.2.0
 
