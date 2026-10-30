@@ -2,7 +2,7 @@
 
 # Authentication weaknesses
 
-**The tells.** Login with no attempt limiting; password rules that cap length or forbid characters; a reset token that is short, predictable, long-lived, or reusable; credentials compared with a non-constant-time equality; a second factor that can be skipped by calling the next endpoint directly.
+**The tells.** A login that returns early when the user does not exist, without running the password verify against a dummy hash, so the fast answer tells which emails have accounts; login with no attempt limiting; password rules that cap length or forbid characters; a reset token that is short, predictable, long-lived, or reusable; credentials compared with a non-constant-time equality; a second factor that can be skipped by calling the next endpoint directly.
 
 **Failure scenario.** An unthrottled login endpoint plus a credential dump gives an attacker unlimited offline-speed guessing against live accounts. Or: a password reset token generated from a timestamp is guessed within its window, and the account is taken over without the password ever being known.
 

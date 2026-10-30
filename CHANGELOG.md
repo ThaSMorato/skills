@@ -1537,6 +1537,28 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
   to do. Triggering goes to the evals; a live test runs with `--setting-sources project,local` and
   `--strict-mcp-config`, in a toy repo outside the plugin's source.
 
+### Wave B: content rules
+
+- **Security.** `crypto-failures`: only Argon2id and scrypt are memory-hard, bcrypt truncates at 72
+  bytes, and the OWASP minimums. `session-management`: a sealed cookie (Iron Session, a cookie session
+  store) has no revocation of its own; refresh rotation consumes atomically, revokes the family on
+  reuse, and survives a concurrent refresh (a short grace window or an idempotent refresh,
+  single-flight on the client or the BFF). `sensitive-data-exposure`: a one-time link in a `GET` is
+  consumed by the mail scanner (read `#token=` and `POST`), and a public build variable (`NEXT_PUBLIC_`,
+  `VITE_`) named like a secret ships to every visitor, with `server-only` on the server env module.
+  `hardcoded-secrets`: the shell history. `authentication`: a login that skips the verify for an
+  unknown user. `broken-access-control`: 404 or 403, and masking is not authorizing.
+- **Lenses.** `review-docs` checks that a generated OpenAPI spec has `properties` on every referenced
+  schema and every returned status in `responses`; `review-architecture` checks that a new module
+  holds its own authority.
+- **Smells and data access.** New `Business Rule at the Edge` (guards, interceptors, pipes, filters,
+  middleware) and `Apparent Modularization` smells; `Swallowed Error` gains the boundary by kind of
+  execution (HTTP, message handler, cron); new `Compensation inside one database` rule.
+- **Stack guides** mine runtime assets, the one place the environment is read, and migration
+  conventions. **Testing:** the case for starting the app outside `webServer`, what `page.route`
+  cannot see behind a BFF, and MSW's E2E mode in the app runtime. **Diagrams:** a Mermaid label with
+  `/`, `(`, `[`, `{` or `|` is quoted.
+
 ## 0.2.0
 
 Rebuilt the code phase as a validated, test-first loop: `/tickets → /design → /plan → /plan-validate → /implement → /review`. Vendored the testing and code-quality references so the plugin ships self-contained.
