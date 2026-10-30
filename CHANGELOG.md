@@ -1599,6 +1599,22 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
 - **`/tm-flow`** lists the map, reports the frontier of an open one, and offers the map before
   `/tm-interview` when the effort's path is unclear.
 
+### Wave K: seeds and descriptions
+
+- **Seeds, resets and test accounts in the router.** `docs/guidelines.md` gains the `Seed` and
+  `Reset the data` rows in its commands table and a test accounts table (handle, role, where the
+  password comes from, never its value). The `guideline-generator` fills them from the repo's seed
+  tasks and fixtures; `/tm-guidelines` asks the owner for the rows marked `to be established`.
+  `/tm-acceptance` (and the `acceptance-checker` it dispatches) and `/tm-implement` read them there
+  before searching, so a run no longer rediscovers how this project gets to a known state.
+- **Four descriptions that fire.** `architecture`, `clean-code`, `data-access` and `security` almost
+  never loaded on their own: on a familiar problem the model answered alone. Their descriptions now
+  open with the trigger in the asker's words and ask to be loaded even when the problem looks
+  familiar. Measured with `claude plugin eval` (3 runs each, before → after): Sonnet 0/3 → 3/3 on
+  all four but `security` (1/3 → 3/3); Haiku 0/3 → 3/3 on `architecture` and `clean-code`, 2/3 on
+  `data-access`, and still 0/3 on `security`, which it answers alone. Every near miss stayed quiet.
+  The anatomy's description rule records how; `scripts/skill-descriptions.test.mjs` keeps it.
+
 ## 0.2.0
 
 Rebuilt the code phase as a validated, test-first loop: `/tickets → /design → /plan → /plan-validate → /implement → /review`. Vendored the testing and code-quality references so the plugin ships self-contained.

@@ -48,6 +48,9 @@ Fill the commands table from what this repo actually runs. Plans copy these verb
 
 Fill `Runs in` for each: `host`, `container <service>` or `either`, from the compose file's services (`docker-compose.yml`, `compose.yaml`), `.devcontainer/`, the Makefile targets that wrap `docker compose exec`, and the container the CI job runs in. A command that runs only in a container is written as its full call from the host (`docker compose exec api pnpm test`), so a plan can copy it as written.
 
+## Seeds, resets and test accounts
+`/tm-acceptance` and `/tm-implement` need a known state: a database with the data a check expects, the same data again after a test changed it, an account to log in with. Found once here, they are not rediscovered on every run. Fill the `Seed` and `Reset the data` rows from what the repo runs (the seed task, the reset or re-create task, the fixture loader, a factory script), with `Runs in` like every other command. Fill the test accounts table from the seeds and fixtures: each account's handle (the e-mail or username it logs in with), its role, and where its password comes from (the variable name, the seed file and line, the fixture), never the value, even when the seed file writes it in the clear: the page is read by every stage and committed. A row the repo does not show says `to be established`; a project with no data to seed prunes the rows and the table.
+
 ## The parallel-sessions page
 Two sessions of the project at once, each in its own worktree, collide on the first thing they share: the port the dev server binds, the database the tests reset, the env file, a container name. Fill `docs/parallel-sessions.md` from what the repo shows: the base ports and where each is read, the database names and how they are created, the variables that would change per session, and every automation that has a port or a name fixed in it. A row the repo does not show (all of them, in greenfield) says `to be established`: `/tm-guidelines` asks the owner for those. A project with nothing to isolate says so in its first section. For `.scratch` in a worktree: `tracked` when the repo versions it; `link` when it is ignored by a rule that also matches a file (`.scratch`, not `.scratch/`); `copy` otherwise.
 
@@ -65,7 +68,7 @@ Where a convention is genuinely inconsistent across the repo, record the **domin
 ## Workflow
 1. Detect the stack, layout and real commands from the repo (and the system profile if present).
 2. List the stack guides that exist; mark the technologies that need one.
-3. Fill the router: stack, routing table, non-negotiables, structure, commands, documents, checklist.
+3. Fill the router: stack, routing table, non-negotiables, structure, commands (with the seed, the reset and the test accounts), documents, checklist.
 4. Self-review: under 150 lines, every path verified, every command taken from the repo, no tutorial content.
 5. Write `docs/guidelines.md`, then fill and write `docs/parallel-sessions.md`.
 6. Write the pointers: a `.claude/rules/<tech>.md` per guide, and the `CLAUDE.md` and `AGENTS.md` of each subproject.

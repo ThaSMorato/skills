@@ -58,6 +58,14 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 | Lint | | |
 | Build | | |
 | Run locally | | |
+| Seed | | |
+| Reset the data | | |
+
+> The accounts a test or a check logs in with, on the seeded data. A password is named by where it comes
+> from (the variable, the seed file, the fixture), never by its value.
+
+| Handle | Role | Password from |
+|---|---|---|
 
 ## 6. Project documents (required)
 > The rest of the docs, and when each one is worth loading.

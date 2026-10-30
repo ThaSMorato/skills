@@ -1,6 +1,6 @@
 ---
 name: security
-description: A self-contained catalog of security weaknesses at the level you can actually see in code (injection, access control, crypto, secrets, session handling, SSRF, deserialization, upload and rate-limit failures, plus LLM-specific risks), each with its tell, its concrete failure scenario, and its fix. Use when reviewing a diff or a feature for security, threat-modelling a design, or when someone asks "is this safe".
+description: 'Use when someone asks "is this safe" or "is this secure" about code, an endpoint or a design, asks to review it for vulnerabilities, or to threat-model it. A catalog of the security weaknesses you can see in code (injection, access control, crypto, secrets, session handling, SSRF, deserialization, upload and rate-limit failures, plus LLM-specific risks), each with its tell, a concrete failure scenario and the fix. Load it before answering, even when the problem looks familiar: the answer then follows its standard instead of a generic one.'
 ---
 
 # Security
