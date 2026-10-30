@@ -65,6 +65,16 @@ describe('flowState and resolveTicket', () => {
     )
   })
 
+  test('a second opinion in the other harness is read from its own file, beside the review', () => {
+    ticket('ledger', '01-read-model')
+    put('.scratch/ledger/reviews/01-read-model.md', '---\nkind: review\nopinion: first\nharness: claude-code\n---\n')
+    put('.scratch/ledger/reviews/01-read-model.second-opinion.md', '---\nkind: review\nopinion: second\nharness: codex\nnot_in_first: 2\n---\n')
+
+    const sut = ticketOf(flowState({ cwd: repo }), 'ledger', '01-read-model')
+
+    assert.deepEqual({ first: sut.review.harness, second: sut.second_opinion }, { first: 'claude-code', second: { kind: 'review', opinion: 'second', harness: 'codex', not_in_first: 2 } })
+  })
+
   test('a validation of an older version of the plan is stale', () => {
     ticket('ledger', '01-read-model')
     put('.scratch/ledger/plans/01-read-model/plan.md', 'plan v1\n')

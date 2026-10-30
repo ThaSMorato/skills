@@ -82,6 +82,7 @@ kind: tidy
 plugin_version: 0.7.0
 model: <the model id your harness reports for this session; `unknown` when it does not say>
 harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
 fixed_point: <ref>
 proposed: {expression: <n>, duplication: <n>, size: <n>}

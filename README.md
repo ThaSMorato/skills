@@ -70,10 +70,11 @@ Then, in a new Codex session, run `$thasmorato-skills:tm-setup` once per plugin 
 
 - **Stages are skills, not slash commands,** under the same names: `/tm-plan` is `$thasmorato-skills:tm-plan`. Codex has built-in review, plan and init commands of its own; those are not this plugin.
 - **Stages never fire on their own.** Every `tm-*` skill is closed to implicit invocation; only the owner typing its name runs it. The reference skills (`testing`, `tdd`, `security`, `code-smells`, `clean-code`, `architecture`, `data-access`, `domain-model`, `ui`, `asking`) stay open, as in Claude Code.
-- **"Never edits" is an instruction, not a sandbox.** Codex ignores a subagent's `sandbox_mode`, so the review lenses are read-only only because they are told to be. Run the session read-only when that has to hold.
+- **"Never edits" holds only in a read-only session.** Codex ignores a subagent's `sandbox_mode`, so the review lenses are read-only only because they are told to be. `tm-setup` installs a `tm-review` profile (`~/.codex/tm-review.config.toml`: read-only, every write asked for, the review's effort, no model). Start the validators and `tm-review` with `codex -p tm-review`, and approve only the write of its report.
+- **A second opinion from the other harness.** `/tm-review` ends by offering a second review in the harness that did not write the change (`--second-opinion`), skipped on a diff under 25 changed lines that touches no risk path. The project adds its own risk paths in `docs/guidelines.md`.
 - **Subagents think at their own effort, on your model.** Each `tm-<agent>.toml` carries the agent's `model_reasoning_effort` and no `model`: the model is your profile's or your session's (or `[agents] default_subagent_model` in your Codex config).
 - **At most six subagents run together** (Codex's default `agents.max_concurrent_threads_per_session`); `tm-review` runs its lenses in batches.
-- **Codex reads `AGENTS.md`, not `CLAUDE.md`.** A project that keeps its instructions in `CLAUDE.md` can add `project_doc_fallback_filenames = ["CLAUDE.md"]` to its Codex config.
+- **Codex reads `AGENTS.md`, not `CLAUDE.md`.** A project that keeps its instructions in `CLAUDE.md` can add `project_doc_fallback_filenames = ["CLAUDE.md"]` to its Codex config. `/tm-guidelines` plants a harmless sentinel line in both files, and `/tm-retro` shows, per harness, which file each stage followed.
 
 The Codex package in `codex/` is generated: edit the source, then run `node scripts/build-codex.mjs`.
 

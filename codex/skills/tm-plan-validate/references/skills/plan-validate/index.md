@@ -79,6 +79,7 @@ kind: validation
 plugin_version: 0.7.0
 model: <the model id your harness reports for this session; `unknown` when it does not say>
 harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
 plan_sha256: <shasum -a 256 of plan.md as validated; a plan edited afterwards no longer matches>
 plan_revision: <the plan's revision as validated>

@@ -1559,6 +1559,29 @@ A stage-by-stage audit of the whole suite, then the fixes. Two findings shaped e
   cannot see behind a BFF, and MSW's E2E mode in the app runtime. **Diagrams:** a Mermaid label with
   `/`, `(`, `[`, `{` or `|` is quoted.
 
+### Wave G: two harnesses
+
+- **A second opinion from the other harness.** `/tm-review` ends with step 8: when it ran in the
+  harness that wrote the change (the `harness` of the ticket's `progress.md`), it names
+  `--second-opinion` for the owner to run in the other one. The new `scripts/second-opinion.mjs`
+  skips it on a diff under 25 changed lines that touches no risk path (auth, billing, migrations,
+  infra, `.sql`, and the `Risk paths` section the guidelines router gains). The second opinion writes
+  `reviews/<NN>-<slug>.second-opinion.md`, unprimed by the first review, and counts `not_in_first`:
+  the confirmed findings the first did not have. `flow-state.mjs` reads it as `second_opinion`,
+  `/tm-flow` shows it, and `/tm-retro` and `/tm-flow-report` read it per author × reviewer pair.
+- **A read-only review session in Codex.** Codex ignores a subagent's `sandbox_mode`, so `tm-setup`
+  now installs `~/.codex/tm-review.config.toml` beside the agents (owned, never over a file the
+  owner wrote): read-only, every write asked for, the review's effort, no model. The validators and
+  `tm-review` run with `codex -p tm-review`.
+- **The instruction sentinel.** `/tm-guidelines` runs `scripts/instructions-sentinel.mjs write`,
+  which adds one harmless line to the root `CLAUDE.md` and `AGENTS.md` that exist (never creating
+  one) with a value only that file gives. The 20 measured artifacts gain an `instructions` field
+  listing the values the loaded instructions give, never looked up. `/tm-retro` and
+  `/tm-flow-report` run `check` and report per harness which file each stage followed, and which
+  stages ran without the project's rules.
+- Left for 0.7.x: the division of stages between the harnesses (item 90, with the rest of 69) and
+  the UI wave.
+
 ## 0.2.0
 
 Rebuilt the code phase as a validated, test-first loop: `/tickets → /design → /plan → /plan-validate → /implement → /review`. Vendored the testing and code-quality references so the plugin ships self-contained.

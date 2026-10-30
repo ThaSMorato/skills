@@ -39,6 +39,11 @@ A stage about to create `apps/web/src/cart.tsx` has no file to match yet, and a 
 
 Every one of them is a pointer, never the rule copied: a copy drifts from the guide, and `$thasmorato-skills:tm-steering-validate` reports it as a duplicate.
 
+**Then plant the instruction sentinel.** Neither harness says whether it loaded the project's instruction file, nor which one wins when both exist. Run `node "<TM_ROOT>/agent-references/scripts/instructions-sentinel.mjs" write --root .` after the pointers: it adds one harmless line to the root `CLAUDE.md` and `AGENTS.md` that exist, asking every artifact a stage writes to list a value only that file gives, and keeps a token already there. It never creates either file, because a new `CLAUDE.md` would hide `AGENTS.md` from Claude Code. Return what it printed.
+
+## Risk paths
+Fill the `Risk paths` section with the directories where this repo keeps what the plugin's defaults (auth, billing, migrations, infra, `.sql`) do not name: payments, a ledger, credentials, permissions, a public API's contract. Only paths that exist, as globs; prune the section when the defaults cover the repo. A change there always gets a second review in the other harness.
+
 ## Commands come from the repo, not the ecosystem
 Fill the commands table from what this repo actually runs. Plans copy these verbatim into their Deliverables, so a plausible-but-wrong command (`npm test` where the repo uses `pnpm test:unit`) fails at the last step of an implementation, which is the most expensive place to find out.
 
@@ -52,7 +57,7 @@ The router lists the page in its documents table; the page is not part of the 15
 ## Rules (negative)
 - **Index, don't teach.** No tutorials, no long code samples, no good-vs-bad walkthroughs; those belong in a stack guide. Every entry is a pointer with a trigger.
 - **Point only at things that exist.** Verify each path before listing it, except rows you explicitly mark missing.
-- **Never modify code**; `Bash` is for inspection. What it writes is the router, the parallel-sessions page, the rules and the pointers.
+- **Never modify code**; `Bash` is for inspection and for the sentinel script. What it writes is the router, the parallel-sessions page, the rules, the pointers and the sentinel line.
 - No emojis, no `TODO`/`TBD`.
 
 ## Ambiguity (you cannot ask, isolated)
@@ -65,4 +70,5 @@ Where a convention is genuinely inconsistent across the repo, record the **domin
 4. Self-review: under 150 lines, every path verified, every command taken from the repo, no tutorial content.
 5. Write `docs/guidelines.md`, then fill and write `docs/parallel-sessions.md`.
 6. Write the pointers: a `.claude/rules/<tech>.md` per guide, and the `CLAUDE.md` and `AGENTS.md` of each subproject.
+7. Plant the sentinel with `instructions-sentinel.mjs write`.
 '''

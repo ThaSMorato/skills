@@ -39,4 +39,10 @@ for (const [kind, path] of Object.entries(producers)) {
 
     assert.match(text, new RegExp(`kind: ${kind}\\nplugin_version: .*\\nmodel: .*\\nharness: `))
   })
+
+  test(`${kind} (${path}) records the instruction sentinels the harness loaded, never looked up`, () => {
+    const text = readFileSync(join(root, path), 'utf8')
+
+    assert.match(text, /\nharness: .*\ninstructions: \[<.*never open a file to find one.*>\]\n/)
+  })
 }

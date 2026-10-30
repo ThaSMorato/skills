@@ -14,6 +14,7 @@ kind: e2e-spec
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 model: <the model id your harness reports for this session; `unknown` when it does not say>
 harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
 plan_revision: <the plan's revision this spec was reconciled with>
 runner: <the repo's E2E runner and its config, e.g. Playwright, playwright.config.ts>
