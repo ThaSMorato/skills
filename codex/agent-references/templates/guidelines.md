@@ -77,7 +77,14 @@ PRUNE + RENUMBER optional sections that don't apply; (required) sections always 
 | Source | Answers |
 |---|---|
 
-## 8. Pre-commit checklist (required)
+## 8. Risk paths (optional)
+> Where a mistake costs the most. A change that touches one of these always gets a second review in the
+> other harness, however small. The plugin already counts auth, billing, migrations, infra and `.sql`;
+> list only what this repo adds, one glob per line, with what lives there.
+
+- `<glob>`: <what lives there>
+
+## 9. Pre-commit checklist (required)
 > What must be true before a change lands, as checkable lines, each one either a command from section
 > 5 or an objectively verifiable condition.
 - [ ]

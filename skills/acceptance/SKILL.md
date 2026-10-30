@@ -74,6 +74,7 @@ kind: acceptance
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 model: <the model id your harness reports for this session; `unknown` when it does not say>
 harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
 verified_at: <the commit checked, git rev-parse HEAD>
 items: <count>

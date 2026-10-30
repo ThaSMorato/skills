@@ -67,6 +67,7 @@ function readTicket({ feature, slug, path, root, copies }) {
     validation: validationOf(at('plans', slug)),
     progress: frontmatterOf(at('plans', slug, 'progress.md')),
     review: frontmatterOf(at('reviews', `${slug}.md`)),
+    second_opinion: frontmatterOf(at('reviews', `${slug}.second-opinion.md`)),
     acceptance: frontmatterOf(at('acceptance', `${slug}.md`)),
     pr: existsSync(at('prs', `${slug}.md`)),
     pr_record: frontmatterOf(at('prs', `${slug}.record.md`)),

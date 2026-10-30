@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { installAgents } from './codex-install-agents.mjs'
+import { installAgents, REVIEW_PROFILE } from './codex-install-agents.mjs'
 
 // The installer writes into the owner's own Codex home, next to agents other tools put there. It may
 // only ever replace or remove what this plugin wrote, and it must leave no `<TM_ROOT>` behind.
@@ -18,6 +18,8 @@ function aPackage({ version = '0.0.0', agents = { 'tm-reviewer.toml': `${OWNED}d
   for (const [name, content] of Object.entries(agents)) writeFileSync(join(packageRoot, 'agents', name), content)
   return packageRoot
 }
+
+const readProfile = (codexHome) => readFileSync(join(codexHome, REVIEW_PROFILE), 'utf8')
 
 function aCodexHome(agents = {}) {
   const codexHome = mkdtempSync(join(tmpdir(), 'tm-codex-home-'))
@@ -62,4 +64,36 @@ test('removes an agent an older version shipped and keeps everyone else', () => 
     { removed, mine: existsSync(join(codexHome, 'agents', 'tm-mine.toml')), other: existsSync(join(codexHome, 'agents', 'other.toml')) },
     { removed: ['tm-dropped.toml'], mine: true, other: true },
   )
+})
+
+// Codex ignores a subagent's sandbox_mode, so a review lens is read-only only when the whole session
+// is. `codex -p tm-review` layers this profile file over the owner's config: read-only, every write
+// asked for, the review's effort, and no model, because the model is the owner's to choose.
+
+test('installs the tm-review profile next to the config: read-only, writes asked for, no model', () => {
+  const codexHome = aCodexHome()
+
+  installAgents({ packageRoot: aPackage(), codexHome })
+
+  assert.deepEqual(
+    { sandbox: /^sandbox_mode = "read-only"$/m.test(readProfile(codexHome)), approval: /^approval_policy = "on-request"$/m.test(readProfile(codexHome)), effort: /^model_reasoning_effort = "high"$/m.test(readProfile(codexHome)), model: /^model\s*=/m.test(readProfile(codexHome)) },
+    { sandbox: true, approval: true, effort: true, model: false },
+  )
+})
+
+test('replaces a profile it wrote, and refuses one the owner wrote, before writing anything', () => {
+  const codexHome = aCodexHome()
+  writeFileSync(join(codexHome, REVIEW_PROFILE), 'sandbox_mode = "workspace-write"\n')
+
+  assert.throws(() => installAgents({ packageRoot: aPackage(), codexHome }), /did not write/)
+  assert.deepEqual({ profile: readProfile(codexHome), agents: existsSync(join(codexHome, 'agents', 'tm-reviewer.toml')) }, { profile: 'sandbox_mode = "workspace-write"\n', agents: false })
+})
+
+test('the profile it wrote is rewritten on the next install', () => {
+  const codexHome = aCodexHome()
+  installAgents({ packageRoot: aPackage({ version: '1.0.0' }), codexHome })
+
+  const { profile } = installAgents({ packageRoot: aPackage({ version: '2.0.0' }), codexHome })
+
+  assert.deepEqual({ profile, header: readProfile(codexHome).split('\n')[0] }, { profile: REVIEW_PROFILE, header: '# thasmorato-skills 2.0.0: the tm-review profile, installed by $thasmorato-skills:tm-setup' })
 })

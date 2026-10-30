@@ -1,6 +1,6 @@
 ---
 description: Review the diff since a fixed point across narrow lenses in parallel (quality, tests, security, spec, standards, architecture, data, docs, and UI when the diff touches it), then synthesize, and verify every finding against the code before you decide.
-argument-hint: "<fixed point: commit/branch/tag, e.g. main or HEAD~5> [--worktree <manifest>]"
+argument-hint: "<fixed point: commit/branch/tag, e.g. main or HEAD~5> [--worktree <manifest>] [--second-opinion]"
 disable-model-invocation: true
 ---
 
@@ -12,6 +12,8 @@ Review the diff between `HEAD` and the fixed point: $ARGUMENTS
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty: a bad ref or an empty diff fails here, not inside six agents.
 
 **Uncommitted work.** With `--worktree <manifest>` (the list of files `/tm-implement` wrote to `.scratch/<feature-slug>/plans/<NN>-<slug>/manifest.txt`), the review compares the working tree with the fixed point for exactly the manifest's files: `git diff <fixed-point> -- <files>` for the tracked ones, and `git diff --no-index /dev/null <file>` for each new one. A change outside the manifest is someone else's (another session, the owner's own edit): it stays out of the diff and out of the findings, as it does in the committed mode; tell every lens so, and name it once in the report as outside this review. Without the flag, when the ticket's files have uncommitted changes, say so and offer the mode. **Never commit to satisfy this preflight**: committing is the owner's call, and a commit made to get a non-empty diff takes it from them.
+
+**Second opinion.** With `--second-opinion`, this run is the second review of a change, in the harness that did not write it, as step 8 of the first review offered. It writes its own file, `.scratch/<feature-slug>/reviews/<NN>-<slug>.second-opinion.md`, with `opinion: second`, and leaves the first review as it is. Until the verifier returns, no lens receives the first review, and you do not read it either: a lens shown the first findings confirms them instead of looking. After the verifier, read the first review and count `not_in_first`: the confirmed findings with no finding there at the same location for the same rule. That count is what the second opinion earned, and `/tm-flow-report` reads it per author × reviewer pair. Its findings are reported, chosen and fixed as in step 7.
 
 ## 2. Compute the diff once
 Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list; in worktree mode, write the manifest's diff from the preflight instead, and say there are no commits yet. Every reviewer receives **the path to that file**, not the instruction to compute it: nine agents each running the same diff is nine times the cost for one result, and the same work redone by every lens.
@@ -49,7 +51,7 @@ Narrow agents trade precision for recall, and the two costs land here:
 - **Severity drift.** Each lens believes its own subject matters most. Re-rank across all of them on the shared scale, judging by consequence rather than by which agent reported it. **Lowering a lens's severity needs a reason in the finding:** a `- **Mitigated by:**` line naming what contains it (`file:line` of the guard, the constraint, the caller that never passes that value). With nothing to cite, the lens's severity stands. Findings about **data loss, security or money are never lowered** in synthesis; only the verifier's code check can refute them.
 
 ## 5. Persist
-Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md`, most-severe first. Give each one `file:line`, the rule it violates, the failure scenario, the fix, and a `- **Lenses:** <lens>, <lens>` line naming every lens that raised it; merged duplicates keep all their lenses. Record the fixed point, the lenses that ran, and the lenses that were skipped and why:
+Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md` (with `--second-opinion`, to the `.second-opinion.md` beside it), most-severe first. Give each one `file:line`, the rule it violates, the failure scenario, the fix, and a `- **Lenses:** <lens>, <lens>` line naming every lens that raised it; merged duplicates keep all their lenses. Record the fixed point, the lenses that ran, and the lenses that were skipped and why:
 
 ```markdown
 ---
@@ -57,7 +59,10 @@ kind: review
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
 model: <the model id your harness reports for this session; `unknown` when it does not say>
 harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
+opinion: first | second
+not_in_first: <confirmed findings the first review does not have>
 fixed_point: <ref>
 mode: committed | worktree
 run: <1 on the first review of this ticket; +1 on every re-run>
@@ -69,7 +74,7 @@ by_lens: {quality: <n>, tests: <n>, security: <n>, spec: <n>, standards: <n>, ar
 ---
 ```
 
-The severity keys stay in English whatever language the headings are in. In `by_lens`, a finding raised by two lenses counts once for each, so the lens counts can sum to more than `findings`; that overlap is itself worth seeing. These counts are how `/tm-retro` tells which lens earns its cost on this project, and a lens that is attributed nowhere cannot be judged.
+`not_in_first` is written only by a second opinion, after the verifier. The severity keys stay in English whatever language the headings are in. In `by_lens`, a finding raised by two lenses counts once for each, so the lens counts can sum to more than `findings`; that overlap is itself worth seeing. These counts are how `/tm-retro` tells which lens earns its cost on this project, and a lens that is attributed nowhere cannot be judged.
 
 Without the file, a review's findings live only in this conversation and are gone at the next `/compact`. `/tm-retro` reads these across a whole epic to find the finding that **repeats**; and a finding that recurs across tickets is a standard that should move into a stack guide or a rule, which is a conclusion no single review can reach.
 
@@ -98,3 +103,10 @@ Every finding leaves this phase with a line in the review file, under its verdic
 **A finding the user declines with a reason that will still hold next time** (a deliberate trade-off, a convention the lens did not know) is offered for `docs/declined.md`, in the format of `${CLAUDE_PLUGIN_ROOT}/templates/declined.md`, so the next review does not raise it again. A passing reason is not recorded, and a reason that is really an architectural decision is an ADR (`/tm-adr-generate`). Nothing here edits code: persisting the findings and their verdicts is a record of what was reported, not a change to the work.
 
 Once the findings the user chose are fixed, rewrite the ticket's `progress.md` frontmatter for the ticket as it now stands (`unverified`, `failed_deliverables` and `status`, as `/tm-implement` defines them), so `/tm-retro` measures the fixed work and not the work before review. Then the next steps are the optional `/tm-tidy <slug> <fixed point>`, then `/tm-acceptance <slug>` (after the last production change), then `/tm-pr <slug> <fixed point>` for the pull request body.
+
+## 8. Second opinion
+Once the review is closed, decide whether the change gets a second review in the other harness. A model reviewing its own work shares its blind spots; the harness that did not write the change does not. The author is the `harness` of the ticket's `progress.md`; this review's harness is the one you run in.
+
+- **This review already ran in the other harness** (yours is not the author's), or this run is itself `--second-opinion`: there is nothing to offer.
+- **The same harness as the author:** run `node "${CLAUDE_PLUGIN_ROOT}/scripts/second-opinion.mjs" --diff <the diff file> --guidelines docs/guidelines.md`. It counts the changed lines and matches the files against the risk paths: auth, billing, migrations, infra and `.sql`, plus the `Risk paths` the project's guidelines list. On `suggest: false`, say it is skipped and why, with the reason it printed. On `suggest: true`, name the command for the owner to run in the other harness, with its reasons: `$thasmorato-skills:tm-review <fixed point> --second-opinion` in Codex, started with `codex -p tm-review` so the session is read-only, or `/tm-review <fixed point> --second-opinion` in Claude Code. Never run it yourself: switching harness is the owner's.
+- **No `progress.md`, or one without `harness`:** the author is unknown. Say so, and offer the second opinion when the script suggests it.
