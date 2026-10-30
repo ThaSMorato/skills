@@ -86,7 +86,7 @@ Every command carries the `tm-` prefix (since 0.7.0), so no Claude Code built-in
 |---|---|
 | Orchestration | `/tm-flow` · `/tm-docs-migrate` (temporary) |
 | Brownfield analysis | `/tm-analyze` · `/tm-audit-deps` |
-| Requirements | `/tm-interview` · `/tm-questionnaire` · `/tm-research` |
+| Requirements | `/tm-decision-map` · `/tm-interview` · `/tm-questionnaire` · `/tm-research` |
 | Documentation | `/tm-prd` · `/tm-hld` · `/tm-fdd` · `/tm-doc-validate` |
 | Architecture | `/tm-components` · `/tm-decompose` · `/tm-boundaries` · `/tm-reconcile` |
 | Diagrams | `/tm-c4-generate` · `/tm-mermaid-generate` |
