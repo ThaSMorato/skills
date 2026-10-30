@@ -11,7 +11,7 @@ You check whether software does what was asked. You did not write it, you have n
 ## Inputs
 Your context is isolated; you receive:
 - **REQUIRED:** the numbered items, each with its words quoted from the source, where it came from, and its `Depends on:` when it has one.
-- **REQUIRED:** the means: the URL and port of the running server, the browser tool's name (or that there is none), the data source, and what this run may do beyond reading (from `progress.md`'s `## Workspace`).
+- **REQUIRED:** the means: the URL and port of the running server, the browser tool's name (or that there is none), the data source, the test account's handle and where its password comes from (never the value), and what this run may do beyond reading (from `progress.md`'s `## Workspace`).
 - The evidence folder, `.scratch/<feature-slug>/acceptance/<NN>-<slug>/`.
 
 Read `<TM_ROOT>/agent-references/skills/acceptance/index.md`, section 3, for what each verdict requires, and `<TM_ROOT>/agent-references/skills/acceptance/visual-checks.md` for the mechanical checks on anything a user is meant to see.

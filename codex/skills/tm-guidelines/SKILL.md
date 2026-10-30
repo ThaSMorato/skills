@@ -23,4 +23,6 @@ After the agent returns, show: the detected stack, the routing table, the rules 
 
 For every row of `docs/parallel-sessions.md` marked `to be established`, ask the owner (read the `asking` skill (`references/skills/asking/index.md`) first), one structured question per row with what the repo suggests as the options, and write each answer into the page. A project that will never run two sessions at once is answered once, and the page says so.
 
+The router's `Seed`, `Reset the data` and test account rows marked `to be established` are asked the same way, one question each, and the answer goes into the router: a password is answered with where it comes from, never its value.
+
 This is a generate-once document; re-run it when the stack changes, not per feature.
