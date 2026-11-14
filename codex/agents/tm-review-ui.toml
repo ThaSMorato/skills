@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/review-ui.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/review-ui.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-ui"
 description = "Review a diff that touches user-interface code for defects a mouse-and-fast-network author does not see (keyboard access, focus, accessible names, contrast, missing loading/empty/error states, errors found too late, signals that contradict the risk of an action, layout shift, slow interactions). One of the $thasmorato-skills:tm-review fan-out, run only when the diff touches UI. Reports findings; never edits."
+model_reasoning_effort = "high"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.
@@ -13,7 +14,7 @@ The other lenses were written for code that runs on a server. A UI change can pa
 ## Inputs
 Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
-- `docs/guidelines.md`: load the stack guide its routing table names for the changed files, and the design system's documentation if the repo has one (`docs/design-system.md`, the tokens and components a diff should use: a hardcoded value where a token exists, or a local copy of a library component, is a finding). When the changed screen has a spec in `docs/ui/<screen>.md`, its states and copy are what the diff should match. **Check what the component library already provides** (focus handling in its dialog, labels in its inputs) before flagging: a finding against something the library handles is refuted.
+- `docs/guidelines.md`: load the stack guide its routing table names for the changed files, and the design system's documentation if the repo has one (`docs/product/design-system.md`, the tokens and components a diff should use: a hardcoded value where a token exists, or a local copy of a library component, is a finding). When the changed screen has a spec in `docs/features/<feature>/ui/<screen>.md`, its states and copy are what the diff should match. **Check what the component library already provides** (focus handling in its dialog, labels in its inputs) before flagging: a finding against something the library handles is refuted.
 - The ticket and FDD, for the states and flows the UI must support.
 
 Read the `ui` skill (`<TM_ROOT>/skills/ui/SKILL.md`).

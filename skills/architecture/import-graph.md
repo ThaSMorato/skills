@@ -1,11 +1,11 @@
-> Part of the `architecture` skill. The one method every stage uses to measure the dependency graph (`/analyze`, `/reconcile` and the `review-architecture` lens) so two measurements of the same code can be compared.
+> Part of the `architecture` skill. The one method every stage uses to measure the dependency graph (`/tm-analyze`, `/tm-reconcile` and the `review-architecture` lens) so two measurements of the same code can be compared.
 
 # Measuring the import graph
 
 Every structural claim this suite makes (cycles, `Ca`/`Ce`, instability, a forbidden edge, a latent component) is arithmetic over one graph: **which component's code imports which other component's code.** If each stage extracts that graph its own way, their numbers disagree for reasons that have nothing to do with the code, and a reconciliation compares two methods instead of two states. So there is one method, and it is this one.
 
 ## 1. Files → components
-Map every source file to a component using the `Lives in` paths in `docs/components.md`. A file no component claims goes in an `unassigned` bucket, and the bucket's size is reported. A large one means the component map no longer describes the code, and that is a finding in itself. With no component map yet (the first `/analyze`), use the top-level source directories, or the ecosystem's own packages, as provisional components, and say so.
+Map every source file to a component using the `Lives in` paths in `docs/architecture/components.md`. A file no component claims goes in an `unassigned` bucket, and the bucket's size is reported. A large one means the component map no longer describes the code, and that is a finding in itself. With no component map yet (the first `/tm-analyze`), use the top-level source directories, or the ecosystem's own packages, as provisional components, and say so.
 
 ## 2. Edges: the ecosystem's tool first, then the recipe
 **Use the native tool when it is installed.** It resolves imports the way the compiler or runtime does, including aliases, re-exports and path mappings:
@@ -42,4 +42,4 @@ Drop edges to external packages (they are the dependency audit's subject) and se
 From the component graph: cycles (every one, as its full path), and per component `Ca`, `Ce`, `I = Ce / (Ca + Ce)`. Abstractness `A` needs the language's notion of an abstract type (interface, protocol, abstract class, trait); count it where the language has one, and write `n/a` where it does not, rather than guessing. The formulas and their reading are in `rules/metrics.md`.
 
 ## Output
-The graph is written to `docs/analysis/dependency-graph.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/dependency-graph.md`, with `measured_commit` set to the commit it was measured at. That commit is what makes a later measurement comparable, and what `/flow` uses to detect drift.
+The graph is written to `docs/analysis/dependency-graph.md`, filling `${CLAUDE_PLUGIN_ROOT}/templates/dependency-graph.md`, with `measured_commit` set to the commit it was measured at. That commit is what makes a later measurement comparable, and what `/tm-flow` uses to detect drift.

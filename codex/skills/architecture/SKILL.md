@@ -1,6 +1,6 @@
 ---
 name: architecture
-description: A self-contained reference for structure. At any scale, the deep-module vocabulary (module, interface, depth, seam, adapter); above the class, the six component principles (REP, CCP, CRP, ADP, SDP, SAP), the Main Sequence metrics, the Dependency Rule, boundaries, plugin architecture, and what counts as a detail. Use when deciding where a boundary or a seam goes, whether a module is deep enough, mapping components, writing a boundary contract, reviewing whether a dependency is legal, or when someone asks "is this architecture any good".
+description: 'Use when someone asks where a boundary or a seam should go, how to split or decouple a module so a provider, a database or a framework can be swapped, whether a dependency between two parts is allowed, whether a module is deep enough, or "is this architecture any good". Gives the deep-module vocabulary (module, interface, depth, seam, adapter) and, above the class, the component principles, the Dependency Rule and what counts as a detail, so the answer names a seam and the side each file lands on. Load it before answering, even when the problem looks familiar: the answer then follows its standard instead of a generic one.'
 ---
 
 # Architecture

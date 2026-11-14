@@ -18,7 +18,7 @@ function requiredSectionsOfTemplate() {
 }
 
 function sectionsNamedByTheGate() {
-  const [, list] = read('commands/interview.md').match(/sections `\(required\)`: ([^.]+)\./)
+  const [, list] = read('commands/tm-interview.md').match(/sections `\(required\)`: ([^.]+)\./)
   return list.split(', ')
 }
 

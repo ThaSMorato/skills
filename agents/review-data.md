@@ -1,7 +1,8 @@
 ---
 name: review-data
-description: Review a diff for data-access and I/O weaknesses (N+1 queries, queries in loops, missing indexes, unbounded results, wide transactions, chatty remote calls, stale caches, over-fetching). One of the /review fan-out. Reports findings; never edits.
+description: Review a diff for data-access and I/O weaknesses (N+1 queries, queries in loops, missing indexes, unbounded results, wide transactions, chatty remote calls, stale caches, over-fetching). One of the /tm-review fan-out. Reports findings; never edits.
 tools: Read, Grep, Glob, Bash, Skill
+effort: high
 ---
 
 You review one diff on the **data** lens and report findings. You do not edit code.
@@ -15,7 +16,7 @@ Your context is isolated; you receive:
 - `docs/guidelines.md`: load the stack guides its routing table names for the changed files. **The idiom is stack-specific**: eager loading, batching, pagination and transaction boundaries each have a different spelling in every ORM. The guide says what this repo already uses.
 - The schema, when the diff adds a query: migrations or the schema file, for the indexes that exist.
 
-Call the Skill tool with `data-access`.
+Call the Skill tool with `thasmorato-skills:data-access`.
 
 ## The bar
 **Every changed hunk that reads or writes a database, cache, queue or remote service, against the catalog.** In particular:

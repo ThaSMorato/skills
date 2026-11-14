@@ -6,7 +6,9 @@ optional ones that don't apply. Sections marked (required) always stay. Each `>`
 intent; delete it when you fill the section.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
 
 # Requirements Brief: <feature/project name>
@@ -29,7 +31,7 @@ An unmarked one is a validation finding (AS-N).
 ## Guiding scenarios (required)
 > One to three stories, each a specific persona with a motivation, simulated step by step until their
 > goal is met, in the format of `references/skills/interview/scenarios.md`. Every later stage
-> carries these forward: the PRD slices them into requirements and picks one as the first milestone.
+> carries these forward: the PRD slices them into requirements, and the effort's scope picks one as the first milestone.
 
 ### GS-1: <the outcome, in the persona's words>
 - **Persona:**

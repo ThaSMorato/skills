@@ -1,6 +1,7 @@
-# thasmorato-skills 0.6.7: generated from agents/review-standards.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.0: generated from agents/review-standards.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-standards"
 description = "Review a diff against the repo's own documented standards, the guidelines router, the stack guides, the ADRs and the glossary. One of the $thasmorato-skills:tm-review fan-out. Reports findings; never edits."
+model_reasoning_effort = "high"
 developer_instructions = '''
 > **Codex.** `<plugin root>` in a file you read is `<TM_ROOT>`, the folder this plugin is installed in.
 > A relative path in a file you read is relative to the folder of the file that cites it.
@@ -14,7 +15,7 @@ Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
 - `docs/guidelines.md`: the router. Load **every stack guide** its routing table names for the changed file patterns; that is where the actual conventions live.
 - `docs/adr/*.md`: the decisions binding in the area the diff touches. An ADR is not advice.
-- `docs/boundaries.md` (if present): for whether an added import is a legal edge.
+- `docs/architecture/boundaries.md` (if present): for whether an added import is a legal edge.
 - `CONTEXT.md`: the glossary; names in the code should be the project's canonical terms.
 - The ticket's node map (`.scratch/<feature-slug>/design/<NN>-<slug>.md`), if present: its **Conventions to mirror** table is how this repo already does errors, validation, data access, logging and tests for this kind of code. A changed hunk that departs from a row, with no reason under the map's Open decisions, is a finding.
 

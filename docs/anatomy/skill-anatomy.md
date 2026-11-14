@@ -9,6 +9,7 @@
 name: <kebab-case>             # = folder name
 description: '<WHAT it does + WHEN to use / trigger phrases>'
 disable-model-invocation: true # on every stage skill; never on a reference skill
+user-invocable: false          # on every stage skill: out of the menu, reached through its `tm-` command
 ---
 
 <imperative, short instructions, addressed to the model>
@@ -27,12 +28,13 @@ Folder: `skills/<name>/SKILL.md`. List the path in `plugin.json → skills`; a s
 1. **`description` is the trigger.** It's how the model decides to invoke. State **what** and **when** ("Use when… / on triggers of…"). Vague = never fires or fires wrong.
    - **Don't summarize the workflow in it.** A description that lists the steps can be followed *instead of* the skill: the model acts on the summary and never reads the body. Say what it is for and when; leave the how to the body.
    - **Name the exclusion** when a sibling skill is the right one for a nearby request ("not for behavior changes; use `tdd`"). Two skills with overlapping triggers fire wrong half the time.
+   - **A problem the model thinks it knows needs the trigger first and a reason to load.** For a catalog of something familiar (an N+1, an injection, a refactor), a description that opens with what the skill is never fires: the model answers alone. Open with the trigger in the words of whoever asks ("Use when someone asks why…"), and say to load it before answering even when the problem looks familiar. `architecture`, `clean-code`, `data-access` and `security` went from almost never firing to firing in most runs on the `evals/` suite with both (Haiku still answers `security` alone); measure any change the same way.
    - **One trigger per branch.** A branch is a distinct case the skill handles. Synonyms that rename one branch are that branch written twice: keep one. The description sits in context on every turn, so it earns harder pruning than the body.
 2. **Short and imperative.** A good skill is a 5–10 sentence prompt, not a spec. Direct instruction ("Interview the user… Ask the open questions in rounds…"), not explanatory prose.
    - **No-ops go.** A sentence the model already obeys by default spends load to say nothing: delete the whole sentence, not words from it. Whether it is a no-op is settled by running the skill without it, not by debate. A word too weak to beat the default ("be thorough") is a no-op too; the fix is a stronger word ("relentless").
 3. **One capability per skill.** If it does two things, it's two skills.
 4. **Compose primitives.** Reuse other skills by reference instead of rewriting. Thin wrapper > monolith. (Owner rule: don't duplicate, reference.)
-   - **Load a skill by naming the tool**: "Call the Skill tool with `domain-model`". A softer phrasing ("use the domain-model skill") lets the model read *about* the skill instead of loading it. The same holds for agents: "Call the Agent tool with `prd-writer`", so the work is delegated instead of done inline. An agent that calls the Skill tool lists `Skill` in its `tools`. `scripts/skill-invocation.test.mjs` fails on a soft phrasing, an unknown skill or agent name, or an agent missing the tool.
+   - **Load a skill by naming the tool, with its full name**: "Call the Skill tool with `thasmorato-skills:domain-model`". A short name resolves to whatever answers to it first, a Claude Code built-in or another plugin's skill. A softer phrasing ("use the domain-model skill") lets the model read *about* the skill instead of loading it. The same holds for agents: "Call the Agent tool with `prd-writer`", so the work is delegated instead of done inline. An agent that calls the Skill tool lists `Skill` in its `tools`. `scripts/skill-invocation.test.mjs` fails on a soft phrasing, an unknown skill or agent name, or an agent missing the tool.
    - A mention that only points at a section ("the `tdd` skill's *Bugs: pin the bug, then flip it*") is a pointer, not a load, and stays as it is.
 5. **Progressive disclosure.** Keep `SKILL.md` lean; put detail (formats, examples) in sibling files loaded on demand (e.g. `FORMAT.md`). Rough thresholds: reference material under ~50 lines stays inline; over ~100 lines it moves to a sibling file.
    - **Disclose by branch**: inline what every branch needs; move behind a pointer what only some branches reach.
@@ -58,10 +60,24 @@ Two choices, trading two costs. **Context load** is what always-loaded text cost
 - **A reference skill stays open.** The skills in `KNOWLEDGE_SKILLS` (`scripts/skill-kinds.mjs`: `testing`, `tdd`, `security`, `asking`...) carry no flag and are called through the Skill tool. A new skill is one or the other, and `scripts/skill-invocation.test.mjs` fails on a skill that is neither listed nor closed.
 - Reference that two user-invoked skills both need can live in neither: neither can load the other. Put it in a plain file both point at.
 
+## Testing a skill
+
+A skill test passes for the wrong reason when something other than the skill told the model what to do. Two kinds of file do that, and both come out of the test's context.
+
+- **The harness context.** The tester's own `CLAUDE.md`, memory, other installed plugins (another copy of this one included) and MCP servers sit in front of the model too. A global rule that says "load the testing skill" makes every trigger test pass.
+- **Files that already hold the answer.** The model reads what it can reach. A test run inside the plugin's source can grep the skill's own text and copy the expected output; a fixture that states the result (a comment naming the bug, a file called `expected.md`) does the same.
+
+**Does an open skill fire on its description?** That is a property of the description and of the model reading it, so it is measured per model, by `claude plugin eval`, which runs each case in an empty workspace with none of the harness context above and hides the suite from the agent. Every open skill has two cases under `evals/`: `<skill>-fires`, a request the description should catch, graded by a `tool_used` call to the Skill tool with its name, and `<skill>-near-miss`, a nearby request it should leave alone, graded by the same call with `min: 0` and `max: 0`. A near miss is what catches a description that fires on everything. A prompt never names the skill or the plugin. `node scripts/skill-evals.mjs plan` prints one command per model (local report, no baseline arm) for the owner to run; `node scripts/skill-evals.mjs summarize` turns the results into one table, case by model. One run per case is a smoke test; judge a description on the default three.
+
+**Does a stage do its job?** That is a live test: `claude -p "/thasmorato-skills:<command>" --plugin-dir <this repo>` in a toy repo.
+- Run it with `--setting-sources project,local`, which drops the user's `CLAUDE.md` and settings, and with `--strict-mcp-config`, which drops every MCP server not passed with `--mcp-config`. `--bare` drops more, but it authenticates only by API key.
+- Build the toy repo in a temp folder, outside the plugin's source and with no `CLAUDE.md` in any folder above it.
+- Plant the problems in code and docs the way a real repo has them, never in a fixture that names them, and grade the run on what it wrote and which tool calls it made (`--output-format stream-json --verbose`).
+
 ## Checklist
 - [ ] `description` states what + when (triggers), names the exclusion when a sibling fits better, and does not summarize the steps.
 - [ ] Every step of a process skill ends on a completion criterion that is clear and exhaustive.
-- [ ] Other skills are loaded with "Call the Skill tool with `<name>`".
+- [ ] Other skills are loaded with "Call the Skill tool with `thasmorato-skills:<name>`".
 - [ ] Written in the positive; prohibitions only as hard guardrails, paired with the target.
 - [ ] Nothing restates what the environment already says.
 - [ ] Invocation chosen on purpose: model-invoked only when the agent or another skill must reach it.
@@ -69,6 +85,7 @@ Two choices, trading two costs. **Context load** is what always-loaded text cost
 - [ ] Reuses primitives instead of duplicating.
 - [ ] Heavy detail moved to a sibling file.
 - [ ] No stray `- ` / empty sections.
+- [ ] An open skill has a `-fires` and a `-near-miss` case under `evals/`, and a live test ran without the harness context or a file holding the answer.
 
 ## Red flags
 - A skill that does "X **and** Y" → split it.

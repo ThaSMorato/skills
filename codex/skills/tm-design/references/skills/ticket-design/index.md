@@ -2,6 +2,7 @@
 name: ticket-design
 description: Design the node map for a piece of work before coding (deep modules behind small interfaces at clean seams) and persist it as the design contract. Use before implementing a ticket, or when designing/improving a module's interface.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 Before writing code, build the **node map** (the design contract) and write it down.
@@ -11,17 +12,17 @@ Read, in this order:
 - **The ticket** (`.scratch/<feature-slug>/issues/<NN>-<slug>.md`): what is being built, its acceptance criteria, its exclusions, its seam. One ticket per fresh context, so it will not already be in view.
 - **The FDD** it names: the public contracts, the declared test seams, the error and concurrency behavior.
 - `docs/analysis/components/*.md` (if present): the existing primitives in the components this work touches. This is the file that answers "what already exists" before you design something new.
-- `docs/boundaries.md` (if present): which components this work may touch and which dependency edges are legal.
-- `docs/adr/*.md` and `docs/guidelines.md`: binding in the area you're touching; load the stack guide the router names for the files involved.
+- `docs/architecture/boundaries.md` (if present): which components this work may touch and which dependency edges are legal.
+- `docs/adr/*.md` and `docs/guidelines.md`: binding in the area you're touching; load the stack guide the router names for the files involved, the files it will create included: match their planned paths against the routing table, since no rule fires for a file that does not exist yet.
 - `CONTEXT.md`: the vocabulary.
-- `docs/ui/<screen>.md` (if the ticket builds a screen that has one): the screen spec `$thasmorato-skills:tm-ui-design` wrote. Its states, copy, widths and components are decided: the UI nodes implement them, and a node that needs something the spec does not say is an open decision for the owner, not a value to fill in.
+- `docs/features/<feature>/ui/<screen>.md` (if the ticket builds a screen that has one): the screen spec `$thasmorato-skills:tm-ui-design` wrote. Its states, copy, widths and components are decided: the UI nodes implement them, and a node that needs something the spec does not say is an open decision for the owner, not a value to fill in.
 
 ## 2. Read the repository before drawing anything
 Everything above this line is a **document derived from another document**. The chain from the brief down to this map never touches the code, so a wrong assumption made early is elaborated by each stage rather than caught, and every gate downstream checks consistency, which a wrong-but-consistent map passes perfectly.
 
 The repository is the only independent source in the chain. Consult it here, while a correction still costs a paragraph.
 
-**First, call the `spawn_agent` tool with `agent_type = "tm-pattern-scout"`**, passing the ticket path. It searches in an isolated context and returns how the repository already does this kind of work: at least three **analogues**, the **conventions to mirror** per category (errors, validation, data access, logging, config, tests), and the **integration points** where new code gets wired in, each at `path:line` with the real code. It documents what exists and judges nothing. Read what it returns before drawing a node: an analogue is the first candidate for `reuses` or `extends`, and a convention is how a `new` node should look.
+**First, call the `spawn_agent` tool with `agent_type = "tm-pattern-scout"`**, passing the ticket path. While it runs, read only the ticket, the FDD and the screen spec; do not search the repository in parallel, and do not schedule a wake-up to check on it: the harness returns its result. When it returns, search only the gaps it reports (a category with no analogue, a convention not found). It searches in an isolated context and returns how the repository already does this kind of work: at least three **analogues**, the **conventions to mirror** per category (errors, validation, data access, logging, config, tests), and the **integration points** where new code gets wired in, each at `path:line` with the real code. It documents what exists and judges nothing. Read what it returns before drawing a node: an analogue is the first candidate for `reuses` or `extends`, and a convention is how a `new` node should look. When an analogue you mirror leans on framework or library behavior (a lifecycle hook, a default, a middleware order), read that behavior in the installed version, by `references/skills/ticket-design/library-docs.md`, not from memory: the mirror copies what the analogue does, and only the framework's code says why it works.
 
 Then, for each capability the ticket needs, **search before you assume it must be built**:
 - grep the domain nouns and verbs from the ticket and the glossary;
@@ -43,20 +44,26 @@ Then, for each capability the ticket needs, **search before you assume it must b
 
   Choose safe, predictable defaults, or no default when no value is safe. On a screen, the mismatches are `ui` → `signal-mismatch`.
 - **Generalize on three scenarios.** Build the extensible version only when three distinct, concrete, near-term scenarios need it, and write a test for each. With fewer, build the specific one the ticket's scenario needs, and leave the seam where the general one would go.
-- Place each node in a **component**, and check that every dependency it introduces is an allowed edge in the boundary contract. An illegal edge found here costs a rethink; found in review it costs a rewrite.
+- Place each node in a **component**, and check that every dependency it introduces is an allowed edge in the boundary contract. **Every new import** a node needs is a row under `New dependency edges`, checked against `docs/architecture/boundaries.md`. A node that needs a component id the component map does not have stops here: name `$thasmorato-skills:tm-components` for the owner, rather than inventing the component.
+- **Behavior the node inherits is a decision.** A redirect after a form, a reload, a cache, a default sort the framework or the analogue brings along: write it under Open decisions, kept or changed, never left implicit.
+- **A visual AC names its layer in the cascade.** The node that owns an AC about how something looks says where the rule lives: the design token, the component's styles, a utility class, a theme override, the page. The layer decides which change can satisfy the AC without breaking a sibling that reads the same rule.
+- **A UI node names its parts exactly**: the icon, the design-system component, by the name the code uses; one you could not find by name is `> Assumed:`. An illegal edge found here costs a rethink; found in review it costs a rewrite.
 
 ## 4. Check completeness against the ticket
 The map is complete when **every acceptance criterion in the ticket has a node that satisfies it**. Walk the ACs by id and name the node for each. An AC with no node is the gap this check exists to find; a node serving no AC is either scope creep or a missing AC.
 
 ## 5. Confirm, then persist
-Present the map and **confirm uncertain decisions with the user** before coding. When a decision cannot be settled on paper (whether a state model holds up, what a screen should look like), offer `$thasmorato-skills:tm-prototype` for it; its answer comes back as a `> Decided:` citing the prototype file.
+Present the map and **confirm uncertain decisions with the user** before coding. When a decision cannot be settled on paper (whether a state model holds up, what a screen should look like), offer `$thasmorato-skills:tm-prototype` for it; its answer comes back as a `> Decided:` citing the prototype file. When the owner settles a structural decision here that no ADR records ("use a queue for this"), name `$thasmorato-skills:tm-adr-propose` for it before the plan builds on it.
 
 Then write it to `.scratch/<feature-slug>/design/<NN>-<slug>.md`:
 
 ```markdown
 ---
 kind: node-map
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
 ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 ---
@@ -66,7 +73,7 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 ## Nodes
 ### <node name>
 - **Kind:** function | class | module | package | slice
-- **Component:** <from docs/components.md>
+- **Component:** <from docs/architecture/components.md>
 - **Interface:** <signature, invariants, ordering, error modes, config, performance>
 - **Depth:** <what it hides>
 - **Grounding:** `reuses <path:line>` · `extends <path:line>` · `new: searched <terms> in <paths>; found nothing`
@@ -85,9 +92,27 @@ ticket: .scratch/<feature-slug>/issues/<NN>-<slug>.md
 
 | Category | Mirror | Pattern |
 |---|---|---|
+| commit and CI gates | <the hook and CI files> | <what they run on a change like this one: lint of the changed lines or all, the paths excluded, type-check, build, the test command> |
+
+## Observers
+> The specs and checks that assert on what this ticket changes: a route, a URL, an event name, a
+> message text, a schema. Grep each changed name across the tests (E2E included) and the CI config.
+> Each observer is updated by the SI that changes what it observes, or it breaks a later SI.
+
+| Changed | Observed by |
+|---|---|
 
 ## Integration points
 | To make it reachable | Change | Example |
+|---|---|---|
+
+## Documents to amend
+> The living documents this ticket changes, and the ones its renames would make false: the feature's
+> `fdd.md` (which contract, flow or rule), the glossary, a README, a sibling FDD that cites a symbol
+> this ticket renames. The docs live on the same branch as the code, so they are part of the work:
+> the plan turns each into a deliverable (`references/skills/doc-validate/living.md`).
+
+| Document | Section or symbol | Change |
 |---|---|---|
 
 ## Grounding summary

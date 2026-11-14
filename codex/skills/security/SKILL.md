@@ -1,6 +1,6 @@
 ---
 name: security
-description: A self-contained catalog of security weaknesses at the level you can actually see in code (injection, access control, crypto, secrets, session handling, SSRF, deserialization, upload and rate-limit failures, plus LLM-specific risks), each with its tell, its concrete failure scenario, and its fix. Use when reviewing a diff or a feature for security, threat-modelling a design, or when someone asks "is this safe".
+description: 'Use when someone asks "is this safe" or "is this secure" about code, an endpoint or a design, asks to review it for vulnerabilities, or to threat-model it. A catalog of the security weaknesses you can see in code (injection, access control, crypto, secrets, session handling, SSRF, deserialization, upload and rate-limit failures, plus LLM-specific risks), each with its tell, a concrete failure scenario and the fix. Load it before answering, even when the problem looks familiar: the answer then follows its standard instead of a generic one.'
 ---
 
 # Security
@@ -31,6 +31,7 @@ Read a rule file **only when its row matches**. Every finding must carry three t
 |---|---|---|
 | Broken object-level authorization (CWE-639) | record fetched by id with no ownership check | `rules/broken-access-control.md` |
 | Missing function-level authorization (CWE-862) | endpoint with authentication but no permission check | `rules/broken-access-control.md` |
+| Existence disclosure (CWE-204) | a sensitive area answers `403` where `404` would hide that the record exists | `rules/broken-access-control.md` |
 | Authentication weaknesses (CWE-287, 307, 521) | no lockout, weak password rules, guessable reset | `rules/authentication.md` |
 | Session management (CWE-384, 613) | session id kept across privilege change, never expires | `rules/session-management.md` |
 | CSRF (CWE-352) | state-changing request authorized only by a cookie | `rules/csrf.md` |
@@ -41,6 +42,8 @@ Read a rule file **only when its row matches**. Every finding must carry three t
 | Cryptographic failures (CWE-327, 330, 916) | outdated algorithm, non-cryptographic randomness, fast password hash | `rules/crypto-failures.md` |
 | Hardcoded secrets (CWE-798) | key, token or password committed to the repo | `rules/hardcoded-secrets.md` |
 | Sensitive data exposure (CWE-200, 532) | secrets or PII in logs, errors, or responses | `rules/sensitive-data-exposure.md` |
+| Token in a URL (CWE-598) | a one-time link as a `GET` with a side effect, or a token in a query string | `rules/sensitive-data-exposure.md` |
+| Public build variable (CWE-200) | `NEXT_PUBLIC_*`, `VITE_*` named like a secret; server env module without `server-only` | `rules/sensitive-data-exposure.md` |
 
 ## Resource and operational safety
 | Weakness | Tell | Rule |

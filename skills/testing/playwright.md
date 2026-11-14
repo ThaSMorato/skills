@@ -100,6 +100,7 @@ await page.route('*/**/api/v1/fruits', route => route.fulfill({ json: [{ name: '
 - **Modify the real response**: `route.fetch()`, edit the body, then `route.fulfill({ response, json })`.
 - **Force failure**: `route.fulfill({ status: 500 })` or `route.abort()` to test error paths.
 - **Glob/regex patterns**: `'*/**/api/**'` matches any host/prefix. `page.routeFromHAR(...)` records/replays real traffic.
+- **It sees only what leaves the browser.** Behind a BFF, the app's server (a route handler, a server action, a server component) calls the domain API, and that server-side call never passes through `page.route`. To fake that upstream, the mock lives in the app's own process (MSW in the app runtime, `frontend-patterns.md`); `page.route` stays for what the browser calls directly, such as forcing a `500` from the BFF route.
 - **Don't over-mock true critical-path E2E**: mocking everything turns E2E into a frontend integration test and loses the "whole system works" confidence. Keep the real happy path real; mock the error branches.
 
 ## Projects & setup dependencies
@@ -117,6 +118,7 @@ projects: [
 - **`dependencies: ['setup']`**: a setup project runs before dependent projects (authenticate + write storageState, seed a DB, prepare data); its inverse `teardown` cleans up after.
 - **Setup project vs `globalSetup`**: `globalSetup` is a plain function running once outside the runner (good for infra), with no trace/fixtures/report. A setup **project** is a real test (it has trace, retry, fixtures, and shows in the report), preferred for login/seed because it's observable when it fails.
 - **Config that fights flakiness**: `use.baseURL` (relative `goto`, swap environments without editing tests); `retries: 2` on CI + `trace: 'on-first-retry'`; `fullyParallel: true` (pairs with per-worker auth when tests mutate state); `webServer` to boot the app and wait for its port.
+- **Starting the app outside `webServer`** has one legitimate case: the app runs in a container while Playwright runs on the host, or it must start in a specific mode (a mock flag). Then the start is an explicit, documented step (start the container, run the server with the flag, then the tests), and a written rule keeps it, or generated code puts the `webServer` back. Without one of those reasons, keep the `webServer`.
 
 ## Visual comparisons
 

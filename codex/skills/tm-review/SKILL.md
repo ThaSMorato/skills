@@ -9,10 +9,10 @@ description: "Review the diff since a fixed point across narrow lenses in parall
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
-> is not `0.6.7`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
+> is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
-**Argument** (the text after the skill name): <fixed point: commit/branch/tag, e.g. main or HEAD~5>
+**Argument** (the text after the skill name): <fixed point: commit/branch/tag, e.g. main or HEAD~5> [--worktree <manifest>] [--second-opinion]
 
 
 Review the diff between `HEAD` and the fixed point: the text after the skill name
@@ -22,8 +22,12 @@ Review the diff between `HEAD` and the fixed point: the text after the skill nam
 ## 1. Preflight
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty: a bad ref or an empty diff fails here, not inside six agents.
 
+**Uncommitted work.** With `--worktree <manifest>` (the list of files `$thasmorato-skills:tm-implement` wrote to `.scratch/<feature-slug>/plans/<NN>-<slug>/manifest.txt`), the review compares the working tree with the fixed point for exactly the manifest's files: `git diff <fixed-point> -- <files>` for the tracked ones, and `git diff --no-index /dev/null <file>` for each new one. A change outside the manifest is someone else's (another session, the owner's own edit): it stays out of the diff and out of the findings, as it does in the committed mode; tell every lens so, and name it once in the report as outside this review. Without the flag, when the ticket's files have uncommitted changes, say so and offer the mode. **Never commit to satisfy this preflight**: committing is the owner's call, and a commit made to get a non-empty diff takes it from them.
+
+**Second opinion.** With `--second-opinion`, this run is the second review of a change, in the harness that did not write it, as step 8 of the first review offered. It writes its own file, `.scratch/<feature-slug>/reviews/<NN>-<slug>.second-opinion.md`, with `opinion: second`, and leaves the first review as it is. Until the verifier returns, no lens receives the first review, and you do not read it either: a lens shown the first findings confirms them instead of looking. After the verifier, read the first review and count `not_in_first`: the confirmed findings with no finding there at the same location for the same rule. That count is what the second opinion earned, and `$thasmorato-skills:tm-flow-report` reads it per author × reviewer pair. Its findings are reported, chosen and fixed as in step 7.
+
 ## 2. Compute the diff once
-Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list. Every reviewer receives **the path to that file**, not the instruction to compute it: nine agents each running the same diff is nine times the cost for one result, and the same work redone by every lens.
+Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list; in worktree mode, write the manifest's diff from the preflight instead, and say there are no commits yet. Every reviewer receives **the path to that file**, not the instruction to compute it: nine agents each running the same diff is nine times the cost for one result, and the same work redone by every lens.
 
 ## 3. Fan out
 Call the `spawn_agent` tool once per lens below, all **at once** (at most 6 running together; wait for every one) so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the fixed point, and the artifacts its own definition names.
@@ -40,9 +44,11 @@ Call the `spawn_agent` tool once per lens below, all **at once** (at most 6 runn
 | `review-docs` | documentation the diff made false: README steps, env vars, flags, described behavior |
 | `review-ui` | **only when the diff touches UI code**: keyboard, focus, accessible names, contrast, loading/empty/error states, layout shift, slow interactions |
 
+**Pass the findings earlier tickets left open.** From the feature's earlier reviews (`.scratch/<feature-slug>/reviews/*.md`), the findings the verifier confirmed and not fixed (deferred, or left for later) that sit in files this diff touches go to the lens that raised them, as leads: whether this diff fixed, kept or worsened each one. A finding confirmed and not fixed that nobody passes on is rediscovered as new, or never again.
+
 If `$thasmorato-skills:tm-trim` ran, `.scratch/<feature-slug>/trim/<NN>-<slug>.md` has an **Unrequested behavior** section: hand it to `review-spec` as leads (behavior in the diff that no AC asked for, which trimming could not cut because cutting it changes behavior). Leads, not findings: the lens confirms each against the plan and the ticket like anything else.
 
-When `docs/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the `spawn_agent` tool with `agent_type = "tm-review-ui"` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
+When `docs/architecture/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the `spawn_agent` tool with `agent_type = "tm-review-ui"` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
 
 **Pass `docs/declined.md` to every lens** when it exists: proposals the owner already turned down, with the scope and the reason. A lens does not raise a finding that matches a `declined` entry (same kind, a scope the entry covers) unless the entry's **Revisit when** has happened; if it believes that has happened, it raises the finding and cites the entry.
 
@@ -56,14 +62,21 @@ Narrow agents trade precision for recall, and the two costs land here:
 - **Severity drift.** Each lens believes its own subject matters most. Re-rank across all of them on the shared scale, judging by consequence rather than by which agent reported it. **Lowering a lens's severity needs a reason in the finding:** a `- **Mitigated by:**` line naming what contains it (`file:line` of the guard, the constraint, the caller that never passes that value). With nothing to cite, the lens's severity stands. Findings about **data loss, security or money are never lowered** in synthesis; only the verifier's code check can refute them.
 
 ## 5. Persist
-Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md`, most-severe first. Give each one `file:line`, the rule it violates, the failure scenario, the fix, and a `- **Lenses:** <lens>, <lens>` line naming every lens that raised it; merged duplicates keep all their lenses. Record the fixed point, the lenses that ran, and the lenses that were skipped and why:
+Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md` (with `--second-opinion`, to the `.second-opinion.md` beside it), most-severe first. Give each one `file:line`, the rule it violates, the failure scenario, the fix, and a `- **Lenses:** <lens>, <lens>` line naming every lens that raised it; merged duplicates keep all their lenses. Record the fixed point, the lenses that ran, and the lenses that were skipped and why:
 
 ```markdown
 ---
 kind: review
-plugin_version: 0.6.7
+plugin_version: 0.7.0
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
+opinion: first | second
+not_in_first: <confirmed findings the first review does not have>
 fixed_point: <ref>
+mode: committed | worktree
+run: <1 on the first review of this ticket; +1 on every re-run>
 lenses_run: [quality, tests, security, spec, standards, architecture, data, docs, ui]
 lenses_skipped: [<lens>: <reason>]
 findings: <count>
@@ -72,20 +85,39 @@ by_lens: {quality: <n>, tests: <n>, security: <n>, spec: <n>, standards: <n>, ar
 ---
 ```
 
-The severity keys stay in English whatever language the headings are in. In `by_lens`, a finding raised by two lenses counts once for each, so the lens counts can sum to more than `findings`; that overlap is itself worth seeing. These counts are how `$thasmorato-skills:tm-retro` tells which lens earns its cost on this project, and a lens that is attributed nowhere cannot be judged.
+`not_in_first` is written only by a second opinion, after the verifier. The severity keys stay in English whatever language the headings are in. In `by_lens`, a finding raised by two lenses counts once for each, so the lens counts can sum to more than `findings`; that overlap is itself worth seeing. These counts are how `$thasmorato-skills:tm-retro` tells which lens earns its cost on this project, and a lens that is attributed nowhere cannot be judged.
 
 Without the file, a review's findings live only in this conversation and are gone at the next `/compact`. `$thasmorato-skills:tm-retro` reads these across a whole epic to find the finding that **repeats**; and a finding that recurs across tickets is a standard that should move into a stack guide or a rule, which is a conclusion no single review can reach.
 
 ## 6. Verify against the code: before the user sees anything
-Call the `spawn_agent` tool with `agent_type = "tm-review-verifier"`, passing the review file, the diff file and the fixed point. It opens every cited location and annotates each finding with a verdict backed by code: `confirmed`, `wrong location`, `rule does not apply`, `impossible scenario`, `already handled`, `duplicate` or `pre-existing`. Write what it returns into the review file: a `- **Verdict:** <verdict>: <evidence>` line under each finding, and its `verdicts` and `refuted_by_lens` counts in the frontmatter. Leave `findings`, `by_severity` and `by_lens` as they are: they count what the lenses raised, and the verdicts are a separate column.
+Call the `spawn_agent` tool with `agent_type = "tm-review-verifier"`, passing the review file, the diff file and the fixed point. It opens every cited location and annotates each finding with a verdict backed by code: `confirmed`, `wrong location`, `rule does not apply`, `impossible scenario`, `already handled`, `duplicate` or `pre-existing`. Write what it returns into the review file: a `- **Verdict:** <verdict>: <evidence>` line under each finding, and its `verdicts`, `refuted_by_lens` and `precedents` counts in the frontmatter. Leave `findings`, `by_severity` and `by_lens` as they are: they count what the lenses raised, and the verdicts are a separate column.
 
 Synthesis filters findings by what they say about themselves; this filters them by what the repository says. One verifier sees the whole set, which is what lets it call a `duplicate`. It **never deletes**: in doubt, a finding stays `confirmed`, because a false positive costs a minute of reading and a false negative ships.
 
 ## 7. Report
 Show the findings **ordered by verdict, then severity**: `confirmed` first, then `pre-existing` (real, but not this change's work), then the refuted ones and duplicates last, each with its one line of evidence. Nothing is hidden: the user may disagree with a verdict, and the finding is still there to act on. Then add a one-line note per lens saying what it covered, and name any lens that was skipped or that reported having no standard to apply.
 
-The user decides what to fix. Ask it as one structured choice, the cut by severity first: **fix every confirmed critical, high and medium, docs included** (recommended), **also the lows**, **choose per finding**, **none now**. A confirmed finding left out of the recommended cut, inside a severity it covers, is named with the reason.
+The user decides what to fix. Ask it as one structured choice, the cut by severity first: **fix every confirmed critical, high and medium, docs included** (recommended), **also the lows**, **choose per finding**, **none now**. A confirmed finding left out of the recommended cut, inside a severity it covers, is named with the reason. Then, per finding where they apply:
+- **A fix that changes what a caller or the user observes** (a limit, a control, a text, a contract, a new acceptance criterion) is its own question, before any code: the review found the problem, and the owner decides what the system does about it.
+- **A value no source gives** (the new limit, the words of a message) is asked without a recommendation: a recommended value is an assumption in disguise.
+- **A finding that cites a rule the project wrote** (a guideline, a stack guide, an ADR) recommends complying; deviating is the other option, and an ADR if it should last.
+- **A finding against a decision approved above this ticket** (the FDD, the plan) that changed after the approval: the recommended option is to deliver as approved, with a follow-up for the change; reopening the approved design is the other.
+- **A pre-existing defect that blocks one of this ticket's ACs** is offered as fix in this ticket: an AC this ticket cannot pass is this ticket's to fix, however old the cause.
+
+### Fixing what was chosen
+Choosing the fixes starts the loop: fix them now, most severe first, each test-first through the `tdd` loop when it changes behavior. A fix that adds an acceptance criterion names the SI that owns it, or a new SI the owner adds with `$thasmorato-skills:tm-plan <slug> amend "<the change>"`; a criterion nobody owns is not checked by anyone. A fix to UI or CSS is measured in the browser (the computed style of the element, the checks in `references/skills/acceptance/visual-checks.md`) before it counts as fixed: a style that looks right in the diff can lose to a rule above it in the cascade.
+
+Every finding leaves this phase with a line in the review file, under its verdict: `- **Outcome:** fixed (<file:line or commit>)`, `declined (<the reason>)` or `deferred (<the follow-up>)`. The phase ends with a structured question: close the review, with every outcome written, or another round (`run` + 1).
+
+**The third `dirty` run stops the loop.** A review is `dirty` while it has confirmed findings inside the recommended cut. When `run` reaches 3 and it still is, say so before the findings and hand the decision to the owner as one structured choice: merge with the findings listed, amend what is upstream of the change (the plan or the ticket, when the findings keep coming from them), or one more round, saying what changes this time. Agreement between models, or of one model with itself, does not prove the change right: a round with nothing new repeats the last one.
 
 **A finding the user declines with a reason that will still hold next time** (a deliberate trade-off, a convention the lens did not know) is offered for `docs/declined.md`, in the format of `references/templates/declined.md`, so the next review does not raise it again. A passing reason is not recorded, and a reason that is really an architectural decision is an ADR (`$thasmorato-skills:tm-adr-generate`). Nothing here edits code: persisting the findings and their verdicts is a record of what was reported, not a change to the work.
 
-Once the findings the user chose are fixed, the next steps are the optional `$thasmorato-skills:tm-tidy <slug> <fixed point>`, then `$thasmorato-skills:tm-acceptance <slug>` (after the last production change), then `$thasmorato-skills:tm-pr <slug> <fixed point>` for the pull request body.
+Once the findings the user chose are fixed, rewrite the ticket's `progress.md` frontmatter for the ticket as it now stands (`unverified`, `failed_deliverables` and `status`, as `$thasmorato-skills:tm-implement` defines them), so `$thasmorato-skills:tm-retro` measures the fixed work and not the work before review. Then the next steps are the optional `$thasmorato-skills:tm-tidy <slug> <fixed point>`, then `$thasmorato-skills:tm-acceptance <slug>` (after the last production change), then `$thasmorato-skills:tm-pr <slug> <fixed point>` for the pull request body.
+
+## 8. Second opinion
+Once the review is closed, decide whether the change gets a second review in the other harness. A model reviewing its own work shares its blind spots; the harness that did not write the change does not. The author is the `harness` of the ticket's `progress.md`; this review's harness is the one you run in.
+
+- **This review already ran in the other harness** (yours is not the author's), or this run is itself `--second-opinion`: there is nothing to offer.
+- **The same harness as the author:** run `node "references/scripts/second-opinion.mjs" --diff <the diff file> --guidelines docs/guidelines.md`. It counts the changed lines and matches the files against the risk paths: auth, billing, migrations, infra and `.sql`, plus the `Risk paths` the project's guidelines list. On `suggest: false`, say it is skipped and why, with the reason it printed. On `suggest: true`, name the command for the owner to run in the other harness, with its reasons: `$thasmorato-skills:tm-review <fixed point> --second-opinion` in Codex, started with `codex -p tm-review` so the session is read-only, or `$thasmorato-skills:tm-review <fixed point> --second-opinion` in Claude Code. Never run it yourself: switching harness is the owner's.
+- **No `progress.md`, or one without `harness`:** the author is unknown. Say so, and offer the second opinion when the script suggests it.

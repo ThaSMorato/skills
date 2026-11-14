@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: retro (what a finished slice of work taught about the PROCESS)
-Filled by /retro over a completed epic, feature or cycle. Its subject is the flow, not the product;
+Filled by /tm-retro over a completed epic, feature or cycle. Its subject is the flow, not the product;
 product findings go to docs/evolutions.md.
 
 EVERY CLAIM CITES AN ARTIFACT. This document is written by reading plan.md, validation.md,
@@ -16,7 +16,7 @@ kind: retro
 scope: <epic / feature / cycle>
 date: <YYYY-MM-DD>
 plugin_versions: [<each plugin_version the measured artifacts record; `unknown` for those without it>]
-findings: {flow: <n>, project: <n>, product: <n>, defect: <n>}
+findings: {flow: <n>, repo-skill: <n>, repo-code: <n>, product: <n>, defect: <n>}
 ---
 
 # Retro: <epic / feature / cycle>
@@ -27,8 +27,8 @@ findings: {flow: <n>, project: <n>, product: <n>, defect: <n>}
 - **Read from:** <the artifact paths this was built out of>
 
 ## Measurements (required)
-> Numbers only, and only from frontmatter: the ticket's `Gear` and acceptance criteria, `plan.md`'s
-> `sis_planned` and `revision`, `progress.md`'s `sis_done`, `escalations` and `unverified`, `validation.md`'s `run`
+> Numbers only, and only from frontmatter: the ticket's `gear` and `acs`, `plan.md`'s
+> `sis_planned` and `revision`, `progress.md`'s `sis_done`, `escalations`, `unverified` and `failed_deliverables`, `validation.md`'s `run`
 > and `fired`, the review's `findings`, `by_severity`, `by_lens`, `verdicts` and `refuted_by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams` and `dispersion`. Nothing here is estimated. A ticket
 > whose artifacts lack these fields predates them: list it as `not measured (pre-v0.4 frontmatter)`
 > rather than reconstructing its numbers from prose.
@@ -36,10 +36,12 @@ findings: {flow: <n>, project: <n>, product: <n>, defect: <n>}
 > This section is the series. Keep its shape identical between retros, so the next one can put its
 > numbers beside this one's.
 
-| Ticket | Plugin version | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Unverified | Review findings |
-|---|---|---|---|---|---|---|---|---|---|---|
+| Ticket | Plugin version | Model | Effort | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Unverified | Review findings | Minutes | Tool calls | CI red after open |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 
 **Totals by plugin version:** <per `plugin_version`: tickets, median SIs per AC, escalations, validation runs to `clean`, review findings, lens precision; two versions in one scope are two populations, never one sum>
+
+**Totals by author:** <per `model` and `harness`, and per author × reviewer pair for the reviews: the same measurements; `unknown` for the artifacts that predate the fields>
 
 **Totals by gear:** <per gear: tickets, median ACs, median SIs, SIs per AC, median review findings>
 
@@ -47,7 +49,7 @@ findings: {flow: <n>, project: <n>, product: <n>, defect: <n>}
 
 **Bugs:** <bugfix tickets by gear; from `.scratch/*/diagnoses/*.md`, how many were `cause-found` vs `unresolved`, and the median hypotheses and probes per diagnosis>
 
-**Trimming:** <summed `before` and `after` from `.scratch/*/trim/*.md` (files and lines), `proposed` by criterion, `applied`, `reverted`, `unrequested`; many `trace` proposals or unrequested notes point at scope creeping in at `/plan` or `/implement`>
+**Trimming:** <summed `before` and `after` from `.scratch/*/trim/*.md` (files and lines), `proposed` by criterion, `applied`, `reverted`, `unrequested`; many `trace` proposals or unrequested notes point at scope creeping in at `/tm-plan` or `/tm-implement`>
 
 **Tidying:** <summed `proposed` / `applied` / `reverted` / `review_findings` from `.scratch/*/tidy/*.md`; many reverted, or review findings on tidy commits, means the proposals were not really structural>
 
@@ -97,7 +99,7 @@ by side, or `first measured retro` when none has a Measurements section>
 
 ## The environment (required)
 > As far as the artifacts and the repository show it (`skills/retro/environment.md`); the session side
-> belongs to `/session-analyze`. A mechanical standard is proposed as a check, a judgement one as a line
+> belongs to `/tm-session-analyze`. A mechanical standard is proposed as a check, a judgement one as a line
 > the review reads.
 
 **Guardrail:** <`docs/guardrails.md`, or the repo's pre-commit hook and CI job and which of lint / type check / tests each runs; or `none`, which is itself a finding>
@@ -111,10 +113,12 @@ by side, or `first measured retro` when none has a Measurements section>
 > a stack guide, a template, a stage's instructions. An item with no source is an opinion; put it in
 > Open questions instead.
 
-> Tag each change: `flow` (the plugin's own stages, gates, templates or agents would do this wrong on any
-> project; `/flow-report` gathers these) or `project` (this repo's guides, rules or checks). When unsure, `project`.
+> Give each change its level (`skills/retro/levels.md`): `flow` (the plugin's own stages, gates, templates or
+> agents would do this wrong on any project; `/tm-flow-report` gathers these, and nothing here applies them),
+> `repo-skill` (this repo's skills, guides, rules or `CLAUDE.md`) or `repo-code` (this repo's code or
+> configuration). When unsure, the lowest level that resolves it.
 
-| Change | Tag | Motivated by | Where it lands |
+| Change | Level | Motivated by | Where it lands |
 |---|---|---|---|
 
 ## What the artifacts couldn't tell me (required)

@@ -1,0 +1,84 @@
+---
+name: code-smells
+description: A catalog of code smells (named symptoms that a design is drifting) with the tell for each and the refactoring that resolves it. Use when reviewing code or a diff, implementing or refactoring, deciding "is this well designed?", or when someone says "code smell" or asks to refactor this.
+---
+
+Code smells are **labelled heuristics, not hard rules**; each is a judgement call. A smell flags something *worth a second look*, not a guaranteed defect; the repository's own guidelines and context always override this catalog. Many smells have a legitimate twin (an honest DTO, deliberate delegation, a small class with a clear concept); name the smell, then judge.
+
+Scan the table below and match what you see to a smell. Read the smell's rule file **only when a row matches**; each holds the full tell, why it hurts, and the fix. Group by family: the family tells you the kind of pressure the smell puts on the code.
+
+## Functions: read at more than one level
+| Smell | Tell | Rule |
+|---|---|---|
+| Mixed Altitude | intent, domain calls and raw mechanics interleaved in one body | `references/skills/code-smells/rules/mixed-altitude.md` |
+
+## Bloaters: grew beyond what they should
+| Smell | Tell | Rule |
+|---|---|---|
+| Primitive Obsession | raw primitive stands in for a domain concept | `references/skills/code-smells/rules/primitive-obsession.md` |
+| Magic Numbers | unnamed literal buried in the code | `references/skills/code-smells/rules/magic-numbers.md` |
+
+## Object-orientation abusers: use OO wrong
+| Smell | Tell | Rule |
+|---|---|---|
+| Refused Bequest | subclass inherits what it doesn't want | `references/skills/code-smells/rules/refused-bequest.md` |
+| Temporary Field | field valid only some of the time | `references/skills/code-smells/rules/temporary-field.md` |
+| Alternative Classes w/ Different Interfaces | equivalent classes, divergent APIs | `references/skills/code-smells/rules/alternative-classes-different-interfaces.md` |
+
+## Change-preventers: freeze the code
+| Smell | Tell | Rule |
+|---|---|---|
+| Divergent Change | one class changes for many reasons | `references/skills/code-smells/rules/divergent-change.md` |
+| Shotgun Surgery | one change edits many classes | `references/skills/code-smells/rules/shotgun-surgery.md` |
+| Parallel Inheritance Hierarchies | new subclass here forces one there | `references/skills/code-smells/rules/parallel-inheritance-hierarchies.md` |
+
+## Dispensables: should disappear
+| Smell | Tell | Rule |
+|---|---|---|
+| Dead Code | never executed / commented-out | `references/skills/code-smells/rules/dead-code.md` |
+| Lazy Class | class doesn't pay its own cost | `references/skills/code-smells/rules/lazy-class.md` |
+| Data Class | only getters/setters, no behavior | `references/skills/code-smells/rules/data-class.md` |
+
+## Couplers: couple too much
+| Smell | Tell | Rule |
+|---|---|---|
+| Inappropriate Intimacy | two classes reach into each other's internals | `references/skills/code-smells/rules/inappropriate-intimacy.md` |
+| Middle Man | class only delegates, adds nothing | `references/skills/code-smells/rules/middle-man.md` |
+| Business Rule at the Edge | a guard, interceptor, pipe, filter or middleware answers a domain question itself | `references/skills/code-smells/rules/business-rule-at-the-edge.md` |
+
+## Error handling and contracts: the failure nobody sees
+| Smell | Tell | Rule |
+|---|---|---|
+| Swallowed Error | a failure happens and nothing downstream can tell | `references/skills/code-smells/rules/swallowed-error.md` |
+| Unactionable Error | an error reaches a person in the implementation's words, or with no next step | `references/skills/code-smells/rules/unactionable-error.md` |
+| Unenforced Invariant | a rule the domain relies on, which the type lets be broken | `references/skills/code-smells/rules/unenforced-invariant.md` |
+
+## Cross-cutting / well-known
+| Smell | Tell | Rule |
+|---|---|---|
+| Anemic Domain Model | data with no behavior, logic in services | `references/skills/code-smells/rules/anemic-domain-model.md` |
+| Callback Hell | hidden side effect / nested async | `references/skills/code-smells/rules/callback-hell.md` |
+
+## Ousterhout red flags: module & interface structure
+| Smell | Tell | Rule |
+|---|---|---|
+| Shallow Module | interface as complex as the payoff | `references/skills/code-smells/rules/shallow-module.md` |
+| Apparent Modularization | an extracted module that uses its caller's connection and receives derived values | `references/skills/code-smells/rules/apparent-modularization.md` |
+| Information Leakage | one design decision known to several modules | `references/skills/code-smells/rules/information-leakage.md` |
+| Temporal Decomposition | modules sliced by execution order, not knowledge | `references/skills/code-smells/rules/temporal-decomposition.md` |
+| Overexposure | common case forced to learn rare features | `references/skills/code-smells/rules/overexposure.md` |
+| Pass-Through Methods | method only forwards its arguments | `references/skills/code-smells/rules/pass-through-methods.md` |
+| Pass-Through Variables | variable dragged through a chain that doesn't use it | `references/skills/code-smells/rules/pass-through-variables.md` |
+| Conjoined Methods | two methods only make sense read together | `references/skills/code-smells/rules/conjoined-methods.md` |
+| Special-General Mixture | general mechanism polluted with one specific use | `references/skills/code-smells/rules/special-general-mixture.md` |
+
+## Ousterhout red flags: comments & names
+| Smell | Tell | Rule |
+|---|---|---|
+| Comment Repeats Code | comment restates what the code already says | `references/skills/code-smells/rules/comment-repeats-code.md` |
+| Comment Contradicts Code | comment says what the code beside it does not do | `references/skills/code-smells/rules/comment-contradicts-code.md` |
+| Implementation Doc Contaminates Interface | interface doc leaks internal detail | `references/skills/code-smells/rules/implementation-doc-contaminates-interface.md` |
+| Nonobvious Code | meaning doesn't jump out on first read | `references/skills/code-smells/rules/nonobvious-code.md` |
+| Vague Name | generic name (`data`, `tmp`, `result`) reveals nothing | `references/skills/code-smells/rules/vague-name.md` |
+| Hard to Pick Name | can't find a good name; design is confused | `references/skills/code-smells/rules/hard-to-pick-name.md` |
+| Hard to Describe | needs a long, caveat-heavy description | `references/skills/code-smells/rules/hard-to-describe.md` |

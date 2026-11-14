@@ -10,6 +10,6 @@
 
 **Once it has been committed the value is burned.** Rotate it. Removing the line, amending the commit, or rewriting history does not un-publish it.
 
-**Watch for.** A default value that is a real secret used as a fallback; secrets passed as build arguments and baked into image layers; and long-lived personal tokens in CI where a scoped, short-lived credential would do.
+**Watch for.** A secret typed into a terminal: it lands in the shell history (Bash, Zsh, Fish), and a synced history is a published one. Read it from a variable loaded from a file outside git; if it has to be typed, start the command with a space (Bash with `HISTCONTROL=ignorespace`, Zsh with `setopt HIST_IGNORE_SPACE`, Fish by default). A default value that is a real secret used as a fallback; secrets passed as build arguments and baked into image layers; and long-lived personal tokens in CI where a scoped, short-lived credential would do.
 
 **Not a finding when.** The value is an obvious placeholder or a public identifier: a publishable key, a client id. Say which, so the next reader does not re-flag it.

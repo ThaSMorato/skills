@@ -5,20 +5,32 @@ Filled by the PRD agent from the requirements-brief. States WHAT and WHY, never 
 don't apply; (required) sections always stay. Product level uses less detail than feature level.
 AI practices: NUMBER the requirements (RF-001, RNF-001) for stable references; optionally add a JSON
 twin (same info, English keys, empty fields omitted) for deterministic consumption.
+LIVING: the product PRD (docs/product/prd.md) describes the whole system as it is, and every effort
+amends it in place (<plugin root>/agent-references/skills/doc-validate/living.md). What belongs to one effort
+(the requirements it adds, changes or removes, its first milestone, its product acceptance criteria)
+is in .scratch/<effort>/scope.md (template scope.md). A feature-level PRD lives at
+docs/features/<feature>/prd.md and follows the same rules.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
+
+---
+kind: prd
+status: draft            # draft | in review | approved | changes-requested; only the gate moves it
+level: product           # product | module | feature
+feature: <F-id, only at level feature>
+---
 
 # PRD: <name>
 
 ## Metadata (required)
-- **Level:** product | module (EPIC) | feature
 - **ID:** <PRD-xxx>
-- **Status:** draft | in review | approved
 - **Sources:** <requirements-brief, interview, attached docs>
 
-> **Level** and **Status** are read by other stages, not decoration. **Level** sets the depth of this
+> **`level`** and **`status`** (the frontmatter) are read by other stages, not decoration. **Level** sets the depth of this
 > document (`product` states outcomes, `feature` states behavior) and it propagates from the brief.
 > **Status** is the gate record: it starts `draft`, and only whoever runs the gate moves it to
 > `approved` or `changes-requested`. `$thasmorato-skills:tm-flow` reads it to answer "what is waiting on me?", so a Status
@@ -49,16 +61,17 @@ An unmarked one is a validation finding (AS-N).
 > Concrete capabilities, NUMBERED and verifiable. Not technical design. Each carries its **origin**:
 > the brief section or recorded decision it came from, so the trace is *recorded*, not merely
 > promised, and the gate can check it without reading both documents side by side.
-> In brownfield, state at the top of this section whether the RFs describe **the delta only** or **the
-> whole system**; the two readings produce completely different documents.
+> The requirements are **the whole system's**, never only this effort's: what an effort changes is
+> the diff of this file plus its `scope.md`. Ids are permanent: a new requirement takes the next free
+> id, and a removed one moves to `Retired requirements`.
 >
 > Write each from the user's side, and keep the motivation: **"<persona> can <action> so that
 > <motivation>"**, or **"<the product> provides <capability> so that <persona> can <value>"**. A
 > requirement without its "so that" has lost the scenario it came from. State **what** must happen,
-> never how. Tag each with the scenario step it slices (`GS-1.3`), `edge` when it is an edge case of
-> that step, and the milestone it belongs to.
-- **RF-001** `GS-1.2` `M1`: <persona> can <action> so that <motivation> *(from: <brief section>)*
-- **RF-002** `GS-1.4` `edge` `M2`: <requirement> *(from: <brief section>)*
+> never how. Tag each with the scenario step it slices (`GS-1.3`) and `edge` when it is an edge case of
+> that step. The milestone is the effort's, in its `scope.md`.
+- **RF-001** `GS-1.2`: <persona> can <action> so that <motivation> *(from: <brief section>)*
+- **RF-002** `GS-1.4` `edge`: <requirement> *(from: <brief section>)*
 
 ## Non-functional requirements (optional)
 > Quality/operational constraints (latency, availability, security, limits). Numbered, each with its
@@ -69,26 +82,19 @@ An unmarked one is a validation finding (AS-N).
 > optimizing where it is easy to look, not where the user is; keep it only with the reason in Risks.
 - **RNF-001** `protects: GS-1.3`: <constraint> *(from: <brief section>)*
 
-## First milestone (required)
-> The first release is **one guiding scenario completed end to end** (a walking skeleton: thin, but
-> the persona reaches their goal), or the smallest set of scenarios that is worth having. Name it,
-> and list the requirements tagged `M1` that complete it. A milestone that delivers pieces of three
-> scenarios and finishes none ships nothing a user can do.
-- **Completes:** GS-<n>
-- **Requirements:** RF-<…>
-
 ## User flow (optional)
 > Expected usage path (order, dependency, logic). Reduces wrong inference.
 
 ## Dependencies (optional)
 > Systems/modules/services/prior decisions it relies on. Avoids planning as if standalone.
 
-## Acceptance criteria (required)
-> Checklist that defines "done" in verifiable conditions (not subjective judgment).
-- [ ]
-
 ## Risks and considerations (optional)
 > Execution uncertainties + notes that don't fit the other sections.
+
+## Retired requirements (required once anything is retired)
+> Requirements the system no longer has: **struck through, never deleted**, each with the reason and
+> where its scope went. The id is never reused.
+- ~~**RF-00n**~~: <what it was> · <why, and where its scope went>
 
 ## JSON contract (required)
 > The same information as a structured object (English keys, empty fields omitted), for pipelines and
@@ -100,9 +106,9 @@ An unmarked one is a validation finding (AS-N).
 > Give each load-bearing element the formal shape the prose cannot carry: **type**, **cardinality**,
 > **allowed values**, **required or not**. Restating the sentence in JSON adds cost and detects nothing.
 >
-> The scenario links are structure, so they belong here: each requirement's `scenarioStep` (`GS-1.3`),
-> `edge` and `milestone`; each RNF's `protects`; the first milestone's `completes` and its requirement
-> ids. That is what lets `$thasmorato-skills:tm-doc-validate` walk scenario coverage mechanically.
+> The scenario links are structure, so they belong here: each requirement's `scenarioStep` (`GS-1.3`)
+> and `edge`; each RNF's `protects`. That is what lets `$thasmorato-skills:tm-doc-validate` walk scenario coverage
+> mechanically. The milestone is the effort's, in `scope.md`'s own JSON contract.
 ```json
 {}
 ```

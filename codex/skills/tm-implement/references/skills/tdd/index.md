@@ -32,4 +32,5 @@ If a proposed fix arrives without its pinned and flipped tests, write them befor
 ## Rules of the loop
 - **Red before green.** Write the failing test first, then only enough code to pass it. No speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
+- **A case is trusted once it has failed.** Each new case is seen red for the right reason before it counts. A case that starts green (a characterization test, one that pins what the code already does) is shown red by breaking the behavior it names. This matters most for an assertion about a guard, a mode, a count, a type or source text: those pass vacuously when the code they mean is never reached. `$thasmorato-skills:tm-implement` makes the break with one mutation, by script.
 - **Refactor only on green.** Once the test passes, clean production and test code with the suite still green; never refactor on red. (`$thasmorato-skills:tm-implement` runs this step for every SI; the review judges the result, it does not do the refactoring.)

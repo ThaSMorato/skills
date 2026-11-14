@@ -19,4 +19,15 @@
 
 **Fix:** let it propagate, or catch only the specific failure you can actually handle, and handle it (a fallback the caller is told about, a retry with a final raise, a translated error with the original attached). If swallowing is truly right (best-effort telemetry, a cleanup on an already failing path), say so in a comment that states why the failure does not matter.
 
+## Where the boundary is
+"Rethrow and let the layer above handle it" assumes there is a layer above. In an HTTP request there is: the global error handler turns the exception into a response, the request fails, the server stays up. In a worker, a queue consumer, a cron job or an event handler, an exception that climbs to the loop can bring the process down (in Node, an unhandled rejection ends it) and stop everything after it. Fail fast still holds, for the **unit of work**, not the process:
+
+| Execution | The boundary | What it does with the failure |
+|---|---|---|
+| HTTP request | the global handler | maps it to a status and an error body, logs it with context |
+| queue message, event handler | the message handler | retries a system error with backoff, sends one that always comes back to a dead-letter queue, records the id, the attempt and the correlation id |
+| cron, scheduled job | the body of one run | marks the run failed, alerts, lets the next run go |
+
+The boundary **handles** the failure and leaves a trace. A catch inside the unit that logs and goes on is still this smell; the one at the boundary that marks the failure is not. When the failure is the process's own (configuration missing at boot, a connection that never comes back, corrupted internal state), crashing is right and the supervisor restarts it.
+
 **Severity:** an empty catch or a silent default on a path that moves money, data or permissions is a defect, not a heuristic; report it `high` or above.

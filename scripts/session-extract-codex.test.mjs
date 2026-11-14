@@ -32,6 +32,54 @@ const segmentsOf = (records) => {
 }
 const turnsOf = (records) => segmentsOf(records).flatMap((segment) => segment.turns)
 
+const wrapped = (input, name = 'exec') => ({ timestamp: at(30), type: 'response_item', payload: { type: 'custom_tool_call', name, call_id: 'c', input } })
+const parallel = (recipients) => ({
+  timestamp: at(30),
+  type: 'response_item',
+  payload: { type: 'function_call', name: 'multi_tool_use.parallel', call_id: 'c', arguments: JSON.stringify({ tool_uses: recipients.map((recipient_name) => ({ recipient_name, parameters: { cmd: 'ls' } })) }) },
+})
+
+describe('createCodexSegmenter: tools inside a wrapper', () => {
+  test('a generic exec wrapper is named with the tools it called inside, in order', () => {
+    const [turn] = turnsOf([wrapped('const r = await tools.exec_command({cmd: "ls"})\nawait tools.apply_patch(p)'), said('assistant', 'done')])
+
+    assert.deepEqual(turn.tools, ['exec(exec_command, apply_patch)'])
+  })
+
+  test('a wrapper whose inner tools cannot be named safely is opaque', () => {
+    const [turn] = turnsOf([wrapped('const name = pick(); await tools[name]({})'), said('assistant', 'done')])
+
+    assert.deepEqual(turn.tools, ['exec(opaque)'])
+  })
+
+  test('a parallel wrapper is named with every recipient', () => {
+    const [turn] = turnsOf([parallel(['functions.exec_command', 'functions.view_image']), said('assistant', 'done')])
+
+    assert.deepEqual(turn.tools, ['multi_tool_use.parallel(exec_command, view_image)'])
+  })
+
+  test('the text inside another tool is never scanned for names', () => {
+    const [turn] = turnsOf([wrapped('*** Begin Patch\n+ await tools.delete_everything()', 'apply_patch'), said('assistant', 'done')])
+
+    assert.deepEqual(turn.tools, ['apply_patch'])
+  })
+
+  test('no argument reaches the extract, not even a secret inside a wrapper', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'tm-secret-'))
+    const transcript = join(dir, 'rollout-2026-10-20T10-00-00-s.jsonl')
+    const records = [
+      { timestamp: at(0), type: 'session_meta', payload: { id: 's', cwd: '/work/app', source: 'cli' } },
+      wrapped('await tools.exec_command({cmd: "OPENAI_API_KEY=sk-live-123 node seed.js"})'),
+      said('assistant', 'seeded'),
+    ]
+    writeFileSync(transcript, records.map((record) => JSON.stringify(record)).join('\n'))
+
+    await extractSession({ transcript, outDir: join(dir, 'out'), harness: 'codex' })
+
+    assert.equal(readFileSync(join(dir, 'out', 'seg-01.md'), 'utf8').includes('sk-live-123'), false)
+  })
+})
+
 describe('createCodexSegmenter', () => {
   test('what the owner typed is an owner turn, with its item id and time', () => {
     const [turn] = turnsOf([said('owner', 'fix the login', { id: 'item-7', second: 5 })])
@@ -146,8 +194,10 @@ test('a Codex session extracts to the same segment files as a Claude one', async
 
   const result = await extractSession({ transcript, outDir, harness: 'codex' })
 
+  const { cost, ...summary } = result
+
   assert.deepEqual(
-    { result, files: readdirSync(outDir).sort(), session: readFileSync(join(outDir, 'seg-01.md'), 'utf8').match(/^session: (.*)$/m)[1] },
+    { result: summary, files: readdirSync(outDir).sort(), session: readFileSync(join(outDir, 'seg-01.md'), 'utf8').match(/^session: (.*)$/m)[1] },
     { result: { sessionId: 'sess-1', segments: 1, ownerTurns: 1, skippedLines: 0 }, files: ['index.md', 'seg-01.md'], session: 'sess-1' },
   )
 })

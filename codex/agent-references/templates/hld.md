@@ -7,19 +7,25 @@ or staying so generic it guides no decision. PRUNE + RENUMBER optional sections 
 (required) sections always stay.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
+
+---
+kind: hld
+status: draft            # draft | in review | approved | changes-requested; only the gate moves it
+level: product           # carried over from the PRD
+---
 
 # HLD: <name>
 
 ## Metadata (required)
-- **Level:** product | module (EPIC) | feature
 - **ID:** <HLD-xxx>
-- **Status:** draft | in review | approved
 - **Sources:** <prd.md, deep-research, analysis/system-profile.md, attached docs>
 
-> **Level** carries over from the PRD unchanged: the design of a feature is not the design of a
-> product, and the chain breaks if it stops here. **Status** starts `draft`; only whoever runs the gate
+> **`level`** carries over from the PRD unchanged: the design of a feature is not the design of a
+> product, and the chain breaks if it stops here. **`status`** starts `draft`; only whoever runs the gate
 > moves it, and `$thasmorato-skills:tm-flow` reads it to report what is awaiting approval.
 
 ## Objective (required)

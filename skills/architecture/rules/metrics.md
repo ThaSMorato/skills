@@ -5,7 +5,7 @@
 These are **graph arithmetic over imports**, not judgement calls. Where you can compute, do not estimate: a number is comparable across runs and an opinion is not.
 
 ## 1. Build the component graph
-1. Take the component definitions from `docs/components.md` (or `docs/boundaries.md`'s manifest): each component owns a set of path globs.
+1. Take the component definitions from `docs/architecture/components.md` (or `docs/architecture/boundaries.md`'s manifest): each component owns a set of path globs.
 2. Extract every import/require/use statement in the repo.
 3. Map each import to the component that owns the imported path. Drop intra-component edges and edges to third-party packages; the graph is **between the repo's own components**.
 
@@ -28,4 +28,4 @@ Run a depth-first search over the component graph and report **every** cycle as 
 ## Scope and honesty
 - **Declare the extraction method.** Static import parsing misses dynamic loading, dependency injection by string key, and reflection. Those are real edges the graph will not show.
 - **Declare what you skipped.** Generated code, vendored directories, and files that failed to parse. A metric computed over 60% of the repo and reported as if it covered all of it is worse than no metric.
-- **The graph is an input, not a report.** `/components` uses it for metrics, `/boundaries` for divergence against the contract, and `/decompose` to decide which epics are parallel-safe.
+- **The graph is an input, not a report.** `/tm-components` uses it for metrics, `/tm-boundaries` for divergence against the contract, and `/tm-decompose` to decide which epics are parallel-safe.

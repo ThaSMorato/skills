@@ -27,11 +27,13 @@ Show:
 - **where the loop escalated**: three-attempt fix limits, failed deliverables;
 - **findings that repeat across tickets**, with their instances, since repetition is what turns an incident into a standard worth moving into a guide;
 - **the environment, as far as the artifacts show it**: the repo's guardrail (or its absence), the mechanical standards the review kept catching (each proposed as a check), and the meta-retros' Environment sections, or that no session was analyzed;
-- **the measurements per plugin version**, and every process change tagged `flow` (the plugin's) or `project` (this repo's); the `flow` ones are what `$thasmorato-skills:tm-flow-report` gathers across projects;
+- **the measurements per plugin version**, and every process change with its level (`references/skills/retro/levels.md`): `flow` (the plugin's), `repo-skill` (this repo's skills and guides) or `repo-code` (this repo's code); the `flow` ones are what `$thasmorato-skills:tm-flow-report` gathers across projects;
 - the product findings appended to `docs/evolutions.md`;
 - **what the artifacts couldn't tell you**: say this out loud rather than letting the document imply it covered everything.
 
-Then ask what to act on. This stage records; the stages that own the files make the changes.
+Record the report: `node "references/scripts/report-registry.mjs" record docs/retro/<scope>.md` adds it, with its counts by level, to the registry `$thasmorato-skills:tm-flow-report` reads.
+
+**Then stop.** Show the findings by level. A `flow` one stays in the report and is never applied here; each `repo-skill` and `repo-code` one names the stage that owns its file, for the owner to run if they choose. This stage records; it changes nothing.
 
 ## Where it sits
 After a set of tickets completes: the end of an epic, or the end of a cycle if you work in fixed cycles. It is not per-ticket: a single ticket has no repetition to find, and repetition is most of the value here.

@@ -2,6 +2,7 @@
 name: interview
 description: Relentlessly interview the user, in rounds of questions, to elicit requirements before documenting. Use at the start of a feature or project, or on any "interview / grill / gather requirements" trigger. Composes with the domain-model skill, which sharpens the vocabulary while this one drives the conversation.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 > Read by path, not loaded: `${CLAUDE_PLUGIN_ROOT}` in this file is the plugin root, the folder that holds the `skills/` this file is in.
@@ -17,7 +18,7 @@ Recommended: <your answer, and why>
 
 **Facts are found, never asked.** Before a round, look the answers up in the environment: the code, the project docs (`docs/`, `CONTEXT.md`, `docs/analysis/system-profile.md`), and the tools available. When a fact needs real digging, call the Agent tool with an exploration agent to find it and keep going: only the questions that depend on that fact wait for it, and they join the round after it reports. Only *decisions* go to the user.
 
-**The answer is with someone else.** When a decision belongs to a person who is not in the conversation (a PM, another team, legal), record it in `Open questions` with who holds it, and offer `/questionnaire` to send them the questions instead of guessing.
+**The answer is with someone else.** When a decision belongs to a person who is not in the conversation (a PM, another team, legal), record it in `Open questions` with who holds it, and offer `/tm-questionnaire` to send them the questions instead of guessing.
 
 Cover the minimum a PRD needs: the problem (not the solution), users and jobs-to-be-done, the guiding scenarios, the antithesis, goals and value, success metrics (metric + target), scope and non-goals, constraints, and the open decisions/trade-offs.
 
@@ -38,7 +39,7 @@ The interview converges when the **words stop moving**. After each round, look a
 
 ## Two challenges, once each
 - **Contrarian**, once the problem and the goals are drafted: *what if the opposite were true, or if we built nothing?* It is how an unexamined premise surfaces while it is still one sentence. Ask too *what does the persona use today?*: the product's value is what it adds **over that replacement**, and a useful product can add nothing. The answers are the brief's **Antithesis**.
-- **Simplifier**, before scope is settled: *what is the smallest version that would still be worth having?* The answer feeds the gear `/flow` will choose, and becomes the first candidate for Out / non-goals. A general, extensible version earns its place only with **three** distinct, concrete, near-term scenarios behind it; with fewer, scope the specific one the scenarios need.
+- **Simplifier**, before scope is settled: *what is the smallest version that would still be worth having?* The answer feeds the gear `/tm-flow` will choose, and becomes the first candidate for Out / non-goals. A general, extensible version earns its place only with **three** distinct, concrete, near-term scenarios behind it; with fewer, scope the specific one the scenarios need.
 
 If two rounds in a row move **no** required section forward, the interview is circling. Ask the **ontological** question instead of another detail: *what is this, really?* A stuck interview is usually stuck on a noun.
 
@@ -47,4 +48,4 @@ Record each challenge and its answer in the brief's **Assumptions challenged** t
 ## The ambiguity gate
 The gate is countable, not a judgement call: **every `(required)` section of the requirements-brief template is filled**, and everything still unsettled is written into `Open questions`. Nothing generates until that holds and the user confirms the shared understanding has been reached.
 
-**Early exit.** The user may stop before the gate. Then write the brief anyway with `Status: early-exit`, every unfilled required section named under `Open questions`, and say what the PRD will be missing. `/prd` sees the status and carries those gaps forward as `> Needs Input:` instead of filling them.
+**Early exit.** The user may stop before the gate. Then write the brief anyway with `Status: early-exit`, every unfilled required section named under `Open questions`, and say what the PRD will be missing. `/tm-prd` sees the status and carries those gaps forward as `> Needs Input:` instead of filling them.

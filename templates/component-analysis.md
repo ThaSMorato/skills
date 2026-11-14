@@ -1,11 +1,11 @@
 <!--
 TEMPLATE: component-analysis (one component, deep)
 Filled by the component-analyzer, one file per component, under docs/analysis/components/.
-Two stages read it: /fdd for the real contracts and conventions of the area a feature touches, and
-/design (with pattern-scout) for the primitives to reuse. Write for them: concrete names, real
+Two stages read it: /tm-fdd for the real contracts and conventions of the area a feature touches, and
+/tm-design (with pattern-scout) for the primitives to reuse. Write for them: concrete names, real
 signatures, path:line. Not a summary.
 Keep the headings, table columns and frontmatter STABLE: stages anchor on them, and the counts are
-read by /analyze's coverage check.
+read by /tm-analyze's coverage check.
 PRUNE optional sections that don't apply; (required) sections always stay.
 The written file STARTS with the frontmatter below; this comment is not copied.
 -->

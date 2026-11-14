@@ -4,8 +4,9 @@
 // package, `node scripts/build-codex.mjs --check` to fail when the committed package is stale.
 //
 // What Codex lacks, and what replaces it here:
-// - commands: each becomes a skill `tm-<command>`, locked to explicit `$thasmorato-skills:tm-<command>`;
-// - the Skill tool: the skill's files are copied under the entry's `references/` and read from there;
+// - commands: each becomes a skill of the same name (`tm-<name>`), locked to explicit `$thasmorato-skills:tm-<name>`;
+// - the Skill tool: the skill's files are copied under the entry's `references/` and read from there
+//   (the plugin prefix of the skill's full name, `thasmorato-skills:<skill>`, has no meaning there);
 // - the Agent tool: `spawn_agent` with `agent_type = "tm-<agent>"`, at most six running together;
 // - `${CLAUDE_PLUGIN_ROOT}`: paths inside the entry, since Codex copies only the package and refuses `..`;
 // - `$ARGUMENTS`: the text the user wrote after the skill name;
@@ -51,7 +52,7 @@ const SETUP_CHECK = [
   '> Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent\'s name.',
 ].join('\n')
 
-const mention = (command) => `$${PLUGIN}:tm-${command}`
+const mention = (command) => `$${PLUGIN}:${command}`
 
 function parseFrontmatter(text) {
   const match = text.match(/^---\n([\s\S]*?)\n---\n?/)
@@ -79,8 +80,12 @@ function filesIn(root, dir) {
     .sort()
 }
 
+// The source names a skill by its full name, `thasmorato-skills:<skill>`, so no other plugin's skill
+// answers the call. In the package the skill is a file read by path, and the short name is the path.
+const unqualified = (text) => text.replace(new RegExp(`\`${PLUGIN}:([a-z0-9-]+)\``, 'g'), '`$1`')
+
 function readSource(root) {
-  const read = (path) => readFileSync(join(root, path), 'utf8')
+  const read = (path) => unqualified(readFileSync(join(root, path), 'utf8'))
   const names = (dir, suffix) => readdirSync(join(root, dir)).filter((name) => name.endsWith(suffix)).map((name) => name.slice(0, -suffix.length))
   return {
     root,
@@ -224,7 +229,7 @@ function emitReferences(source, out, { base, prefix, deps, file, exposed }) {
 
 function emitEntry(source, out, command) {
   const { fields, body } = parseFrontmatter(source.read(`commands/${command}.md`))
-  const dir = `skills/tm-${command}`
+  const dir = `skills/${command}`
   const file = `commands/${command}.md`
   const deps = closure(source, [body])
   emitReferences(source, out, { base: `${dir}/references`, prefix: 'references/', deps, file })
@@ -237,7 +242,7 @@ function emitEntry(source, out, command) {
   )
   const check = spawns ? `${SETUP_CHECK.replace('{version}', source.version)}\n\n` : ''
   const description = translate(fields.description, { file, commands: source.commands })
-  out.set(`${dir}/SKILL.md`, `${skillFrontmatter(`tm-${command}`, description)}${ENTRY_PREAMBLE}\n\n${check}${argument}${translated}`)
+  out.set(`${dir}/SKILL.md`, `${skillFrontmatter(command, description)}${ENTRY_PREAMBLE}\n\n${check}${argument}${translated}`)
   out.set(`${dir}/agents/openai.yaml`, LOCK)
 }
 
@@ -272,6 +277,8 @@ function emitAgents(source, out) {
         `# ${PLUGIN} ${source.version}: generated from ${file} by scripts/build-codex.mjs; installed by $${PLUGIN}:tm-setup`,
         `name = ${tomlBasic(`tm-${agent}`)}`,
         `description = ${tomlBasic(translate(fields.description, { file, commands: source.commands }))}`,
+        // The agent's effort travels with it; the model is the owner's profile or session, never pinned here.
+        ...(fields.effort ? [`model_reasoning_effort = ${tomlBasic(fields.effort)}`] : []),
         `developer_instructions = '''\n${instructions.trimEnd()}\n'''\n`,
       ].join('\n'),
     )

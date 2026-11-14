@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: declined (proposals the owner turned down, so no stage proposes them again)
-Read by /tidy, /trim and /review before they propose; appended to when the owner declines a proposal
+Read by /tm-tidy, /tm-trim and /tm-review before they propose; appended to when the owner declines a proposal
 for a reason that will still hold next time. APPEND-ONLY: never edit or delete an entry; when a reason
 stops holding, add an entry that says so (`Status: reopened`, with the date and why).
 
@@ -8,7 +8,7 @@ WHAT GOES IN: a decline whose reason a future proposer would need in order not t
 thing again. "We keep the two handlers separate: they will diverge when the B2B rules land (ticket 14)."
 WHAT STAYS OUT: passing reasons ("not now", "out of scope for this ticket") and self-evident ones. Those
 are answered in the moment and recorded nowhere. A reason that is an architectural decision (hard to
-reverse, surprising without context, a real trade-off) is an ADR instead: offer `/adr-generate`.
+reverse, surprising without context, a real trade-off) is an ADR instead: offer `/tm-adr-generate`.
 -->
 
 # Declined proposals

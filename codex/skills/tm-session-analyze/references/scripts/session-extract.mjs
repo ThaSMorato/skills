@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Turns a session transcript (JSONL) into one readable file per compaction segment,
-// keeping only the conversation: what the owner said, answered, rejected or ran as a slash command
-// (with the options a structured question offered), and what the assistant said plus the names of
-// the tools it called. Everything else (file snapshots, tool results,
+// keeping only the conversation: what the owner said (mid-turn messages included), answered, rejected
+// or ran as a slash command (with the options a structured question offered), and what the assistant
+// said plus the names of the tools it called. The index adds what each stage cost: minutes, tool
+// calls, re-invocations, answers outside the options, clarifications and overruled recommendations. Everything else (file snapshots, tool results,
 // thinking, subagent turns, compaction summaries) is dropped: it is either bulk or not the owner.
 // Claude Code by default; `--harness codex` reads a Codex rollout (see session-extract-codex.mjs).
 // No dependencies beyond the Node standard library.
@@ -19,6 +20,10 @@ const COMMAND_NAME = /<command-name>([^<]*)<\/command-name>/
 const COMMAND_ARGS = /<command-args>([^<]*)<\/command-args>/
 const CLARIFY_BOILERPLATE = /^The user wants to clarify these questions\./
 const REJECTION_PREFIX = /[\s\S]*the user said:\s*/i
+const RECOMMENDED = /\(Recommended\)\s*$/
+const NO_STAGE = '(no stage)'
+const STAGE_PREFIX = 'tm-' // only the flow's stages open a row: /compact, /model, /login are the harness
+const IDLE_AFTER_MS = 30 * 60 * 1000
 
 export function projectDirCandidates(cwd) {
   return [...new Set([cwd.replace(/[^a-zA-Z0-9]/g, '-'), cwd.replace(/\//g, '-')])]
@@ -63,6 +68,18 @@ export function createSegmenter() {
     }
     if (entry.type === 'assistant') return acceptAssistant(entry)
     if (entry.type === 'user') return acceptOwner(entry)
+    if (entry.type === 'attachment') return acceptQueued(entry)
+  }
+
+  // A message the owner sends while the assistant works is recorded only as a queued command; a
+  // queued task notification is the harness, not the owner.
+  function acceptQueued(entry) {
+    const queued = entry.attachment
+    if (queued?.type !== 'queued_command' || queued.commandMode !== 'prompt') return
+    const text = cleanOwnerText(String(queued.prompt ?? ''))
+    if (!text || HARNESS_MARKUP.test(text)) return
+    const kind = text.startsWith('/') ? 'invoked' : 'queued'
+    current().turns.push({ role: 'owner', kind, uuid: entry.uuid, timestamp: queued.timestamp ?? entry.timestamp, text })
   }
 
   function acceptAssistant(entry) {
@@ -102,10 +119,11 @@ function compactionOf(entry) {
 function ownerTurnOf(entry, toolNamesById) {
   const base = { role: 'owner', uuid: entry.uuid, timestamp: entry.timestamp }
   if (entry.toolUseResult?.answers) {
-    return { ...base, kind: 'answered', text: formatAnswers(entry.toolUseResult) }
+    return { ...base, kind: 'answered', text: formatAnswers(entry.toolUseResult), answers: answersOf(entry.toolUseResult) }
   }
   if (entry.toolDenialKind) {
-    return { ...base, kind: 'rejected', text: formatRejection(entry, toolNamesById) }
+    const text = formatRejection(entry, toolNamesById)
+    return isClarification(entry) ? { ...base, kind: 'rejected', text, clarify: true } : { ...base, kind: 'rejected', text }
   }
   const blocks = asBlocks(entry.message?.content)
   if (blocks.some((block) => block.type === 'tool_result')) return null
@@ -131,6 +149,19 @@ function formatAnswers({ answers, annotations = {}, questions = [] }) {
       return answered + offeredOptions(questions.find((asked) => asked.question === question))
     })
     .join('\n')
+}
+
+function answersOf({ answers, questions = [] }) {
+  return Object.entries(answers).map(([question, answer]) => {
+    const offered = (questions.find((asked) => asked.question === question)?.options ?? []).map((option) => option.label)
+    return { question, answer, offered, recommended: offered.find((label) => RECOMMENDED.test(label)) ?? null }
+  })
+}
+
+function isClarification(entry) {
+  const result = asBlocks(entry.message?.content).find((block) => block.type === 'tool_result')
+  const raw = typeof result?.content === 'string' ? result.content : joinText(asBlocks(result?.content))
+  return CLARIFY_BOILERPLATE.test(raw.replace(REJECTION_PREFIX, '').trim())
 }
 
 function offeredOptions(asked) {
@@ -191,7 +222,63 @@ function renderTurn(turn) {
   return `### assistant · ${turn.timestamp} · ${turn.uuid}\n${turn.text}${tools}`
 }
 
-function renderIndex({ sessionId, transcript, segments }) {
+/**
+ * What each stage cost, from the turns alone: a stage runs from the owner's invocation of a flow
+ * stage (`tm-*`) to the next one; a harness command between them (`/compact`) does not end it. A pause over 30 minutes is idle time, kept apart. In Codex, the answers to structured questions
+ * are not extracted, so what rests on them is `null` (not measured), never 0.
+ */
+export function costByStage(segments, { harness = 'claude' } = {}) {
+  const answersMeasured = harness !== 'codex'
+  const rows = new Map()
+  const rowOf = (stage) => {
+    if (!rows.has(stage)) rows.set(stage, emptyCost(stage, answersMeasured))
+    return rows.get(stage)
+  }
+  const turns = segments.flatMap((segment) => segment.turns)
+  let stage = NO_STAGE
+  turns.forEach((turn, index) => {
+    const invoked = turn.role === 'owner' && turn.kind === 'invoked' ? stageNameOf(turn.text) : null
+    if (invoked?.startsWith(STAGE_PREFIX)) {
+      stage = invoked
+      rowOf(stage).invocations += 1
+    }
+    const row = rowOf(stage)
+    addGap(row, turn, turns[index + 1])
+    if (turn.role === 'assistant') row.tool_calls += turn.tools.length
+    if (answersMeasured) addAnswers(row, turn)
+  })
+  return [...rows.values()].map(({ activeMs, idleMs, ...row }) => ({ ...row, minutes: toMinutes(activeMs), idle_minutes: toMinutes(idleMs) }))
+}
+
+function emptyCost(stage, answersMeasured) {
+  const counted = answersMeasured ? 0 : null
+  return { stage, activeMs: 0, idleMs: 0, tool_calls: 0, invocations: 0, other_answers: counted, clarifications: counted, overrules: counted }
+}
+
+function stageNameOf(invocation) {
+  return invocation.split(/\s+/)[0].replace(/^\//, '').replace(/^.*:/, '')
+}
+
+function addGap(row, turn, next) {
+  const gap = next ? Date.parse(next.timestamp) - Date.parse(turn.timestamp) : 0
+  if (!Number.isFinite(gap) || gap <= 0) return
+  if (gap > IDLE_AFTER_MS) row.idleMs += gap
+  else row.activeMs += gap
+}
+
+function addAnswers(row, turn) {
+  if (turn.clarify) row.clarifications += 1
+  for (const { answer, offered, recommended } of turn.answers ?? []) {
+    if (offered.length === 0) continue
+    const chosen = String(answer).split(', ')
+    if (!chosen.every((label) => offered.includes(label))) row.other_answers += 1
+    else if (recommended && !chosen.includes(recommended)) row.overrules += 1
+  }
+}
+
+const toMinutes = (ms) => Math.round((ms / 60000) * 10) / 10
+
+function renderIndex({ sessionId, transcript, segments, cost }) {
   const rows = segments.map((segment, i) => {
     const owner = segment.turns.filter((turn) => turn.role === 'owner').length
     const trigger = segment.compaction?.trigger ?? 'start'
@@ -211,10 +298,19 @@ function renderIndex({ sessionId, transcript, segments }) {
     '|---|---|---|---|---|',
     ...rows,
     '',
+    '## Cost by stage',
+    '',
+    '| Stage | Minutes | Idle minutes | Tool calls | Invocations | Other answers | Clarifications | Overrules |',
+    '|---|---|---|---|---|---|---|---|',
+    ...cost.map((row) =>
+      `| ${row.stage} | ${row.minutes} | ${row.idle_minutes} | ${row.tool_calls} | ${row.invocations} | ${notMeasured(row.other_answers)} | ${notMeasured(row.clarifications)} | ${notMeasured(row.overrules)} |`,
+    ),
+    '',
   ].join('\n')
 }
 
 const pad = (n) => String(n).padStart(2, '0')
+const notMeasured = (value) => (value === null ? 'not measured' : value)
 
 const HARNESSES = {
   claude: { createSegmenter, sessionIdOf: async (transcript) => basename(transcript, '.jsonl') },
@@ -240,10 +336,11 @@ export async function extractSession({ transcript, outDir, harness = 'claude' })
     const content = renderSegment(segment, { sessionId, index: i + 1, total: segments.length })
     writeFileSync(join(outDir, `seg-${pad(i + 1)}.md`), content)
   })
-  writeFileSync(join(outDir, 'index.md'), renderIndex({ sessionId, transcript, segments }))
+  const cost = costByStage(segments, { harness })
+  writeFileSync(join(outDir, 'index.md'), renderIndex({ sessionId, transcript, segments, cost }))
 
   const ownerTurns = segments.flatMap((segment) => segment.turns).filter((turn) => turn.role === 'owner').length
-  return { sessionId, segments: segments.length, ownerTurns, skippedLines }
+  return { sessionId, segments: segments.length, ownerTurns, skippedLines, cost }
 }
 
 function parseLine(line) {

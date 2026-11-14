@@ -1,6 +1,6 @@
 <!--
 TEMPLATE: meta-retro (what one working session taught about the flow and the project)
-Filled by /session-analyze from a session transcript, across every compaction segment.
+Filled by /tm-session-analyze from a session transcript, across every compaction segment.
 EVERY FINDING RESTS ON AN OWNER TURN: uuid, timestamp, the owner's own words. The assistant
 criticizing itself is not evidence. Where the conversation cannot answer something, say so.
 The written file STARTS with the frontmatter below; this comment is not copied.
@@ -9,13 +9,17 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 ---
 kind: meta-retro
 plugin_version: <the "version" in ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json>
+model: <the model id your harness reports for this session; `unknown` when it does not say>
+harness: <claude-code | codex>
+instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 session: <session id>
 analyzed_at: <YYYY-MM-DD>
 segments: <n>
 owner_turns: <n read>
-findings: {flow: <n>, project: <n>}
-promotable: <n project findings that passed the promotion filter>
+findings: {flow: <n>, repo-skill: <n>, repo-code: <n>}
+promotable: <n repo-skill findings that passed the promotion filter>
 repeated: <n findings seen in more than one segment>
+cost: {minutes: <n>, idle_minutes: <n>, tool_calls: <n>, invocations: <n>, other_answers: <n>, clarifications: <n>, overrules: <n>}
 ---
 
 # Meta-retro: session <session id>
@@ -33,12 +37,14 @@ repeated: <n findings seen in more than one segment>
 | Pattern | Owner turn | Stage | Change |
 |---|---|---|---|
 
-## Project findings (required)
-> Specific to this codebase or this owner. Same columns, plus the promotion filter (`skills/retro/promotion-filter.md`):
-> `passes`, or the question it failed. Only a finding that passes is proposed as a skill or a guide in this project.
+## Repo findings (required)
+> Specific to this codebase or this owner, by level (`skills/retro/levels.md`): `repo-skill` (its skills,
+> guides and `CLAUDE.md`) or `repo-code` (its code and configuration). Same columns, plus the promotion
+> filter (`skills/retro/promotion-filter.md`) for a `repo-skill` one: `passes`, or the question it failed.
+> Only a finding that passes is proposed as a skill or a guide in this project.
 
-| Pattern | Owner turn | Stage | Change | Filter |
-|---|---|---|---|---|
+| Level | Pattern | Owner turn | Stage | Change | Filter |
+|---|---|---|---|---|---|
 
 ## Environment (required when any signal or repeated correction exists)
 > From `skills/retro/environment.md`: navigation, tool economy and information access, which only a
@@ -48,6 +54,16 @@ repeated: <n findings seen in more than one segment>
 
 | Category | Evidence (segment · tool calls or owner turn) | Tactical cost | Strategic change | Mechanical / judgement | Where it lands |
 |---|---|---|---|---|---|
+
+## Cost by stage (required)
+> From the extract's `index.md`, copied, not estimated: per stage (the owner's invocation to the next),
+> active minutes (pauses over 30 minutes are idle), tool calls, invocations (a stage re-run is the owner
+> restarting it), answers outside the options, questions rejected to clarify, overruled recommendations.
+> Wasted calls come from the segment analysts' tool-economy signals, with their segment. In Codex, the
+> answer columns are `not measured`.
+
+| Stage | Minutes | Idle | Tool calls | Invocations | Other answers | Clarifications | Overrules | Wasted calls (segment) |
+|---|---|---|---|---|---|---|---|---|
 
 ## What the conversation couldn't tell me (required)
 > Segments too thin to judge, tool results that were dropped by design, anything a reader might

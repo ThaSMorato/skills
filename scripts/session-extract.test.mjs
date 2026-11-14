@@ -10,6 +10,7 @@ import {
   createSegmenter,
   renderSegment,
   extractSession,
+  costByStage,
 } from './session-extract.mjs'
 
 const makeEntry = (overrides = {}) => ({
@@ -235,6 +236,7 @@ describe('createSegmenter: owner turns', () => {
         uuid: 'u-9',
         timestamp: entry.timestamp,
         text: 'Which runtime? → Node (note: no dependencies)',
+        answers: [{ question: 'Which runtime?', answer: 'Node', offered: [], recommended: null }],
       },
     ])
   })
@@ -394,11 +396,134 @@ describe('extractSession', () => {
     writeFileSync(transcript, lines.join('\n'))
     const outDir = join(workDir, 'out')
 
-    const result = await extractSession({ transcript, outDir })
+    const { cost, ...result } = await extractSession({ transcript, outDir })
 
     assert.deepEqual(readdirSync(outDir).sort(), ['index.md', 'seg-01.md', 'seg-02.md'])
     assert.deepEqual(result, { sessionId: 'session-1', segments: 2, ownerTurns: 2, skippedLines: 1 })
     assert.match(readFileSync(join(outDir, 'seg-02.md'), 'utf8'), /u-2/)
     assert.match(readFileSync(join(outDir, 'index.md'), 'utf8'), /segments: 2\n/)
+  })
+})
+
+const queued = (prompt, { commandMode = 'prompt', uuid = 'q-1', timestamp = '2026-09-18T10:05:00.000Z' } = {}) => ({
+  type: 'attachment',
+  uuid,
+  timestamp,
+  isSidechain: false,
+  attachment: { type: 'queued_command', commandMode, prompt, timestamp },
+})
+
+describe('createSegmenter: messages the owner sent mid-turn', () => {
+  test('a message queued while the assistant worked is an owner turn, with its uuid and time', () => {
+    const [segment] = segmentsOf([queued('stop, use the other table', { uuid: 'q-7' })])
+
+    assert.deepEqual(segment.turns, [{ role: 'owner', kind: 'queued', uuid: 'q-7', timestamp: '2026-09-18T10:05:00.000Z', text: 'stop, use the other table' }])
+  })
+
+  test('a slash command queued mid-turn is an invocation', () => {
+    const [segment] = segmentsOf([queued('/thasmorato-skills:tm-review main')])
+
+    assert.deepEqual({ kind: segment.turns[0].kind, text: segment.turns[0].text }, { kind: 'invoked', text: '/thasmorato-skills:tm-review main' })
+  })
+
+  test('a task notification queued by the harness is not the owner', () => {
+    const [segment] = segmentsOf([queued('<task-notification>done</task-notification>', { commandMode: 'task-notification' })])
+
+    assert.deepEqual(segment.turns, [])
+  })
+})
+
+const at = (minute) => `2026-09-18T10:${String(minute).padStart(2, '0')}:00.000Z`
+const owner = (kind, text, minute, extra = {}) => ({ role: 'owner', kind, uuid: `o-${minute}`, timestamp: at(minute), text, ...extra })
+const assistant = (minute, tools = []) => ({ role: 'assistant', kind: 'said', uuid: `a-${minute}`, timestamp: at(minute), text: 'ok', tools })
+const answered = (answer, offered, minute) => owner('answered', '', minute, { answers: [{ question: 'Gear?', answer, offered, recommended: offered.find((label) => label.endsWith('(Recommended)')) ?? null }] })
+const costOf = (turns, options) => costByStage([{ compaction: null, turns }], options)
+const stage = (cost, name) => cost.find((row) => row.stage === name)
+
+describe('costByStage', () => {
+  test('each stage gets the minutes and tool calls from its invocation until the next one', () => {
+    const cost = costOf([
+      owner('invoked', '/thasmorato-skills:tm-plan 02-export', 0),
+      assistant(4, ['Read', 'Grep']),
+      assistant(10, ['Write']),
+      owner('invoked', '/thasmorato-skills:tm-plan-validate 02-export', 12),
+      assistant(15, ['Read']),
+    ])
+
+    assert.deepEqual(
+      [stage(cost, 'tm-plan'), stage(cost, 'tm-plan-validate')].map(({ minutes, tool_calls, invocations }) => ({ minutes, tool_calls, invocations })),
+      [{ minutes: 12, tool_calls: 3, invocations: 1 }, { minutes: 3, tool_calls: 1, invocations: 1 }],
+    )
+  })
+
+  test('a pause longer than 30 minutes counts as idle, not as the stage working', () => {
+    const cost = costOf([owner('invoked', '/tm-implement 02-export', 0), assistant(5), assistant(55)])
+
+    assert.deepEqual({ minutes: stage(cost, 'tm-implement').minutes, idle: stage(cost, 'tm-implement').idle_minutes }, { minutes: 5, idle: 50 })
+  })
+
+  test('the same stage invoked again adds to its row', () => {
+    const cost = costOf([owner('invoked', '/tm-plan 02', 0), assistant(1), owner('invoked', '/tm-plan 02', 2), assistant(3)])
+
+    assert.equal(stage(cost, 'tm-plan').invocations, 2)
+  })
+
+  test('an answer outside the options offered is counted as Other', () => {
+    const cost = costOf([owner('invoked', '/tm-flow', 0), answered('Small, but skip the trace', ['Small (Recommended)', 'Feature'], 1)])
+
+    assert.equal(stage(cost, 'tm-flow').other_answers, 1)
+  })
+
+  test('an offered answer other than the recommended one is an overrule', () => {
+    const cost = costOf([owner('invoked', '/tm-flow', 0), answered('Feature', ['Small (Recommended)', 'Feature'], 1)])
+
+    assert.deepEqual({ overrules: stage(cost, 'tm-flow').overrules, other: stage(cost, 'tm-flow').other_answers }, { overrules: 1, other: 0 })
+  })
+
+  test('a multi-select answer of offered options is not Other', () => {
+    const cost = costOf([owner('invoked', '/tm-flow', 0), answered('Merge SI-2, Merge SI-3', ['1 SI (Recommended)', 'Merge SI-2', 'Merge SI-3'], 1)])
+
+    assert.deepEqual({ other: stage(cost, 'tm-flow').other_answers, overrules: stage(cost, 'tm-flow').overrules }, { other: 0, overrules: 1 })
+  })
+
+  test('a question rejected to clarify is a clarification', () => {
+    const cost = costOf([owner('invoked', '/tm-flow', 0), owner('rejected', '[rejected AskUserQuestion to clarify]', 1, { clarify: true })])
+
+    assert.equal(stage(cost, 'tm-flow').clarifications, 1)
+  })
+
+  test('a harness command such as /compact does not open a stage: the work goes on in the one before', () => {
+    const cost = costOf([owner('invoked', '/thasmorato-skills:tm-implement 02', 0), assistant(2), owner('invoked', '/compact', 4), assistant(6, ['Read'])])
+
+    assert.deepEqual(cost.map(({ stage: name, minutes, tool_calls, invocations }) => ({ name, minutes, tool_calls, invocations })), [{ name: 'tm-implement', minutes: 6, tool_calls: 1, invocations: 1 }])
+  })
+
+  test('work before any invocation is its own row', () => {
+    assert.deepEqual(costOf([owner('said', 'hi', 0), assistant(2, ['Read'])]).map((row) => row.stage), ['(no stage)'])
+  })
+
+  test('in Codex, what a rollout does not record is not measured rather than zero', () => {
+    const cost = costOf([owner('invoked', 'tm-plan 02', 0), assistant(1, ['exec(exec_command)'])], { harness: 'codex' })
+
+    assert.deepEqual({ other: stage(cost, 'tm-plan').other_answers, overrules: stage(cost, 'tm-plan').overrules }, { other: null, overrules: null })
+  })
+})
+
+describe('extractSession: cost', () => {
+  test('the index carries the cost by stage, and the summary returns it', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'cost-'))
+    const transcript = join(dir, 'sess-c.jsonl')
+    const lines = [
+      makeEntry({ uuid: 'u-1', timestamp: at(0), message: { content: '<command-name>/tm-plan</command-name><command-args>02</command-args>' } }),
+      makeAssistant([{ type: 'tool_use', id: 't-1', name: 'Read', input: {} }], { timestamp: at(6) }),
+    ]
+    writeFileSync(transcript, lines.map((line) => JSON.stringify(line)).join('\n'))
+
+    const result = await extractSession({ transcript, outDir: join(dir, 'out') })
+
+    assert.deepEqual(
+      { cost: result.cost.map(({ stage: name, minutes, tool_calls }) => ({ name, minutes, tool_calls })), table: /^## Cost by stage$/m.test(readFileSync(join(dir, 'out', 'index.md'), 'utf8')) },
+      { cost: [{ name: 'tm-plan', minutes: 6, tool_calls: 1 }], table: true },
+    )
   })
 })

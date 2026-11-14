@@ -1,6 +1,6 @@
 ---
 name: asking
-description: How to put a question, a finding, or a gate to the user; resolve every id to what it means, offer a structured choice when the answer is a closed set, and ask only what is genuinely a decision. Use whenever a stage reports findings, hits a gate, needs input, or writes a Needs Input or Assumed marker.
+description: How to put a question, a finding, or a gate to the user; resolve every id to what it means, offer a structured choice when the answer is a closed set, and ask only what is genuinely a decision. Use whenever a stage reports findings, hits a gate, needs input, hands off to the next stage, or writes a Needs Input or Assumed marker.
 ---
 
 The user is not holding your context. They have not just read the document you are quoting, they do not remember which finding `CV-3` was, and every second they spend reconstructing that is a second the stage cost them instead of saving.
@@ -25,6 +25,8 @@ This applies everywhere an identifier is spoken: findings, gate reports, progres
 
 **Show the thing, not where it is.** A question about copy carries the text; about a screen or a screenshot, the absolute path the owner can open (and say where it was saved). A question about a consequence ("how should these tests keep proving the price?") first states the change that causes it: where, which screens, what the user sees. Ask the product question before the mechanics question that depends on it.
 
+**Open the round with what it is about.** Every round of questions starts by naming the feature and the ticket (*"ledger export, ticket `02: CSV writer`"*): the owner may have more than one session open, and an option list with no subject gets answered for the wrong one. A node of the map, a stage artifact or a file the question cites gets the same one-phrase resolution an id does.
+
 ## 2. Offer a choice when the answer is a closed set
 
 When you know the options, present them as **options** rather than asking an open question and making the user compose the answer in prose.
@@ -32,10 +34,14 @@ When you know the options, present them as **options** rather than asking an ope
 - **Lead with your recommendation** and say it is one.
 - **Label by outcome, not by mechanism**: "keep the existing component and write only the link service" rather than "option B".
 - **Say what each choice costs.** An option list without consequences is a menu without prices.
+- **The recommendation never widens the request.** An option that builds more than was asked (a second format, a refactor next door, a ticket nobody requested) can be offered, never recommended. The **minimal variant**, the least that answers the request, is always one of the options.
+- **One option per independent choice.** Two decisions that do not depend on each other are two questions, not four options that combine them.
+- **Each option says what it creates and where** (the file, the ticket, the section it adds or edits) **and what deferring it costs**: what gets harder later, or nothing.
+- **Offer the moves that unblock, when they fit:** *amend the contract upstream* (the FDD, the ticket, the plan) when the obstacle is a decision written above this stage, and *start now, the dependent part last* when only part of the work waits on something.
 - **Multi-select when the options combine.** Merges, splits, a set of findings to fix: when the owner may pick several, let them, instead of making them type "2 and 3" into Other.
 - **Free text is right** when the answer is genuinely open: a name, a business rule, a constraint you cannot enumerate. Don't force a real question into fake options.
 
-**When the answer is a question, answer it.** An "Other" that asks something ("what does AC-9 say?") is the owner's turn, not a reply to fold in: answer it in plain words, and stop. Re-ask only after they have read the answer; editing files or rewording the question in the meantime answers nothing.
+**When the answer is a question, answer it.** An "Other" that asks something ("what does AC-9 say?") is the owner's turn, not a reply to fold in: answer it in plain words, and stop. An "Other" that objects to the options (*"none of these, the real problem is…"*) is answered the same way: in text, about the objection, before any option comes back. Re-ask only after they have read the answer; editing files or rewording the question in the meantime answers nothing.
 
 **Group, don't flood.** Twelve findings do not become twelve prompts. Ask about the ones where you genuinely cannot proceed, and report the rest for the user to read.
 
@@ -47,24 +53,27 @@ Look it up before you ask. The code, the docs, `CONTEXT.md`, the config, the too
 
 A question whose answer is in a file you could have read is a question that teaches the user their attention is cheap to you.
 
-**Check the premises before the question.** A question rests on facts ("the URL would exceed the limit", "there is no external API", "the list was not provided"). Before sending it, name each one and verify the cheap ones: measure it, search the repo and this session's `.scratch/` for what was already captured, look for the flag, the enum, the history, before claiming something is absent, and pull a real sample from the integration when one is reachable. Each option says what it rests on: *"the task says X"*, *"inferred from Y"*. A question built on an absence ("I found no Z") offers **investigate further** as one of its options. Something the owner already answered or supplied is a fact: never ask it again.
+**Check the premises before the question.** A question rests on facts ("the URL would exceed the limit", "there is no external API", "the list was not provided"). Before sending it, name each one and verify the cheap ones: measure it, search the repo and this session's `.scratch/` for what was already captured, look for the flag, the enum, the history, before claiming something is absent, and pull a real sample from the integration when one is reachable. The cheap ones come first: the **literal value** (the string, the number, the config key as the file has it, not as remembered), the integration's **raw response**, the **remote state** (`git fetch`, then whether a blocker's pull request merged), the **worktree and branch** of the current directory, and a **size measured** rather than estimated. For a ticket, `node "references/scripts/blocker-state.mjs" <ticket file>` answers the remote state and the worktree at once (§7). The question says where it looked (*"checked `gh pr list` and ticket 01's progress file"*). Each option says what it rests on: *"the task says X"*, *"inferred from Y"*. A question built on an absence ("I found no Z") offers **investigate further** as one of its options. Something the owner already answered or supplied is a fact: never ask it again.
 
 ## 4. Make the default visible: as a marker, not a sentence
 
 When you are proceeding under an assumption rather than blocking, say what you assumed **and what would change if it were wrong**. "Assuming the ledger is append-only; if it isn't, `SI-3` needs a different seam" lets the user correct you in one word. An unstated assumption gets discovered three stages later, which is where this whole suite's expensive mistakes live.
 
-In a document, that sentence is a **marker**, because a marker is something a validator can find and a sentence is not. There are three, and each carries the value, where it came from, and what breaks if it is wrong:
+In a document, that sentence is a **marker**, because a marker is something a validator can find and a sentence is not. There are three, and each carries the value, where it came from, and what breaks if it is wrong. Each is written as a **callout**: a first line that GitHub and Obsidian both render as a colored box, then the marker line, unchanged, which is what validators search for:
 
-| Marker | Means | At the gate |
+| Marker (after its callout line) | Means | At the gate |
 |---|---|---|
-| `> Needs Input: <what> — <why no default is defensible>` | there is no value you can defend; what is written is a placeholder | **blocks**: the document is not approvable until it is answered |
-| `> Assumed: <value> — <no source: what you looked at>. If <other value>, <what changes>.` | you chose a value the sources do not give, and you can defend it | **listed**: the user confirms or corrects, but it does not block |
-| `> Decided: <value> — <who>, <YYYY-MM-DD>` | an `Assumed` the user confirmed or corrected, or a value the owner supplied (their request, an image, a document: `owner (task.md)`) | a **source**: cite it like any other |
+| `> [!CAUTION]` then `> Needs Input: <what> — <why no default is defensible>` | there is no value you can defend; what is written is a placeholder | **blocks**: the document is not approvable until it is answered |
+| `> [!WARNING]` then `> Assumed: <value> — <no source: what you looked at>. If <other value>, <what changes>.` | you chose a value the sources do not give, and you can defend it | **listed**: the user confirms or corrects, but it does not block |
+| `> [!NOTE]` then `> Decided: <value> — <who>, <YYYY-MM-DD>` | an `Assumed` the user confirmed or corrected, or a value the owner supplied (their request, an image, a document: `owner (task.md)`) | a **source**: cite it like any other |
 
 ```
+> [!WARNING]
 > Assumed: retention is 90 days — neither the brief nor the PRD states one.
-  If it is 30, the partitioning in SI-2 changes.
+> If it is 30, the partitioning in SI-2 changes.
 ```
+
+Every line of the marker starts with `> `, so the box holds all of it. A marker written before 0.7.0 has no callout line; it is still a marker, and `$thasmorato-skills:tm-docs-migrate` adds the line.
 
 Pick between the first two by the ceiling below: if a wrong value would change a contract, a schema or a boundary **and** nothing makes one value more defensible than another, it is `Needs Input`. Otherwise it is `Assumed`.
 
@@ -74,9 +83,11 @@ Pick between the first two by the ceiling below: if a wrong value would change a
 
 A gate is not "approve?". It is a **brief**: what was produced, why, what needs attention **with each item resolved**, what happens next if approved, and what to say instead if not, with the path to each artifact. The user reads the brief, never the raw output: not the full document, not the tool's log, not the list of every finding. They should be able to decide without opening anything, and be able to open everything, because you named the paths.
 
+**A gate on this stage's own work has no recommended "approve".** The stage that produced the work is the worst judge of it: offer approve among the options, without the recommendation, and let the brief carry the evidence. **A decision that blocks the next step is asked with the structured-choice tool**, never left as a question at the end of a prose turn, where it reads as a remark and the turn ends without an answer.
+
 **Say exactly what the approval covers.** The count in words and the list ("this approves tickets 01 and 02, and nothing else"), and anything produced beyond what was asked for (a placeholder, a follow-up, an extra file) named on its own line with its own question. An approval that silently covers more than the brief names is not an approval of that part.
 
-**Every `> Assumed:` in what was produced is part of the gate.** List them (value, what it rests on, what changes if wrong) as one grouped question, not one prompt each. On the answer, a confirmed one becomes `> Decided: <value> — owner, <date>`: rewrite the marker in place; that is a label, not a content change. A corrected one becomes `> Decided: <the new value> — owner, <date>` too, but the text around it has to change to match, so it goes through whoever owns the document: where a command says to re-run its agent rather than edit, re-run it with the correction. A marker left as `Assumed` after an approval means the gate was skipped, not that the assumption was accepted.
+**Every `> Assumed:` in what was produced is part of the gate.** List them (value, what it rests on, what changes if wrong) as one grouped question, not one prompt each. On the answer, a confirmed one becomes `> Decided: <value> — owner, <date>`: rewrite the marker in place, its callout line too (`[!WARNING]` becomes `[!NOTE]`); that is a label, not a content change. A `Decided` that amends a document already approved changes the rule **everywhere the document states it**, not only next to the marker: grep the rule's other mentions and rewrite them too. A corrected one becomes `> Decided: <the new value> — owner, <date>` too, but the text around it has to change to match, so it goes through whoever owns the document: where a command says to re-run its agent rather than edit, re-run it with the correction. A marker left as `Assumed` after an approval means the gate was skipped, not that the assumption was accepted.
 
 ## 6. Recognise an assumption by what it is about, not by how sure you feel
 
@@ -95,3 +106,20 @@ Deriving a value and completing one read the same: same fluency, same confidence
 These are the other half of §3. A **fact** (does this already exist, what does this function return) is yours to find, and not finding it is a grounding failure (`GR-N`), never an assumption to mark. A **decision** in one of these classes is what gets marked.
 
 **The ceiling matters as much as the floor.** Mark a value only when a different answer would change the artifact: a contract, a schema, a boundary, a slice. A detector that fires on everything becomes an interrogation, and a user who is asked about everything stops reading the questions. If swapping the assumption changes nothing downstream, write the value and move on.
+
+## 7. Hand off to the next stage
+
+A stage ends by naming what comes next, and that name is the one thing the owner acts on without checking it.
+
+- **Read the disk before naming it.** The next stage is the one the artifacts say is next (the files, their `status:`, the validation's hash), read now, not the one this conversation assumed: another session may have finished a step, and the owner may have edited a file.
+- **A stop report in a ticket's loop opens with its criteria**, before anything else, one row each:
+
+  | AC | State | Blocked by |
+  |---|---|---|
+  | `AC-1` *"the export lists every entry of the month"* | done, tested by `export.test.ts` | none |
+  | `AC-2` *"an empty month exports a header only"* | not started | ticket `01: ledger read model`, in review (PR #7) |
+
+  The state uses the stage's own words (done, in progress, not verified, blocked), and the blocker is resolved like any id.
+- **An open prerequisite is repeated until it is resolved.** A tracker id that does not exist yet, a server nobody started, a document validation still `dirty`: write it to `progress.md` under `## Open prerequisites` (or to the stage's own output when there is no progress file), and list it in every "Next" from then on, with what it blocks. A prerequisite said once, three reports ago, is one nobody remembers.
+- **The blockers come from the script.** Before naming a stage that depends on another ticket, `node "references/scripts/blocker-state.mjs" <ticket file>` prints the branch and whether it is a linked worktree, how far it is from the base, and each blocker's state: `merged`, `in review` (with its pull request), `implemented, no PR`, `in progress`, `not started`. Work can build on a blocker `in review` by stacking on its branch: say so, rather than calling the ticket blocked. When it prints `pr_lookup: unavailable`, the states come from the disk alone; say that too.
+- **A full context is part of the handoff.** When the session carries a ticket's design and plan and the next stage writes code, recommend stopping, `/compact`, then the next command: the implementation needs the room, and the documents are on disk.

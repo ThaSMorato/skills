@@ -5,7 +5,9 @@ their definitions, NO implementation detail, NO decisions (those are ADRs). Add 
 CONTEXT.md is the single owner of definitions: other docs USE the terms, they do not redefine them.
 ASSUMPTIONS: a decision the sources do not give is marked `> Assumed:` (or `> Needs Input:` when no
 value is defensible), per the `asking` skill (§4 the markers, §6 which values count and the ceiling).
-An unmarked one is a validation finding (AS-N).
+An unmarked one is a validation finding (AS-N). Each marker is a callout: the line above it is
+`> [!CAUTION]` for Needs Input, `> [!WARNING]` for Assumed, `> [!NOTE]` for Decided, and every line
+of the marker starts with `> `.
 -->
 
 # Glossary: <project>
@@ -27,7 +29,7 @@ An unmarked one is a validation finding (AS-N).
 > **(a)** by properties × by a concrete example · **(b)** what it is × what it is explicitly not ·
 > **(c)** prose × a formal shape (fields, types, cardinality, allowed states).
 >
-> `/doc-validate` compares the two and reports only the pairs that disagree.
+> `/tm-doc-validate` compares the two and reports only the pairs that disagree.
 
 ### <Term>
 - **Axis:** <a | b | c>

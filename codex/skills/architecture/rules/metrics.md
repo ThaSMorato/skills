@@ -5,7 +5,7 @@
 These are **graph arithmetic over imports**, not judgement calls. Where you can compute, do not estimate: a number is comparable across runs and an opinion is not.
 
 ## 1. Build the component graph
-1. Take the component definitions from `docs/components.md` (or `docs/boundaries.md`'s manifest): each component owns a set of path globs.
+1. Take the component definitions from `docs/architecture/components.md` (or `docs/architecture/boundaries.md`'s manifest): each component owns a set of path globs.
 2. Extract every import/require/use statement in the repo.
 3. Map each import to the component that owns the imported path. Drop intra-component edges and edges to third-party packages; the graph is **between the repo's own components**.
 

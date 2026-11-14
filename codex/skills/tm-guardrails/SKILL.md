@@ -1,6 +1,6 @@
 ---
 name: tm-guardrails
-description: "Install the checks a repository is missing, using the commands it already has: pre-commit hook, CI job, a Claude Code hook that blocks destructive git, and optionally a dependency linter for docs/boundaries.md. Each one is proven to fire."
+description: "Install the checks a repository is missing, using the commands it already has: pre-commit hook, CI job, a Claude Code hook that blocks destructive git, and optionally a dependency linter for docs/architecture/boundaries.md. Each one is proven to fire."
 ---
 
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);

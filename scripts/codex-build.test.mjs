@@ -22,7 +22,7 @@ const skillNames = readdirSync(join(root, 'skills')).filter((name) => !name.incl
 const agentNames = readdirSync(join(root, 'agents')).map((file) => file.replace(/\.md$/, ''))
 const version = JSON.parse(readFileSync(join(root, '.claude-plugin', 'plugin.json'), 'utf8')).version
 
-const entrySkill = (name) => `skills/tm-${name}/SKILL.md`
+const entrySkill = (name) => `skills/${name}/SKILL.md`
 const entryOf = (path) => path.match(/^skills\/([^/]+)\//)?.[1]
 const textFiles = paths.filter((path) => /\.(md|toml|yaml|json)$/.test(path))
 
@@ -52,9 +52,9 @@ test('no Claude Code mechanism survives in the package', () => {
 
 test('every command has a locked entry skill', () => {
   const missing = commandNames.filter((name) => !built.has(entrySkill(name)))
-  const unlocked = [...commandNames, 'setup']
+  const unlocked = [...commandNames, 'tm-setup']
     .filter((name) => built.has(entrySkill(name)))
-    .filter((name) => !/allow_implicit_invocation: false/.test(read(`skills/tm-${name}/agents/openai.yaml`) ?? ''))
+    .filter((name) => !/allow_implicit_invocation: false/.test(read(`skills/${name}/agents/openai.yaml`) ?? ''))
 
   assert.deepEqual({ missing, unlocked }, { missing: [], unlocked: [] })
 })
@@ -71,7 +71,7 @@ test('every knowledge skill is exposed and left open to the model', () => {
 // named SKILL.md would be a second, unlocked way into that stage.
 test('only entries and knowledge skills are named SKILL.md', () => {
   const registered = paths.filter((path) => /(^|\/)skill\.md$/i.test(path))
-  const expected = [...commandNames, 'setup'].map(entrySkill).concat(KNOWLEDGE_SKILLS.map((name) => `skills/${name}/SKILL.md`))
+  const expected = [...commandNames, 'tm-setup'].map(entrySkill).concat(KNOWLEDGE_SKILLS.map((name) => `skills/${name}/SKILL.md`))
 
   assert.deepEqual(registered.sort(), expected.sort())
 })
@@ -172,7 +172,7 @@ test('every agent is generated, and every spawned agent exists', () => {
 
 // Codex parses agent files with deny_unknown_fields: a Claude key such as `tools` breaks the parse.
 test('agent files carry only the keys Codex accepts', () => {
-  const ALLOWED = ['name', 'description', 'developer_instructions']
+  const ALLOWED = ['name', 'description', 'model_reasoning_effort', 'developer_instructions']
   const offending = paths
     .filter((path) => path.startsWith('agents/'))
     .filter((path) => {
@@ -182,6 +182,26 @@ test('agent files carry only the keys Codex accepts', () => {
     })
 
   assert.deepEqual(offending, [])
+})
+
+// The effort is the agent's, so it travels with the agent; the model does not. A model id ages in weeks
+// and this suite is for anyone, so the model comes from the owner's profile or session.
+test('an agent thinks at its own effort in Codex, on the model the owner chose', () => {
+  const effortOf = (agent) => readFileSync(join(root, 'agents', `${agent}.md`), 'utf8').match(/^effort: (\S+)$/m)?.[1]
+  const mismatched = agentNames.filter((agent) => {
+    const toml = read(`agents/tm-${agent}.toml`)
+    return !toml.includes(`\nmodel_reasoning_effort = "${effortOf(agent)}"\n`) || /^model = /m.test(toml)
+  })
+
+  assert.deepEqual(mismatched, [])
+})
+
+// The commands already carry `tm-`; the build adding its own would name every stage twice.
+test('a stage has the same name in both harnesses', () => {
+  const doubled = paths.filter((path) => path.includes('tm-tm-'))
+  const renamed = commandNames.filter((name) => !built.has(`skills/${name}/SKILL.md`))
+
+  assert.deepEqual({ doubled, renamed }, { doubled: [], renamed: [] })
 })
 
 test('an entry that spawns plugin agents checks the setup first', () => {
@@ -197,10 +217,10 @@ test('an entry that spawns plugin agents checks the setup first', () => {
 
 test('stages are named the way Codex reaches them', () => {
   const SLASH = new RegExp(`(?<=[\\s\`(])/(${commandNames.join('|')})(?![\\w/-])`, 'g')
-  const MENTION = /\$thasmorato-skills:tm-([a-z0-9-]+)/g
+  const MENTION = /\$thasmorato-skills:(tm-[a-z0-9-]+)/g
   const slashes = textFiles.flatMap((path) => (read(path).match(SLASH) ?? []).map((found) => `${path}: ${found}`))
   const unknown = textFiles.flatMap((path) =>
-    [...read(path).matchAll(MENTION)].map(([, name]) => name).filter((name) => name !== 'setup' && !commandNames.includes(name)),
+    [...read(path).matchAll(MENTION)].map(([, name]) => name).filter((name) => name !== 'tm-setup' && !commandNames.includes(name)),
   )
 
   assert.deepEqual({ slashes, unknown: [...new Set(unknown)] }, { slashes: [], unknown: [] })

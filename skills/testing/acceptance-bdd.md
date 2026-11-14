@@ -39,7 +39,7 @@ A **scenario test** tells a whole guiding scenario from the PRD (`${CLAUDE_PLUGI
 - **One per guiding scenario**, at the top of the pyramid, few on purpose. Name it by the outcome: `GS-1: Ana closes the monthly expense report`.
 - **It is multi-act by design.** It is the one test allowed to chain Acts, because the sequence is what it verifies. Assert at each step the persona would check before moving on (they saw the filtered list, the total matches), so a red run still names the step that broke.
 - **Through the public interface only**, with the persona's data, not the team's: the ids, names and order a real user would have.
-- **Write it when the scenario's last requirement lands**, the same moment `/acceptance` walks the scenario in the browser; this test keeps that walk from regressing.
+- **Write it when the scenario's last requirement lands**, the same moment `/tm-acceptance` walks the scenario in the browser; this test keeps that walk from regressing.
 - Everything else stays single-act. A test that chains Acts and is not one of these is still the multi-act smell.
 
 ## Test DSLs at the acceptance level

@@ -37,6 +37,7 @@ Mock HTTP where the app meets the network (MSW-style request interception), not 
 - **Why the boundary**: you exercise the actual request/response wiring and can reuse the same mocks across unit, integration, and E2E.
 - **Force hard states**: return `500`, an empty list, or a slow/timed-out response to test error and empty UI states the real backend rarely produces on demand.
 - **Keep it deterministic**: no live network means no latency-driven flakiness.
+- **E2E mode, inside the app runtime.** In an E2E run the test runner is not in the app's process, so the runner's mock server intercepts nothing. Register the same handlers in the app's server process, behind a flag (in Next.js, `instrumentation.ts` starting the node server when `MSW_ENABLED=true` in the node runtime). The flag says which mode the app started in, keeps the suite runnable against the real backend later, and keeps the fake out of production. The session mechanism stays real: the login handler answers exactly what the BFF expects from upstream.
 - **Default handlers plus per-test overrides.** Register the happy-path handlers once for the suite, override one inside the test that needs a different answer (`server.use(...)` returning a `500`), and **reset the handlers after each test** so the override does not leak into the next.
 
 ## Component testing
