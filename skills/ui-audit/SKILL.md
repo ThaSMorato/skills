@@ -1,6 +1,6 @@
 ---
 name: ui-audit
-description: 'Evaluate an existing screen in the running software and list its problems, numbered, with evidence and a severity: a design critique by an isolated agent (usability heuristics scored 0 to 4, cognitive load, personas), a technical pass (design-system drift, responsiveness, integrity, missing states), and the screen under worst-case real data. Reports; never edits. Use before a redesign, or on "audit / critique this screen".'
+description: 'Evaluate an existing screen in the running software and list its problems, numbered, with evidence and a severity: a design critique by an isolated agent (usability heuristics scored 0 to 4, cognitive load, personas), a technical pass (design-system drift, responsiveness, integrity, missing states), and the screen under worst-case real data. Reports; never edits. Use before a redesign.'
 disable-model-invocation: true
 user-invocable: false
 ---

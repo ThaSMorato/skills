@@ -1,6 +1,6 @@
 ---
 name: flow-report
-description: 'Gather what several projects learned about the plugin itself: read their /tm-retro and /tm-session-analyze reports, keep the findings tagged flow, group them by the stage they would change, put the flow measurements side by side per plugin version, and rank what the next version should change. Use when planning the next version of the plugin, on "/tm-flow-report" or "what should the next version fix".'
+description: 'Gather what several projects learned about the plugin itself: read their /tm-retro and /tm-session-analyze reports, keep the findings tagged flow, group them by the stage they would change, put the flow measurements side by side per plugin version, and rank what the next version should change. Use when planning the next version of the plugin.'
 argument-hint: "(none): the reports registry · or <project paths, or a file listing them one per line>"
 disable-model-invocation: true
 user-invocable: false

@@ -1,6 +1,6 @@
 ---
 name: doc-validate
-description: Validate one design document against the one it came from before the human gate (coverage in both directions, contradictions, glossary drift, unanswered non-functional requirements, unfilled required sections) and emit a clean/dirty verdict. Use after /tm-prd, /tm-hld, /tm-decompose or /tm-fdd, on "validate the docs / is the PRD ready / check the HLD against the PRD".
+description: Validate one design document against the one it came from before the human gate (coverage in both directions, contradictions, glossary drift, unanswered non-functional requirements, unfilled required sections) and emit a clean/dirty verdict. Use after /tm-prd, /tm-hld, /tm-decompose or /tm-fdd.
 disable-model-invocation: true
 user-invocable: false
 ---

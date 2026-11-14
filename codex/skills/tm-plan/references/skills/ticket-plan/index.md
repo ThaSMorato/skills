@@ -1,6 +1,6 @@
 ---
 name: ticket-plan
-description: Break one ticket into a validated implementation plan, vertical Step Implementations (SIs) with tests, dependencies, and acceptance criteria, ready for the SI-by-SI implement loop. Use before implementing a ticket, on "plan this ticket / break this into steps", or right after $thasmorato-skills:tm-design.
+description: Break one ticket into a validated implementation plan, vertical Step Implementations (SIs) with tests, dependencies, and acceptance criteria, ready for the SI-by-SI implement loop. Use before implementing a ticket, right after $thasmorato-skills:tm-design.
 disable-model-invocation: true
 user-invocable: false
 ---

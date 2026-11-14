@@ -1,6 +1,6 @@
 ---
 name: walkthrough
-description: 'Teach the owner the change the AI built, before it merges: a short HTML lesson over the ticket''s diff (what it does in domain words, where it lives, the path through the code for each acceptance criterion, what can go wrong) with a recall quiz, so nobody approves code they do not understand. Use after /tm-review or /tm-tidy and before /tm-pr, or on "walk me through this change / explain what you built".'
+description: 'Teach the owner the change the AI built, before it merges: a short HTML lesson over the ticket''s diff (what it does in domain words, where it lives, the path through the code for each acceptance criterion, what can go wrong) with a recall quiz, so nobody approves code they do not understand. Use after /tm-review or /tm-tidy and before /tm-pr.'
 disable-model-invocation: true
 user-invocable: false
 ---
@@ -21,7 +21,7 @@ Teach the code **as it is now**, read from the files, not from what the plan int
 One self-contained HTML file. Call the Skill tool with `thasmorato-skills:visuals` for the views and the HTML conventions, and follow the lesson shape and quiz rules of `${CLAUDE_PLUGIN_ROOT}/skills/teach/lessons.md`. Sections, in order:
 
 1. **What it does**, in two or three sentences of domain words: the behavior a user now gets, by acceptance criterion.
-2. **Where it lives**: a file or component tree diff sketch of what was added and changed, and the main flow as a call tree. One picture, the whole change.
+2. **Where it lives**: `node "${CLAUDE_PLUGIN_ROOT}/scripts/change-map.mjs" --base <fixed-point> --head HEAD` prints every changed file exactly once (with its kind, and whether it is only skimmed: a lockfile, a generated file, a pure rename), the links between the changed files, and a reading order, each file after the files it depends on. Group the files by role (contract, domain, adapters and callers, entry or UI, tests), draw only the script's links as a Mermaid `flowchart`, and number the reading order. Then the main flow as a call tree. The reading map is the whole change; the call tree is the path through it.
 3. **The path, per criterion.** For each acceptance criterion, the route through the code that delivers it: entry point, the calls that matter, where the decision is made, where the data is stored or sent. Short excerpts with `file:line`, never whole files. Next to each, **why it is shaped this way** when the node map or an ADR says so (*"the price is computed in `Pricing`, not in the handler: node map, Open decisions, D-2"*).
 4. **What can go wrong**: the edge cases the code handles and where; the review findings accepted instead of fixed, and why; everything in the **Not verified** list.
 5. **Quiz**: three to five questions a person can only answer by understanding the change, not by remembering words from the lesson: *"An order with an expired coupon reaches checkout. Which module decides the total, and what does it ignore?"*. Every option the same length and form; feedback that cites the `file:line` that answers it.

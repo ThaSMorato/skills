@@ -35,3 +35,4 @@ Read a rule file **only when its row matches**. Every finding carries **the rule
 | Wide transaction | a transaction that spans remote calls, user think-time, or a loop over many rows | `rules/wide-transaction.md` |
 | Compensation inside one database | steps in one database, each in its own transaction, undone by a compensating delete | `rules/same-database-compensation.md` |
 | Cache invalidation | a write path that changes data a cache holds, with no invalidation or expiry | `rules/cache-invalidation.md` |
+| Foreign key with no action | a new foreign key with no `ON DELETE` / `ON UPDATE`, or a cascade nobody chose | `rules/foreign-key-action.md` |

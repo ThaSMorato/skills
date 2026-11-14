@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: 'Answer one design question with throwaway code before it is designed for real: a clickable HTML demo for a state model or business logic, or switchable variants of a UI on its real page. Use when a decision in $thasmorato-skills:tm-design, $thasmorato-skills:tm-fdd or an interview cannot be settled on paper ("does this state machine hold up", "what should this screen look like"), or on "prototype / spike / try it out". Not for building the feature: that is $thasmorato-skills:tm-design → $thasmorato-skills:tm-plan → $thasmorato-skills:tm-implement, test-first.'
+description: 'Answer one design question with throwaway code before it is designed for real: a clickable HTML demo for a state model or business logic, or switchable variants of a UI on its real page. Use when a decision in $thasmorato-skills:tm-design, $thasmorato-skills:tm-fdd or an interview cannot be settled on paper ("does this state machine hold up", "what should this screen look like"). Not for building the feature: that is $thasmorato-skills:tm-design → $thasmorato-skills:tm-plan → $thasmorato-skills:tm-implement, test-first.'
 disable-model-invocation: true
 user-invocable: false
 ---

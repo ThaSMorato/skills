@@ -1,6 +1,6 @@
 ---
 name: trim
-description: 'After a ticket is implemented and before it is reviewed, make its change smaller without changing behavior; read every file the diff created or modified against the plan and the acceptance criteria, and propose structural cuts with evidence: incidental hunks nothing asked for, code that re-implements what the repo already has, new files or layers the change did not need, a behavior spread over more files than it needs. Applies only the cuts the user picks, one at a time, with the tests untouched and green. Use after $thasmorato-skills:tm-implement and before $thasmorato-skills:tm-review, on "trim / shrink / make this diff smaller / more targeted".'
+description: 'After a ticket is implemented and before it is reviewed, make its change smaller without changing behavior; read every file the diff created or modified against the plan and the acceptance criteria, and propose structural cuts with evidence: incidental hunks nothing asked for, code that re-implements what the repo already has, new files or layers the change did not need, a behavior spread over more files than it needs. Applies only the cuts the user picks, one at a time, with the tests untouched and green. Use after $thasmorato-skills:tm-implement and before $thasmorato-skills:tm-review.'
 disable-model-invocation: true
 user-invocable: false
 ---

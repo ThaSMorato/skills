@@ -1,6 +1,6 @@
 ---
 name: retro
-description: Look back over a finished epic, feature or cycle by reading what the work left on disk (plans, validations, progress notes, review findings) and record what it taught about the process and about the product. Use after a set of tickets completes, at the end of a cycle, or on "retro / look back / what did we learn".
+description: Look back over a finished epic, feature or cycle by reading what the work left on disk (plans, validations, progress notes, review findings) and record what it taught about the process and about the product. Use after a set of tickets completes, or at the end of a cycle.
 disable-model-invocation: true
 user-invocable: false
 ---
@@ -43,7 +43,7 @@ The counts come from fields each stage writes for exactly this purpose: the tick
 
 **Did the project's instructions reach the stage.** Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/instructions-sentinel.mjs" check --root . <artifact>...` over the artifacts in scope. It reads each one's `instructions` field against the sentinels in the root `CLAUDE.md` and `AGENTS.md`: `followed` (and which file), `none` (the stage ran without the project's instructions), `stale` (a value no file gives now: an old token, or one made up) or `unknown` (the artifact predates the field). Report them per `harness`. A harness whose artifacts show `none` ran its stages without the project's rules: read its misses with that in mind instead of blaming the model.
 
-**The cost of each ticket.** Sum the minutes and tool calls per ticket from the **Cost by stage** rows of the `docs/meta-retro/` reports in scope: a row belongs to the ticket its invocation names (`tm-implement 02-export`), and a row that names no ticket stays a session total. Beside it, the `model` and `effort` the ticket's `progress.md` records, and `ci_red_after_open` from its pull request record (`prs/<NN>-<slug>.record.md`; `pending` is said as pending). A ticket no analyzed session covers has its cost `not measured`.
+**The cost of each ticket.** Sum the minutes and tool calls per ticket from the **Cost by stage** rows of the `docs/meta-retro/` reports in scope: a row belongs to the ticket its invocation names (`tm-implement 02-export`), and a row that names no ticket stays a session total. Beside it, the `model` and `effort` the ticket's `progress.md` records, and `ci_red_after_open` from its pull request record (`prs/<NN>-<slug>.record.md`; `pending` is said as pending), with the `review_attention` the same record gave: a `light` pull request that reached CI broken is the attention rule missing something. A ticket no analyzed session covers has its cost `not measured`.
 
 Then read the **Measurements** section of the most recent earlier `docs/retro/*.md` and put its totals beside this one's, version by version. One retro is a snapshot; the comparison, on the same version or across versions, is what shows whether a change to the flow did anything.
 

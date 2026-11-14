@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Execute a validated plan one Step Implementation at a time, test-first (red → green → refactor), run the SI's tests, then STOP and wait before the next SI. Use on "implement / build / execute the plan", "implement SI-N", or after /tm-plan-validate reports clean.
+description: Execute a validated plan one Step Implementation at a time, test-first (red → green → refactor), run the SI's tests, then STOP and wait before the next SI. Use after /tm-plan-validate reports clean.
 disable-model-invocation: true
 user-invocable: false
 ---

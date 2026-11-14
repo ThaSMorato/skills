@@ -28,6 +28,8 @@ Use the one that makes the point with the fewest elements; combine two when one 
 
 Keep only the calls, files, props, states and boundaries the current question needs. A view that shows everything shows nothing.
 
+A reading map is the exception: it shows every changed file, once, because a reviewer has to know that nothing was left out. `scripts/change-map.mjs` draws its list, its links and its reading order (`/tm-pr-map`, `/tm-pr`, `/tm-walkthrough`).
+
 ## Rules
 - **Place each view next to the sentence it supports.** A diagram in an appendix is a diagram nobody connects to the claim.
 - **If a diagram needs a paragraph to be understood, redraw it.** The paragraph is the sign that the view is the wrong one or carries too much.

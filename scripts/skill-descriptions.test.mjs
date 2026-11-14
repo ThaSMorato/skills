@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -12,6 +12,19 @@ import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const descriptionOf = (skill) => readFileSync(join(root, 'skills', skill, 'SKILL.md'), 'utf8').match(/^description: (.+)$/m)?.[1] ?? ''
+
+// A stage skill is closed to the model (`disable-model-invocation: true`): only its command reaches it,
+// so a phrase in its description that would trigger it never fires and only misleads whoever reads it.
+const stageSkills = readdirSync(join(root, 'skills'), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
+  .filter((skill) => /^disable-model-invocation: true$/m.test(readFileSync(join(root, 'skills', skill, 'SKILL.md'), 'utf8')))
+
+test('no stage skill description carries a trigger phrase that can never fire', () => {
+  const withTrigger = stageSkills.filter((skill) => /\bon "/.test(descriptionOf(skill)))
+
+  assert.deepEqual(withTrigger, [])
+})
 
 for (const skill of ['architecture', 'clean-code', 'data-access', 'security']) {
   test(`the ${skill} description opens with its trigger and asks to be loaded on a familiar problem`, () => {

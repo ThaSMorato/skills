@@ -437,6 +437,37 @@ Built as a stack, one PR per wave (#60 to #79), released together.
   `data-access`, and still 0/3 on `security`, which it answers alone. Every near miss stayed quiet.
   The anatomy's description rule records how; `scripts/skill-descriptions.test.mjs` keeps it.
 
+### Wave L1: reading a pull request
+
+- **`/tm-pr-map <pull request | base..head>`**, new: the map a reviewer needs before reading a line,
+  for any pull request, a colleague's included. What it changes and why; the review attention
+  (`close`, `normal` or `light`) from the door, the blast radius and the guidelines' `Risk paths`;
+  every changed file once, grouped by role (contract, domain, adapters and callers, entry or UI,
+  tests), with the skimmed ones marked; the links between the changed files as a Mermaid flowchart;
+  a numbered reading order; what CI proved (`gh pr checks`) and what nothing proves; and when a full
+  review pays. It fetches the pull request as a ref and reads the files from git: it never checks the
+  branch out, posts, comments or approves. An HTML page, plus a record (`kind: pr-map`) written into
+  `.scratch/pr-maps/` only when the repo ignores `.scratch/`.
+- **`scripts/change-map.mjs`** draws the list, the links and the order from two refs: each file once
+  with its kind (lockfiles, generated files and pure renames only skimmed), the import lines that
+  name another changed file (JavaScript and TypeScript, Python, Go, and the import forms of most
+  languages), and each file after the files it depends on. `change-map.test.mjs` fails when a
+  changed file is left off the map.
+- **`/tm-pr` and `/tm-walkthrough` carry the same reading map**: the PR body in a `<details>` under
+  the summary, the lesson as its "Where it lives". `visuals` makes it the one view that shows every
+  file.
+- **The PR body.** One sentence of why before what changed. The merge danger gains the review
+  attention (a one-way door, or a radius of `data`, `privacy`, `security` or `money`, is always
+  `close`; never a reason to skip the owner's review), recorded with the door and the radius in the
+  `.record.md` so `/tm-retro` sets it beside `ci_red_after_open`. A change that starts storing what a
+  user writes is a one-way door. A pull request already open gets its body updated with
+  `gh pr edit`, never a second one; a defect seen while writing the body is listed as `found while
+  writing, not reviewed`.
+- **`data-access`** gains the foreign key with no referential action (a delete that starts failing,
+  or a cascade nobody chose).
+- **Descriptions with no dead triggers.** The 29 stage skills closed to the model lose the
+  `on "..."` phrases that could never fire; `skill-descriptions.test.mjs` keeps them out.
+
 **Migration.** Type the new command names (the table below); move the documents with `/tm-docs-migrate`.
 
 | Before | Now |

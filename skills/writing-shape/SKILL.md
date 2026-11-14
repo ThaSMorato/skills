@@ -1,6 +1,6 @@
 ---
 name: writing-shape
-description: 'Writing, exploit phase: shape a pile of raw material into an argued article, paragraph by paragraph, from a chosen opening, pushing back on every block that does not earn its place. Use with a fragments file, notes or a transcript, on "/tm-writing-shape" or "make this into an article".'
+description: 'Writing, exploit phase: shape a pile of raw material into an argued article, paragraph by paragraph, from a chosen opening, pushing back on every block that does not earn its place. Use with a fragments file, notes or a transcript.'
 argument-hint: "<path to the raw material> [path to the article]"
 disable-model-invocation: true
 user-invocable: false
