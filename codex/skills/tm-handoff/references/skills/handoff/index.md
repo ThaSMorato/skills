@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: 'Write what only this conversation knows into a handoff file, so a fresh session can continue the work without re-asking: the direction, the decisions said only in chat, what is in flight, and the next step, pointing at the artifacts for everything else. Use before ending a long session, on "handoff / continue in a new session / pass this to another agent".'
+description: 'Write what only this conversation knows into a handoff file, so a fresh session can continue the work without re-asking: the direction, the decisions said only in chat, what is in flight, and the next step, pointing at the artifacts for everything else. Use before ending a long session.'
 argument-hint: "[what the next session will do]"
 disable-model-invocation: true
 user-invocable: false

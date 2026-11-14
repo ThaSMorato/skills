@@ -1,6 +1,6 @@
 ---
 name: generate-stack-guide
-description: Generate a per-technology engineering guide skill (conventions, patterns and gotchas for one language or framework) as a router with lazy-loaded rules. Use on "generate a stack guide / guide for <tech>", or when the guidelines router marks a technology as missing. User-invoked.
+description: Generate a per-technology engineering guide skill (conventions, patterns and gotchas for one language or framework) as a router with lazy-loaded rules. Use when the guidelines router marks a technology as missing. User-invoked.
 disable-model-invocation: true
 user-invocable: false
 ---

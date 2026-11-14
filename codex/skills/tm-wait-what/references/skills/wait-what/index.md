@@ -1,6 +1,6 @@
 ---
 name: wait-what
-description: 'The last answer did not land: re-pitch it with a little context, in simplified technical English (ASD-STE100), in the glossary''s words. Typed by the user on "/tm-wait-what".'
+description: 'The last answer did not land: re-pitch it with a little context, in simplified technical English (ASD-STE100), in the glossary''s words. Typed by the user as $thasmorato-skills:tm-wait-what.'
 disable-model-invocation: true
 user-invocable: false
 ---

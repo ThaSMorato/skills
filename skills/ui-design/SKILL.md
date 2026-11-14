@@ -1,6 +1,6 @@
 ---
 name: ui-design
-description: 'Design a new screen or redesign an existing one before it is built: classify what is already true (redesign, an established visual world, or none), write the screen brief in rounds, propose three genuinely different directions as HTML with captures, refine the chosen one through every state and width with an isolated critic, and write the screen spec that /tm-design builds from and /tm-acceptance checks against. Use when a screen has no design to copy, or on "design / redesign this screen".'
+description: 'Design a new screen or redesign an existing one before it is built: classify what is already true (redesign, an established visual world, or none), write the screen brief in rounds, propose three genuinely different directions as HTML with captures, refine the chosen one through every state and width with an isolated critic, and write the screen spec that /tm-design builds from and /tm-acceptance checks against. Use when a screen has no design to copy.'
 disable-model-invocation: true
 user-invocable: false
 ---

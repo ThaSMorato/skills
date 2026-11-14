@@ -1,6 +1,6 @@
 ---
 name: steering-validate
-description: 'Validate the instructions an agent follows in this repo against each other: CLAUDE.md and AGENTS.md at every level, the path-scoped rules, the stack and testing guides, the guidelines router. Finds contradictions, references to nothing, duplicates that will drift, and an instruction another one overrides in silence, and emits a clean/dirty verdict. Use after /tm-guidelines or /tm-generate-stack-guide, when an instruction did not hold, or on "check CLAUDE.md / do my rules contradict each other".'
+description: 'Validate the instructions an agent follows in this repo against each other: CLAUDE.md and AGENTS.md at every level, the path-scoped rules, the stack and testing guides, the guidelines router. Finds contradictions, references to nothing, duplicates that will drift, and an instruction another one overrides in silence, and emits a clean/dirty verdict. Use after /tm-guidelines or /tm-generate-stack-guide, or when an instruction did not hold.'
 disable-model-invocation: true
 user-invocable: false
 ---

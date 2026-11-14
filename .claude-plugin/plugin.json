@@ -48,6 +48,7 @@
     "./skills/acceptance",
     "./skills/walkthrough",
     "./skills/pr",
+    "./skills/pr-map",
     "./skills/visuals",
     "./skills/teach",
     "./skills/wait-what",

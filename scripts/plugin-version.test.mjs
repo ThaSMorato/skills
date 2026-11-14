@@ -32,6 +32,7 @@ const producers = {
   pr: 'skills/pr/SKILL.md',
   'steering-validation': 'skills/steering-validate/SKILL.md',
   'decision-map': 'templates/decision-map.md',
+  'pr-map': 'skills/pr-map/SKILL.md',
 }
 
 for (const [kind, path] of Object.entries(producers)) {

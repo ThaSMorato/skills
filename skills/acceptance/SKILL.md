@@ -1,6 +1,6 @@
 ---
 name: acceptance
-description: 'Check every acceptance criterion and every part of the owner''s request against the running software before the work is called done: each one checked by an agent that did not write the code: in the browser on the real controls (with a screenshot), by an HTTP request, by a command, by a measurement, by a named test only, or not verified with the reason, recorded in one index the pull request reads. Use after the last /tm-review fix and /tm-tidy, before /tm-walkthrough and /tm-pr, or on "test it in the browser / were all the ACs checked".'
+description: 'Check every acceptance criterion and every part of the owner''s request against the running software before the work is called done: each one checked by an agent that did not write the code: in the browser on the real controls (with a screenshot), by an HTTP request, by a command, by a measurement, by a named test only, or not verified with the reason, recorded in one index the pull request reads. Use after the last /tm-review fix and /tm-tidy, before /tm-walkthrough and /tm-pr.'
 disable-model-invocation: true
 user-invocable: false
 ---

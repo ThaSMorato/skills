@@ -1,6 +1,6 @@
 ---
 name: pr
-description: 'Write the body of a pull request from what the work left on disk: a summary drawn as the smallest view that explains the change, evidence that it works (before and after), and how dangerous the merge is (one-way or two-way door, blast radius). Use after $thasmorato-skills:tm-tidy (or $thasmorato-skills:tm-review) when a ticket is ready to merge, and on "write the PR / PR description / open a PR".'
+description: 'Write the body of a pull request from what the work left on disk: a summary drawn as the smallest view that explains the change, evidence that it works (before and after), and how dangerous the merge is (one-way or two-way door, blast radius). Use after $thasmorato-skills:tm-tidy (or $thasmorato-skills:tm-review) when a ticket is ready to merge.'
 disable-model-invocation: true
 user-invocable: false
 ---
@@ -37,9 +37,16 @@ Use the glossary's terms (`CONTEXT.md`), and resolve every id as the `asking` sk
 
 ```markdown
 ## Summary
+<one sentence of why: the problem or the acceptance criterion this change answers, in domain words>
 <one or two sentences: what the change does, in domain words>
 
 <the smallest view that makes it clear>
+
+<details><summary>Reading map</summary>
+
+<every changed file once by role, the links between them, the reading order>
+
+</details>
 
 ## Evidence
 - **Before:** <failing test, error output, or screenshot>
@@ -50,12 +57,13 @@ Use the glossary's terms (`CONTEXT.md`), and resolve every id as the `asking` sk
 ## Merge danger
 **Door:** <one-way | two-way>: <why>
 **Blast radius:** <one word>: <who or what is affected if it is wrong>
+**Review attention:** <close | normal | light>: <why>
 
 ## Decisions that change the request
 <each decision this work recorded that changes what was asked: the decision, who made it, and what the request said before; `none` when there is none>
 
 ## Review
-<lenses run; findings fixed; findings accepted, each with why; pre-existing ones noted as not this PR's>
+<lenses run; findings fixed; findings accepted, each with why; pre-existing ones noted as not this PR's; anything found while writing, not reviewed>
 
 Closes <ticket id: title> (`<NN>-<slug>`)
 ```
@@ -63,9 +71,16 @@ Closes <ticket id: title> (`<NN>-<slug>`)
 The `Closes` line carries the slug: it is how `blocker-state.mjs` finds this pull request from a ticket that waits on it.
 
 ### Summary
+Open with one sentence of why: the problem or the acceptance criterion the change answers, in domain words, before what it does. A reviewer who knows the why reads the diff as an answer; one who does not reads it as a puzzle.
+
 Read the `visuals` skill (`references/skills/visuals/index.md`) and pick the smallest view: a diff sketch of the call tree, the component tree or the file tree when the point is what moved; pseudocode when it is logic; a sequence diagram when it is an interaction. One view usually; two when one cannot carry it. Name the structural commits (from `trim/` and `tidy/`) apart from the behavioral ones, so the reviewer can read them separately.
 
 **Done when** someone who has not read the ticket can say what the change does from the summary alone.
+
+### Reading map
+`node "references/scripts/change-map.mjs" --base <fixed-point> --head HEAD` prints every changed file exactly once (with its kind, and whether it is only skimmed: a lockfile, a generated file, a pure rename), the links between the changed files, and a reading order, each file after the files it depends on. Group the files by role (contract, domain, adapters and callers, entry or UI, tests), draw only the script's links as a Mermaid `flowchart`, and number the reading order. It goes inside the `<details>`: the summary stays short, and the reviewer who wants the whole shape opens it.
+
+**Done when** every file of the script's list is in the map once and every link drawn is one the script printed.
 
 ### Evidence
 Concrete proof, as a before and an after, strongest first:
@@ -78,13 +93,18 @@ Everything in the plan's **Not verified** list, and every diagnosis seam gap, go
 **Done when** every acceptance criterion has a line of evidence or is named as not verified.
 
 ### Merge danger
-- **Door.** A **two-way door** can be walked back by reverting the commit: code behind an interface, a refactor, a feature behind a flag. A **one-way door** cannot: a schema migration that drops or rewrites data, a deleted record or file, a published API, event or message format others consume, a call to an external system that acts (sends, charges, deletes), a public URL or identifier. Say which, and which part makes it so.
-- **Blast radius.** One word (`local`, `module`, `service`, `consumers`, `users`, `data`), then what breaks if the change is wrong: the consumers of a changed contract, the screens a layout change reaches (and their mobile and dark variants), the jobs that read a changed table. Consider every way it can spread, not only the intended one.
+- **Door.** A **two-way door** can be walked back by reverting the commit: code behind an interface, a refactor, a feature behind a flag. A **one-way door** cannot: a schema migration that drops or rewrites data, a deleted record or file, a published API, event or message format others consume, a call to an external system that acts (sends, charges, deletes), a public URL or identifier, and a change that starts storing what a user writes (a new table, column or upload): once users write into it, reverting deletes what they wrote or leaves it orphaned. Say which, and which part makes it so.
+- **Blast radius.** One word (`local`, `module`, `service`, `consumers`, `users`, `data`, `privacy`, `security`, `money`), then what breaks if the change is wrong: the consumers of a changed contract, the screens a layout change reaches (and their mobile and dark variants), the jobs that read a changed table. Consider every way it can spread, not only the intended one.
 
-**Done when** the door names its reason and the blast radius names who is affected.
+- **Review attention.** Where the owner's review spends its minutes. A one-way door is always `close`, and so is a radius of `data`, `privacy`, `security` or `money`. A two-way door with a `local` or `module` radius is `light`; anything else is `normal`. A changed file under a `Risk paths` entry of the guidelines raises it one level. The attention orders the review; it is never a reason to skip the owner's review.
+
+**Done when** the door names its reason, the blast radius names who is affected, and the attention follows from both.
 
 ### Decisions that change the request
 Required, even when it says `none`. Read the `> Decided` markers in the ticket, the node map, the plan and the documents the diff edits, and list each one that changes what the request asked for (a criterion dropped or rewritten, a behavior the owner chose differently, a `supersedes`). A reviewer who approves the diff approves the request as changed, and should see the change rather than infer it.
+
+### Review
+The lenses `$thasmorato-skills:tm-review` ran and what became of their findings. A defect you see while writing the body, that no lens raised, goes here as `found while writing, not reviewed`, with where it is, and names `$thasmorato-skills:tm-review` for it: never fix it here, never leave it out.
 
 ## Output
 Write the body to `.scratch/<feature-slug>/prs/<NN>-<slug>.md`, one file per ticket. The body is the pull request's text, so it carries no frontmatter; beside it, write `.scratch/<feature-slug>/prs/<NN>-<slug>.record.md`:
@@ -98,13 +118,16 @@ harness: <claude-code | codex>
 instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]
 slug: <NN>-<slug>
 url: <the pull request's URL, or `not opened`>
+door: <one-way | two-way>
+blast_radius: <one word>
+review_attention: <close | normal | light>
 ci_red_after_open: pending | true | false
 ---
 ```
 
 `ci_red_after_open` stays `pending` until CI has run on the opened pull request. On a later run of this stage (the owner runs it again after CI), read the first CI run that started after the pull request opened (`gh pr view <url> --json createdAt,headRefName`, then `gh run list --branch <head> --json createdAt,conclusion,status`): `true` when it failed, `false` when it passed, still `pending` while it runs. It is how `$thasmorato-skills:tm-retro` measures what reached CI broken.
 
- Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/prs/<NN>-<slug>.md`).
+ Opening the pull request is outward-facing and the owner's call: show the body, and only when the owner asks, open it with the platform's CLI from that file (for GitHub, `gh pr create --body-file .scratch/<feature-slug>/prs/<NN>-<slug>.md`). When `gh pr view` finds a pull request already open for the branch, offer to update its body instead (`gh pr edit <number> --body-file .scratch/<feature-slug>/prs/<NN>-<slug>.md`), never a second pull request.
 
 ## Postflight
 After the body is written, and again after the pull request opens:

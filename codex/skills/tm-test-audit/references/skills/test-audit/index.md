@@ -1,6 +1,6 @@
 ---
 name: test-audit
-description: 'Audit a whole test suite, or one path of it, for what it lacks and what it carries for nothing: behavior no test reaches, error paths nobody drives, feature rules whose test does not exist, against tests that duplicate another, test the framework or the implementation, or cover code that is gone; with mutation testing over the suite at the report level. Three levels: report, confirm (remove one at a time, with the owner), full (also write the missing tests, test-first). Use on "audit the tests", "is this suite any good", "which tests are missing / useless".'
+description: 'Audit a whole test suite, or one path of it, for what it lacks and what it carries for nothing: behavior no test reaches, error paths nobody drives, feature rules whose test does not exist, against tests that duplicate another, test the framework or the implementation, or cover code that is gone; with mutation testing over the suite at the report level. Three levels: report, confirm (remove one at a time, with the owner), full (also write the missing tests, test-first). Use when a suite is suspected of missing or useless tests.'
 disable-model-invocation: true
 user-invocable: false
 ---

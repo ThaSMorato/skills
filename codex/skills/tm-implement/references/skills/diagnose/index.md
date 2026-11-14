@@ -1,6 +1,6 @@
 ---
 name: diagnose
-description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, on "debug / why does this fail / find the bug / this broke", for a performance regression, and inside $thasmorato-skills:tm-implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
+description: 'Find the cause of a bug or unexpected behavior by evidence, not by guessing, and pin it with tests before anything is fixed. Use when something fails and the cause is not known, for a performance regression, and inside $thasmorato-skills:tm-implement once a fix attempt has failed twice. Not for designing a new feature (design) or for a bug whose cause is already known (go straight to tdd pin-then-flip).'
 disable-model-invocation: true
 user-invocable: false
 ---

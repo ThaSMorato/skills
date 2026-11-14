@@ -1,6 +1,6 @@
 ---
 name: tickets-validate
-description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Runs as the postflight of /tm-tickets, or on "validate the tickets".
+description: Validate a feature's set of tickets before the human gate (coverage against the FDD, tickets that trace to nothing, tickets too big or too small, several tickets slicing one seam, blocking cycles, and sizes that are not comparable) and emit a clean/dirty verdict. Named by the postflight of /tm-tickets.
 disable-model-invocation: true
 user-invocable: false
 ---

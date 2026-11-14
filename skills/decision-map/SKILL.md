@@ -1,6 +1,6 @@
 ---
 name: decision-map
-description: 'Keep the map of decisions an effort needs before its PRD, when the effort does not fit one session and its path is not yet clear: the destination, what is decided and where it lives, what is open and which stage resolves it, and the fog. One decision per session. Use on "decision map / what do we still need to decide / where does this effort stand", or when /tm-flow offers it.'
+description: 'Keep the map of decisions an effort needs before its PRD, when the effort does not fit one session and its path is not yet clear: the destination, what is decided and where it lives, what is open and which stage resolves it, and the fog. One decision per session. Use when /tm-flow offers it, or when an effort needs it.'
 disable-model-invocation: true
 user-invocable: false
 ---

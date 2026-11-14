@@ -1,6 +1,6 @@
 ---
 name: plan-validate
-description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates $thasmorato-skills:tm-implement. Use after $thasmorato-skills:tm-plan, on "validate the plan / is this plan ready".
+description: Validate an implementation plan before coding; check the SIs against the ticket, the node map and the FDD for gaps, ambiguity, dependency cycles, oversized slices, and untestable acceptance criteria, and emit a clean/dirty verdict that gates $thasmorato-skills:tm-implement. Use after $thasmorato-skills:tm-plan.
 disable-model-invocation: true
 user-invocable: false
 ---

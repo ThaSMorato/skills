@@ -1,6 +1,6 @@
 ---
 name: tidy
-description: 'Make working code simple by Kent Beck''s four rules of Simple Design, as structural changes only: either the code a reviewed ticket changed, or a path of existing code that has tests covering it. Use after /tm-review, or on "tidy / simplify / clean up this ticket", "clean up this file / this area", "leave it cleaner". Not for behavior changes or bug fixes; use tdd for those.'
+description: 'Make working code simple by Kent Beck''s four rules of Simple Design, as structural changes only: either the code a reviewed ticket changed, or a path of existing code that has tests covering it. Use after /tm-review, or on a path of tested code. Not for behavior changes or bug fixes; use tdd for those.'
 disable-model-invocation: true
 user-invocable: false
 ---
