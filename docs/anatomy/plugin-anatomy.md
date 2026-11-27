@@ -18,7 +18,7 @@
 └── docs/                  # authoring/usage guides (not runtime)
 ```
 
-`commands/` and `agents/` are **auto-discovered** from their directories; `skills/` are **listed explicitly** in `plugin.json → skills` (relative paths to each folder containing a `SKILL.md`). A skill folder that is not listed **does not load, and nothing says so**; `scripts/plugin-manifest.test.mjs` fails when the two disagree, so run `node --test scripts/*.test.mjs` before shipping a new skill.
+`commands/` and `agents/` are **auto-discovered** from their directories; `skills/` are **listed explicitly** in `plugin.json → skills` (relative paths to each folder containing a `SKILL.md`). A skill folder that is not listed **does not load, and nothing says so**; `scripts/plugin-manifest.test.mjs` fails when the two disagree, and the pre-commit hook and the CI job run it with the rest of the suite (`npm test`).
 
 ## Manifests
 

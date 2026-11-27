@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.7.1
+
+Fixes from two reviews of 0.7.0 in use: a retro of its tool use and token cost over 65 Claude Code
+sessions and 356 Codex threads, and a review of the `retro` stage against its own rules. Built as a
+stack, one PR per wave.
+
+### Wave A: the guardrail
+
+- **The repository runs its own tests.** The retro's environment lens calls a repository with no
+  pre-commit hook and no CI job a finding, and this one had neither: 482 tests ran only when someone
+  remembered the command. `npm test` is now the one test script; `.githooks/pre-commit` runs it
+  before every commit (turned on once per clone with `git config core.hooksPath .githooks`), and
+  `.github/workflows/test.yml` runs it on every pull request and on `main`. The script uses the
+  `dot` reporter: a green run is a few lines, a red one prints each failure.
+  `scripts/repo-guardrail.test.mjs` fails when the hook or the job stops running the script.
+
 ## 0.7.0
 
 Built as a stack, one PR per wave (#60 to #79), released together.

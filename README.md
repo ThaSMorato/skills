@@ -108,7 +108,7 @@ Every command carries the `tm-` prefix (since 0.7.0), so no Claude Code built-in
 | `templates/` | Canonical skeleton per artifact (generation scaffold + handoff anchor + gate checklist) |
 | `codex/` | The Codex package, **generated** from the folders above by `scripts/build-codex.mjs`; never edited by hand. `.agents/plugins/marketplace.json` points Codex at it |
 | `adapters/codex/` | The little that exists only in Codex: the `tm-setup` skill |
-| `scripts/` | The few things that have to be code: the session-transcript extractor behind `/tm-session-analyze`, the Codex build and its agent installer, and the plugin's own consistency tests. Node standard library only, no dependencies; run the tests with `node --test scripts/*.test.mjs` |
+| `scripts/` | The few things that have to be code: the session-transcript extractor behind `/tm-session-analyze`, the Codex build and its agent installer, and the plugin's own consistency tests. Node standard library only, no dependencies. `npm test` runs the tests; so do the pre-commit hook, turned on once per clone with `git config core.hooksPath .githooks`, and the CI job on every pull request |
 | `docs/anatomy/` | Authoring standards (skill/command/agent/plugin anatomy) |
 
 ## Design principles
