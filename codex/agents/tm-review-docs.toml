@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/review-docs.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/review-docs.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-docs"
 description = "Review a diff for documentation it made false (a README step, an env var, a CLI flag, a feature's living FDD or the glossary describing behavior the changed code no longer matches). One of the $thasmorato-skills:tm-review fan-out. Reports findings; never edits."
 model_reasoning_effort = "high"

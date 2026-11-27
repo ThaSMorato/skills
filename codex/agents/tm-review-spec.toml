@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/review-spec.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/review-spec.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-spec"
 description = "Review a diff against what it was supposed to do (the plan's SIs, the ticket's acceptance criteria, the FDD's contracts) for missing criteria and scope drift. One of the $thasmorato-skills:tm-review fan-out. Reports findings; never edits."
 model_reasoning_effort = "high"

@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/component-mapper.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/component-mapper.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-component-mapper"
 description = "Turn the HLD's \"Main components\" section into the system component map, the named parts of the system, one level below the containers, that every FDD then maps its feature onto. Delegate when the user runs $thasmorato-skills:tm-components, after $thasmorato-skills:tm-hld."
 model_reasoning_effort = "high"

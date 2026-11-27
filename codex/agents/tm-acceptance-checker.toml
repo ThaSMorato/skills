@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/acceptance-checker.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/acceptance-checker.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-acceptance-checker"
 description = "Check a ticket's numbered acceptance items against the running software (in the browser on the real controls, by an HTTP request, by a command, by a measurement, or by a named test) and return one verdict per item with its evidence and how it was checked. Dispatched by $thasmorato-skills:tm-acceptance, so the verdicts come from a context that did not write the code. Checks and reports; never edits the code."
 model_reasoning_effort = "high"

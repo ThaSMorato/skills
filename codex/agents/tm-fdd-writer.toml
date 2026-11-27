@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/fdd-writer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/fdd-writer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-fdd-writer"
 description = "Write or amend the Feature Design Doc of one feature from the HLD, with this effort's acceptance criteria for it. Delegate after $thasmorato-skills:tm-hld has produced docs/architecture/hld.md, when the user runs $thasmorato-skills:tm-fdd <feature> or asks to spec a feature."
 model_reasoning_effort = "high"

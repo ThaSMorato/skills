@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/decomposer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/decomposer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-decomposer"
 description = "Cut the product into epics and features, ordered by risk, with cross-feature dependencies, coverage in the omission direction, and stable ids. Delegate when the user runs $thasmorato-skills:tm-decompose, after $thasmorato-skills:tm-components."
 model_reasoning_effort = "high"

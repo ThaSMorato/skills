@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/reconciler.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/reconciler.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-reconciler"
 description = "Re-measure the dependency graph and reconcile it with the component map and boundary contract (what drifted since the last measurement, by whom, and which amendments the owning stages should make) and detect latent components by measured evidence. Delegate when the user runs $thasmorato-skills:tm-reconcile. Measures and reports; never edits the documents it reconciles, never touches code."
 model_reasoning_effort = "high"

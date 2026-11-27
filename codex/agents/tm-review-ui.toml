@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/review-ui.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/review-ui.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-ui"
 description = "Review a diff that touches user-interface code for defects a mouse-and-fast-network author does not see (keyboard access, focus, accessible names, contrast, missing loading/empty/error states, errors found too late, signals that contradict the risk of an action, layout shift, slow interactions). One of the $thasmorato-skills:tm-review fan-out, run only when the diff touches UI. Reports findings; never edits."
 model_reasoning_effort = "high"

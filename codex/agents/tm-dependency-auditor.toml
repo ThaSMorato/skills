@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/dependency-auditor.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/dependency-auditor.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-dependency-auditor"
 description = "Audit an existing project's dependencies (outdated/deprecated/vulnerable/unmaintained libraries and licenses). Analysis only, never upgrades. Delegate when the user runs $thasmorato-skills:tm-audit-deps."
 model_reasoning_effort = "high"

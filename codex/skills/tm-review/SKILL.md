@@ -14,7 +14,7 @@ description: "Review the diff since a fixed point across narrow lenses in parall
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
-> is not `0.7.0`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
+> is not `0.7.1`, stop and tell the owner to run `$thasmorato-skills:tm-setup`, then this stage again.
 > Plugin subagents carry the `tm-` prefix: their `agent_type` is `tm-` followed by the agent's name.
 
 **Argument** (the text after the skill name): <fixed point: commit/branch/tag, e.g. main or HEAD~5> [--worktree <manifest>] [--second-opinion]
@@ -74,7 +74,7 @@ Write the merged findings to `.scratch/<feature-slug>/reviews/<NN>-<slug>.md` (w
 ```markdown
 ---
 kind: review
-plugin_version: 0.7.0
+plugin_version: 0.7.1
 model: <the model id your harness reports for this session; `unknown` when it does not say>
 harness: <claude-code | codex>
 instructions: [<every value the project instructions already in your context ask this field to list, exactly as written; [] when none does; never open a file to find one>]

@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/guideline-generator.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/guideline-generator.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-guideline-generator"
 description = "Generate the project's engineering guidelines as a ROUTER (an index of stack guides, rules, documents and commands, with lazy loading). Delegate when the user runs $thasmorato-skills:tm-guidelines."
 model_reasoning_effort = "medium"

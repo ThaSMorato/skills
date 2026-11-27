@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/adr-generator.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/adr-generator.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-adr-generator"
 description = "Write a formal ADR (MADR) from a confirmed Potential ADR. Delegate when the user runs $thasmorato-skills:tm-adr-generate <potential> or confirms a Potential ADR to formalize."
 model_reasoning_effort = "medium"
