@@ -79,6 +79,34 @@ describe('resolveTranscript', () => {
     assert.equal(result, newer)
   })
 
+  const writeTurns = (dir, id, mtimeSeconds, entries) => {
+    const path = writeSession(dir, id, mtimeSeconds)
+    writeFileSync(path, entries.map((entry) => JSON.stringify(entry)).join('\n'))
+    utimesSync(path, mtimeSeconds, mtimeSeconds)
+    return path
+  }
+  const invocation = (name, args = '') => makeEntry({ message: { content: `<command-name>/${name}</command-name><command-args>${args}</command-args>` } })
+
+  test('with no id, a session that only ran the analyzer is passed over: after /clear it is the one asking', () => {
+    const worked = writeTurns('-Users-me-app', 'worked', 1_000, [invocation('tm-implement', '02-export'), makeAssistant([{ type: 'text', text: 'done' }])])
+    writeTurns('-Users-me-app', 'asking', 2_000, [invocation('thasmorato-skills:tm-session-analyze')])
+
+    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), worked)
+  })
+
+  test('with no id, a session that ran the analyzer after its own work is still the one read', () => {
+    writeTurns('-Users-me-app', 'older', 1_000, [invocation('tm-plan', '02-export')])
+    const sameSession = writeTurns('-Users-me-app', 'same', 2_000, [invocation('tm-implement', '02-export'), invocation('tm-session-analyze')])
+
+    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), sameSession)
+  })
+
+  test('when the analyzer is all any session ran, it says there is no working session to read', () => {
+    writeTurns('-Users-me-app', 'asking', 2_000, [invocation('tm-session-analyze')])
+
+    assert.throws(() => resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), /No working session.*only ran \/tm-session-analyze/s)
+  })
+
   test('picks the named session when an id is given', () => {
     const older = writeSession('-Users-me-app', 'older', 1_000)
     writeSession('-Users-me-app', 'newer', 2_000)

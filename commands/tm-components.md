@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Call the Agent tool with `component-mapper` to write `docs/architecture/components.md` from `docs/architecture/hld.md`.
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 This is the step that closes a real gap in the chain: the HLD is **required** to list components, and until now nothing turned that list into a shared map, so each FDD invented its own carve-up and nobody owned the cross-feature picture.
 

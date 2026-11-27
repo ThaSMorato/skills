@@ -19,7 +19,7 @@ Only `flow` findings are read (`${CLAUDE_PLUGIN_ROOT}/skills/retro/levels.md`): 
 
 The measurements come from each project's artifacts, summed by a script: `node "${CLAUDE_PLUGIN_ROOT}/scripts/retro-measure.mjs" --root <project>` prints, over every finished ticket of the project, the totals per plugin version, per author and per gear, the reviews by author and reviewer, each lens's precision, the sums per artifact and **Instructions, per harness**. Agents read only the prose findings.
 
-With more than three projects, call the Agent tool once per project, all in a single message, each told to return exactly the items above with their file and section; the synthesis stays here.
+With more than three projects, call the Agent tool with an exploration agent once per project, all in a single message, each told to return exactly the items above with their file and section; the synthesis stays here.
 
 **Done when** every project is accounted for: its reports read, or named as having none.
 

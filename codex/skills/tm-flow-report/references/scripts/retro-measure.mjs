@@ -26,7 +26,7 @@ export const MEASURED_FIELDS = {
   trim: ['before', 'after', 'proposed', 'applied', 'reverted', 'unrequested'],
   tidy: ['proposed', 'applied', 'reverted', 'review_findings'],
   walkthrough: ['questions', 'missed', 'unclear_after'],
-  acceptance: ['items', 'by_verdict', 'failed', 'friction', 'mocked'],
+  acceptance: ['items', 'by_verdict', 'failed', 'friction', 'mocked', 'source_read'],
   pr_record: ['review_attention', 'ci_red_after_open'],
   tickets_validation: ['tickets', 'seams', 'dispersion', 'fired'],
   diagnoses: ['status', 'hypotheses', 'probes', 'levels'],

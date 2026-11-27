@@ -72,7 +72,7 @@ test('a single decision is triaged by its own command', () => {
 })
 
 test('the three markers are callouts', () => {
-  const asking = read('skills/asking/SKILL.md')
+  const asking = read('skills/asking/markers.md')
 
   assert.deepEqual(
     ['> [!CAUTION]', '> [!WARNING]', '> [!NOTE]'].filter((callout) => !asking.includes(callout)),

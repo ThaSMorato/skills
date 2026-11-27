@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/tidy/SKILL.md` and follow it for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 Preflight, by mode:
 - **Ticket** (`<slug> <fixed point>`): the ticket has a review file under `.scratch/<feature-slug>/reviews/`. Tidying before the review mixes two questions, *is it right?* and *is it simple?*, and the answer to the first can change the code the second would tidy. If there is no review, point at `/tm-review` and stop.
@@ -14,4 +14,4 @@ Preflight, by mode:
 
 Show the proposals grouped by rule, in rule order, each with its evidence. Ask which to apply. Then apply them one at a time, reporting per tidying: applied, or reverted and why. Then review the tidying diff alone with `review-spec` and `review-quality`, and revert any tidying a kept finding points at.
 
-Postflight (ticket mode): the tidyings applied and reverted, and the next steps: the optional `/tm-walkthrough <slug> <fixed point>`, then `/tm-pr <slug> <fixed point>` for the pull request body.
+Postflight (ticket mode): the tidyings applied and reverted, and the next steps: `/clear`, then the optional `/tm-walkthrough <slug> <fixed point>`, then `/tm-pr <slug> <fixed point>` for the pull request body.

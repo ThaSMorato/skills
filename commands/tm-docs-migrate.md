@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Move this project's documents to the living layout: the system's state in `docs/product/`, `docs/architecture/` and one folder per feature in `docs/features/<feature>/`; what belongs to one effort in `.scratch/<effort>/`. Effort slug, if given: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 **Temporary.** This command exists for projects written before 0.7.0, and leaves the plugin once none is left. It moves and splits files, moves the sections that now belong to an effort, and rewrites references to them; it does not rewrite what a document says.
 
@@ -28,6 +28,7 @@ The working tree is clean (`git status --porcelain` prints nothing), so the migr
 | `docs/ui/<screen>.md` and `docs/ui/<screen>/` | `docs/features/<feature>/ui/<screen>.md` and `…/ui/<screen>/` |
 | the PRD's `First milestone`, `Acceptance criteria` and its RFs' milestone tags | `.scratch/<effort>/scope.md` |
 | each FDD's `Acceptance criteria` | `.scratch/<effort>/criteria/<feature>.md` |
+| the PRD's `## JSON contract` section | `docs/product/prd.contract.json`: the block as it is, and the section removed |
 
 `CONTEXT.md`, `docs/adr/` and the rest of `docs/` stay where they are.
 

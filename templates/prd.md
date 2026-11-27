@@ -3,8 +3,8 @@ TEMPLATE: prd (Product Requirements Document)
 Filled by the PRD agent from the requirements-brief. States WHAT and WHY, never HOW
 (architecture/implementation belong to the HLD/FDD). PRUNE + RENUMBER the optional sections that
 don't apply; (required) sections always stay. Product level uses less detail than feature level.
-AI practices: NUMBER the requirements (RF-001, RNF-001) for stable references; optionally add a JSON
-twin (same info, English keys, empty fields omitted) for deterministic consumption.
+AI practices: NUMBER the requirements (RF-001, RNF-001) for stable references. The JSON contract (the
+same information as a structured object) is prd.contract.json, beside this file, never a section of it.
 LIVING: the product PRD (docs/product/prd.md) describes the whole system as it is, and every effort
 amends it in place (${CLAUDE_PLUGIN_ROOT}/skills/doc-validate/living.md). What belongs to one effort
 (the requirements it adds, changes or removes, its first milestone, its product acceptance criteria)
@@ -29,6 +29,7 @@ feature: <F-id, only at level feature>
 ## Metadata (required)
 - **ID:** <PRD-xxx>
 - **Sources:** <requirements-brief, interview, attached docs>
+- **Contract:** [`prd.contract.json`](prd.contract.json): the requirements as a structured object, which `/tm-doc-validate` compares with this document
 
 > **`level`** and **`status`** (the frontmatter) are read by other stages, not decoration. **Level** sets the depth of this
 > document (`product` states outcomes, `feature` states behavior) and it propagates from the brief.
@@ -96,19 +97,3 @@ feature: <F-id, only at level feature>
 > where its scope went. The id is never reused.
 - ~~**RF-00n**~~: <what it was> · <why, and where its scope went>
 
-## JSON contract (required)
-> The same information as a structured object (English keys, empty fields omitted), for pipelines and
-> validation. It is a **serialization**, and that is its value: it catches structural omission: a
-> requirement present in prose and absent here, or the reverse. It does **not** catch a wrong meaning,
-> because the same wrong meaning serializes cleanly; that is what the two-axis definitions in
-> `CONTEXT.md` are for. `/tm-doc-validate` compares prose against this block.
->
-> Give each load-bearing element the formal shape the prose cannot carry: **type**, **cardinality**,
-> **allowed values**, **required or not**. Restating the sentence in JSON adds cost and detects nothing.
->
-> The scenario links are structure, so they belong here: each requirement's `scenarioStep` (`GS-1.3`)
-> and `edge`; each RNF's `protects`. That is what lets `/tm-doc-validate` walk scenario coverage
-> mechanically. The milestone is the effort's, in `scope.md`'s own JSON contract.
-```json
-{}
-```

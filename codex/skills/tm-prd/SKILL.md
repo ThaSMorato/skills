@@ -6,6 +6,13 @@ description: "Write the PRD from the requirements brief (.scratch/<effort>/brief
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
+>
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` the longest
+> `yield_time_ms` the command could need (a test suite takes minutes: ask for them, never for one second), and call
+> `wait_agent` once for an agent. When a wait returns before the command ends, wait again with the same long value:
+> a second long wait, never a run of short polls.
+> Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
+> finishes, not while it runs.
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
@@ -17,7 +24,7 @@ description: "Write the PRD from the requirements brief (.scratch/<effort>/brief
 
 Call the `spawn_agent` tool with `agent_type = "tm-prd-writer"` to write or amend the PRD, `docs/product/prd.md`, and to write this effort's scope, `.scratch/<effort>/scope.md`, from the effort's requirements brief (`.scratch/<effort>/brief.md`, or the path given). The PRD is living (the whole system); the scope holds what is this effort's alone: the requirements it adds, changes or removes, its first milestone and its product acceptance criteria. When the brief says `Level: feature`, the PRD is the feature's, `docs/features/<feature>/prd.md`: pass the agent the feature, the index row the brief's title matches, and ask which when none or several match. The effort is the slug `$thasmorato-skills:tm-interview` gave this work, the folder under `.scratch/`: take it from the argument, or use the only `.scratch/*/brief.md` there is; with more than one and no argument, ask which.
 
-> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask.
 
 If the brief doesn't exist, tell the user to run `$thasmorato-skills:tm-interview` first instead of delegating.
 

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/test-audit/SKILL.md` and follow it for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 Preflight: run the scope's suite once through the `test-runner` agent. A red suite cannot be audited (a removal or an addition cannot be shown to keep it green): report what fails and stop. Name the level that will run, and that only `confirm` and `full` change files.
 

@@ -6,6 +6,13 @@ description: "Drive the Doc-Dev flow; scan where the project stands, report what
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
+>
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` the longest
+> `yield_time_ms` the command could need (a test suite takes minutes: ask for them, never for one second), and call
+> `wait_agent` once for an agent. When a wait returns before the command ends, wait again with the same long value:
+> a second long wait, never a run of short polls.
+> Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
+> finishes, not while it runs.
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
@@ -17,7 +24,7 @@ description: "Drive the Doc-Dev flow; scan where the project stands, report what
 
 You are the **coordinator**. Scope: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask.
 
 ## Always scan first, before running anything
 The first thing this command does, every time, is **read the disk and say where the project stands**. Not "start at stage one": scan, report, then propose. This is the most common way the command is used ("where am I, what's next, what's waiting on me") and running a stage before answering that is how work gets redone.
@@ -89,7 +96,7 @@ The worktree column is kept whenever the repository has more than one worktree, 
 
 **An open decision map.** For each `decision-map.md` with `status: open`, run `node "references/scripts/decision-map.mjs" frontier --effort <effort>` and report its frontier: the open decisions nothing open still blocks, each with its type and the stage that resolves it, and what is still open elsewhere. While the map is open, the effort's next stage is the one its `Next step` names, or `$thasmorato-skills:tm-decision-map <effort>` to record what came back.
 
-Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop. The command is the last line, written out with its arguments and "you run it"; it is never one of the options of a question, because an answer to a question is not the owner starting a stage. When the owner's last turn is a command typed as plain text that did not load, say in one line to send it again with the `/` first.
+Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop. The command is the last line, written out with its arguments and "you run it", after `/new` (*"you run: `/new`, then `$thasmorato-skills:tm-plan 02-export`"*): the stages hand off through files, so the next one starts in a fresh context and loses nothing. It is never one of the options of a question, because an answer to a question is not the owner starting a stage. When the owner's last turn is a command typed as plain text that did not load, say in one line to send it again with the `/` first.
 
 **This command never runs a stage.** Every command and every stage skill is closed to model invocation, so only the owner starts a stage, and each stage ends at its own postflight. A coordinator that ran the next stage itself is how a plan got validated in a loop until it passed, with nobody reading it in between.
 
@@ -157,7 +164,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
     - **Screens:** a ticket that builds a new screen with nothing to copy (no Figma, prototype, image or existing page) runs `$thasmorato-skills:tm-ui-design <screen>` before `$thasmorato-skills:tm-design`; a redesign runs `$thasmorato-skills:tm-ui-audit <screen>` first, then `$thasmorato-skills:tm-ui-design`. A screen with a spec in its feature's `ui/` goes straight to `$thasmorato-skills:tm-design`.
     - **Bugs:** a bug whose cause is not known starts at `$thasmorato-skills:tm-diagnose`, never at a fix. It ends with the cause and the pinned and flipped tests; an obvious fix is then made test-first (Direct), anything larger becomes a `Type: bugfix` ticket whose Source is the diagnosis, through `$thasmorato-skills:tm-design` → `$thasmorato-skills:tm-plan` in the Small gear. **The gear is chosen after `$thasmorato-skills:tm-diagnose`, never before:** until the cause is known, nobody knows whether the fix is one line or a redesign.
 14. When an epic or a cycle finishes: `$thasmorato-skills:tm-retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught: process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
-15. When a working session ends, whether a whole flow driven through several `/compact`s or a long stretch of work: `$thasmorato-skills:tm-session-analyze`. `$thasmorato-skills:tm-retro` reads the artifacts; this reads what only the conversation holds (the owner correcting, rejecting, repeating), across every compaction segment, and tags each finding with its level: `flow` (improve the plugin), `repo-skill` (a skill or guide here) or `repo-code` (this repo's code). It owns the environment lens: what got in the way (navigation, tool economy, missing information, instructions that did not hold).
+15. When a working session ends: `$thasmorato-skills:tm-session-analyze`, after `/new` like any stage (with no id it reads the session before the one it runs in). A flow whose stages each ended on `/new` is one session per stage, so run it for each session worth reading, by id. `$thasmorato-skills:tm-retro` reads the artifacts; this reads what only the conversation holds (the owner correcting, rejecting, repeating), across every compaction segment, and tags each finding with its level: `flow` (improve the plugin), `repo-skill` (a skill or guide here) or `repo-code` (this repo's code). It owns the environment lens: what got in the way (navigation, tool economy, missing information, instructions that did not hold).
 16. When planning the plugin's next version: `$thasmorato-skills:tm-flow-report <projects>` reads the `flow`-tagged findings of several projects' retros and meta-retros, groups them by the stage they would change, and puts the measurements side by side per `plugin_version`.
 
 ## Parallelism: fan out on reads, stay serial on writes

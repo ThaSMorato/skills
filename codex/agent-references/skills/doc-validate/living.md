@@ -11,7 +11,11 @@ Two kinds of document never mix:
 What belongs to one effort lives in `.scratch/<effort>/` and dies with it: the brief, the decomposition, the scope (`scope.md`: the milestone, the requirements this effort adds, changes or removes, the product criteria) and the acceptance criteria per feature (`criteria/<feature>.md`).
 
 ## For the writer
-**New or existing.** When the target does not exist, fill the template and write the whole file. When it exists, it is living: read it whole, then amend it **section by section with `Edit`**. Rewriting an existing file with `Write` erases what earlier efforts decided, and nothing downstream notices.
+**New or existing.** When the target does not exist, fill the template and write the whole file. When it exists, it is living: amend it **section by section with `Edit`**. Rewriting an existing file with `Write` erases what earlier efforts decided, and nothing downstream notices.
+
+**Read the outline, then the sections this effort touches.** List the document's headings with their line numbers (`grep -n '^#'`), and read, by line range, every section the effort's sources touch. A living document grows with every effort; read whole on every amendment, it costs more each time until one read no longer returns it. Before adding an element, an id or a term, search the document for it (`grep -n`), so the amendment extends what is there and writes nothing twice.
+
+**Within its budget.** After amending, run `node "<plugin root>/agent-references/scripts/doc-size.mjs" <the file>`. A section it reports is over what one read returns: split it, or move its detail to the document that owns it (a feature's detail into that feature's `fdd.md`, a serialization into its own file beside the document). `$thasmorato-skills:tm-doc-validate` fails the same check as `DS`.
 
 **Amend only what this effort changes.** Each edit traces to the effort's source (the brief, the scope, the decomposition, the HLD). A section the effort does not touch stays byte for byte. Content marked `> Decided:` is the owner's: change it only when the source changes that very decision.
 
@@ -35,4 +39,4 @@ On a branch, compare the amended document with its version on the base branch (`
 - a changed decision with no ADR, no Potential ADR and no line in the writer's return that reported it;
 - text about the change instead of the system ("new", "previously", "added in").
 
-The ceiling: a reworded sentence that says the same thing is not a finding.
+The ceiling: a reworded sentence that says the same thing is not a finding. Neither is a `## JSON contract` section that left the PRD and stands, with the same content, in `prd.contract.json` beside it: it was moved, not removed.

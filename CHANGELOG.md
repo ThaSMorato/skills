@@ -111,6 +111,80 @@ stack, one PR per wave.
     anatomy's "no stray bullets, no empty sections" item became a test over every skill, command
     and agent; the tests of the skill check its headings and rules instead of loose substrings.
 
+### Wave D: re-sending the context less
+
+The retro of 0.7.0 in use measured 11.4B input tokens in Claude Code and 6.1B in Codex against 72M of
+output: nearly all of the cost is a context of 200k tokens and more, sent again on every call.
+
+- **Codex waits once.** In Codex, `tm-implement` waited on tests with `write_stdin` and a
+  `yield_time_ms` of one second, again and again, and sent a progress message every few calls: about
+  30% of Codex's input. Every generated Codex skill now opens by saying a command or an agent is
+  waited on once, with a `yield_time_ms` of minutes or one `wait_agent`, and that progress is sent when
+  a step finishes. `/tm-implement` carries the rule for both harnesses: one wait per command, progress
+  once per SI.
+- **A living document is read in part.** The writers were told to read a living document whole before
+  amending it; a PRD had reached 1.33 MB and an HLD 878 KB, and 45 reads failed on size. `living.md`
+  now says: read the outline, then the sections the effort touches, and search for an id or a term
+  before adding it. `scripts/doc-size.mjs` reports a living document over 100 KB or a section over
+  25 KB, `/tm-doc-validate` fails it as the new `DS` category, and the writer runs it after amending.
+- **The PRD's JSON contract is a file beside it,** `prd.contract.json`. It was 40% of the largest PRD,
+  read by every stage that opened the document and needed only by `/tm-doc-validate`. `prd-writer`
+  moves an inline `## JSON contract` section out on its next amendment. The scope keeps its own
+  inline: it dies with the effort.
+- **A stage hands off into a fresh context.** A whole ticket ran in one session, at 204k tokens of
+  context per turn. The stages already hand off through files, so the closing line of a stage is now
+  `/clear`, then the next command (`/new` in Codex); `/compact` remains for a stage continuing
+  itself, the next SI of `/tm-implement`. The rule is in the core of the `asking` skill and in the
+  command anatomy, and `/tm-flow` and `/tm-implement` say it.
+- **`asking` is a short core.** It was 16 KB, loaded by every command. Sections 1 to 3 stay (resolve
+  the id, offer a choice, ask only decisions); the markers and assumption classes (`markers.md`), the
+  gate (`gates.md`) and the handoff (`handoff.md`) are read on the branch that needs them, under the
+  section numbers other files cite. The 37 commands that restated the skill beside the call that
+  loads it now only load it.
+- **The acceptance checker is sent to the screen.** At 13M tokens a run it was the most expensive
+  subagent, and most of its shell calls were `sed` and `grep`, which suggests it read the source to
+  find the screen. `/tm-acceptance` passes each item's route and control; the checker finds controls
+  from the browser's snapshot, and returns a **Source read** line naming any source file it opened
+  and why, so the next retro can settle it.
+- **The review resolves the standard once.** `/tm-review` writes the list of changed files beside the
+  diff and resolves the stack guides from the router's table once; `review-standards` reads the
+  guides it is handed and the rules a changed hunk touches, where it read the router and every guide
+  itself. `review-data` runs only when the diff touches data access, and a diff that changes
+  documentation only runs `review-spec`, `review-standards` and `review-docs`.
+- **Every fan-out names its agent.** `/tm-flow-report` dispatched "the Agent tool once per project"
+  and left the type to the model. It names an exploration agent now.
+
+- **From the review (#85):**
+  - *The standards lens stopped reading the non-negotiables.* Once `/tm-review` passed it the stack
+    guides, it opened the router only when none matched, and the router's Non-negotiables belong to
+    no guide. It reads that section on every review. Its ADR pre-filter searched by feature and
+    path, which an ADR never carries: it now takes every ADR whose `scope` is `repo-wide` or the
+    layer of the change, then the ones that list the feature.
+  - *`/clear` dropped what only the chat held.* A preference or a decision no artifact records is
+    written down first, or the closing line names `/tm-handoff` before `/clear`. Six closing lines
+    that named the next command without `/clear` (one recommended `/compact`) now name it.
+  - *After `/clear`, `/tm-session-analyze` read the session it was started in.* With no id it takes
+    the most recent session that did any work and passes over one that only ran the analyzer, in
+    both harnesses. The command says a flow ended on `/clear` is one session per stage.
+  - *Only two lenses have a surface.* "A lens runs when the diff touches its surface" read as a
+    rule for all nine; every lens but `review-ui` and `review-data` runs on every diff. The data
+    surface is decided from the hunks, since a file's name hides a `fetch` in a component, and
+    "documentation only" is defined: prose a person reads, never a prompt, a template, a config or
+    a contract a lens judges against.
+  - *Moving the contract out of an old PRD read as a regression.* The writer reports the move, the
+    validator accepts a section that stands whole in `prd.contract.json`, an old PRD is compared
+    with the section it still holds, and `/tm-docs-migrate` moves it.
+  - *The checker's Source read reached nobody.* It is kept in the acceptance record (`source_read`
+    and a section), and `retro-measure.mjs` sums it.
+  - *`doc-size.mjs` closed a code block on any fence.* A block closes on a fence of the character
+    that opened it, at least as long, indented or not, so a heading inside a nested block is not a
+    section. A test with accented text now tells bytes from characters, and `--root` with no
+    directory says so.
+  - In Codex, a wait that returns before the command ends is followed by another long one. Local
+    rollouts show waits honoured up to 60 seconds and none asked for beyond that, so "minutes" in
+    one wait is unproven.
+  - The tests of this wave check that every `asking` §N citation lands in the file that holds §N.
+
 ## 0.7.0
 
 Built as a stack, one PR per wave (#60 to #79), released together.

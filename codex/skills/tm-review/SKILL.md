@@ -6,6 +6,13 @@ description: "Review the diff since a fixed point across narrow lenses in parall
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
+>
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` the longest
+> `yield_time_ms` the command could need (a test suite takes minutes: ask for them, never for one second), and call
+> `wait_agent` once for an agent. When a wait returns before the command ends, wait again with the same long value:
+> a second long wait, never a run of short polls.
+> Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
+> finishes, not while it runs.
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
@@ -17,7 +24,7 @@ description: "Review the diff since a fixed point across narrow lenses in parall
 
 Review the diff between `HEAD` and the fixed point: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask.
 
 ## 1. Preflight
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty: a bad ref or an empty diff fails here, not inside six agents.
@@ -29,8 +36,10 @@ If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-ba
 ## 2. Compute the diff once
 Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list; in worktree mode, write the manifest's diff from the preflight instead, and say there are no commits yet. Every reviewer receives **the path to that file**, not the instruction to compute it: nine agents each running the same diff is nine times the cost for one result, and the same work redone by every lens.
 
+Beside it, write the list of changed files (`git diff --name-only <fixed-point>...HEAD`; in worktree mode, the manifest) and resolve the standard once: read the routing table of `docs/guidelines.md` and keep the stack guides whose file patterns match a changed file. Every lens receives the file list; `review-standards` receives the guides by path, and reads the router's Non-negotiables itself, which no guide carries. A lens that resolves them itself reads the router and every guide again on each review.
+
 ## 3. Fan out
-Call the `spawn_agent` tool once per lens below, all **at once** (at most 6 running together; wait for every one) so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the fixed point, and the artifacts its own definition names.
+Call the `spawn_agent` tool once per lens below, all **at once** (at most 6 running together; wait for every one) so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the list of changed files, the fixed point, and the artifacts its own definition names.
 
 | Agent | Lens |
 |---|---|
@@ -40,7 +49,7 @@ Call the `spawn_agent` tool once per lens below, all **at once** (at most 6 runn
 | `review-spec` | plan / ticket / FDD: all of it, and only it |
 | `review-standards` | the repo's own guidelines, stack guides, ADRs, glossary |
 | `review-architecture` | boundary contract, cycles, detail leaking into policy |
-| `review-data` | what each line costs against real data: N+1, queries in loops, indexes, unbounded reads, transactions, caches |
+| `review-data` | **only when the diff touches code that reads or writes a database, a cache, a queue or a remote service, or a migration**: what each line costs against real data: N+1, queries in loops, indexes, unbounded reads, transactions, caches |
 | `review-docs` | documentation the diff made false: README steps, env vars, flags, described behavior |
 | `review-ui` | **only when the diff touches UI code**: keyboard, focus, accessible names, contrast, loading/empty/error states, layout shift, slow interactions |
 
@@ -48,7 +57,7 @@ Call the `spawn_agent` tool once per lens below, all **at once** (at most 6 runn
 
 If `$thasmorato-skills:tm-trim` ran, `.scratch/<feature-slug>/trim/<NN>-<slug>.md` has an **Unrequested behavior** section: hand it to `review-spec` as leads (behavior in the diff that no AC asked for, which trimming could not cut because cutting it changes behavior). Leads, not findings: the lens confirms each against the plan and the ticket like anything else.
 
-When `docs/architecture/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the `spawn_agent` tool with `agent_type = "tm-review-ui"` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
+When `docs/architecture/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. **Two lenses have a surface, and run only when the diff touches it; every other lens in the table runs on every diff.** A diff that changed no test file is when `review-tests` matters most. Call the `spawn_agent` tool with `agent_type = "tm-review-ui"` only when the diff touches UI code (components, templates, styles, client-side views), decided from the list of changed files. Call it with `review-data` only when the diff touches data access as the table says, decided from the hunks, not the file names: search the diff file for what data access looks like in this codebase (a query, an ORM or repository call, a cache or queue client, `fetch` or an HTTP client, a migration), because a `Button.tsx` that gains a `fetch` in a loop is data access under a UI name. When neither settles it, the lens runs. A diff that is **documentation only** runs `review-spec`, `review-standards` and `review-docs`, and no other: every changed file is prose a person reads (a README, a changelog, a guide under `docs/`), and none is read by an agent or a program (a skill, a command or agent prompt, a template, `CLAUDE.md`, `AGENTS.md`, a config) or is a contract a lens judges against (`docs/architecture/boundaries.md`, `docs/architecture/components.md`, an ADR). One file outside that, or one in doubt, and the full set runs. Record each lens left out in `lenses_skipped` with the reason. Every skip is said out loud.
 
 **Pass `docs/declined.md` to every lens** when it exists: proposals the owner already turned down, with the scope and the reason. A lens does not raise a finding that matches a `declined` entry (same kind, a scope the entry covers) unless the entry's **Revisit when** has happened; if it believes that has happened, it raises the finding and cites the entry.
 
@@ -113,7 +122,7 @@ Every finding leaves this phase with a line in the review file, under its verdic
 
 **A finding the user declines with a reason that will still hold next time** (a deliberate trade-off, a convention the lens did not know) is offered for `docs/declined.md`, in the format of `references/templates/declined.md`, so the next review does not raise it again. A passing reason is not recorded, and a reason that is really an architectural decision is an ADR (`$thasmorato-skills:tm-adr-generate`). Nothing here edits code: persisting the findings and their verdicts is a record of what was reported, not a change to the work.
 
-Once the findings the user chose are fixed, rewrite the ticket's `progress.md` frontmatter for the ticket as it now stands (`unverified`, `failed_deliverables` and `status`, as `$thasmorato-skills:tm-implement` defines them), so `$thasmorato-skills:tm-retro` measures the fixed work and not the work before review. Then the next steps are the optional `$thasmorato-skills:tm-tidy <slug> <fixed point>`, then `$thasmorato-skills:tm-acceptance <slug>` (after the last production change), then `$thasmorato-skills:tm-pr <slug> <fixed point>` for the pull request body.
+Once the findings the user chose are fixed, rewrite the ticket's `progress.md` frontmatter for the ticket as it now stands (`unverified`, `failed_deliverables` and `status`, as `$thasmorato-skills:tm-implement` defines them), so `$thasmorato-skills:tm-retro` measures the fixed work and not the work before review. Then the next steps are `/new`, then the optional `$thasmorato-skills:tm-tidy <slug> <fixed point>`, then `$thasmorato-skills:tm-acceptance <slug>` (after the last production change), then `$thasmorato-skills:tm-pr <slug> <fixed point>` for the pull request body.
 
 ## 8. Second opinion
 Once the review is closed, decide whether the change gets a second review in the other harness. A model reviewing its own work shares its blind spots; the harness that did not write the change does not. The author is the `harness` of the ticket's `progress.md`; this review's harness is the one you run in.

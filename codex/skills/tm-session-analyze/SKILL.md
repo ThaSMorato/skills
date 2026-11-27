@@ -6,6 +6,13 @@ description: "Read a whole working session (every compaction segment) and report
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
+>
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` the longest
+> `yield_time_ms` the command could need (a test suite takes minutes: ask for them, never for one second), and call
+> `wait_agent` once for an agent. When a wait returns before the command ends, wait again with the same long value:
+> a second long wait, never a run of short polls.
+> Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
+> finishes, not while it runs.
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
@@ -17,9 +24,9 @@ description: "Read a whole working session (every compaction segment) and report
 
 Analyze the working session: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask.
 
-`$thasmorato-skills:tm-retro` reads what the work left on disk. This reads what only the conversation holds: the owner correcting a proposal, rejecting a question, asking for the same thing twice. `/compact` shrinks the context window but deletes nothing from the transcript, so the whole session, every segment, is still there to read.
+`$thasmorato-skills:tm-retro` reads what the work left on disk. This reads what only the conversation holds: the owner correcting a proposal, rejecting a question, asking for the same thing twice. `/compact` shrinks the context window but deletes nothing from the transcript, so the whole session, every segment, is still there to read. `/new` is different: it starts a new session with a transcript of its own, so a flow whose stages each ended on `/new` is one session per stage, and each run of this command reads one of them.
 
 ## 1. Extract
 Check that Node is available (`node --version`). If it is not, say so and stop: the extractor needs it, and a 200 MB transcript cannot be filtered by reading it.
@@ -30,7 +37,7 @@ Run:
 node "references/scripts/session-extract.mjs" --harness codex [--session <id>]
 ```
 
-With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected (a message sent mid-turn included, as a `queued` turn), the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the tools it called: each one's name, the program a `Bash` call ran (`Bash(npm test)`), and for each result whether it failed and how many characters came back. It drops file snapshots, the content of tool results and every other argument (where file contents and secrets live), thinking, subagent turns and the compaction summaries. In Codex the extractor reads the Codex rollout instead (`--harness codex`) and keeps the same, except denied approvals, answers to structured questions and the outcome of each tool call, which a rollout does not record in a form it can rely on yet: say so in the report when the session ran in Codex. A Codex wrapper is named with the tools it called inside (`exec(exec_command, apply_patch)`), or `exec(opaque)` when they cannot be named safely.
+With no id it takes the most recent session of the current directory that did any work: one that only ran this command, which is the session you are in after `/new`, is passed over. An earlier one is named by its id, the file name of its transcript. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected (a message sent mid-turn included, as a `queued` turn), the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the tools it called: each one's name, the program a `Bash` call ran (`Bash(npm test)`), and for each result whether it failed and how many characters came back. It drops file snapshots, the content of tool results and every other argument (where file contents and secrets live), thinking, subagent turns and the compaction summaries. In Codex the extractor reads the Codex rollout instead (`--harness codex`) and keeps the same, except denied approvals, answers to structured questions and the outcome of each tool call, which a rollout does not record in a form it can rely on yet: say so in the report when the session ran in Codex. A Codex wrapper is named with the tools it called inside (`exec(exec_command, apply_patch)`), or `exec(opaque)` when they cannot be named safely.
 
 The index also carries a **Cost by stage** table, computed from the turns: per stage (from the owner's invocation to the next) and per ticket, a row being named `tm-implement 02-export` when the invocation gave the ticket's slug, the active minutes (a pause over 30 minutes is idle, kept apart), the tool calls, how many of them failed (a non-zero exit counts, so a `grep` that found nothing is in the count) and how many characters their results brought back, the invocations, the answers outside the options offered (`Other`), the questions rejected to clarify, and the answers that overruled a `(Recommended)` option. In Codex the failed calls, the result characters and the last three are `not measured`.
 

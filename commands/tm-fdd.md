@@ -8,7 +8,7 @@ Call the Agent tool with `fdd-writer` to write or amend the Feature Design Doc, 
 
 The FDD is living: an existing one is amended, never rewritten, and it carries no acceptance criteria. The effort is the slug `/tm-interview` gave this work: take it from the argument, or use the only `.scratch/*/decomposition.md` that lists this feature; with more than one and no argument, ask which. Pass the agent both.
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 If no feature was given, ask which feature to spec. If `docs/architecture/hld.md` doesn't exist, tell the user to run `/tm-hld` first instead of delegating.
 

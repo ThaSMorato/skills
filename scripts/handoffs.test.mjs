@@ -12,6 +12,8 @@ import { fileURLToPath } from 'node:url'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const read = (path) => readFileSync(join(root, path), 'utf8')
 const ASKING = 'skills/asking/SKILL.md'
+const ASKING_GATES = 'skills/asking/gates.md'
+const ASKING_HANDOFF = 'skills/asking/handoff.md'
 const PR = 'skills/pr/SKILL.md'
 const BLOCKER_STATE = '${CLAUDE_PLUGIN_ROOT}/scripts/blocker-state.mjs'
 
@@ -35,21 +37,21 @@ test('the stages of a ticket read the blockers from the script, not from memory'
 })
 
 test('a stop report opens with where each criterion stands', () => {
-  assert.match(read(ASKING), /^## 7\. Hand off[^\n]*\n[\s\S]*\| AC \| State \| Blocked by \|/m)
+  assert.match(read(ASKING_HANDOFF), /^## 7\. Hand off[^\n]*\n[\s\S]*\| AC \| State \| Blocked by \|/m)
 })
 
 test('a question never offers more than was asked, and always offers the least', () => {
   const asking = read(ASKING)
 
   assert.deepEqual(
-    { widens: /never widens the request/.test(asking), minimal: /minimal variant/.test(asking), ownGate: /no recommended "approve"/.test(asking) },
+    { widens: /never widens the request/.test(asking), minimal: /minimal variant/.test(asking), ownGate: /no recommended "approve"/.test(read(ASKING_GATES)) },
     { widens: true, minimal: true, ownGate: true },
   )
 })
 
 test('an open prerequisite stays in every report until it is resolved', () => {
   assert.deepEqual(
-    { progress: /^## Open prerequisites$/m.test(read('skills/implement/SKILL.md')), asking: /Open prerequisites/.test(read(ASKING)) },
+    { progress: /^## Open prerequisites$/m.test(read('skills/implement/SKILL.md')), asking: /Open prerequisites/.test(read(ASKING_HANDOFF)) },
     { progress: true, asking: true },
   )
 })

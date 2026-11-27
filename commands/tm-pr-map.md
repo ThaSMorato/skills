@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/pr-map/SKILL.md` and follow it for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 Preflight: the argument names a pull request or two refs. With none, list the open pull requests (`gh pr list`) and ask which one. For a pull request, `gh auth status` passes and `gh pr view` finds it; for two refs, both resolve. A pull request with no changed files has nothing to map: say so and stop.
 

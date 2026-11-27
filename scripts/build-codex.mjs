@@ -10,6 +10,9 @@
 // - the Agent tool: `spawn_agent` with `agent_type = "tm-<agent>"`, at most six running together;
 // - `${CLAUDE_PLUGIN_ROOT}`: paths inside the entry, since Codex copies only the package and refuses `..`;
 // - `$ARGUMENTS`: the text the user wrote after the skill name;
+// - `/clear`: `/new`, the Codex command that starts a fresh conversation;
+// - waiting: every entry says to wait once, with a long `yield_time_ms` or one `wait_agent`. Codex re-sends the
+//   whole conversation on every poll, and one-second polls were about a fifth of its input in 0.7.0;
 // - plugin subagents: TOML files that `$thasmorato-skills:tm-setup` installs into `~/.codex/agents/`.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
@@ -35,6 +38,13 @@ const ENTRY_PREAMBLE = [
   '> **Codex.** Paths that start with `references/` are inside this skill\'s folder (the folder of this `SKILL.md`);',
   '> in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry',
   '> of this plugin: tell the owner to run it, never run it yourself.',
+  '>',
+  '> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` the longest',
+  '> `yield_time_ms` the command could need (a test suite takes minutes: ask for them, never for one second), and call',
+  '> `wait_agent` once for an agent. When a wait returns before the command ends, wait again with the same long value:',
+  '> a second long wait, never a run of short polls.',
+  '> Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step',
+  '> finishes, not while it runs.',
 ].join('\n')
 
 // The install rewrites `<TM_ROOT>` only in the agent files, so the package files an agent reads name the root
@@ -143,6 +153,7 @@ export function translate(text, context) {
     .replace(/\*\*in a single message\*\*/g, `**at once** (at most ${MAX_RUNNING_AGENTS} running together; wait for every one)`)
     .replace(/in a single message/g, `at once (at most ${MAX_RUNNING_AGENTS} running together; wait for every one)`)
     .replace(/\$ARGUMENTS/g, 'the text after the skill name')
+    .replace(/`\/clear`/g, '`/new`')
   if (commands.length) {
     out = out.replace(new RegExp(`(?<=[\\s\`(])/(${commands.join('|')})(?![\\w/-])`, 'g'), (_, name) => mention(name))
   }

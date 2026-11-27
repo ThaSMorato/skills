@@ -11,10 +11,11 @@
 // Claude Code by default; `--harness codex` reads a Codex rollout (see session-extract-codex.mjs).
 // No dependencies beyond the Node standard library.
 
-import { createReadStream, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+import { closeSync, createReadStream, existsSync, mkdirSync, openSync, readdirSync, readSync, statSync, writeFileSync } from 'node:fs'
 import { createInterface } from 'node:readline'
 import { basename, join } from 'node:path'
 import { homedir } from 'node:os'
+import { StringDecoder } from 'node:string_decoder'
 import { codexSessionIdOf, createCodexSegmenter, resolveCodexTranscript } from './session-extract-codex.mjs'
 
 const SYSTEM_REMINDER = /<system-reminder>[\s\S]*?<\/system-reminder>/g
@@ -26,6 +27,7 @@ const REJECTION_PREFIX = /[\s\S]*the user said:\s*/i
 const RECOMMENDED = /\(Recommended\)\s*$/
 const NO_STAGE = '(no stage)'
 const TICKET = /^(?:[a-z0-9][a-z0-9-]*\/)?\d{2}-[a-z0-9][a-z0-9-]*$/
+const ANALYZER = 'tm-session-analyze'
 const STAGE_PREFIX = 'tm-' // only the flow's stages open a row: /compact, /model, /login are the harness
 const IDLE_AFTER_MS = 30 * 60 * 1000
 const OPAQUE = 'opaque'
@@ -75,13 +77,50 @@ function namedSession(dir, sessionId) {
   return path
 }
 
+// The session to read when none is named: the most recent one that did any work. After `/clear` the
+// newest transcript is the session that is asking, which holds nothing but this command.
 function mostRecentSession(dir) {
   const sessions = readdirSync(dir)
     .filter((name) => name.endsWith('.jsonl'))
     .map((name) => join(dir, name))
     .sort((a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs)
   if (sessions.length === 0) throw new Error(`No session transcripts in ${dir}`)
-  return sessions[0]
+  const working = sessions.find((transcript) => !ranOnlyTheAnalyzer(transcript, createSegmenter))
+  if (!working) throw new Error(`No working session in ${dir}: every transcript only ran /${ANALYZER}. Name one with --session <id>.`)
+  return working
+}
+
+// Stops at the first owner turn that is anything else, so a long working session costs a few lines.
+export function ranOnlyTheAnalyzer(transcript, segmenterOf) {
+  const segmenter = segmenterOf()
+  let lastSeen
+  for (const line of linesOf(transcript)) {
+    const entry = line.trim() ? parseLine(line) : null
+    if (!entry) continue
+    segmenter.accept(entry)
+    const last = segmenter.segments().at(-1).turns.findLast((turn) => turn.role === 'owner')
+    if (!last || last === lastSeen) continue
+    if (last.kind !== 'invoked' || stageOf(last.text) !== ANALYZER) return false
+    lastSeen = last
+  }
+  return lastSeen !== undefined
+}
+
+function* linesOf(path) {
+  const file = openSync(path, 'r')
+  const chunk = Buffer.alloc(1 << 16)
+  const decoder = new StringDecoder('utf8')
+  let pending = ''
+  try {
+    for (let read = readSync(file, chunk); read > 0; read = readSync(file, chunk)) {
+      const lines = (pending + decoder.write(chunk.subarray(0, read))).split('\n')
+      pending = lines.pop()
+      yield* lines
+    }
+    if (pending) yield pending
+  } finally {
+    closeSync(file)
+  }
 }
 
 export function createSegmenter() {
@@ -481,7 +520,7 @@ async function main() {
   const args = parseArgs(process.argv.slice(2))
   const transcript =
     args.harness === 'codex'
-      ? await resolveCodexTranscript({ codexHome: args.codexHome ?? process.env.CODEX_HOME ?? join(homedir(), '.codex'), ...args })
+      ? await resolveCodexTranscript({ codexHome: args.codexHome ?? process.env.CODEX_HOME ?? join(homedir(), '.codex'), ...args, passOver: (rollout) => ranOnlyTheAnalyzer(rollout, createCodexSegmenter) })
       : resolveTranscript(args)
   const sessionId = await HARNESSES[args.harness].sessionIdOf(transcript)
   const outDir = join(args.outRoot ?? join(args.cwd, '.scratch', 'session-analyze'), sessionId)
