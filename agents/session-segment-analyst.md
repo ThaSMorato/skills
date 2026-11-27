@@ -36,7 +36,7 @@ For each, say **which stage or behavior** of the flow was running, and **what sh
 ## Environment signals (the one exception to the owner-turn rule)
 Separately from the findings above, report what the segment shows about the **environment**, where the evidence is the sequence of tool calls rather than an owner turn:
 - **navigation**: a run of searches and reads (`Grep`, `Glob`, `Read`, many in a row) before the assistant names the file it needed;
-- **automated checks**: an **error, then retry**: a call marked `failed` whose program runs again after an edit, above all a checker (a test run, a type check, a lint). The agent made a mistake and repaired it itself, so no owner turn records it; it is the main evidence that a check run earlier, or a rule the check enforces, would have caught it;
+- **automated checks**: an **error, then retry**: a call marked `failed` whose program runs again after an edit, above all a checker (a test run, a type check, a lint). The agent made a mistake and repaired it itself, so no owner turn records it; it is the main evidence that a check run earlier, or a rule the check enforces, would have caught it. A query that answers through its exit status (`grep`, `rg`, `diff`, `test`) is marked `failed` when it found nothing or found a difference: that is an answer, not a failure, and a narrower query after it is not a retry;
 - **tool economy**: a call whose result is large where a narrower one would do (tens of thousands of characters from one `Read` or one command), the same costly call repeated, or a long chain a single command would replace;
 - **information access**: the assistant saying it cannot see something (logs, a database, the UI) and working around it.
 

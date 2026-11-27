@@ -463,6 +463,62 @@ describe('createSegmenter: what a tool call ran and cost', () => {
     })
   }
 
+  for (const [command, label] of [
+    ['git checkout acme-client-payroll', 'Bash(git checkout)'],
+    ['git push origin feature/acme-payroll', 'Bash(git push)'],
+    ['git clone mytoken', 'Bash(git clone)'],
+    ['docker login hunter2pass', 'Bash(docker login)'],
+    ['cargo login abc123', 'Bash(cargo login)'],
+    ['npm install acme-internal-sdk', 'Bash(npm install)'],
+    ['poetry add privatelib', 'Bash(poetry add)'],
+    ['npx secretpkgname', 'Bash(npx)'],
+    ['make secret-target', 'Bash(make)'],
+    ['npm run deploy:prod-acme', 'Bash(npm run)'],
+    ['gh pr view 83 --json state', 'Bash(gh pr view)'],
+    ['docker compose up -d', 'Bash(docker compose up)'],
+    ['uv run pytest tests/billing', 'Bash(uv run pytest)'],
+    ['make test', 'Bash(make test)'],
+  ]) {
+    test(`after a runner only a known subcommand is kept, never the argument that follows it: ${command}`, () => {
+      assert.equal(labelOf(command), label)
+    })
+  }
+
+  for (const [command, label] of [
+    ['\nnpm test', 'Bash(npm test)'],
+    ['NODE_ENV=test\nnpm test', 'Bash(npm test)'],
+    ['# run the unit tests\nnpm test', 'Bash(npm test)'],
+    ['sudo npm test', 'Bash(npm test)'],
+    ['time npm test', 'Bash(npm test)'],
+    ['env CI=1 npm test', 'Bash(npm test)'],
+    ['sudo -u deployer npm test', 'Bash(sudo)'],
+    ['if true; then npm test; fi', 'Bash(true && npm test)'],
+    ['for f in *.md; do wc -l "$f"; done', 'Bash(wc)'],
+  ]) {
+    test(`the program is found behind a blank line, a variable, a wrapper or a shell keyword: ${JSON.stringify(command)}`, () => {
+      assert.equal(labelOf(command), label)
+    })
+  }
+
+  for (const command of ['TOKEN=$(cat <<EOF\nsecretword now\nEOF\n)', '"\nsecretword now\n"', "X='\nsecretword now'"]) {
+    test(`a line that only opens content names nothing, and the content below it is never read as a command: ${JSON.stringify(command)}`, () => {
+      assert.equal(labelOf(command), 'Bash(opaque)')
+    })
+  }
+
+  // The bugs as they were, kept for the owner to read beside the fix: delete when read.
+  for (const [command, label] of [
+    ['git checkout acme-client-payroll', 'Bash(git checkout acme-client-payroll)'],
+    ['docker login hunter2pass', 'Bash(docker login hunter2pass)'],
+    ['npx secretpkgname', 'Bash(npx secretpkgname)'],
+    ['\nnpm test', 'Bash(opaque)'],
+    ['sudo npm test', 'Bash(sudo)'],
+  ]) {
+    test(`pin: an argument after a runner is kept, and a program behind a blank line or a wrapper is lost: ${JSON.stringify(command)}`, { skip: PINNED }, () => {
+      assert.equal(labelOf(command), label)
+    })
+  }
+
   test('a call records whether it failed and how many characters came back, never the content', () => {
     const entries = [
       makeAssistant([bash('npm test', 't-1'), { type: 'tool_use', id: 't-2', name: 'Read', input: { file_path: '/secret/path' } }]),

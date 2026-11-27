@@ -32,7 +32,23 @@ const OPAQUE = 'opaque'
 const PROGRAM = /^[A-Za-z0-9_.][A-Za-z0-9_.+-]{0,39}$/
 const QUOTED = /'[^']*'|"(?:\\.|[^"\\])*"/g
 const CONTENT_STARTS = /<<|\$\(|`|['"]/
-const SUBCOMMAND = /^[a-z][a-z0-9:_-]*$/
+// What may follow a runner in a label. A closed list: a word is kept because it is a public
+// subcommand, never because it looks like one, since a branch, a package, a target or a token typed
+// after `git checkout` or `npm install` has the same shape.
+const SUBCOMMANDS = new Set([
+  ...['test', 'run', 'exec', 'install', 'ci', 'build', 'lint', 'format', 'fmt', 'start', 'dev', 'typecheck', 'check', 'unit', 'e2e', 'integration', 'watch', 'fix', 'coverage'],
+  ...['audit', 'outdated', 'publish', 'pack', 'add', 'remove', 'update', 'upgrade', 'init', 'create', 'clean', 'list', 'ls', 'view', 'info', 'link', 'dlx', 'x', 'sync', 'lock'],
+  ...['status', 'diff', 'log', 'show', 'commit', 'push', 'pull', 'fetch', 'merge', 'rebase', 'checkout', 'switch', 'branch', 'stash', 'reset', 'restore', 'revert', 'tag', 'clone'],
+  ...['worktree', 'remote', 'cherry-pick', 'blame', 'grep', 'rev-parse', 'ls-files', 'config', 'bisect', 'mv', 'rm', 'apply'],
+  ...['pr', 'issue', 'repo', 'workflow', 'api', 'release', 'auth', 'edit', 'checks', 'comment', 'close', 'review'],
+  ...['compose', 'ps', 'logs', 'up', 'down', 'images', 'login', 'get', 'describe', 'delete', 'rollout', 'port-forward'],
+  ...['vet', 'mod', 'tidy', 'generate', 'clippy', 'bench', 'doc', 'migrate', 'serve', 'console', 'shell', 'compile', 'deps'],
+  ...['node', 'tsc', 'tsx', 'eslint', 'prettier', 'biome', 'vitest', 'jest', 'playwright', 'pytest', 'ruff', 'mypy', 'rspec', 'rubocop', 'knip'],
+])
+// Words a program hides behind: a wrapper (`sudo npm test`) or a shell keyword (`then npm test`).
+const PREFIXES = new Set(['sudo', 'time', 'env', 'nohup', 'exec', 'command', 'nice', 'if', 'elif', 'then', 'else', 'while', 'until', 'do', '!'])
+// Shell words that open or close a block and run nothing themselves.
+const BLOCK_WORDS = new Set(['for', 'case', 'select', 'function', 'fi', 'done', 'esac'])
 const ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/
 // Programs whose first words say what ran (`npm run lint`, `git commit`); every other program is named alone.
 const RUNNERS = new Set(['npm', 'pnpm', 'yarn', 'bun', 'npx', 'deno', 'git', 'gh', 'go', 'cargo', 'make', 'just', 'docker', 'kubectl', 'mvn', 'gradle', 'dotnet', 'mix', 'bundle', 'rake', 'composer', 'poetry', 'uv', 'pip', 'turbo', 'nx'])
@@ -138,27 +154,48 @@ function toolLabelOf(tool) {
 }
 
 // What a shell command ran, by program name only: its arguments are where paths and secrets live.
+// The label comes from the first line that names a program. A blank line, a comment or a line that
+// only sets variables is passed over; a line that opens a heredoc, a substitution or a quote ends
+// the search, because what follows it is content, not commands.
 function programsOf(command) {
-  const programs = commandLineOf(command).split(/&&|\|\||;/).map((part) => programOf(part.split('|')[0])).filter((program) => program && program !== 'cd')
-  return [...new Set(programs)].slice(0, MAX_PROGRAMS).join(' && ') || OPAQUE
+  for (const line of String(command ?? '').split('\n')) {
+    const unquoted = line.replace(QUOTED, ' ')
+    const [code] = unquoted.split(CONTENT_STARTS)
+    const programs = programsIn(code)
+    if (programs.length > 0) return programs.slice(0, MAX_PROGRAMS).join(' && ')
+    if (code !== unquoted) break
+  }
+  return OPAQUE
 }
 
-// The part of a command that can name programs: its first line with the quoted text taken out, up to
-// the first heredoc, substitution or unclosed quote. What follows those is content, not commands.
-function commandLineOf(command) {
-  return String(command ?? '').split('\n')[0].replace(QUOTED, ' ').split(CONTENT_STARTS)[0]
+function programsIn(code) {
+  if (code.trim().startsWith('#')) return []
+  const programs = code.split(/&&|\|\||;/).map((part) => programOf(part.split('|')[0])).filter((program) => program && program !== 'cd')
+  return [...new Set(programs)]
 }
 
 function programOf(simpleCommand) {
   const words = simpleCommand.trim().split(/\s+/)
-  const start = words.findIndex((word) => !ASSIGNMENT.test(word))
+  const start = words.findIndex((word) => !ASSIGNMENT.test(word) && !PREFIXES.has(word))
   if (start === -1) return null
   const [first, ...rest] = words.slice(start)
+  if (first.startsWith('-')) return wrapperOf(words[start - 1])
   const program = basename(first)
-  if (!PROGRAM.test(program)) return null
+  if (!PROGRAM.test(program) || BLOCK_WORDS.has(program)) return null
   if (!RUNNERS.has(program)) return program
-  const stop = rest.findIndex((word) => !SUBCOMMAND.test(word))
+  const stop = rest.findIndex((word) => !isSubcommand(word))
   return [program, ...rest.slice(0, stop === -1 ? MAX_SUBCOMMANDS : Math.min(stop, MAX_SUBCOMMANDS))].join(' ')
+}
+
+// A wrapper given options of its own (`sudo -u deployer npm test`) is named alone: telling its
+// options from the program it runs would mean knowing every wrapper's flags.
+function wrapperOf(word) {
+  return PREFIXES.has(word) && PROGRAM.test(word) ? word : null
+}
+
+// A package script is named in parts (`test:unit`): it is kept when every part is a known word.
+function isSubcommand(word) {
+  return word.split(':').every((part) => SUBCOMMANDS.has(part))
 }
 
 function charsOf(content) {

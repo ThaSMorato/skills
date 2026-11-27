@@ -89,6 +89,28 @@ stack, one PR per wave.
   (a mechanical rule becomes a check, a judgement rule moves to the stack guide or the review
   standard), with the session as the evidence of what each line triggered.
 
+- **From the review (#84):**
+  - *A Bash label could carry an argument.* After a runner (`git`, `npm`, `docker`...) the extract
+    kept any lowercase word that looked like a subcommand, so `git checkout acme-client-payroll`,
+    `docker login hunter2pass` and `npx secretpkgname` came through whole, into segments a
+    meta-retro quotes. What may follow a runner is now a closed list of known subcommands, and a
+    package script is kept only when every part of its name is on it (`test:unit`, not
+    `deploy:prod-acme`).
+  - *A program behind a blank line, a variable, a wrapper or a shell keyword was lost* (`sudo npm
+    test` read as `sudo`, a command after a newline as `opaque`), which weakened the error, then
+    retry signal. The label now comes from the first line that names a program, and still stops at
+    the first heredoc, substitution or open quote.
+  - *The owner's global file was quoted into a project report.* `/tm-session-analyze` step 3c
+    cites a line of `~/.claude/CLAUDE.md`, `CLAUDE.local.md` or `~/.codex/AGENTS.md` by file and
+    line number, never quoted or paraphrased. It reads the files the session's harness loaded
+    (`.claude/CLAUDE.md`, `@path` imports, Codex's `AGENTS.md` chain), and an instruction for a
+    task the session never did is listed as not exercised instead of failed as a no-op.
+  - A `grep` that found nothing exits non-zero and is marked `failed`: the analyst is told that a
+    query's exit status is an answer, not a failure.
+  - The near-miss eval for `writing-for-agents` is now a README section written for people. The
+    anatomy's "no stray bullets, no empty sections" item became a test over every skill, command
+    and agent; the tests of the skill check its headings and rules instead of loose substrings.
+
 ## 0.7.0
 
 Built as a stack, one PR per wave (#60 to #79), released together.

@@ -51,8 +51,9 @@ cost: {minutes: <n>, idle_minutes: <n>, tool_calls: <n>, failed_calls: <n>, resu
 > error the agent repaired itself), tool economy, information access, and the **Steering files** read
 > against the session. Evidence is the segment and the tool calls the extract kept, each with its outcome
 > (a run of searches before a file was found, a failed call then a retry, a large result), the steering
-> file and the line quoted, or an owner turn when there is one. Each finding is read on two tracks: what
-> it cost this session, and what change to the environment prevents it.
+> file and the line (quoted for a repository file; for the owner's global file or `CLAUDE.local.md`,
+> by line number, never quoted), or an owner turn when there is one. Each finding is read on two tracks:
+> what it cost this session, and what change to the environment prevents it.
 
 | Category | Evidence (segment · tool calls or owner turn) | Tactical cost | Strategic change | Mechanical / judgement | Where it lands |
 |---|---|---|---|---|---|
