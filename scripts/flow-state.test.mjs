@@ -11,9 +11,6 @@ import { flowState, resolveTicket } from './flow-state.mjs'
 // Where each ticket stands is in the frontmatter its stages wrote. Read mechanically, the matrix is
 // the same for /tm-flow, /tm-retro and /tm-flow-report; read by a model out of prose, it drifts.
 
-// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
-const PINNED = true
-
 const sha256 = (text) => createHash('sha256').update(text).digest('hex')
 
 describe('flowState and resolveTicket', () => {
@@ -170,14 +167,6 @@ describe('flowState and resolveTicket', () => {
   test('a legacy status written with a capital or in backticks still finishes the ticket', () => {
     ticket('ledger', '01-read-model')
     put('.scratch/ledger/plans/01-read-model/progress.md', legacyProgress('**Status:** `Completed`'))
-
-    assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'awaiting-retro')
-  })
-
-  // The bug as it was, kept for the owner to read beside the fix: delete when read.
-  test('pin: a legacy ticket in progress is read as finished by its first done SI', { skip: PINNED }, () => {
-    ticket('ledger', '01-read-model')
-    put('.scratch/ledger/plans/01-read-model/progress.md', legacyProgress('**Status:** In progress'))
 
     assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'awaiting-retro')
   })
