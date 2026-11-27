@@ -58,6 +58,8 @@ A question whose answer is in a file you could have read is a question that teac
 ## Every stage ends on `/clear`, then the next command
 A stage reads its input from disk, so the conversation that produced it is dead weight to the next one, re-sent on every call it makes. The closing line names `/clear` first: *"you run: `/clear`, then `/tm-plan-validate 03-checkout`"*. The one exception is this same stage continuing (the next SI of `/tm-implement`), which keeps its context and names `/compact`.
 
+What only this conversation holds does not survive `/clear`: a preference or a correction the owner gave in chat, a decision no artifact records yet. Write it into the artifact that owns it before closing; when it has no artifact, the closing line names `/tm-handoff` first: *"you run: `/tm-handoff`, then `/clear`, then `/tm-implement 03-checkout`"*.
+
 ## The rest, by what you are doing
 Sections 4 to 7 live beside this file. Read the one your next move needs:
 

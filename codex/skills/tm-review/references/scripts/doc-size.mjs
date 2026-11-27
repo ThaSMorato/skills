@@ -18,7 +18,7 @@ export const SECTION_BUDGET_BYTES = 25_000
 
 const LIVING_FOLDERS = ['docs/product', 'docs/architecture', 'docs/features']
 const SECTION_HEADING = /^## +(.+?)\s*$/
-const CODE_FENCE = /^(```|~~~)/
+const CODE_FENCE = /^\s*(`{3,}|~{3,})(.*)$/
 const LARGEST_SHOWN = 3
 
 export function checkSizes({ root, files }) {
@@ -40,14 +40,24 @@ function measure(text) {
 
 function sectionsOf(text) {
   const sections = []
-  let inCode = false
+  let openFence = null
   text.split('\n').forEach((line, index) => {
-    if (CODE_FENCE.test(line)) inCode = !inCode
-    const heading = inCode ? null : line.match(SECTION_HEADING)?.[1]
+    openFence = fenceAfter(openFence, line)
+    const heading = openFence ? null : line.match(SECTION_HEADING)?.[1]
     if (heading) sections.push({ heading, line: index + 1, bytes: 0 })
     if (sections.length) sections.at(-1).bytes += Buffer.byteLength(line) + 1
   })
   return sections
+}
+
+// The fence a line leaves open. A code block closes only on a fence of the character that opened it,
+// at least as long, with nothing after it: a shorter or different fence inside is the block's text.
+function fenceAfter(openFence, line) {
+  const [, fence, rest] = line.match(CODE_FENCE) ?? []
+  if (!fence) return openFence
+  if (!openFence) return fence
+  const closes = fence[0] === openFence[0] && fence.length >= openFence.length && rest.trim() === ''
+  return closes ? null : openFence
 }
 
 function existing(root, file) {
@@ -64,6 +74,7 @@ function markdownUnder(root, folder) {
 
 function parseArgs(argv) {
   const at = argv.indexOf('--root')
+  if (at !== -1 && !argv[at + 1]) throw new Error('--root needs a directory after it')
   return { root: at === -1 ? process.cwd() : argv[at + 1], files: argv.filter((arg, index) => !arg.startsWith('--') && (at === -1 || index !== at + 1)) }
 }
 

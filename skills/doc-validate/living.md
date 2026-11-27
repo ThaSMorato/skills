@@ -39,4 +39,4 @@ On a branch, compare the amended document with its version on the base branch (`
 - a changed decision with no ADR, no Potential ADR and no line in the writer's return that reported it;
 - text about the change instead of the system ("new", "previously", "added in").
 
-The ceiling: a reworded sentence that says the same thing is not a finding.
+The ceiling: a reworded sentence that says the same thing is not a finding. Neither is a `## JSON contract` section that left the PRD and stands, with the same content, in `prd.contract.json` beside it: it was moved, not removed.

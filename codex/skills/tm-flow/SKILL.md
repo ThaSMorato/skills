@@ -7,8 +7,10 @@ description: "Drive the Doc-Dev flow; scan where the project stands, report what
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
 >
-> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` a `yield_time_ms`
-> long enough for it to finish (minutes for a test suite, never one second), and call `wait_agent` once for an agent.
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` the longest
+> `yield_time_ms` the command could need (a test suite takes minutes: ask for them, never for one second), and call
+> `wait_agent` once for an agent. When a wait returns before the command ends, wait again with the same long value:
+> a second long wait, never a run of short polls.
 > Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
 > finishes, not while it runs.
 
@@ -162,7 +164,7 @@ Brownfield is a **modifier on every stage**, not a prefix. `$thasmorato-skills:t
     - **Screens:** a ticket that builds a new screen with nothing to copy (no Figma, prototype, image or existing page) runs `$thasmorato-skills:tm-ui-design <screen>` before `$thasmorato-skills:tm-design`; a redesign runs `$thasmorato-skills:tm-ui-audit <screen>` first, then `$thasmorato-skills:tm-ui-design`. A screen with a spec in its feature's `ui/` goes straight to `$thasmorato-skills:tm-design`.
     - **Bugs:** a bug whose cause is not known starts at `$thasmorato-skills:tm-diagnose`, never at a fix. It ends with the cause and the pinned and flipped tests; an obvious fix is then made test-first (Direct), anything larger becomes a `Type: bugfix` ticket whose Source is the diagnosis, through `$thasmorato-skills:tm-design` → `$thasmorato-skills:tm-plan` in the Small gear. **The gear is chosen after `$thasmorato-skills:tm-diagnose`, never before:** until the cause is known, nobody knows whether the fix is one line or a redesign.
 14. When an epic or a cycle finishes: `$thasmorato-skills:tm-retro <epic>`. Every other stage writes forward; this is the only one that writes back, reading what the work left on disk and recording what it taught: process findings to `docs/retro/`, product findings to `docs/evolutions.md`. Run it over a set of tickets, never one: a single ticket has no repetition to find, and repetition is what separates an incident from a standard worth moving into a guide.
-15. When a working session ends, whether a whole flow driven through several `/compact`s or a long stretch of work: `$thasmorato-skills:tm-session-analyze`. `$thasmorato-skills:tm-retro` reads the artifacts; this reads what only the conversation holds (the owner correcting, rejecting, repeating), across every compaction segment, and tags each finding with its level: `flow` (improve the plugin), `repo-skill` (a skill or guide here) or `repo-code` (this repo's code). It owns the environment lens: what got in the way (navigation, tool economy, missing information, instructions that did not hold).
+15. When a working session ends: `$thasmorato-skills:tm-session-analyze`, after `/new` like any stage (with no id it reads the session before the one it runs in). A flow whose stages each ended on `/new` is one session per stage, so run it for each session worth reading, by id. `$thasmorato-skills:tm-retro` reads the artifacts; this reads what only the conversation holds (the owner correcting, rejecting, repeating), across every compaction segment, and tags each finding with its level: `flow` (improve the plugin), `repo-skill` (a skill or guide here) or `repo-code` (this repo's code). It owns the environment lens: what got in the way (navigation, tool economy, missing information, instructions that did not hold).
 16. When planning the plugin's next version: `$thasmorato-skills:tm-flow-report <projects>` reads the `flow`-tagged findings of several projects' retros and meta-retros, groups them by the stage they would change, and puts the measurements side by side per `plugin_version`.
 
 ## Parallelism: fan out on reads, stay serial on writes

@@ -154,6 +154,37 @@ output: nearly all of the cost is a context of 200k tokens and more, sent again 
 - **Every fan-out names its agent.** `/tm-flow-report` dispatched "the Agent tool once per project"
   and left the type to the model. It names an exploration agent now.
 
+- **From the review (#85):**
+  - *The standards lens stopped reading the non-negotiables.* Once `/tm-review` passed it the stack
+    guides, it opened the router only when none matched, and the router's Non-negotiables belong to
+    no guide. It reads that section on every review. Its ADR pre-filter searched by feature and
+    path, which an ADR never carries: it now takes every ADR whose `scope` is `repo-wide` or the
+    layer of the change, then the ones that list the feature.
+  - *`/clear` dropped what only the chat held.* A preference or a decision no artifact records is
+    written down first, or the closing line names `/tm-handoff` before `/clear`. Six closing lines
+    that named the next command without `/clear` (one recommended `/compact`) now name it.
+  - *After `/clear`, `/tm-session-analyze` read the session it was started in.* With no id it takes
+    the most recent session that did any work and passes over one that only ran the analyzer, in
+    both harnesses. The command says a flow ended on `/clear` is one session per stage.
+  - *Only two lenses have a surface.* "A lens runs when the diff touches its surface" read as a
+    rule for all nine; every lens but `review-ui` and `review-data` runs on every diff. The data
+    surface is decided from the hunks, since a file's name hides a `fetch` in a component, and
+    "documentation only" is defined: prose a person reads, never a prompt, a template, a config or
+    a contract a lens judges against.
+  - *Moving the contract out of an old PRD read as a regression.* The writer reports the move, the
+    validator accepts a section that stands whole in `prd.contract.json`, an old PRD is compared
+    with the section it still holds, and `/tm-docs-migrate` moves it.
+  - *The checker's Source read reached nobody.* It is kept in the acceptance record (`source_read`
+    and a section), and `retro-measure.mjs` sums it.
+  - *`doc-size.mjs` closed a code block on any fence.* A block closes on a fence of the character
+    that opened it, at least as long, indented or not, so a heading inside a nested block is not a
+    section. A test with accented text now tells bytes from characters, and `--root` with no
+    directory says so.
+  - In Codex, a wait that returns before the command ends is followed by another long one. Local
+    rollouts show waits honoured up to 60 seconds and none asked for beyond that, so "minutes" in
+    one wait is unproven.
+  - The tests of this wave check that every `asking` §N citation lands in the file that holds §N.
+
 ## 0.7.0
 
 Built as a stack, one PR per wave (#60 to #79), released together.

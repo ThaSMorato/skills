@@ -51,6 +51,9 @@ describe('projectDirCandidates', () => {
   })
 })
 
+// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
+const PINNED = true
+
 describe('resolveTranscript', () => {
   let projectsRoot
 
@@ -77,6 +80,42 @@ describe('resolveTranscript', () => {
     const result = resolveTranscript({ projectsRoot, cwd: '/Users/me/app' })
 
     assert.equal(result, newer)
+  })
+
+  const writeTurns = (dir, id, mtimeSeconds, entries) => {
+    const path = writeSession(dir, id, mtimeSeconds)
+    writeFileSync(path, entries.map((entry) => JSON.stringify(entry)).join('\n'))
+    utimesSync(path, mtimeSeconds, mtimeSeconds)
+    return path
+  }
+  const invocation = (name, args = '') => makeEntry({ message: { content: `<command-name>/${name}</command-name><command-args>${args}</command-args>` } })
+
+  test('with no id, a session that only ran the analyzer is passed over: after /clear it is the one asking', () => {
+    const worked = writeTurns('-Users-me-app', 'worked', 1_000, [invocation('tm-implement', '02-export'), makeAssistant([{ type: 'text', text: 'done' }])])
+    writeTurns('-Users-me-app', 'asking', 2_000, [invocation('thasmorato-skills:tm-session-analyze')])
+
+    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), worked)
+  })
+
+  test('with no id, a session that ran the analyzer after its own work is still the one read', () => {
+    writeTurns('-Users-me-app', 'older', 1_000, [invocation('tm-plan', '02-export')])
+    const sameSession = writeTurns('-Users-me-app', 'same', 2_000, [invocation('tm-implement', '02-export'), invocation('tm-session-analyze')])
+
+    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), sameSession)
+  })
+
+  test('when the analyzer is all any session ran, it says there is no working session to read', () => {
+    writeTurns('-Users-me-app', 'asking', 2_000, [invocation('tm-session-analyze')])
+
+    assert.throws(() => resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), /No working session.*only ran \/tm-session-analyze/s)
+  })
+
+  // The bug as it was, kept for the owner to read beside the fix: delete when read.
+  test('pin: with no id, the analyzer reads the session it was just started in', { skip: PINNED }, () => {
+    writeTurns('-Users-me-app', 'worked', 1_000, [invocation('tm-implement', '02-export')])
+    const asking = writeTurns('-Users-me-app', 'asking', 2_000, [invocation('tm-session-analyze')])
+
+    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), asking)
   })
 
   test('picks the named session when an id is given', () => {
@@ -432,9 +471,6 @@ describe('createSegmenter: messages the owner sent mid-turn', () => {
     assert.deepEqual(segment.turns, [])
   })
 })
-
-// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
-const PINNED = true
 
 // The extract kept only tool names, so a mistake the agent made and repaired itself (a red test, a
 // failed type check) left no trace, and a 50k-character read looked like a cheap one. Each call now

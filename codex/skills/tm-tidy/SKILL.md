@@ -7,8 +7,10 @@ description: "Make working code simple, Beck's four rules of Simple Design in or
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
 >
-> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` a `yield_time_ms`
-> long enough for it to finish (minutes for a test suite, never one second), and call `wait_agent` once for an agent.
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` the longest
+> `yield_time_ms` the command could need (a test suite takes minutes: ask for them, never for one second), and call
+> `wait_agent` once for an agent. When a wait returns before the command ends, wait again with the same long value:
+> a second long wait, never a run of short polls.
 > Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
 > finishes, not while it runs.
 
@@ -30,4 +32,4 @@ Preflight, by mode:
 
 Show the proposals grouped by rule, in rule order, each with its evidence. Ask which to apply. Then apply them one at a time, reporting per tidying: applied, or reverted and why. Then review the tidying diff alone with `review-spec` and `review-quality`, and revert any tidying a kept finding points at.
 
-Postflight (ticket mode): the tidyings applied and reverted, and the next steps: the optional `$thasmorato-skills:tm-walkthrough <slug> <fixed point>`, then `$thasmorato-skills:tm-pr <slug> <fixed point>` for the pull request body.
+Postflight (ticket mode): the tidyings applied and reverted, and the next steps: `/new`, then the optional `$thasmorato-skills:tm-walkthrough <slug> <fixed point>`, then `$thasmorato-skills:tm-pr <slug> <fixed point>` for the pull request body.

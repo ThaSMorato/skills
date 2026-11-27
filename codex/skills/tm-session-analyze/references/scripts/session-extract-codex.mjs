@@ -105,7 +105,8 @@ function textOf(item) {
 }
 
 /** The rollout of `cwd`: the one named by `sessionId`, else the most recent owner session there. */
-export async function resolveCodexTranscript({ codexHome, cwd, sessionId }) {
+// With no id, `passOver` says which rollouts are not a working session: the one that is asking.
+export async function resolveCodexTranscript({ codexHome, cwd, sessionId, passOver = () => false }) {
   const target = canonical(cwd)
   const rollouts = SESSION_DIRS.flatMap((dir) => rolloutsUnder(join(codexHome, dir)))
   const candidates = []
@@ -119,7 +120,10 @@ export async function resolveCodexTranscript({ codexHome, cwd, sessionId }) {
     const which = sessionId ? `session ${sessionId}` : 'a session'
     throw new Error(`No Codex ${which} for ${cwd} under ${SESSION_DIRS.map((dir) => join(codexHome, dir)).join(' or ')}`)
   }
-  return candidates.sort((a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs)[0]
+  const newestFirst = candidates.sort((a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs)
+  const working = sessionId ? newestFirst[0] : newestFirst.find((rollout) => !passOver(rollout))
+  if (!working) throw new Error(`No working Codex session for ${cwd}: every rollout only ran the analyzer. Name one with --session <id>.`)
+  return working
 }
 
 /** The session id a rollout records, read from its first line. */

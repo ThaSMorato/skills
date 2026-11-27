@@ -28,6 +28,7 @@ The working tree is clean (`git status --porcelain` prints nothing), so the migr
 | `docs/ui/<screen>.md` and `docs/ui/<screen>/` | `docs/features/<feature>/ui/<screen>.md` and `…/ui/<screen>/` |
 | the PRD's `First milestone`, `Acceptance criteria` and its RFs' milestone tags | `.scratch/<effort>/scope.md` |
 | each FDD's `Acceptance criteria` | `.scratch/<effort>/criteria/<feature>.md` |
+| the PRD's `## JSON contract` section | `docs/product/prd.contract.json`: the block as it is, and the section removed |
 
 `CONTEXT.md`, `docs/adr/` and the rest of `docs/` stay where they are.
 
