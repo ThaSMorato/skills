@@ -51,9 +51,6 @@ describe('projectDirCandidates', () => {
   })
 })
 
-// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
-const PINNED = true
-
 describe('resolveTranscript', () => {
   let projectsRoot
 
@@ -108,14 +105,6 @@ describe('resolveTranscript', () => {
     writeTurns('-Users-me-app', 'asking', 2_000, [invocation('tm-session-analyze')])
 
     assert.throws(() => resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), /No working session.*only ran \/tm-session-analyze/s)
-  })
-
-  // The bug as it was, kept for the owner to read beside the fix: delete when read.
-  test('pin: with no id, the analyzer reads the session it was just started in', { skip: PINNED }, () => {
-    writeTurns('-Users-me-app', 'worked', 1_000, [invocation('tm-implement', '02-export')])
-    const asking = writeTurns('-Users-me-app', 'asking', 2_000, [invocation('tm-session-analyze')])
-
-    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), asking)
   })
 
   test('picks the named session when an id is given', () => {
