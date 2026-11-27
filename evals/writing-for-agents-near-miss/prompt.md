@@ -5,4 +5,4 @@ max_turns: 4
 allowed_tools: [Read, Glob, Grep, Skill]
 ---
 
-Tighten this paragraph for our company blog, keeping it under forty words: "We shipped the new checkout last week, and although there were a few small problems on the first day, most customers found it faster than the old one."
+Write the "Getting started" section of our README for the people joining the team next week: how to install the dependencies and run the tests. They read it on GitHub on their first day, so keep it friendly and short.

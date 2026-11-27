@@ -49,7 +49,7 @@ const TICKET_COLUMNS = [
   ['ACs', 'acs', 'ticket', 'acs'],
   ['SIs planned', 'sis_planned', 'plan', 'sis_planned'],
   ['SIs done', 'sis_done', 'progress', 'sis_done'],
-  ['Plan revisions', 'plan_revisions', 'plan', 'revision'],
+  ['Plan revisions', 'plan_revisions', 'plan', 'revision', revisionsAfterTheFirst],
   ['Validation runs', 'validation_runs', 'validation', 'run'],
   ['Escalations', 'escalations', 'progress', 'escalations'],
   ['Unverified', 'unverified', 'progress', 'unverified'],
@@ -124,9 +124,16 @@ function idOf(ticket) {
 }
 
 function ticketRow(ticket, costs) {
-  const cells = TICKET_COLUMNS.filter(([, , artifact]) => artifact).map(([, key, artifact, field]) => [key, cellOf(ticket[artifact], field)])
+  const cells = TICKET_COLUMNS.filter(([, , artifact]) => artifact).map(([, key, artifact, field, read = asWritten]) => [key, read(cellOf(ticket[artifact], field))])
   const row = { ticket: idOf(ticket), ...Object.fromEntries(cells), ...(costs.get(idOf(ticket)) ?? { minutes: NOT_MEASURED, tool_calls: NOT_MEASURED }) }
   return { ...row, ...Object.fromEntries(AUTHORSHIP.filter((key) => !isMeasured(row[key])).map((key) => [key, UNKNOWN])) }
+}
+
+const asWritten = (cell) => cell
+
+// A plan's `revision` is 1 when first written: the revisions are the ones after it.
+function revisionsAfterTheFirst(revision) {
+  return isNumber(revision) ? Math.max(revision - 1, 0) : revision
 }
 
 function cellOf(artifact, field) {
@@ -147,7 +154,7 @@ function fieldsNotMeasured(ticket) {
 function groupTickets(rows, keys) {
   return [...groupBy(rows, (row) => keys.map((key) => row[key]).join('\u0000'))]
     .map(([, group]) => ({ ...pick(group[0], keys), ...groupTotals(group) }))
-    .sort((a, b) => keys.map((key) => a[key]).join(' ').localeCompare(keys.map((key) => b[key]).join(' ')))
+    .sort((a, b) => keys.map((key) => a[key]).join(' ').localeCompare(keys.map((key) => b[key]).join(' '), undefined, { numeric: true }))
 }
 
 function groupTotals(rows) {

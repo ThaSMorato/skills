@@ -31,11 +31,8 @@ test('a message the owner sent mid-turn is read as an owner turn', () => {
   assert.match(read('agents/session-segment-analyst.md'), /`queued`[^\n]*mid-turn/)
 })
 
-test('the progress file records the effort the work ran at, which the retro sets beside each ticket', () => {
-  assert.deepEqual(
-    { column: /\['Effort', 'effort', 'progress', 'effort'\]/.test(read('scripts/retro-measure.mjs')), effort: /^effort: <the effort level/m.test(read('skills/implement/SKILL.md')) },
-    { column: true, effort: true },
-  )
+test('the progress file records the effort the work ran at', () => {
+  assert.match(read('skills/implement/SKILL.md'), /^effort: <the effort level/m)
 })
 
 test('the pull request leaves a record beside its body, with whether CI went red after it opened', () => {
@@ -49,7 +46,7 @@ test('the pull request leaves a record beside its body, with whether CI went red
 
 test('the cross-project report puts the cost beside the other measurements', () => {
   assert.deepEqual(
-    { skill: /minutes and tool calls per ticket[^\n]*ci_red_after_open/.test(read('skills/flow-report/SKILL.md')), template: /Cost per ticket/.test(read('templates/flow-report.md')) },
+    { skill: /Cost by stage tables[^\n]*other answers, clarifications and overrules per stage/.test(read('skills/flow-report/SKILL.md')), template: /Cost per ticket/.test(read('templates/flow-report.md')) },
     { skill: true, template: true },
   )
 })

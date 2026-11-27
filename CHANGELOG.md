@@ -15,6 +15,8 @@ stack, one PR per wave.
   `.github/workflows/test.yml` runs it on every pull request and on `main`. The script uses the
   `dot` reporter: a green run is a few lines, a red one prints each failure.
   `scripts/repo-guardrail.test.mjs` fails when the hook or the job stops running the script.
+- **From the review (#82):** the job's token is read-only (`permissions: contents: read`), and the
+  guardrail test accepts any `node --test` run over `scripts/*.test.mjs` instead of one exact string.
 
 ### Wave B: the retro stage, against its own rules
 
@@ -86,6 +88,28 @@ stack, one PR per wave.
   `~/.claude/CLAUDE.md` and runs every instruction through the no-op test and the wrong-home test
   (a mechanical rule becomes a check, a judgement rule moves to the stack guide or the review
   standard), with the session as the evidence of what each line triggered.
+
+- **From the review (#84):**
+  - *A Bash label could carry an argument.* After a runner (`git`, `npm`, `docker`...) the extract
+    kept any lowercase word that looked like a subcommand, so `git checkout acme-client-payroll`,
+    `docker login hunter2pass` and `npx secretpkgname` came through whole, into segments a
+    meta-retro quotes. What may follow a runner is now a closed list of known subcommands, and a
+    package script is kept only when every part of its name is on it (`test:unit`, not
+    `deploy:prod-acme`).
+  - *A program behind a blank line, a variable, a wrapper or a shell keyword was lost* (`sudo npm
+    test` read as `sudo`, a command after a newline as `opaque`), which weakened the error, then
+    retry signal. The label now comes from the first line that names a program, and still stops at
+    the first heredoc, substitution or open quote.
+  - *The owner's global file was quoted into a project report.* `/tm-session-analyze` step 3c
+    cites a line of `~/.claude/CLAUDE.md`, `CLAUDE.local.md` or `~/.codex/AGENTS.md` by file and
+    line number, never quoted or paraphrased. It reads the files the session's harness loaded
+    (`.claude/CLAUDE.md`, `@path` imports, Codex's `AGENTS.md` chain), and an instruction for a
+    task the session never did is listed as not exercised instead of failed as a no-op.
+  - A `grep` that found nothing exits non-zero and is marked `failed`: the analyst is told that a
+    query's exit status is an answer, not a failure.
+  - The near-miss eval for `writing-for-agents` is now a README section written for people. The
+    anatomy's "no stray bullets, no empty sections" item became a test over every skill, command
+    and agent; the tests of the skill check its headings and rules instead of loose substrings.
 
 ### Wave D: re-sending the context less
 
@@ -228,6 +252,24 @@ Built as a stack, one PR per wave (#60 to #79), released together.
   Assumed, `> [!NOTE]` Decided); the marker line itself is unchanged, so the validators still find it.
 - **`/tm-docs-migrate`** adds the callout lines and moves Status and Level into the frontmatter.
   `scripts/adr-links.test.mjs` holds the wave.
+
+- **From the review (#83):**
+  - *A legacy ticket in progress counted as finished.* A progress file from before the frontmatter
+    was read by the first `**Status:**` line anywhere in it, and every SI has one: a ticket whose own
+    line said `In progress` took its first finished SI's `done`. The status is now read above the
+    first SI only, in any case, with or without backticks.
+  - *A ticket's cost could never be measured.* The retro script gave a Cost by stage row to the
+    ticket its Stage cell named, and the extractor never wrote one: it kept the command's name and
+    merged every ticket a stage ran on. A row is now a stage on a ticket (`tm-implement 02-export`),
+    the ticket kept only in the shape a ticket slug has, so free text typed after a command stays
+    out. The test builds its meta-retro from the extractor's own table.
+  - *Plan revisions were off by one* (`revision` is 1 when first written), and *versions were sorted
+    as text* (`0.10.0` before `0.7.1`).
+  - `/tm-flow-report` §3 reads the script table by table instead of keeping its own list of
+    measurements, and a test fails when the script prints a section the report does not name.
+  - `templates/evolutions.md` no longer offers `defect` as a kind. Three tests that compared a
+    constant with itself, or searched the script's source for a line, became tests of what the
+    script prints.
 
 ### Wave C1a: the plan and its validation
 
