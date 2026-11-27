@@ -30,16 +30,10 @@ test('a message the owner sent mid-turn is read as an owner turn', () => {
   assert.match(read('agents/session-segment-analyst.md'), /`queued`[^\n]*mid-turn/)
 })
 
-test('the retro sums the cost per ticket, with who did the work and at what effort', () => {
-  const retro = read('templates/retro.md')
-
+test('the progress file records the effort the work ran at, which the retro sets beside each ticket', () => {
   assert.deepEqual(
-    {
-      columns: /\| Ticket \| Plugin version \| Model \| Effort \|[^\n]*\| Minutes \| Tool calls \| CI red after open \|/.test(retro),
-      sums: /minutes and tool calls per ticket/.test(read('skills/retro/SKILL.md')),
-      effort: /^effort: <the effort level/m.test(read('skills/implement/SKILL.md')),
-    },
-    { columns: true, sums: true, effort: true },
+    { column: /\['Effort', 'effort', 'progress', 'effort'\]/.test(read('scripts/retro-measure.mjs')), effort: /^effort: <the effort level/m.test(read('skills/implement/SKILL.md')) },
+    { column: true, effort: true },
   )
 })
 

@@ -14,7 +14,8 @@ const read = (path) => (existsSync(join(root, path)) ? readFileSync(join(root, p
 const LEVELS = '${CLAUDE_PLUGIN_ROOT}/skills/retro/levels.md'
 const REGISTRY = '${CLAUDE_PLUGIN_ROOT}/scripts/report-registry.mjs'
 const FLOW_STATE = '${CLAUDE_PLUGIN_ROOT}/scripts/flow-state.mjs'
-const LOOKING_BACK = ['commands/tm-retro.md', 'skills/retro/SKILL.md', 'commands/tm-session-analyze.md', 'agents/session-segment-analyst.md', 'skills/flow-report/SKILL.md']
+const RETRO_MEASURE = '${CLAUDE_PLUGIN_ROOT}/scripts/retro-measure.mjs'
+const LOOKING_BACK = ['skills/retro/SKILL.md', 'commands/tm-session-analyze.md', 'agents/session-segment-analyst.md', 'skills/flow-report/SKILL.md']
 
 test('the three levels are written once and cited by every stage that tags a finding', () => {
   const levels = read('skills/retro/levels.md')
@@ -35,7 +36,7 @@ test('the old two-level tag is gone from the stages that tag', () => {
 })
 
 test('retro and session-analyze write the report and stop, with no invitation to act', () => {
-  const stages = ['commands/tm-retro.md', 'commands/tm-session-analyze.md']
+  const stages = ['skills/retro/SKILL.md', 'commands/tm-session-analyze.md']
 
   assert.deepEqual(
     { invites: stages.filter((path) => /ask what to act on/i.test(read(path))), stops: stages.filter((path) => !/\*\*Then stop\.\*\*/.test(read(path))) },
@@ -57,7 +58,7 @@ test('no stage that looks back edits a plugin file', () => {
 test('both reports count their findings by level', () => {
   assert.deepEqual(
     {
-      retro: /^findings: \{flow: <n>, repo-skill: <n>, repo-code: <n>, product: <n>, defect: <n>\}$/m.test(read('templates/retro.md')),
+      retro: /^findings: \{flow: <n>, repo-skill: <n>, repo-code: <n>, product: <n>\}$/m.test(read('templates/retro.md')),
       metaRetro: /^findings: \{flow: <n>, repo-skill: <n>, repo-code: <n>\}$/m.test(read('templates/meta-retro.md')),
     },
     { retro: true, metaRetro: true },
@@ -67,7 +68,7 @@ test('both reports count their findings by level', () => {
 test('every report records itself, and the cross-project report reads the registry when given no path', () => {
   assert.deepEqual(
     {
-      retro: read('commands/tm-retro.md').includes(`${REGISTRY}" record`),
+      retro: read('skills/retro/SKILL.md').includes(`${REGISTRY}" record`),
       session: read('commands/tm-session-analyze.md').includes(`${REGISTRY}" record`),
       flowReport: read('skills/flow-report/SKILL.md').includes(`${REGISTRY}" list`),
       neutralPath: read('scripts/report-registry.mjs').includes("'.thasmorato-skills', 'reports.json'"),
@@ -76,10 +77,13 @@ test('every report records itself, and the cross-project report reads the regist
   )
 })
 
-test('the matrix and the counts come from the flow-state script', () => {
+test('the matrix comes from the flow-state script, and the counts from the script that sums them', () => {
   assert.deepEqual(
-    ['commands/tm-flow.md', 'skills/retro/SKILL.md', 'skills/flow-report/SKILL.md'].filter((path) => !read(path).includes(FLOW_STATE)),
-    [],
+    {
+      matrix: read('commands/tm-flow.md').includes(FLOW_STATE),
+      counts: ['skills/retro/SKILL.md', 'skills/flow-report/SKILL.md'].filter((path) => !read(path).includes(RETRO_MEASURE)),
+    },
+    { matrix: true, counts: [] },
   )
 })
 

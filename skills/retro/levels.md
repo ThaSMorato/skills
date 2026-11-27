@@ -8,7 +8,7 @@ A finding about how the work went is about one of three things, and each has its
 |---|---|---|---|
 | `flow` | the plugin's process would do this wrong on any project: a stage's instructions, a gate, a template, an agent | the report, and from there `/tm-flow-report`, across projects | the plugin's next version; never edited from inside a project |
 | `repo-skill` | a convention of this repo or this team: a ticket structure the team fixed, a naming rule, a library preference | this repo's skills and guides: `.claude/skills/`, the `testing-guide-<project>`, the stack guides, `docs/guidelines.md`, `CLAUDE.md` | the stage that owns that file |
-| `repo-code` | a defect or a gap in this repo's code or configuration | a ticket, or a check | the stage that owns that file (`/tm-tickets`, `/tm-guardrails`) |
+| `repo-code` | a defect or a gap in this repo's code or configuration: what shipped does the wrong thing, or a check, a script or a setting is missing | a ticket, or a check | the stage that owns that file (`/tm-tickets`, `/tm-guardrails`) |
 
 **The question that picks the level:** does it hold for any project (`flow`), for this repo (`repo-skill`), or is it a defect in the code (`repo-code`)? When unsure, take the lowest level that resolves it: a `flow` change reaches every user of the plugin, so it needs the stronger case, evidence that it would recur on a project that is not this one.
 

@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 // Says where every ticket stands, from the frontmatter its stages wrote: the ticket, the node map,
-// the plan, its validation (stale when the plan changed after it), the progress, the review, the
-// acceptance record, the PR body. A ticket implemented in another worktree with its own copy of
-// .scratch is read from there. A feature whose tickets all completed, with no retro covering it,
-// is `awaiting-retro`. /tm-flow builds its matrix from this, /tm-retro and /tm-flow-report their counts.
+// the plan, its validation (stale when the plan changed after it), the progress, the review, the trim,
+// tidy and walkthrough records, the acceptance record, the PR body, and per feature its ticket-set
+// validation and its diagnoses. A ticket implemented in another worktree with its own copy of
+// .scratch is read from there. A feature whose tickets all completed is `awaiting-retro` until the
+// retros cover every one of them: a retro names its `features` and the `tickets` it covered, so a
+// ticket that finished after it is still owed one. /tm-flow builds its matrix from this, and
+// retro-measure.mjs the retro's and the flow report's counts.
 // Usage: node flow-state.mjs [--root <dir>]          (prints JSON)
 //        node flow-state.mjs resolve <text> [--root <dir>] (the tickets a loose slug names)
 // No dependencies beyond the Node standard library.
@@ -17,6 +20,8 @@ import { readWorktrees } from './worktrees.mjs'
 
 const STATUS_LINE = /^- \*\*Status:\*\*\s*([^\n|]+?)\s*$/m
 const TITLE = /^# \d{2}: (.+)$/m
+const BODY_STATUS = /^(?:- )?\*\*Status:\*\*\s*([a-z_]+)/m
+// `done` is the second value versions before 0.7.0 wrote. This list is the one definition of finished.
 const FINISHED = ['completed', 'done']
 
 export function flowState({ cwd, run }) {
@@ -28,8 +33,15 @@ export function flowState({ cwd, run }) {
     root,
     features: [...features].map(([feature, tickets]) => {
       const read = tickets.map((ticket) => readTicket({ ...ticket, root, copies }))
-      const retro = retros.find((entry) => entry.scopes.includes(feature))?.file ?? null
-      return { feature, state: featureState(read, retro), retro, tickets: read }
+      const covering = retros.filter((retro) => retro.features.includes(feature))
+      return {
+        feature,
+        state: featureState(read, covering),
+        retro: covering.at(-1)?.file ?? null,
+        tickets_validation: frontmatterOf(join(root, '.scratch', feature, 'tickets-validation.md')),
+        diagnoses: frontmattersIn(join(root, '.scratch', feature, 'diagnoses')),
+        tickets: read,
+      }
     }),
   }
 }
@@ -65,9 +77,12 @@ function readTicket({ feature, slug, path, root, copies }) {
     design: existsSync(at('design', `${slug}.md`)),
     plan: frontmatterOf(at('plans', slug, 'plan.md')),
     validation: validationOf(at('plans', slug)),
-    progress: frontmatterOf(at('plans', slug, 'progress.md')),
+    progress: progressOf(at('plans', slug, 'progress.md')),
     review: frontmatterOf(at('reviews', `${slug}.md`)),
     second_opinion: frontmatterOf(at('reviews', `${slug}.second-opinion.md`)),
+    trim: frontmatterOf(at('trim', `${slug}.md`)),
+    tidy: frontmatterOf(at('tidy', `${slug}.md`)),
+    walkthrough: frontmatterOf(at('walkthrough', `${slug}.md`)),
     acceptance: frontmatterOf(at('acceptance', `${slug}.md`)),
     pr: existsSync(at('prs', `${slug}.md`)),
     pr_record: frontmatterOf(at('prs', `${slug}.record.md`)),
@@ -92,21 +107,47 @@ function validationOf(planDir) {
   return { ...fields, stale }
 }
 
-function featureState(tickets, retro) {
-  if (tickets.every((ticket) => FINISHED.includes(ticket.progress?.status))) return retro ? 'retro done' : 'awaiting-retro'
+export function isFinished(ticket) {
+  return FINISHED.includes(ticket.progress?.status)
+}
+
+function featureState(tickets, retros) {
+  if (tickets.every(isFinished)) return tickets.every((ticket) => retros.some((retro) => covers(retro, ticket))) ? 'retro done' : 'awaiting-retro'
   return tickets.some((ticket) => ticket.design || ticket.plan || ticket.progress) ? 'in progress' : 'not started'
+}
+
+function covers(retro, ticket) {
+  return retro.tickets === null || retro.tickets.includes(`${ticket.feature}/${ticket.slug}`)
 }
 
 function readRetros(root) {
   const dir = join(root, 'docs', 'retro')
-  return markdownFiles(dir).map((file) => ({
-    file: `docs/retro/${file}`,
-    scopes: String(frontmatterOf(join(dir, file))?.scope ?? '').split(/[\s,]+/).filter(Boolean),
-  }))
+  return markdownFiles(dir).map((file) => {
+    const fields = frontmatterOf(join(dir, file))
+    return { file: `docs/retro/${file}`, features: featuresOf(fields), tickets: Array.isArray(fields.tickets) ? fields.tickets.map(String) : null }
+  })
+}
+
+// A retro from before the `features` field has only its free-text scope: its words are read as
+// feature names, with every ticket of each covered.
+function featuresOf(fields) {
+  return Array.isArray(fields.features) ? fields.features.map(String) : String(fields.scope ?? '').split(/[\s,]+/).filter(Boolean)
 }
 
 function frontmatterOf(path) {
   return existsSync(path) ? readFrontmatter(readFileSync(path, 'utf8')) ?? {} : null
+}
+
+// A progress file from before the frontmatter says where it stands in its body.
+function progressOf(path) {
+  const fields = frontmatterOf(path)
+  if (!fields || fields.status) return fields
+  const status = readFileSync(path, 'utf8').match(BODY_STATUS)?.[1]
+  return status ? { ...fields, status } : fields
+}
+
+function frontmattersIn(dir) {
+  return markdownFiles(dir).map((file) => ({ file, ...frontmatterOf(join(dir, file)) }))
 }
 
 function sha256(content) {

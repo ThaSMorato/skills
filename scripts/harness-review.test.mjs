@@ -4,6 +4,8 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { MEASURED_FIELDS } from './retro-measure.mjs'
+
 // Two harnesses review better than one only when the second is asked at the right time, works with the
 // same project rules, and cannot edit what it reviews. The review stage offers the other harness, the
 // setup makes its session read-only, and the guidelines stage plants the sentinel the retro reads.
@@ -43,8 +45,8 @@ describe('the review offers a second opinion in the other harness', () => {
   })
 
   test('the retro and the flow report measure what the second opinion found per pair', () => {
-    assert.match(read('skills/retro/SKILL.md'), /`not_in_first`/)
-    assert.match(read('skills/flow-report/SKILL.md'), /`not_in_first`/)
+    assert.ok(MEASURED_FIELDS.second_opinion.includes('not_in_first'))
+    assert.match(read('scripts/retro-measure.mjs'), /Reviews by author and reviewer/)
   })
 })
 
@@ -54,11 +56,9 @@ describe('the project instructions reach both harnesses, measured', () => {
     assert.match(read('commands/tm-guidelines.md'), /sentinel/)
   })
 
-  test('the retro and the flow report check the field with the script, per harness', () => {
-    for (const path of ['skills/retro/SKILL.md', 'skills/flow-report/SKILL.md']) {
-      assert.match(read(path), /instructions-sentinel\.mjs" check/, path)
-      assert.match(read(path), /`instructions`/, path)
-    }
+  test('the retro and the flow report read the sentinel check per harness from the measuring script', () => {
+    assert.match(read('scripts/retro-measure.mjs'), /checkInstructions\(\{ sentinels, values: artifact\.instructions \}\)/)
+    for (const path of ['skills/retro/SKILL.md', 'skills/flow-report/SKILL.md']) assert.match(read(path), /Instructions, per harness/, path)
   })
 })
 

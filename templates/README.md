@@ -30,7 +30,7 @@
 | `declined.md` | `/tm-tidy`, `/tm-trim`, `/tm-review` (append-only) | `docs/declined.md` |
 | `component-analysis.md` | `component-analyzer` | `docs/analysis/components/<component>.md` |
 | `dependency-graph.md` | `architectural-analyzer` (read by `reconciler`) | `docs/analysis/dependency-graph.md` |
-| `retro.md` | `/tm-retro` | `docs/retro/<scope>.md` |
+| `retro.md` | `/tm-retro` | `docs/retro/<YYYY-MM-DD>-<scope>.md` |
 | `evolutions.md` | `/tm-retro`, `decomposer` (append-only) | `docs/evolutions.md` |
 | `meta-retro.md` | `/tm-session-analyze` | `docs/meta-retro/<date>-<session>.md` |
 | `flow-report.md` | `/tm-flow-report` | `docs/flow-reports/<date>.md` |

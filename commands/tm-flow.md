@@ -55,7 +55,7 @@ Phase 2 is a **loop per ticket**, so "the next step" is *which ticket, and which
 
 **Every worktree first.** Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/worktrees.mjs"`: it lists the repository's worktrees, each with its branch, how its `.scratch` got there (`tracked`, `shared` through a link to the main one, `copy`, `none`) and the `progress.md` files it holds. A ticket in progress in another worktree is in progress there, not `not started` here: its cells come from that worktree's `.scratch`, and the worktree column names it (`main` for the main one). A `copy` that is ahead of the main `.scratch` says so: its ticket's `plans/<NN>-<slug>/` returns to the main worktree when the ticket ends.
 
-Build this table from `node "${CLAUDE_PLUGIN_ROOT}/scripts/flow-state.mjs"`: it reads every ticket's artifacts by their frontmatter, from the worktree that holds each, and resolves a loose slug in the scope (`resolve <text>`; more than one match is a question). Each feature has a state: a feature `awaiting-retro` (every ticket completed, no retro covers it) has `/tm-retro <feature>` next, for the owner.
+Build this table from `node "${CLAUDE_PLUGIN_ROOT}/scripts/flow-state.mjs"`: it reads every ticket's artifacts by their frontmatter, from the worktree that holds each, and resolves a loose slug in the scope (`resolve <text>`; more than one match is a question). Each feature has a state: a feature `awaiting-retro` (every ticket completed, and at least one that no retro covered) has `/tm-retro <feature>` next, for the owner.
 
 | ticket | worktree | design | plan | validate | implement | review |
 |---|---|---|---|---|---|---|
