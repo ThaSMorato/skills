@@ -451,7 +451,7 @@ describe('costByStage', () => {
     ])
 
     assert.deepEqual(
-      [stage(cost, 'tm-plan'), stage(cost, 'tm-plan-validate')].map(({ minutes, tool_calls, invocations }) => ({ minutes, tool_calls, invocations })),
+      [stage(cost, 'tm-plan 02-export'), stage(cost, 'tm-plan-validate 02-export')].map(({ minutes, tool_calls, invocations }) => ({ minutes, tool_calls, invocations })),
       [{ minutes: 12, tool_calls: 3, invocations: 1 }, { minutes: 3, tool_calls: 1, invocations: 1 }],
     )
   })
@@ -459,7 +459,22 @@ describe('costByStage', () => {
   test('a pause longer than 30 minutes counts as idle, not as the stage working', () => {
     const cost = costOf([owner('invoked', '/tm-implement 02-export', 0), assistant(5), assistant(55)])
 
-    assert.deepEqual({ minutes: stage(cost, 'tm-implement').minutes, idle: stage(cost, 'tm-implement').idle_minutes }, { minutes: 5, idle: 50 })
+    assert.deepEqual({ minutes: stage(cost, 'tm-implement 02-export').minutes, idle: stage(cost, 'tm-implement 02-export').idle_minutes }, { minutes: 5, idle: 50 })
+  })
+
+  const twoTickets = () => costOf([owner('invoked', '/tm-implement 01-read-model', 0), assistant(4, ['Read']), owner('invoked', '/thasmorato-skills:tm-implement ledger/02-export continuous', 5), assistant(7, ['Read', 'Edit'])])
+
+  test('a stage run on two tickets is two rows, each named with the ticket its invocation gave', () => {
+    assert.deepEqual(
+      twoTickets().map(({ stage: name, tool_calls, invocations }) => ({ name, tool_calls, invocations })),
+      [{ name: 'tm-implement 01-read-model', tool_calls: 1, invocations: 1 }, { name: 'tm-implement ledger/02-export', tool_calls: 2, invocations: 1 }],
+    )
+  })
+
+  test('an argument that is not a ticket stays out of the row: free text, a fixed point, a mode', () => {
+    const cost = costOf([owner('invoked', '/tm-interview the acme-payroll export for client 7', 0), assistant(1), owner('invoked', '/tm-review main', 2), assistant(3)])
+
+    assert.deepEqual(cost.map((row) => row.stage), ['tm-interview', 'tm-review'])
   })
 
   test('the same stage invoked again adds to its row', () => {

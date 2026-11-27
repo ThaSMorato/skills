@@ -30,7 +30,7 @@
 | `declined.md` | `$thasmorato-skills:tm-tidy`, `$thasmorato-skills:tm-trim`, `$thasmorato-skills:tm-review` (append-only) | `docs/declined.md` |
 | `component-analysis.md` | `component-analyzer` | `docs/analysis/components/<component>.md` |
 | `dependency-graph.md` | `architectural-analyzer` (read by `reconciler`) | `docs/analysis/dependency-graph.md` |
-| `retro.md` | `$thasmorato-skills:tm-retro` | `docs/retro/<scope>.md` |
+| `retro.md` | `$thasmorato-skills:tm-retro` | `docs/retro/<YYYY-MM-DD>-<scope>.md` |
 | `evolutions.md` | `$thasmorato-skills:tm-retro`, `decomposer` (append-only) | `docs/evolutions.md` |
 | `meta-retro.md` | `$thasmorato-skills:tm-session-analyze` | `docs/meta-retro/<date>-<session>.md` |
 | `flow-report.md` | `$thasmorato-skills:tm-flow-report` | `docs/flow-reports/<date>.md` |

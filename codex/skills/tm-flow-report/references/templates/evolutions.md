@@ -18,7 +18,7 @@ Every entry cites the artifact it came from; an entry nobody can trace is an ent
 
 ### EV-1: <one-line finding>
 - **Found by:** <the artifact: `.scratch/<slug>/plans/<NN>/progress.md`, a review file, `$thasmorato-skills:tm-decompose` run, …>
-- **Kind:** capability | constraint | defect | opportunity
+- **Kind:** capability | constraint | opportunity
 - **What it is:** <one or two lines, stated as what was observed, not as a proposal>
 - **Why it isn't a requirement (yet):** <traces to no RF/RNF · out of the current scope · needs a decision>
 - **Became:** <RF-0NN, or an ADR id, or `nothing yet`>

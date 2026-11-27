@@ -15,52 +15,28 @@ The written file STARTS with the frontmatter below; this comment is not copied.
 kind: retro
 scope: <epic / feature / cycle>
 date: <YYYY-MM-DD>
-plugin_versions: [<each plugin_version the measured artifacts record; `unknown` for those without it>]
-findings: {flow: <n>, repo-skill: <n>, repo-code: <n>, product: <n>, defect: <n>}
+plugin_versions: [<as the measuring script prints it>]
+features: [<as the measuring script prints it: the features this retro read>]
+tickets: [<as the measuring script prints it: the finished tickets this retro covered, `<feature>/<NN-slug>`>]
+findings: {flow: <n>, repo-skill: <n>, repo-code: <n>, product: <n>}
 ---
 
 # Retro: <epic / feature / cycle>
 
 ## Metadata (required)
-- **Scope:** <what this covers: the tickets, by id>
+- **Scope:** <what this covers: the tickets, by id, and the tickets in scope left out as not finished>
 - **Date:** <YYYY-MM-DD>
 - **Read from:** <the artifact paths this was built out of>
 
 ## Measurements (required)
-> Numbers only, and only from frontmatter: the ticket's `gear` and `acs`, `plan.md`'s
-> `sis_planned` and `revision`, `progress.md`'s `sis_done`, `escalations`, `unverified` and `failed_deliverables`, `validation.md`'s `run`
-> and `fired`, the review's `findings`, `by_severity`, `by_lens`, `verdicts` and `refuted_by_lens`, and per feature `tickets-validation.md`'s `tickets`, `seams` and `dispersion`. Nothing here is estimated. A ticket
-> whose artifacts lack these fields predates them: list it as `not measured (pre-v0.4 frontmatter)`
-> rather than reconstructing its numbers from prose.
->
-> This section is the series. Keep its shape identical between retros, so the next one can put its
-> numbers beside this one's.
+> The section `node "references/scripts/retro-measure.mjs" <scope>` prints, pasted whole and
+> unchanged: every number in it is a frontmatter field the script summed, and its shape is the same in
+> every retro, so the next one can set its numbers beside these. `not measured` stays as printed.
 
-| Ticket | Plugin version | Model | Effort | Gear | ACs | SIs planned | SIs done | Plan revisions | Validation runs | Escalations | Unverified | Review findings | Minutes | Tool calls | CI red after open |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+<the script's section>
 
-**Totals by plugin version:** <per `plugin_version`: tickets, median SIs per AC, escalations, validation runs to `clean`, review findings, lens precision; two versions in one scope are two populations, never one sum>
-
-**Totals by author:** <per `model` and `harness`, and per author × reviewer pair for the reviews: the same measurements; `unknown` for the artifacts that predate the fields>
-
-**Totals by gear:** <per gear: tickets, median ACs, median SIs, SIs per AC, median review findings>
-
-**Ticket sets:** <per feature: tickets, seams, dispersion, and the categories `tickets-validate` fired>
-
-**Bugs:** <bugfix tickets by gear; from `.scratch/*/diagnoses/*.md`, how many were `cause-found` vs `unresolved`, and the median hypotheses and probes per diagnosis>
-
-**Trimming:** <summed `before` and `after` from `.scratch/*/trim/*.md` (files and lines), `proposed` by criterion, `applied`, `reverted`, `unrequested`; many `trace` proposals or unrequested notes point at scope creeping in at `$thasmorato-skills:tm-plan` or `$thasmorato-skills:tm-implement`>
-
-**Tidying:** <summed `proposed` / `applied` / `reverted` / `review_findings` from `.scratch/*/tidy/*.md`; many reverted, or review findings on tidy commits, means the proposals were not really structural>
-
-**Understanding:** <summed `questions`, `missed` and `unclear_after` from `.scratch/*/walkthrough/*.md`; misses that cluster in one area point at code its owners cannot follow>
-
-**Pre-existing findings:** <summed `pre-existing` from the reviews' `verdicts`, and how many areas they fall in>
-
-**Review findings by lens:** <summed `by_lens` across the scope, and beside it `refuted_by_lens`, each lens's precision: of what it raised, how much the verifier refuted with code>
-
-**Compared with the previous retro:** <the same totals from the latest earlier `docs/retro/*.md`, side
-by side, or `first measured retro` when none has a Measurements section>
+**Compared with the previous retro:** <the totals of the retro the script names, beside these, version by
+version; or `first measured retro`>
 
 ## What shipped against what was planned (required)
 > Where the Measurements table shows planned and done differ, what the artifacts say about why. A
@@ -85,8 +61,9 @@ by side, or `first measured retro` when none has a Measurements section>
 
 ## Review findings, by lens (optional)
 > Beyond the counts in Measurements: whether any class of finding repeats across tickets. A repeating finding is a standard that should move into a stack guide or a
-> rule: the repetition is the signal, and one occurrence is not. Before proposing the move, run it through the promotion filter
-> (`skills/retro/promotion-filter.md`); one that fails stays here as a finding, with the question it failed.
+> rule or a check: the repetition is the signal, and one occurrence is not. A mechanical one is proposed as a check; a judgement
+> one first passes the promotion filter (`skills/retro/promotion-filter.md`), and one that fails stays here as a finding, with
+> the question it failed.
 
 ## Debt hotspots (required when any review had a `pre-existing` finding)
 > From the `pre-existing` verdicts across the scope's reviews: real problems in code no ticket changed.
@@ -98,13 +75,19 @@ by side, or `first measured retro` when none has a Measurements section>
 |---|---|---|---|---|
 
 ## The environment (required)
-> As far as the artifacts and the repository show it (`skills/retro/environment.md`); the session side
-> belongs to `$thasmorato-skills:tm-session-analyze`. A mechanical standard is proposed as a check, a judgement one as a line
-> the review reads.
+> Every category `skills/retro/environment.md` marks as read by `$thasmorato-skills:tm-retro`, each with its evidence cited or
+> `none in scope`; the session side belongs to `$thasmorato-skills:tm-session-analyze`. A mechanical standard is proposed as a
+> check, a judgement one as a line the review reads.
 
 **Guardrail:** <`docs/guardrails.md`, or the repo's pre-commit hook and CI job and which of lint / type check / tests each runs; or `none`, which is itself a finding>
 
-**Mechanical standards the review kept catching:** <repeated review findings a lint rule, hook or CI job could catch, each with the check that would>
+**Automated checks:** <mistakes a linter, the type checker, a test or a CI job could have caught: repeated review findings, failed deliverables, escalations, each with the check that would catch it>
+
+**Navigation:** <effort spent finding a file or a convention: `progress.md` notes, review findings of the "missed the existing X" kind, analogues `pattern-scout` found late, each with the pointer that would have sent the agent there>
+
+**Coding standards:** <a rule the review enforces that is unclear, stale or never fires: the lenses the Measurements show with low precision, and what their refuted findings have in common>
+
+**Information access:** <facts out of reach: `unverified` items, `> Assumed:` marks, `Not verified` sections, escalations that ended in "could not observe", each with the access that would close it>
 
 **From the sessions:** <the Environment sections of the `docs/meta-retro/` reports in scope, cited; or `no meta-retro in scope: the session side was not read`>
 
@@ -116,7 +99,8 @@ by side, or `first measured retro` when none has a Measurements section>
 > Give each change its level (`skills/retro/levels.md`): `flow` (the plugin's own stages, gates, templates or
 > agents would do this wrong on any project; `$thasmorato-skills:tm-flow-report` gathers these, and nothing here applies them),
 > `repo-skill` (this repo's skills, guides, rules or `CLAUDE.md`) or `repo-code` (this repo's code or
-> configuration). When unsure, the lowest level that resolves it.
+> configuration; a defect in what shipped is one, and lands in a ticket). When unsure, the lowest level
+> that resolves it.
 
 | Change | Level | Motivated by | Where it lands |
 |---|---|---|---|

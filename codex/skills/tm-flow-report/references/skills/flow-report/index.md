@@ -15,7 +15,7 @@ Resolve the projects: the paths given, or the lines of the file given (one path 
 
 Only `flow` findings are read (`references/skills/retro/levels.md`): a `repo-skill`, `repo-code` or older `project` finding is about its own repo. A retro from before any tag has untagged changes: list them apart, as **untagged**, and judge each by the level rule (would it recur on any project?), saying it was judged here.
 
-The measurements come from each project's artifacts, read mechanically: `node "references/scripts/flow-state.mjs" --root <project>` prints every ticket's frontmatter fields. Agents read only the prose findings.
+The measurements come from each project's artifacts, summed by a script: `node "references/scripts/retro-measure.mjs" --root <project>` prints, over every finished ticket of the project, the totals per plugin version, per author and per gear, the reviews by author and reviewer, each lens's precision, the sums per artifact and **Instructions, per harness**. Agents read only the prose findings.
 
 With more than three projects, call the `spawn_agent` tool once per project, all at once (at most 6 running together; wait for every one), each told to return exactly the items above with their file and section; the synthesis stays here.
 
@@ -30,7 +30,15 @@ Rank by evidence:
 3. **Single**: listed, not proposed.
 
 ## 3. Measurements, per version
-Put the flow measurements side by side **per `plugin_version`**, summed across projects: escalations per ticket, validation runs to `clean` and the categories that fired, review findings and each lens's precision (refuted over raised), trim and tidy reverted over applied, diagnoses `cause-found` over all, walkthrough `missed` over questions, and the cost: minutes and tool calls per ticket, other answers, clarifications and overrules per stage (from the meta-retros' Cost by stage), and the share of pull requests with `ci_red_after_open`. For each, the direction from the previous version, and how many tickets it rests on. Then the same measurements per `model` and `harness`, and the reviews per author × reviewer pair (the `progress.md`'s and the review's), with the second opinions' `not_in_first` per pair (what the other harness found that the first review did not), and `unknown` for the artifacts that predate the fields. Per `harness`, the share of artifacts whose `instructions` the project's sentinels confirm, from `node "references/scripts/instructions-sentinel.mjs" check --root <project> <artifact>...` run once per project: a harness that ran without the project's rules is not compared with one that had them. A version with a handful of tickets is reported with its count and no trend: a direction from three tickets is noise.
+Put the flow measurements side by side **per `plugin_version`**, summed across projects, table by table as the script prints them. The script holds the list of what is measured, so read every column of every table: a field added there reaches this report with no edit here.
+
+- **Totals by plugin version**, **Sums by artifact, per plugin version** and **Ticket sets**: every column, with the direction from the previous version and how many tickets it rests on. A version with a handful of tickets is reported with its count and no trend: a direction from three tickets is noise.
+- **Review lenses**: each lens's precision, refuted over raised.
+- **Totals by author** and **Totals by gear**: the same columns per model and harness, and per gear.
+- **Reviews by author and reviewer**: each pair apart (the `progress.md`'s author, the review's), the second opinion's row beside the first review's: what the other harness found that the first did not.
+- **Instructions, per harness**: the share of artifacts the project's sentinels confirm. A harness that ran without the project's rules is not compared with one that had them.
+- **Not measured**: the artifacts that predate a field stay out of its sum, and are counted as `unknown`.
+- From the meta-retros' Cost by stage tables, which the script reads only for a ticket's minutes and tool calls: the other answers, clarifications and overrules per stage.
 
 ## 4. Propose
 For each group in tiers 1 and 2: the change to the plugin (which file, what it should do differently), the instances it rests on (project, report, row), and the measurement it should move. Proposals that touch the same file are merged. The owner decides what enters the next version's backlog; nothing here edits the plugin.

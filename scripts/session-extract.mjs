@@ -22,6 +22,7 @@ const CLARIFY_BOILERPLATE = /^The user wants to clarify these questions\./
 const REJECTION_PREFIX = /[\s\S]*the user said:\s*/i
 const RECOMMENDED = /\(Recommended\)\s*$/
 const NO_STAGE = '(no stage)'
+const TICKET = /^(?:[a-z0-9][a-z0-9-]*\/)?\d{2}-[a-z0-9][a-z0-9-]*$/
 const STAGE_PREFIX = 'tm-' // only the flow's stages open a row: /compact, /model, /login are the harness
 const IDLE_AFTER_MS = 30 * 60 * 1000
 
@@ -223,7 +224,7 @@ function renderTurn(turn) {
 }
 
 /**
- * What each stage cost, from the turns alone: a stage runs from the owner's invocation of a flow
+ * What each stage cost, per ticket, from the turns alone: a stage runs from the owner's invocation of a flow
  * stage (`tm-*`) to the next one; a harness command between them (`/compact`) does not end it. A pause over 30 minutes is idle time, kept apart. In Codex, the answers to structured questions
  * are not extracted, so what rests on them is `null` (not measured), never 0.
  */
@@ -237,7 +238,7 @@ export function costByStage(segments, { harness = 'claude' } = {}) {
   const turns = segments.flatMap((segment) => segment.turns)
   let stage = NO_STAGE
   turns.forEach((turn, index) => {
-    const invoked = turn.role === 'owner' && turn.kind === 'invoked' ? stageNameOf(turn.text) : null
+    const invoked = turn.role === 'owner' && turn.kind === 'invoked' ? stageOf(turn.text) : null
     if (invoked?.startsWith(STAGE_PREFIX)) {
       stage = invoked
       rowOf(stage).invocations += 1
@@ -255,8 +256,13 @@ function emptyCost(stage, answersMeasured) {
   return { stage, activeMs: 0, idleMs: 0, tool_calls: 0, invocations: 0, other_answers: counted, clarifications: counted, overrules: counted }
 }
 
-function stageNameOf(invocation) {
-  return invocation.split(/\s+/)[0].replace(/^\//, '').replace(/^.*:/, '')
+// A row is a stage on a ticket: `tm-implement 02-export`. The ticket is the one argument kept, and
+// only in the shape a ticket has, so free text typed after a command never reaches the table.
+function stageOf(invocation) {
+  const [command, ...args] = invocation.trim().split(/\s+/)
+  const name = command.replace(/^\//, '').replace(/^.*:/, '')
+  const ticket = args.find((arg) => TICKET.test(arg))
+  return ticket ? `${name} ${ticket}` : name
 }
 
 function addGap(row, turn, next) {
@@ -298,6 +304,13 @@ function renderIndex({ sessionId, transcript, segments, cost }) {
     '|---|---|---|---|---|',
     ...rows,
     '',
+    renderCostTable(cost),
+  ].join('\n')
+}
+
+// The table /tm-session-analyze copies into the meta-retro, and the retro script reads back from it.
+export function renderCostTable(cost) {
+  return [
     '## Cost by stage',
     '',
     '| Stage | Minutes | Idle minutes | Tool calls | Invocations | Other answers | Clarifications | Overrules |',

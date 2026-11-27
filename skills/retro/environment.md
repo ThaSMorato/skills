@@ -1,4 +1,4 @@
-> Read by `/tm-session-analyze`, which owns this lens: the conversation is where navigation, tool economy and missing information show up. `/tm-retro` applies only the part its artifacts prove (the guardrail, mechanical standards the review kept catching) and cites the meta-retros for the rest. Kept in the `retro` folder beside `promotion-filter.md`, its sibling reference.
+> Read by `/tm-retro` and `/tm-session-analyze`. Each takes the categories the table marks as its own: `/tm-retro` the ones whose evidence is a file on disk, `/tm-session-analyze` the ones only a conversation shows. `/tm-retro` cites the meta-retros for the session side. Kept in the `retro` folder beside `promotion-filter.md`, its sibling reference.
 
 # The environment lens: what would make the next run better
 
@@ -16,15 +16,15 @@ The strategic target is a **pit of success**: an environment where the correct m
 ## The categories
 Each category has its own evidence. Cite it, as everywhere in a retro; a category with no evidence in scope is skipped, not guessed.
 
-| Category | Look for | Evidence |
-|---|---|---|
-| **Navigation** | The agent spent effort finding a file, a convention or a hidden dependency between files; a pointer would have sent it straight there. | `progress.md` notes, review findings of the "missed the existing X" kind, `pattern-scout` analogues found late; session evidence from `docs/meta-retro/` |
-| **Automated checks** | A mistake a linter, the type checker, a test or a filesystem check could have caught. | review findings, failed deliverables, `escalations` |
-| **Guardrail** | The repository has no barrier at all: no pre-commit hook and no CI job running its lint, type check and tests. | the repo itself: `.husky/`, `.pre-commit-config.yaml`, `lefthook.yml`, `.github/workflows/`, `.gitlab-ci.yml`, the `package.json` (or build tool) scripts |
-| **Coding standards** | The review missed a mistake, or a rule it enforces is unclear, stale or never fires. | review files, `by_lens`, `refuted_by_lens` |
-| **Steering files** | `CLAUDE.md` / `AGENTS.md` carries instructions that belong in a standard or a check, or instructions that change nothing (the model already does it, or nothing in scope ever triggered it). Read both scopes: the repository's and the user's global one (`~/.claude/CLAUDE.md`), which loads into every project and costs context in all of them. | the files themselves, against what the artifacts show the agent did |
-| **Tool economy** | Expensive tool calls that a script, a narrower command or a better-shaped tool would replace. | session evidence only (`docs/meta-retro/`); without it, name this under what the artifacts couldn't tell |
-| **Information access** | A fact the agent needed was out of reach: dev server logs, a test database, read access to a third-party service, a browser to see the UI. | `unverified` items, `> Assumed:` marks, `Not verified` sections, escalations that ended in "could not observe" |
+| Category | Look for | Evidence | Read by |
+|---|---|---|---|
+| **Navigation** | The agent spent effort finding a file, a convention or a hidden dependency between files; a pointer would have sent it straight there. | on disk: `progress.md` notes, review findings of the "missed the existing X" kind, `pattern-scout` analogues found late; in a session: a run of searches before the file was found | `/tm-retro`, `/tm-session-analyze` |
+| **Automated checks** | A mistake a linter, the type checker, a test or a filesystem check could have caught. | on disk: review findings, failed deliverables, `escalations` | `/tm-retro` |
+| **Guardrail** | The repository has no barrier at all: no pre-commit hook and no CI job running its lint, type check and tests. | the repo itself: `.husky/`, `.pre-commit-config.yaml`, `lefthook.yml`, `.githooks/`, `.github/workflows/`, `.gitlab-ci.yml`, the `package.json` (or build tool) scripts | `/tm-retro` |
+| **Coding standards** | The review missed a mistake, or a rule it enforces is unclear, stale or never fires. | on disk: review files, and each lens's precision in the retro's Measurements | `/tm-retro` |
+| **Steering files** | `CLAUDE.md` / `AGENTS.md` carries instructions that belong in a standard or a check, or instructions that change nothing (the model already does it, or nothing in scope ever triggered it). Read both scopes: the repository's and the user's global one (`~/.claude/CLAUDE.md`), which loads into every project and costs context in all of them. | the files themselves, against what the session shows the agent did | `/tm-session-analyze` |
+| **Tool economy** | Expensive tool calls that a script, a narrower command or a better-shaped tool would replace. | in a session only: the tool calls the extract kept | `/tm-session-analyze` |
+| **Information access** | A fact the agent needed was out of reach: dev server logs, a test database, read access to a third-party service, a browser to see the UI. | on disk: `unverified` items, `> Assumed:` marks, `Not verified` sections, escalations that ended in "could not observe"; in a session: the owner pasting what the agent could not reach | `/tm-retro`, `/tm-session-analyze` |
 
 **Read the repository's own check command first** (its `lint` / `check` / `test` scripts, its CI workflow) before proposing a check. A check that already exists but is not wired, or is silently broken, is the finding; a new one would duplicate it.
 
@@ -41,4 +41,4 @@ Checks over prose: a check fires every time at no attention cost, and a rule in 
 The **review** enforces standards, not the implementation. The implementer carries the most context pressure (exploring, writing, debugging); the reviewer receives a diff and has room to apply a long list. So a standard lands in a stack guide or the review standard that `review-standards` reads, and the steering file (`CLAUDE.md`) keeps only **pointers** to where things are. A steering file that grows rules is a finding under **Steering files**.
 
 ## Output
-Present the environment findings **most severe first**: severity is what the problem cost, times how often it would recur without the change. Each environment finding carries: the category, the tactical cost (cited), the strategic change, **mechanical** or **judgement** when it is a standard, and **where it lands** (the check to add, the file to change, the access to grant). It still passes `promotion-filter.md` before it is proposed as a guide or a rule; a mechanical finding that passes is proposed as a check.
+Present the environment findings **most severe first**: severity is what the problem cost, times how often it would recur without the change. Each environment finding carries: the category, the tactical cost (cited), the strategic change, **mechanical** or **judgement** when it is a standard, and **where it lands** (the check to add, the file to change, the access to grant). A judgement one passes `promotion-filter.md` before it is proposed as a guide or a rule; a mechanical one is proposed as a check without it.

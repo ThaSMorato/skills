@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+
 // Two harnesses review better than one only when the second is asked at the right time, works with the
 // same project rules, and cannot edit what it reviews. The review stage offers the other harness, the
 // setup makes its session read-only, and the guidelines stage plants the sentinel the retro reads.
@@ -42,10 +43,6 @@ describe('the review offers a second opinion in the other harness', () => {
     assert.match(read('agents/guideline-generator.md'), /Risk paths/)
   })
 
-  test('the retro and the flow report measure what the second opinion found per pair', () => {
-    assert.match(read('skills/retro/SKILL.md'), /`not_in_first`/)
-    assert.match(read('skills/flow-report/SKILL.md'), /`not_in_first`/)
-  })
 })
 
 describe('the project instructions reach both harnesses, measured', () => {
@@ -54,11 +51,8 @@ describe('the project instructions reach both harnesses, measured', () => {
     assert.match(read('commands/tm-guidelines.md'), /sentinel/)
   })
 
-  test('the retro and the flow report check the field with the script, per harness', () => {
-    for (const path of ['skills/retro/SKILL.md', 'skills/flow-report/SKILL.md']) {
-      assert.match(read(path), /instructions-sentinel\.mjs" check/, path)
-      assert.match(read(path), /`instructions`/, path)
-    }
+  test('the retro and the flow report read the sentinel check per harness, by the name the measuring script prints', () => {
+    for (const path of ['skills/retro/SKILL.md', 'skills/flow-report/SKILL.md']) assert.match(read(path), /Instructions, per harness/, path)
   })
 })
 

@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+
 // Reviewing a pull request starts with understanding its shape: which files changed, how they connect
 // and where to start, and how much attention it deserves. /tm-pr-map gives that for any pull request,
 // a colleague's included, without touching it; /tm-pr and /tm-walkthrough carry the same map for the
@@ -82,10 +83,6 @@ test('the PR body says why before what, edits an open pull request, and names a 
     },
     { why: true, edit: true, foundWhileWriting: true },
   )
-})
-
-test('the retro sets the attention a pull request got beside whether CI went red', () => {
-  assert.match(read('skills/retro/SKILL.md'), /`review_attention`/)
 })
 
 test('data-access catalogs the foreign key with no referential action', () => {

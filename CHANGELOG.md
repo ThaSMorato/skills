@@ -18,6 +18,49 @@ stack, one PR per wave.
 - **From the review (#82):** the job's token is read-only (`permissions: contents: read`), and the
   guardrail test accepts any `node --test` run over `scripts/*.test.mjs` instead of one exact string.
 
+### Wave B: the retro stage, against its own rules
+
+- **A script sums the measurements.** `/tm-retro` had the model add up about fifty frontmatter fields
+  from raw JSON, grouped four ways, and read by hand the files the script skipped. A number added up
+  in prose looks exactly like a measured one. `scripts/retro-measure.mjs <feature | feature/NN-slug>...`
+  prints the whole Measurements section: one row per finished ticket, totals by plugin version, by
+  author and by gear, the reviews by author and reviewer, each lens's precision, the sums per
+  artifact, the ticket sets, the instruction sentinels per harness, and each ticket's minutes and
+  tool calls from the meta-retros' Cost by stage rows. A field an artifact predates prints
+  `not measured`. `flow-state.mjs` now also reads `trim/`, `tidy/`, `walkthrough/`, `diagnoses/` and
+  `tickets-validation.md`. `/tm-flow-report` reads the same script per project.
+- **One list of measured fields.** The list lived in the skill, in the template and in the flow
+  report, each copy different, and the template had no place for about half of it. It is now
+  `MEASURED_FIELDS` in the script; the skill and the template cite the script, and tests fail when a
+  measured field is one no stage writes, or one the printed section has no place for.
+- **A retro names what it covered.** `flow-state` split the free-text `scope` into words and read
+  each as a feature, so a retro scoped to a cycle (`scope: 2026-Q4`) covered nothing and its features
+  waited for a retro forever, and a retro over the finished tickets of a feature marked the whole
+  feature done once the rest finished. The retro's frontmatter now carries `features` and `tickets`,
+  printed by the script: a ticket that finishes after the retro leaves its feature `awaiting-retro`
+  again. A retro from before the fields is read by its scope, as before. The tickets in scope left
+  out as not finished are named.
+- **Finished has one definition.** The command accepted `completed`, the skill also `done`, and the
+  script neither value from a body: on an older project the command stopped before the skill ran.
+  `flow-state.mjs` is the one definition (`completed`, `done`, or `**Status:** completed` in the body
+  of a progress file that predates the frontmatter).
+- **The command is a pointer.** `commands/tm-retro.md` repeated the skill's workflow as a preflight
+  and a postflight, and the two had drifted. Every rule of the stage now lives in the skill, whose
+  workflow comes first and ends each step on a completion criterion; the split by author, the
+  sentinel check and the cost have a step.
+- **A defect is a `repo-code` finding.** `levels.md` called `repo-code` "a defect or a gap in this
+  repo's code", while the skill treated a defect as a third kind and the template counted both. The
+  report counts `{flow, repo-skill, repo-code, product}`; a defect in what shipped is `repo-code` and
+  lands in a ticket.
+- **The promotion filter gates prose only.** It exists because a guide or a rule is loaded on every
+  later run; a lint rule or a hook adds nothing to the agent's context, and the filter's first
+  question rejected common lint rules worth adding. A mechanical finding goes straight to a check.
+- **The environment lens says who reads each category.** `/tm-retro` takes every category whose
+  evidence is a file on disk (navigation and information access too), `/tm-session-analyze` the ones
+  only a conversation shows, and the report template has a place for each.
+- **A retro is a dated file:** `docs/retro/<YYYY-MM-DD>-<scope>.md`. The undated name was overwritten
+  by a second run over the same scope, against "never edit an earlier entry".
+
 ## 0.7.0
 
 Built as a stack, one PR per wave (#60 to #79), released together.
@@ -116,6 +159,24 @@ Built as a stack, one PR per wave (#60 to #79), released together.
   Assumed, `> [!NOTE]` Decided); the marker line itself is unchanged, so the validators still find it.
 - **`/tm-docs-migrate`** adds the callout lines and moves Status and Level into the frontmatter.
   `scripts/adr-links.test.mjs` holds the wave.
+
+- **From the review (#83):**
+  - *A legacy ticket in progress counted as finished.* A progress file from before the frontmatter
+    was read by the first `**Status:**` line anywhere in it, and every SI has one: a ticket whose own
+    line said `In progress` took its first finished SI's `done`. The status is now read above the
+    first SI only, in any case, with or without backticks.
+  - *A ticket's cost could never be measured.* The retro script gave a Cost by stage row to the
+    ticket its Stage cell named, and the extractor never wrote one: it kept the command's name and
+    merged every ticket a stage ran on. A row is now a stage on a ticket (`tm-implement 02-export`),
+    the ticket kept only in the shape a ticket slug has, so free text typed after a command stays
+    out. The test builds its meta-retro from the extractor's own table.
+  - *Plan revisions were off by one* (`revision` is 1 when first written), and *versions were sorted
+    as text* (`0.10.0` before `0.7.1`).
+  - `/tm-flow-report` §3 reads the script table by table instead of keeping its own list of
+    measurements, and a test fails when the script prints a section the report does not name.
+  - `templates/evolutions.md` no longer offers `defect` as a kind. Three tests that compared a
+    constant with itself, or searched the script's source for a line, became tests of what the
+    script prints.
 
 ### Wave C1a: the plan and its validation
 
