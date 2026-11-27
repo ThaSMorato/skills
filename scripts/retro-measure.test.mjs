@@ -13,9 +13,6 @@ import { costByStage, renderCostTable } from './session-extract.mjs'
 // A number added up in prose looks exactly like a measured one. The script sums them, from one list
 // of fields, and prints the Measurements section; the model pastes it.
 
-// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
-const PINNED = true
-
 const pluginRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const frontmatter = (fields) => `---\n${Object.entries(fields).map(([key, value]) => `${key}: ${value}`).join('\n')}\n---\n`
 
@@ -218,19 +215,6 @@ describe('measure', () => {
     assert.deepEqual(measure({ cwd: repo, scope: [] }).by_plugin_version.map((group) => group.plugin_version), ['0.7.1', '0.9.0', '0.10.0'])
   })
 
-  // The bugs as they were, kept for the owner to read beside the fix: delete when read.
-  test('pin: a plan never revised counts one revision', { skip: PINNED }, () => {
-    finished('ledger', '01-read-model')
-
-    assert.equal(rowOf(measure({ cwd: repo, scope: [] }), 'ledger/01-read-model').plan_revisions, 1)
-  })
-
-  test('pin: the versions are sorted as text, 0.10.0 before 0.7.1', { skip: PINNED }, () => {
-    for (const [slug, version] of [['01-a', '0.9.0'], ['02-b', '0.10.0'], ['03-c', '0.7.1']]) finished('ledger', slug, { plugin_version: version })
-
-    assert.deepEqual(measure({ cwd: repo, scope: [] }).by_plugin_version.map((group) => group.plugin_version), ['0.10.0', '0.7.1', '0.9.0'])
-  })
-
   // The meta-retro's table is the extractor's own: /tm-session-analyze copies it from the index.
   const minute = (n) => `2026-11-20T10:${String(n).padStart(2, '0')}:00.000Z`
   const invoked = (text, at) => ({ role: 'owner', kind: 'invoked', uuid: `o-${at}`, timestamp: minute(at), text })
@@ -259,14 +243,6 @@ describe('measure', () => {
     metaRetro('2026-11-21-c3d4', [invoked('/tm-review 01-read-model main', 0), worked(8, ['Read'])])
 
     assert.deepEqual([rowOf(measure({ cwd: repo, scope: [] }), 'ledger/01-read-model')].map((row) => [row.minutes, row.tool_calls]), [[50, 6]])
-  })
-
-  // The bug as it was, kept for the owner to read beside the fix: delete when read.
-  test('pin: a ticket a session worked on is not measured, because no row of the extractor names it', { skip: PINNED }, () => {
-    finished('ledger', '01-read-model')
-    sessionOnTicketOne()
-
-    assert.deepEqual([rowOf(measure({ cwd: repo, scope: [] }), 'ledger/01-read-model')].map((row) => [row.minutes, row.tool_calls]), [['not measured', 'not measured']])
   })
 
   test('an artifact that predates a measured field is named, and its cell says not measured', () => {

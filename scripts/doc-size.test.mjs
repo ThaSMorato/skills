@@ -12,9 +12,6 @@ import { FILE_BUDGET_BYTES, SECTION_BUDGET_BYTES, checkSizes } from './doc-size.
 // an HLD 878 KB, past what one read returns, and the writers told to read them whole failed or paid
 // for all of it on every amendment. This check is the size budget a validation can fail on.
 
-// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
-const PINNED = true
-
 const script = join(dirname(fileURLToPath(import.meta.url)), 'doc-size.mjs')
 const prose = (bytes) => `${'word '.repeat(Math.ceil(bytes / 5))}\n`
 
@@ -92,11 +89,6 @@ describe('checkSizes', () => {
     const sut = spawnSync('node', [script, '--root'], { encoding: 'utf8' })
 
     assert.deepEqual({ status: sut.status, message: sut.stderr.trim() }, { status: 2, message: '--root needs a directory after it' })
-  })
-
-  // The bug as it was, kept for the owner to read beside the fix: delete when read.
-  test('pin: any fence line flips the code block, so a heading inside a nested block is named as the section', { skip: PINNED }, () => {
-    assert.deepEqual(headingsOf(`# PRD\n\n## Examples\n\n~~~md\n\`\`\`json\n## Inside the block\n${big}\`\`\`\n~~~\n`), ['Inside the block'])
   })
 
   test('with no file named, it reads the living documents and leaves the records and the effort files alone', () => {
