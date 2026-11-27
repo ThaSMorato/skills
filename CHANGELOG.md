@@ -15,6 +15,8 @@ stack, one PR per wave.
   `.github/workflows/test.yml` runs it on every pull request and on `main`. The script uses the
   `dot` reporter: a green run is a few lines, a red one prints each failure.
   `scripts/repo-guardrail.test.mjs` fails when the hook or the job stops running the script.
+- **From the review (#82):** the job's token is read-only (`permissions: contents: read`), and the
+  guardrail test accepts any `node --test` run over `scripts/*.test.mjs` instead of one exact string.
 
 ### Wave B: the retro stage, against its own rules
 
