@@ -69,7 +69,7 @@ A defect in what shipped is a `repo-code` finding: it lands in a ticket, and the
 ## What repetition means
 One occurrence is an incident. The same finding across several tickets is a **standard that should move**: a review finding that keeps recurring belongs in a stack guide, a rule or a check; a validation category that keeps firing belongs earlier in the flow, in the stage that produces what it catches. Call something a pattern when you can point at more than one instance, and name them.
 
-Classify a repeated standard by `environment.md`: **mechanical** or **judgement**. A mechanical one is proposed as a check. A judgement one would become prose that every later run loads, so it first passes `promotion-filter.md`; one that fails stays in the retro as a finding, with the question it failed.
+Classify a repeated standard by `environment.md`: **mechanical** or **judgement**. A mechanical one is proposed as a check. A judgement one would become prose that every later run loads, so it first passes `promotion-filter.md`; one that fails stays in the retro as a finding, with the question it failed. One that passes is a line an agent will load: call the Skill tool with `thasmorato-skills:writing-for-agents` before wording the change it proposes.
 
 ## Debt the reviews saw and nobody owned
 A review finding with the verdict `pre-existing` is real, but in code the diff did not change, so it is nobody's work and it vanishes after the review. Across an epic, those are the most honest map of technical debt the project has: found by the lenses, confirmed by the verifier, and located to `file:line`.

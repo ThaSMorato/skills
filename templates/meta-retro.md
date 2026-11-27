@@ -19,7 +19,7 @@ owner_turns: <n read>
 findings: {flow: <n>, repo-skill: <n>, repo-code: <n>}
 promotable: <n repo-skill findings that passed the promotion filter>
 repeated: <n findings seen in more than one segment>
-cost: {minutes: <n>, idle_minutes: <n>, tool_calls: <n>, invocations: <n>, other_answers: <n>, clarifications: <n>, overrules: <n>}
+cost: {minutes: <n>, idle_minutes: <n>, tool_calls: <n>, failed_calls: <n>, result_chars: <n>, invocations: <n>, other_answers: <n>, clarifications: <n>, overrules: <n>}
 ---
 
 # Meta-retro: session <session id>
@@ -47,10 +47,13 @@ cost: {minutes: <n>, idle_minutes: <n>, tool_calls: <n>, invocations: <n>, other
 |---|---|---|---|---|---|
 
 ## Environment (required when any signal or repeated correction exists)
-> From `skills/retro/environment.md`: navigation, tool economy and information access, which only a
-> session shows. Evidence is the segment and the tool-call names the extract kept (a run of searches
-> before a file was found, a costly call repeated), or an owner turn when there is one. Each finding is
-> read on two tracks: what it cost this session, and what change to the environment prevents it.
+> From `skills/retro/environment.md`, the categories a session shows: navigation, automated checks (an
+> error the agent repaired itself), tool economy, information access, and the **Steering files** read
+> against the session. Evidence is the segment and the tool calls the extract kept, each with its outcome
+> (a run of searches before a file was found, a failed call then a retry, a large result), the steering
+> file and the line (quoted for a repository file; for the owner's global file or `CLAUDE.local.md`,
+> by line number, never quoted), or an owner turn when there is one. Each finding is read on two tracks:
+> what it cost this session, and what change to the environment prevents it.
 
 | Category | Evidence (segment · tool calls or owner turn) | Tactical cost | Strategic change | Mechanical / judgement | Where it lands |
 |---|---|---|---|---|---|
@@ -58,13 +61,14 @@ cost: {minutes: <n>, idle_minutes: <n>, tool_calls: <n>, invocations: <n>, other
 ## Cost by stage (required)
 > From the extract's `index.md`, copied, not estimated, the Stage cells unchanged (`tm-implement 02-export`:
 > the ticket in the cell is how `/tm-retro` finds its cost): per stage and ticket (the owner's invocation to the next),
-> active minutes (pauses over 30 minutes are idle), tool calls, invocations (a stage re-run is the owner
-> restarting it), answers outside the options, questions rejected to clarify, overruled recommendations.
-> Wasted calls come from the segment analysts' tool-economy signals, with their segment. In Codex, the
-> answer columns are `not measured`.
+> active minutes (pauses over 30 minutes are idle), tool calls, the calls that failed, the characters the
+> results brought back, invocations (a stage re-run is the owner restarting it), answers outside the
+> options, questions rejected to clarify, overruled recommendations. Wasted calls come from the segment
+> analysts' tool-economy signals, with their segment. In Codex, the failed calls, the result characters
+> and the answer columns are `not measured`.
 
-| Stage | Minutes | Idle | Tool calls | Invocations | Other answers | Clarifications | Overrules | Wasted calls (segment) |
-|---|---|---|---|---|---|---|---|---|
+| Stage | Minutes | Idle | Tool calls | Failed calls | Result chars | Invocations | Other answers | Clarifications | Overrules | Wasted calls (segment) |
+|---|---|---|---|---|---|---|---|---|---|---|
 
 ## What the conversation couldn't tell me (required)
 > Segments too thin to judge, tool results that were dropped by design, anything a reader might

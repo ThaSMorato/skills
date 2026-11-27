@@ -61,6 +61,56 @@ stack, one PR per wave.
 - **A retro is a dated file:** `docs/retro/<YYYY-MM-DD>-<scope>.md`. The undated name was overwritten
   by a second run over the same scope, against "never edit an earlier entry".
 
+### Wave C: what a session shows, and how agent documents are written
+
+- **The extract keeps what a tool call ran and cost.** `session-extract.mjs` kept only tool names, so
+  a mistake the agent made and repaired itself (a red test, a failed type check) left no trace, and
+  a 50k-character read looked like a cheap one. Each call now shows the program a `Bash` call ran
+  (`Bash(npm test)`), whether it failed and how many characters came back
+  (`[failed, 3120 chars]`); the content of a result and every other argument are still dropped.
+  Only the first line of a command is read, with quoted text taken out and nothing past a heredoc
+  or a substitution, and only a known runner keeps its subcommand. The Cost by stage table gains
+  `Failed calls` and `Result chars`. In Codex these are `not measured`.
+- **Error, then retry is a signal.** `session-segment-analyst` reports a failed call the agent then
+  repaired as an `automated-checks` signal, the evidence that a check would have caught it, and
+  judges tool economy on the size of what came back. `/tm-session-analyze` and `environment.md`
+  read it under Automated checks.
+- **`writing-for-agents` is a reference skill.** The rules for writing a document an agent loads
+  (pointers, the two loads, where each piece sits, completion criteria, the tests for a sentence,
+  the positive, leading words) lived in `docs/anatomy/skill-anatomy.md`, which does not ship, so no
+  stage running in a project could load them. They are now `skills/writing-for-agents`, open and
+  listed in `KNOWLEDGE_SKILLS`, with a `-fires` and a `-near-miss` eval case. `skill-anatomy.md`
+  keeps this plugin's mechanics and points at the skill. `guideline-generator`,
+  `/tm-generate-stack-guide`, `/tm-generate-test-guide`, `/tm-retro` (when a finding becomes a
+  proposed line) and `/tm-session-analyze` load it.
+- **`/tm-session-analyze` reads the steering files.** `environment.md` defined the category and no
+  stage ran it. A new step reads the repository's `CLAUDE.md` and `AGENTS.md` and the owner's global
+  `~/.claude/CLAUDE.md` and runs every instruction through the no-op test and the wrong-home test
+  (a mechanical rule becomes a check, a judgement rule moves to the stack guide or the review
+  standard), with the session as the evidence of what each line triggered.
+
+- **From the review (#84):**
+  - *A Bash label could carry an argument.* After a runner (`git`, `npm`, `docker`...) the extract
+    kept any lowercase word that looked like a subcommand, so `git checkout acme-client-payroll`,
+    `docker login hunter2pass` and `npx secretpkgname` came through whole, into segments a
+    meta-retro quotes. What may follow a runner is now a closed list of known subcommands, and a
+    package script is kept only when every part of its name is on it (`test:unit`, not
+    `deploy:prod-acme`).
+  - *A program behind a blank line, a variable, a wrapper or a shell keyword was lost* (`sudo npm
+    test` read as `sudo`, a command after a newline as `opaque`), which weakened the error, then
+    retry signal. The label now comes from the first line that names a program, and still stops at
+    the first heredoc, substitution or open quote.
+  - *The owner's global file was quoted into a project report.* `/tm-session-analyze` step 3c
+    cites a line of `~/.claude/CLAUDE.md`, `CLAUDE.local.md` or `~/.codex/AGENTS.md` by file and
+    line number, never quoted or paraphrased. It reads the files the session's harness loaded
+    (`.claude/CLAUDE.md`, `@path` imports, Codex's `AGENTS.md` chain), and an instruction for a
+    task the session never did is listed as not exercised instead of failed as a no-op.
+  - A `grep` that found nothing exits non-zero and is marked `failed`: the analyst is told that a
+    query's exit status is an answer, not a failure.
+  - The near-miss eval for `writing-for-agents` is now a README section written for people. The
+    anatomy's "no stray bullets, no empty sections" item became a test over every skill, command
+    and agent; the tests of the skill check its headings and rules instead of loose substrings.
+
 ## 0.7.0
 
 Built as a stack, one PR per wave (#60 to #79), released together.

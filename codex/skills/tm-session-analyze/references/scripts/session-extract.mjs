@@ -2,9 +2,12 @@
 // Turns a session transcript (JSONL) into one readable file per compaction segment,
 // keeping only the conversation: what the owner said (mid-turn messages included), answered, rejected
 // or ran as a slash command (with the options a structured question offered), and what the assistant
-// said plus the names of the tools it called. The index adds what each stage cost: minutes, tool
-// calls, re-invocations, answers outside the options, clarifications and overruled recommendations. Everything else (file snapshots, tool results,
-// thinking, subagent turns, compaction summaries) is dropped: it is either bulk or not the owner.
+// said plus the tools it called: each one's name, the program a Bash call ran, whether the call
+// failed and how many characters came back. The index adds what each stage cost: minutes, tool calls,
+// failed calls, result characters, re-invocations, answers outside the options, clarifications and
+// overruled recommendations. Everything else (file snapshots, the content of tool results, the other
+// tools' arguments, thinking, subagent turns, compaction summaries) is dropped: it is either bulk,
+// where file contents and secrets live, or not the owner.
 // Claude Code by default; `--harness codex` reads a Codex rollout (see session-extract-codex.mjs).
 // No dependencies beyond the Node standard library.
 
@@ -25,6 +28,32 @@ const NO_STAGE = '(no stage)'
 const TICKET = /^(?:[a-z0-9][a-z0-9-]*\/)?\d{2}-[a-z0-9][a-z0-9-]*$/
 const STAGE_PREFIX = 'tm-' // only the flow's stages open a row: /compact, /model, /login are the harness
 const IDLE_AFTER_MS = 30 * 60 * 1000
+const OPAQUE = 'opaque'
+const PROGRAM = /^[A-Za-z0-9_.][A-Za-z0-9_.+-]{0,39}$/
+const QUOTED = /'[^']*'|"(?:\\.|[^"\\])*"/g
+const CONTENT_STARTS = /<<|\$\(|`|['"]/
+// What may follow a runner in a label. A closed list: a word is kept because it is a public
+// subcommand, never because it looks like one, since a branch, a package, a target or a token typed
+// after `git checkout` or `npm install` has the same shape.
+const SUBCOMMANDS = new Set([
+  ...['test', 'run', 'exec', 'install', 'ci', 'build', 'lint', 'format', 'fmt', 'start', 'dev', 'typecheck', 'check', 'unit', 'e2e', 'integration', 'watch', 'fix', 'coverage'],
+  ...['audit', 'outdated', 'publish', 'pack', 'add', 'remove', 'update', 'upgrade', 'init', 'create', 'clean', 'list', 'ls', 'view', 'info', 'link', 'dlx', 'x', 'sync', 'lock'],
+  ...['status', 'diff', 'log', 'show', 'commit', 'push', 'pull', 'fetch', 'merge', 'rebase', 'checkout', 'switch', 'branch', 'stash', 'reset', 'restore', 'revert', 'tag', 'clone'],
+  ...['worktree', 'remote', 'cherry-pick', 'blame', 'grep', 'rev-parse', 'ls-files', 'config', 'bisect', 'mv', 'rm', 'apply'],
+  ...['pr', 'issue', 'repo', 'workflow', 'api', 'release', 'auth', 'edit', 'checks', 'comment', 'close', 'review'],
+  ...['compose', 'ps', 'logs', 'up', 'down', 'images', 'login', 'get', 'describe', 'delete', 'rollout', 'port-forward'],
+  ...['vet', 'mod', 'tidy', 'generate', 'clippy', 'bench', 'doc', 'migrate', 'serve', 'console', 'shell', 'compile', 'deps'],
+  ...['node', 'tsc', 'tsx', 'eslint', 'prettier', 'biome', 'vitest', 'jest', 'playwright', 'pytest', 'ruff', 'mypy', 'rspec', 'rubocop', 'knip'],
+])
+// Words a program hides behind: a wrapper (`sudo npm test`) or a shell keyword (`then npm test`).
+const PREFIXES = new Set(['sudo', 'time', 'env', 'nohup', 'exec', 'command', 'nice', 'if', 'elif', 'then', 'else', 'while', 'until', 'do', '!'])
+// Shell words that open or close a block and run nothing themselves.
+const BLOCK_WORDS = new Set(['for', 'case', 'select', 'function', 'fi', 'done', 'esac'])
+const ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/
+// Programs whose first words say what ran (`npm run lint`, `git commit`); every other program is named alone.
+const RUNNERS = new Set(['npm', 'pnpm', 'yarn', 'bun', 'npx', 'deno', 'git', 'gh', 'go', 'cargo', 'make', 'just', 'docker', 'kubectl', 'mvn', 'gradle', 'dotnet', 'mix', 'bundle', 'rake', 'composer', 'poetry', 'uv', 'pip', 'turbo', 'nx'])
+const MAX_SUBCOMMANDS = 2
+const MAX_PROGRAMS = 3
 
 export function projectDirCandidates(cwd) {
   return [...new Set([cwd.replace(/[^a-zA-Z0-9]/g, '-'), cwd.replace(/\//g, '-')])]
@@ -57,7 +86,7 @@ function mostRecentSession(dir) {
 
 export function createSegmenter() {
   const segments = [{ compaction: null, turns: [] }]
-  const toolNamesById = new Map()
+  const callsById = new Map()
 
   const current = () => segments[segments.length - 1]
 
@@ -86,23 +115,26 @@ export function createSegmenter() {
   function acceptAssistant(entry) {
     const blocks = asBlocks(entry.message?.content)
     const tools = blocks.filter((block) => block.type === 'tool_use')
-    for (const tool of tools) toolNamesById.set(tool.id, tool.name)
     const text = joinText(blocks)
     if (!text && tools.length === 0) return
-    current().turns.push({
-      role: 'assistant',
-      kind: 'said',
-      uuid: entry.uuid,
-      timestamp: entry.timestamp,
-      text,
-      tools: tools.map((tool) => tool.name),
-    })
+    const turn = { role: 'assistant', kind: 'said', uuid: entry.uuid, timestamp: entry.timestamp, text, tools: tools.map(toolLabelOf), results: tools.map(() => null) }
+    tools.forEach((tool, index) => callsById.set(tool.id, { name: tool.name, turn, index }))
+    current().turns.push(turn)
   }
 
   function acceptOwner(entry) {
     if (entry.isMeta || entry.isCompactSummary) return
-    const turn = ownerTurnOf(entry, toolNamesById)
+    if (!entry.toolDenialKind) recordResults(entry)
+    const turn = ownerTurnOf(entry, callsById)
     if (turn) current().turns.push(turn)
+  }
+
+  // A tool's result comes back in a later entry: it completes the call on the assistant turn that made it.
+  function recordResults(entry) {
+    for (const block of asBlocks(entry.message?.content)) {
+      const call = block.type === 'tool_result' ? callsById.get(block.tool_use_id) : undefined
+      if (call) call.turn.results[call.index] = { failed: block.is_error === true, chars: charsOf(block.content) }
+    }
   }
 
   return { accept, segments: () => segments }
@@ -117,13 +149,66 @@ function compactionOf(entry) {
   return { trigger, preTokens, at: entry.timestamp }
 }
 
-function ownerTurnOf(entry, toolNamesById) {
+function toolLabelOf(tool) {
+  return tool.name === 'Bash' ? `Bash(${programsOf(tool.input?.command)})` : tool.name
+}
+
+// What a shell command ran, by program name only: its arguments are where paths and secrets live.
+// The label comes from the first line that names a program. A blank line, a comment or a line that
+// only sets variables is passed over; a line that opens a heredoc, a substitution or a quote ends
+// the search, because what follows it is content, not commands.
+function programsOf(command) {
+  for (const line of String(command ?? '').split('\n')) {
+    const unquoted = line.replace(QUOTED, ' ')
+    const [code] = unquoted.split(CONTENT_STARTS)
+    const programs = programsIn(code)
+    if (programs.length > 0) return programs.slice(0, MAX_PROGRAMS).join(' && ')
+    if (code !== unquoted) break
+  }
+  return OPAQUE
+}
+
+function programsIn(code) {
+  if (code.trim().startsWith('#')) return []
+  const programs = code.split(/&&|\|\||;/).map((part) => programOf(part.split('|')[0])).filter((program) => program && program !== 'cd')
+  return [...new Set(programs)]
+}
+
+function programOf(simpleCommand) {
+  const words = simpleCommand.trim().split(/\s+/)
+  const start = words.findIndex((word) => !ASSIGNMENT.test(word) && !PREFIXES.has(word))
+  if (start === -1) return null
+  const [first, ...rest] = words.slice(start)
+  if (first.startsWith('-')) return wrapperOf(words[start - 1])
+  const program = basename(first)
+  if (!PROGRAM.test(program) || BLOCK_WORDS.has(program)) return null
+  if (!RUNNERS.has(program)) return program
+  const stop = rest.findIndex((word) => !isSubcommand(word))
+  return [program, ...rest.slice(0, stop === -1 ? MAX_SUBCOMMANDS : Math.min(stop, MAX_SUBCOMMANDS))].join(' ')
+}
+
+// A wrapper given options of its own (`sudo -u deployer npm test`) is named alone: telling its
+// options from the program it runs would mean knowing every wrapper's flags.
+function wrapperOf(word) {
+  return PREFIXES.has(word) && PROGRAM.test(word) ? word : null
+}
+
+// A package script is named in parts (`test:unit`): it is kept when every part is a known word.
+function isSubcommand(word) {
+  return word.split(':').every((part) => SUBCOMMANDS.has(part))
+}
+
+function charsOf(content) {
+  return asBlocks(content).reduce((total, block) => total + (block.type === 'text' ? block.text.length : 0), 0)
+}
+
+function ownerTurnOf(entry, callsById) {
   const base = { role: 'owner', uuid: entry.uuid, timestamp: entry.timestamp }
   if (entry.toolUseResult?.answers) {
     return { ...base, kind: 'answered', text: formatAnswers(entry.toolUseResult), answers: answersOf(entry.toolUseResult) }
   }
   if (entry.toolDenialKind) {
-    const text = formatRejection(entry, toolNamesById)
+    const text = formatRejection(entry, callsById)
     return isClarification(entry) ? { ...base, kind: 'rejected', text, clarify: true } : { ...base, kind: 'rejected', text }
   }
   const blocks = asBlocks(entry.message?.content)
@@ -171,9 +256,9 @@ function offeredOptions(asked) {
   return `\n  offered${mode}: ${asked.options.map((option) => option.label).join(' · ')}`
 }
 
-function formatRejection(entry, toolNamesById) {
+function formatRejection(entry, callsById) {
   const result = asBlocks(entry.message?.content).find((block) => block.type === 'tool_result')
-  const toolName = toolNamesById.get(result?.tool_use_id) ?? 'tool call'
+  const toolName = callsById.get(result?.tool_use_id)?.name ?? 'tool call'
   const raw = typeof result?.content === 'string' ? result.content : joinText(asBlocks(result?.content))
   const said = REJECTION_PREFIX.test(raw) ? raw.replace(REJECTION_PREFIX, '').trim() : ''
   if (CLARIFY_BOILERPLATE.test(said)) return `[rejected ${toolName} to clarify; the clarification is the next owner turn]`
@@ -219,20 +304,25 @@ function renderTurn(turn) {
   if (turn.role === 'owner') {
     return `### owner · ${turn.kind} · ${turn.timestamp} · ${turn.uuid}\n${turn.text}`
   }
-  const tools = turn.tools.length > 0 ? `\n\n_tools: ${turn.tools.join(', ')}_` : ''
+  const tools = turn.tools.length > 0 ? `\n\n_tools: ${turn.tools.map((tool, index) => tool + outcomeOf(turn.results?.[index])).join(', ')}_` : ''
   return `### assistant · ${turn.timestamp} · ${turn.uuid}\n${turn.text}${tools}`
+}
+
+function outcomeOf(result) {
+  if (!result) return ''
+  return result.failed ? ` [failed, ${result.chars} chars]` : ` [${result.chars} chars]`
 }
 
 /**
  * What each stage cost, per ticket, from the turns alone: a stage runs from the owner's invocation of a flow
  * stage (`tm-*`) to the next one; a harness command between them (`/compact`) does not end it. A pause over 30 minutes is idle time, kept apart. In Codex, the answers to structured questions
- * are not extracted, so what rests on them is `null` (not measured), never 0.
+ * and the results of tool calls are not extracted, so what rests on them is `null` (not measured), never 0.
  */
 export function costByStage(segments, { harness = 'claude' } = {}) {
-  const answersMeasured = harness !== 'codex'
+  const fullyMeasured = harness !== 'codex'
   const rows = new Map()
   const rowOf = (stage) => {
-    if (!rows.has(stage)) rows.set(stage, emptyCost(stage, answersMeasured))
+    if (!rows.has(stage)) rows.set(stage, emptyCost(stage, fullyMeasured))
     return rows.get(stage)
   }
   const turns = segments.flatMap((segment) => segment.turns)
@@ -246,14 +336,22 @@ export function costByStage(segments, { harness = 'claude' } = {}) {
     const row = rowOf(stage)
     addGap(row, turn, turns[index + 1])
     if (turn.role === 'assistant') row.tool_calls += turn.tools.length
-    if (answersMeasured) addAnswers(row, turn)
+    if (fullyMeasured) addResults(row, turn)
+    if (fullyMeasured) addAnswers(row, turn)
   })
   return [...rows.values()].map(({ activeMs, idleMs, ...row }) => ({ ...row, minutes: toMinutes(activeMs), idle_minutes: toMinutes(idleMs) }))
 }
 
-function emptyCost(stage, answersMeasured) {
-  const counted = answersMeasured ? 0 : null
-  return { stage, activeMs: 0, idleMs: 0, tool_calls: 0, invocations: 0, other_answers: counted, clarifications: counted, overrules: counted }
+function emptyCost(stage, fullyMeasured) {
+  const counted = fullyMeasured ? 0 : null
+  return { stage, activeMs: 0, idleMs: 0, tool_calls: 0, failed_calls: counted, result_chars: counted, invocations: 0, other_answers: counted, clarifications: counted, overrules: counted }
+}
+
+function addResults(row, turn) {
+  for (const result of (turn.results ?? []).filter(Boolean)) {
+    if (result.failed) row.failed_calls += 1
+    row.result_chars += result.chars
+  }
 }
 
 // A row is a stage on a ticket: `tm-implement 02-export`. The ticket is the one argument kept, and
@@ -313,10 +411,10 @@ export function renderCostTable(cost) {
   return [
     '## Cost by stage',
     '',
-    '| Stage | Minutes | Idle minutes | Tool calls | Invocations | Other answers | Clarifications | Overrules |',
-    '|---|---|---|---|---|---|---|---|',
+    '| Stage | Minutes | Idle minutes | Tool calls | Failed calls | Result chars | Invocations | Other answers | Clarifications | Overrules |',
+    '|---|---|---|---|---|---|---|---|---|---|',
     ...cost.map((row) =>
-      `| ${row.stage} | ${row.minutes} | ${row.idle_minutes} | ${row.tool_calls} | ${row.invocations} | ${notMeasured(row.other_answers)} | ${notMeasured(row.clarifications)} | ${notMeasured(row.overrules)} |`,
+      `| ${[row.stage, row.minutes, row.idle_minutes, row.tool_calls, row.failed_calls, row.result_chars, row.invocations, row.other_answers, row.clarifications, row.overrules].map(notMeasured).join(' | ')} |`,
     ),
     '',
   ].join('\n')

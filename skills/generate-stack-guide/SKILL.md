@@ -43,6 +43,8 @@ Where the repo and the external source disagree, the **repo wins** and the diver
 Show what you found (the conventions, and anything where the repo and the source disagree) and confirm the calls before writing. This is the only interactive step; get it right here rather than generating twice.
 
 ## Phase 4: Generate
+Call the Skill tool with `thasmorato-skills:writing-for-agents` first: the guide is a document every later stage loads, so its description is a pointer that opens with its trigger, and each rule passes that skill's tests for a sentence.
+
 Write a multi-file skill at `.claude/skills/<tech>-guide/`:
 
 ```
