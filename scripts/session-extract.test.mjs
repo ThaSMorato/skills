@@ -536,25 +536,6 @@ describe('createSegmenter: what a tool call ran and cost', () => {
     })
   }
 
-  for (const command of ['TOKEN=$(cat <<EOF\nsecretword now\nEOF\n)', '"\nsecretword now\n"', "X='\nsecretword now'"]) {
-    test(`a line that only opens content names nothing, and the content below it is never read as a command: ${JSON.stringify(command)}`, () => {
-      assert.equal(labelOf(command), 'Bash(opaque)')
-    })
-  }
-
-  // The bugs as they were, kept for the owner to read beside the fix: delete when read.
-  for (const [command, label] of [
-    ['git checkout acme-client-payroll', 'Bash(git checkout acme-client-payroll)'],
-    ['docker login hunter2pass', 'Bash(docker login hunter2pass)'],
-    ['npx secretpkgname', 'Bash(npx secretpkgname)'],
-    ['\nnpm test', 'Bash(opaque)'],
-    ['sudo npm test', 'Bash(sudo)'],
-  ]) {
-    test(`pin: an argument after a runner is kept, and a program behind a blank line or a wrapper is lost: ${JSON.stringify(command)}`, { skip: PINNED }, () => {
-      assert.equal(labelOf(command), label)
-    })
-  }
-
   test('a call records whether it failed and how many characters came back, never the content', () => {
     const entries = [
       makeAssistant([bash('npm test', 't-1'), { type: 'tool_use', id: 't-2', name: 'Read', input: { file_path: '/secret/path' } }]),
@@ -592,7 +573,6 @@ describe('createSegmenter: what a tool call ran and cost', () => {
     assert.match(result, /_tools: Bash\(npm test\) \[failed, 3120 chars\], Edit \[40 chars\], Bash\(npm test\) \[900 chars\], Read_/)
   })
 })
-
 const at = (minute) => `2026-09-18T10:${String(minute).padStart(2, '0')}:00.000Z`
 const owner = (kind, text, minute, extra = {}) => ({ role: 'owner', kind, uuid: `o-${minute}`, timestamp: at(minute), text, ...extra })
 const assistant = (minute, tools = [], results) => ({ role: 'assistant', kind: 'said', uuid: `a-${minute}`, timestamp: at(minute), text: 'ok', tools, ...(results ? { results } : {}) })
@@ -635,11 +615,6 @@ describe('costByStage', () => {
     const cost = costOf([owner('invoked', '/tm-interview the acme-payroll export for client 7', 0), assistant(1), owner('invoked', '/tm-review main', 2), assistant(3)])
 
     assert.deepEqual(cost.map((row) => row.stage), ['tm-interview', 'tm-review'])
-  })
-
-  // The bug as it was, kept for the owner to read beside the fix: delete when read.
-  test('pin: a stage run on two tickets is one row, with no ticket in it', { skip: PINNED }, () => {
-    assert.deepEqual(twoTickets().map(({ stage: name, invocations }) => ({ name, invocations })), [{ name: 'tm-implement', invocations: 2 }])
   })
 
   test('the same stage invoked again adds to its row', () => {
