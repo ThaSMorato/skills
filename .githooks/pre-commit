@@ -1,0 +1,9 @@
+#!/bin/sh
+# Turned on once per clone: git config core.hooksPath .githooks
+# The suite runs in seconds, so all of it runs before every commit; CI runs the same script.
+
+# Git exports GIT_DIR and GIT_INDEX_FILE to a hook. The tests build their own repositories in temp
+# folders, and with those variables set their git calls would act on this repository instead.
+unset $(git rev-parse --local-env-vars)
+
+npm test --silent

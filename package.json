@@ -1,0 +1,8 @@
+{
+  "name": "thasmorato-skills",
+  "private": true,
+  "description": "The plugin's own checks. The plugin itself is described by .claude-plugin/plugin.json.",
+  "scripts": {
+    "test": "node --test --test-reporter=dot scripts/*.test.mjs"
+  }
+}
