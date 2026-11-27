@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/review-quality.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/review-quality.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-quality"
 description = "Review a diff for code smells and clean-code violations (naming, functions, comments, errors, design, module depth). One of the $thasmorato-skills:tm-review fan-out. Reports findings; never edits."
 model_reasoning_effort = "high"

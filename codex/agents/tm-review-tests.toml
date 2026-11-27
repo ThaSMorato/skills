@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/review-tests.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/review-tests.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-review-tests"
 description = "Review a diff's tests as first-class code (coverage of the acceptance criteria, behavior through public interfaces, single-act, determinism, test DSL quality). One of the $thasmorato-skills:tm-review fan-out. Reports findings; never edits."
 model_reasoning_effort = "high"

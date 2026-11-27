@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/session-segment-analyst.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/session-segment-analyst.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-session-segment-analyst"
 description = "Read one segment of an extracted session transcript and report where the owner had to correct, reject or repeat something, each finding anchored on an owner turn by uuid and timestamp, and tagged with its level (the plugin's flow, this repo's skills, or its code). One of the $thasmorato-skills:tm-session-analyze fan-out. Reports findings; never edits."
 model_reasoning_effort = "high"

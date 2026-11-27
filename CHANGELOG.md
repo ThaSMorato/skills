@@ -4,7 +4,7 @@
 
 Fixes from two reviews of 0.7.0 in use: a retro of its tool use and token cost over 65 Claude Code
 sessions and 356 Codex threads, and a review of the `retro` stage against its own rules. Built as a
-stack, one PR per wave.
+stack, one PR per wave (#82 to #85), released together (#86).
 
 ### Wave A: the guardrail
 

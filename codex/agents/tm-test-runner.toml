@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/test-runner.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/test-runner.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-test-runner"
 description = "Run one test, type-check, lint or build command and return only the summary (counts, and per failure the test, the assertion and the first line of the stack), so the log never enters the main conversation. Dispatched by $thasmorato-skills:tm-implement for each SI's tests, the baseline and the final verification. Runs and reports; never edits."
 model_reasoning_effort = "low"

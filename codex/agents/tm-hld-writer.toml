@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/hld-writer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/hld-writer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-hld-writer"
 description = "Write a High-Level Design from a PRD. Delegate after $thasmorato-skills:tm-prd has produced docs/product/prd.md, when the user runs $thasmorato-skills:tm-hld or asks for the high-level architecture."
 model_reasoning_effort = "high"

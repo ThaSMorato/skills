@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/researcher.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/researcher.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-researcher"
 description = "Investigate a technical question against primary sources and capture cited findings as a Markdown report that feeds the HLD/FDD. Delegate as a background/AFK agent when the user runs $thasmorato-skills:tm-research <question>, or when a decision needs reading legwork."
 model_reasoning_effort = "high"

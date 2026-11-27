@@ -1,4 +1,4 @@
-# thasmorato-skills 0.7.0: generated from agents/component-analyzer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
+# thasmorato-skills 0.7.1: generated from agents/component-analyzer.md by scripts/build-codex.mjs; installed by $thasmorato-skills:tm-setup
 name = "tm-component-analyzer"
 description = "Deep-analyze ONE component of an existing codebase (internal structure, business rules, dependencies, patterns, tech debt). Analysis only. Delegate when the user runs $thasmorato-skills:tm-analyze <component>, or fan out one per component discovered by the architectural-analyzer."
 model_reasoning_effort = "high"
