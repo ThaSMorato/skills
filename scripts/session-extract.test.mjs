@@ -433,9 +433,6 @@ describe('createSegmenter: messages the owner sent mid-turn', () => {
   })
 })
 
-// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
-const PINNED = true
-
 const at = (minute) => `2026-09-18T10:${String(minute).padStart(2, '0')}:00.000Z`
 const owner = (kind, text, minute, extra = {}) => ({ role: 'owner', kind, uuid: `o-${minute}`, timestamp: at(minute), text, ...extra })
 const assistant = (minute, tools = []) => ({ role: 'assistant', kind: 'said', uuid: `a-${minute}`, timestamp: at(minute), text: 'ok', tools })
@@ -478,11 +475,6 @@ describe('costByStage', () => {
     const cost = costOf([owner('invoked', '/tm-interview the acme-payroll export for client 7', 0), assistant(1), owner('invoked', '/tm-review main', 2), assistant(3)])
 
     assert.deepEqual(cost.map((row) => row.stage), ['tm-interview', 'tm-review'])
-  })
-
-  // The bug as it was, kept for the owner to read beside the fix: delete when read.
-  test('pin: a stage run on two tickets is one row, with no ticket in it', { skip: PINNED }, () => {
-    assert.deepEqual(twoTickets().map(({ stage: name, invocations }) => ({ name, invocations })), [{ name: 'tm-implement', invocations: 2 }])
   })
 
   test('the same stage invoked again adds to its row', () => {
