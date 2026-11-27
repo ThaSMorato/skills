@@ -104,17 +104,6 @@ describe('flowState and resolveTicket', () => {
     )
   })
 
-  // The pins assert what the bug did, and fail since the fix. The owner deletes them after reading both.
-  const PINNED = 'pinned the bug before 0.7.1 fixed it; fails now, delete after review'
-
-  test('pin: a retro scoped to a cycle matches no feature, so the features it covered wait forever', { skip: PINNED }, () => {
-    ticket('ledger', '01-read-model')
-    progress('ledger', '01-read-model', { status: 'completed', done: 3 })
-    put('docs/retro/2026-q4.md', '---\nkind: retro\nscope: 2026-Q4\nfeatures: [ledger]\n---\n')
-
-    assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'awaiting-retro')
-  })
-
   test('a retro scoped to a cycle covers the features it lists', () => {
     ticket('ledger', '01-read-model')
     progress('ledger', '01-read-model', { status: 'completed', done: 3 })
@@ -124,16 +113,6 @@ describe('flowState and resolveTicket', () => {
       { state: featureOf(flowState({ cwd: repo }), 'ledger').state, retro: featureOf(flowState({ cwd: repo }), 'ledger').retro },
       { state: 'retro done', retro: 'docs/retro/2026-q4.md' },
     )
-  })
-
-  test('pin: a retro over the finished tickets marks the whole feature done once the rest finish', { skip: PINNED }, () => {
-    ticket('ledger', '01-read-model')
-    ticket('ledger', '02-export')
-    progress('ledger', '01-read-model', { status: 'completed', done: 3 })
-    put('docs/retro/ledger.md', '---\nkind: retro\nscope: ledger\nfeatures: [ledger]\ntickets: [ledger/01-read-model]\n---\n')
-    progress('ledger', '02-export', { status: 'completed', done: 3 })
-
-    assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'retro done')
   })
 
   test('a ticket that finished after the retro leaves its feature awaiting one', () => {
@@ -158,13 +137,6 @@ describe('flowState and resolveTicket', () => {
       { state: featureOf(flowState({ cwd: repo }), 'ledger').state, retro: featureOf(flowState({ cwd: repo }), 'ledger').retro },
       { state: 'retro done', retro: 'docs/retro/2026-11-01-ledger.md' },
     )
-  })
-
-  test('pin: a progress file from before the frontmatter, finished in its body, is not read as finished', { skip: PINNED }, () => {
-    ticket('ledger', '01-read-model')
-    put('.scratch/ledger/plans/01-read-model/progress.md', '# Progress\n\n**Status:** completed\n')
-
-    assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'in progress')
   })
 
   test('a progress file from before the frontmatter is finished when its body says so', () => {
