@@ -58,6 +58,8 @@ A visual item (layout, copy, a state the user sees) is **browser** or **not veri
 
 **`mocked`** is `true` when any verdict rests on a mocked integration or on data made up for the check instead of the environment's own; the record names which items at the top.
 
+**Keep what the checker opened.** Its return ends on a **Source read** line: copy it into the record's section of that name and count it in `source_read`. Each entry is a route or a control this stage's dispatch should have named, and the record is the only place it outlives this conversation.
+
 **Done when** every item has a verdict, every browser verdict has its screenshot and its Check, every http, run and measured verdict has its saved output, and every failure is reported.
 
 ## Exploratory pass (optional)
@@ -81,6 +83,7 @@ failed: <count>
 friction: <count of friction notes>
 mocked: <true | false (see section 3)>
 capture_only: <count of browser verdicts with no mechanical check>
+source_read: <count of source files the checker opened, from its Source read line; 0 for `none`>
 ---
 
 # Acceptance: <NN> <Ticket title>
@@ -95,6 +98,11 @@ capture_only: <count of browser verdicts with no mechanical check>
 | What | How | Put back |
 |---|---|---|
 | the `exports` flag | `FEATURE_EXPORTS=1` in `.env.local`, read by the server at start | removed, server restarted |
+
+## Source read
+| File | What the checker was looking for |
+|---|---|
+| `src/routes/exports.tsx` | the path of the export screen, which the dispatch did not name |
 
 ## Friction
 | Scenario step | What happened | Evidence |
@@ -113,4 +121,4 @@ With every item passed, follow `<plugin root>/agent-references/skills/acceptance
 **Done when** every criterion this ticket's ACs trace to is `absorbed` or `delivered, waiting on` its other tickets.
 
 ## Gate
-Open the report with one line per acceptance criterion, as the `asking` skill's §7 table (AC, state, blocked by). Then report the counts, every failure, every **not verified** item resolved to its words, the `capture only` verdicts, the means provided and whether each was put back, the friction notes, the suggested cases, any AC to amend because what it names is not visible, and the criteria absorbed (each with where it went and its test) or waiting. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `$thasmorato-skills:tm-walkthrough` or `$thasmorato-skills:tm-pr`.
+Open the report with one line per acceptance criterion, as the `asking` skill's §7 table (AC, state, blocked by). Then report the counts, every failure, every **not verified** item resolved to its words, the `capture only` verdicts, the means provided and whether each was put back, the friction notes, the suggested cases, any AC to amend because what it names is not visible, and the criteria absorbed (each with where it went and its test) or waiting. The work is done when nothing failed and the owner has read the **not verified** list; until then, say what is missing instead of "done". Next: `/new`, then `$thasmorato-skills:tm-walkthrough` or `$thasmorato-skills:tm-pr`.

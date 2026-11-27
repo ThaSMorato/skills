@@ -32,7 +32,15 @@ Rank by evidence:
 3. **Single**: listed, not proposed.
 
 ## 3. Measurements, per version
-Put the flow measurements side by side **per `plugin_version`**, summed across projects: escalations per ticket, validation runs to `clean` and the categories that fired, review findings and each lens's precision (refuted over raised), trim and tidy reverted over applied, diagnoses `cause-found` over all, walkthrough `missed` over questions, and the cost: minutes and tool calls per ticket, other answers, clarifications and overrules per stage (from the meta-retros' Cost by stage), and the share of pull requests with `ci_red_after_open`. For each, the direction from the previous version, and how many tickets it rests on. Then the same measurements per `model` and `harness`, and the reviews per author × reviewer pair (the `progress.md`'s and the review's), with the second opinions' `not_in_first` per pair (what the other harness found that the first review did not), and `unknown` for the artifacts that predate the fields. Per `harness`, the share of artifacts the project's sentinels confirm, from each project's **Instructions, per harness** table: a harness that ran without the project's rules is not compared with one that had them. A version with a handful of tickets is reported with its count and no trend: a direction from three tickets is noise.
+Put the flow measurements side by side **per `plugin_version`**, summed across projects, table by table as the script prints them. The script holds the list of what is measured, so read every column of every table: a field added there reaches this report with no edit here.
+
+- **Totals by plugin version**, **Sums by artifact, per plugin version** and **Ticket sets**: every column, with the direction from the previous version and how many tickets it rests on. A version with a handful of tickets is reported with its count and no trend: a direction from three tickets is noise.
+- **Review lenses**: each lens's precision, refuted over raised.
+- **Totals by author** and **Totals by gear**: the same columns per model and harness, and per gear.
+- **Reviews by author and reviewer**: each pair apart (the `progress.md`'s author, the review's), the second opinion's row beside the first review's: what the other harness found that the first did not.
+- **Instructions, per harness**: the share of artifacts the project's sentinels confirm. A harness that ran without the project's rules is not compared with one that had them.
+- **Not measured**: the artifacts that predate a field stay out of its sum, and are counted as `unknown`.
+- From the meta-retros' Cost by stage tables, which the script reads only for a ticket's minutes and tool calls: the other answers, clarifications and overrules per stage.
 
 ## 4. Propose
 For each group in tiers 1 and 2: the change to the plugin (which file, what it should do differently), the instances it rests on (project, report, row), and the measurement it should move. Proposals that touch the same file are merged. The owner decides what enters the next version's backlog; nothing here edits the plugin.

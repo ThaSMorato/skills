@@ -7,8 +7,10 @@ description: "Read a whole working session (every compaction segment) and report
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
 >
-> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` a `yield_time_ms`
-> long enough for it to finish (minutes for a test suite, never one second), and call `wait_agent` once for an agent.
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` the longest
+> `yield_time_ms` the command could need (a test suite takes minutes: ask for them, never for one second), and call
+> `wait_agent` once for an agent. When a wait returns before the command ends, wait again with the same long value:
+> a second long wait, never a run of short polls.
 > Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
 > finishes, not while it runs.
 
@@ -24,7 +26,7 @@ Analyze the working session: the text after the skill name
 
 > Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask.
 
-`$thasmorato-skills:tm-retro` reads what the work left on disk. This reads what only the conversation holds: the owner correcting a proposal, rejecting a question, asking for the same thing twice. `/compact` shrinks the context window but deletes nothing from the transcript, so the whole session, every segment, is still there to read.
+`$thasmorato-skills:tm-retro` reads what the work left on disk. This reads what only the conversation holds: the owner correcting a proposal, rejecting a question, asking for the same thing twice. `/compact` shrinks the context window but deletes nothing from the transcript, so the whole session, every segment, is still there to read. `/new` is different: it starts a new session with a transcript of its own, so a flow whose stages each ended on `/new` is one session per stage, and each run of this command reads one of them.
 
 ## 1. Extract
 Check that Node is available (`node --version`). If it is not, say so and stop: the extractor needs it, and a 200 MB transcript cannot be filtered by reading it.
@@ -35,9 +37,9 @@ Run:
 node "references/scripts/session-extract.mjs" --harness codex [--session <id>]
 ```
 
-With no id it takes the most recent session of the current directory. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected (a message sent mid-turn included, as a `queued` turn), the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the tools it called: each one's name, the program a `Bash` call ran (`Bash(npm test)`), and for each result whether it failed and how many characters came back. It drops file snapshots, the content of tool results and every other argument (where file contents and secrets live), thinking, subagent turns and the compaction summaries. In Codex the extractor reads the Codex rollout instead (`--harness codex`) and keeps the same, except denied approvals, answers to structured questions and the outcome of each tool call, which a rollout does not record in a form it can rely on yet: say so in the report when the session ran in Codex. A Codex wrapper is named with the tools it called inside (`exec(exec_command, apply_patch)`), or `exec(opaque)` when they cannot be named safely.
+With no id it takes the most recent session of the current directory that did any work: one that only ran this command, which is the session you are in after `/new`, is passed over. An earlier one is named by its id, the file name of its transcript. It writes `.scratch/session-analyze/<session-id>/`, with one `seg-NN.md` per compaction segment and an `index.md`, and prints a JSON summary. It keeps what the owner said, answered and rejected (a message sent mid-turn included, as a `queued` turn), the slash commands they ran (with their arguments), and the options each structured question offered, plus the assistant's text and the tools it called: each one's name, the program a `Bash` call ran (`Bash(npm test)`), and for each result whether it failed and how many characters came back. It drops file snapshots, the content of tool results and every other argument (where file contents and secrets live), thinking, subagent turns and the compaction summaries. In Codex the extractor reads the Codex rollout instead (`--harness codex`) and keeps the same, except denied approvals, answers to structured questions and the outcome of each tool call, which a rollout does not record in a form it can rely on yet: say so in the report when the session ran in Codex. A Codex wrapper is named with the tools it called inside (`exec(exec_command, apply_patch)`), or `exec(opaque)` when they cannot be named safely.
 
-The index also carries a **Cost by stage** table, computed from the turns: per stage (from the owner's invocation to the next), the active minutes (a pause over 30 minutes is idle, kept apart), the tool calls, how many of them failed and how many characters their results brought back, the invocations, the answers outside the options offered (`Other`), the questions rejected to clarify, and the answers that overruled a `(Recommended)` option. In Codex the failed calls, the result characters and the last three are `not measured`.
+The index also carries a **Cost by stage** table, computed from the turns: per stage (from the owner's invocation to the next) and per ticket, a row being named `tm-implement 02-export` when the invocation gave the ticket's slug, the active minutes (a pause over 30 minutes is idle, kept apart), the tool calls, how many of them failed (a non-zero exit counts, so a `grep` that found nothing is in the count) and how many characters their results brought back, the invocations, the answers outside the options offered (`Other`), the questions rejected to clarify, and the answers that overruled a `(Recommended)` option. In Codex the failed calls, the result characters and the last three are `not measured`.
 
 ## 2. Fan out, one agent per segment
 Call the `spawn_agent` tool with `agent_type = "tm-session-segment-analyst"` for **every** segment **at once** (at most 6 running together; wait for every one), so they run in parallel, each with its segment's path and the index path. A segment fits one agent whole, so there is no chunking and no summarizing, and each agent reads the original conversation rather than a summary of a summary.
@@ -59,16 +61,22 @@ A session shows what no artifact records, so this is where the environment lens 
 `$thasmorato-skills:tm-retro` reads these sections for the session side of its environment, so write them even when they are short.
 
 ## 3c. The steering files
-The steering files are the one category read from the files themselves, set against what the session shows. Read the `CLAUDE.md` and `AGENTS.md` of the repository (the root's, and a subproject's when the session worked in one) and the owner's global `~/.claude/CLAUDE.md`, which loads into every project. Read the `writing-for-agents` skill (`references/skills/writing-for-agents/index.md`), and run every instruction in those files through two of its tests for a sentence:
-- **No-op**: the agent would do the same without the line, or nothing in this session triggered it. The session is the evidence: name a turn where the line applied, or say none did.
+The steering files are the one category read from the files themselves, set against what the session shows. Read the ones the harness of this session loaded:
+- **Claude Code**: the repository's `CLAUDE.md` or `.claude/CLAUDE.md` (the root's, and a subproject's when the session worked in one), every file one of them imports with an `@path` line, and the owner's own: `CLAUDE.local.md` and the global `~/.claude/CLAUDE.md`, which loads into every project.
+- **Codex** (the extract ran with `--harness codex`): the repository's `AGENTS.md`, the root's and each one down to the directory worked in, and the owner's global `~/.codex/AGENTS.md`.
+
+Read the `writing-for-agents` skill (`references/skills/writing-for-agents/index.md`), and run every instruction in those files through two of its tests for a sentence:
+- **No-op**: the agent would do the same without the line, because the line states what it does by default. The session is the evidence: name a turn where the line applied and what the agent did.
 - **Wrong home**: a rule only one kind of task needs. A mechanical one becomes a check; a judgement one moves to the stack guide or the review standard that `review-standards` reads, and the steering file keeps a pointer.
+
+**Not exercised** is the third outcome: an instruction for a task this session never did (closing a browser, the bug procedure) is listed under that name with no verdict. One session cannot fail a rule for a rare task.
 
 An instruction the owner had to repeat in this session fails where it is, whatever the tests say: name what should replace it (a check, a pointer, a skill).
 
-Each line that fails is an environment finding under **Steering files**: the file and the line quoted, the test it failed, and where it should go. Its level is `repo-skill`; for the global file, say that the change is the owner's to make outside this repository. **Done when** every instruction of every file read has passed or is a finding, and a file that does not exist is named as absent.
+Each line that fails is an environment finding under **Steering files**: the file and the line, the test it failed, and where it should go. A line of a repository file is quoted. A line of a file the owner keeps for themselves (the global file, `CLAUDE.local.md`) is cited by file and line number, never quoted or paraphrased: this report lives in the project, where others read it, and that file does not. Its finding names the kind of home (a check, a stack guide, a pointer) and says the change is the owner's to make outside this repository. The level is `repo-skill`. **Done when** every instruction of every file read has passed, is a finding or is listed as not exercised, and a file that does not exist is named as absent.
 
 ## 3d. The cost
-Copy the Cost by stage table from the index.md into the report, and sum it into the frontmatter's `cost`. The one column the extract cannot count is the wasted calls: take them from the segment analysts' tool-economy signals (a costly call repeated, a chain one command would replace), per stage, citing the segment. The extract counts; the analysts judge; nothing in this table is estimated.
+Copy the Cost by stage table from the index.md into the report, the Stage cells as the extract wrote them (`$thasmorato-skills:tm-retro` finds a ticket's cost by the slug in its rows), and sum it into the frontmatter's `cost`. The one column the extract cannot count is the wasted calls: take them from the segment analysts' tool-economy signals (a costly call repeated, a chain one command would replace), per stage, citing the segment. The extract counts; the analysts judge; nothing in this table is estimated.
 
 ## 4. Write
 Write `docs/meta-retro/<YYYY-MM-DD>-<session-id>.md`, filling `references/templates/meta-retro.md`. It lives in the project: a finding can be specific to it.

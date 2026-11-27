@@ -79,4 +79,4 @@ by_severity: {P0: <n>, P1: <n>, P2: <n>, P3: <n>}
 Also produce the HTML version for reading: call the Skill tool with `thasmorato-skills:visuals` and follow its `html-report.md`, with the captures beside each finding.
 
 ## Gate
-Report the score, the counts by severity, the P0 and P1 findings resolved to their words, the strengths, and what was not covered. Close with two to four questions that change what comes next (priority, what must not change, scope), each with options. Next: `/tm-ui-design <screen>` with this audit as its input, or the fixes, one ticket each.
+Report the score, the counts by severity, the P0 and P1 findings resolved to their words, the strengths, and what was not covered. Close with two to four questions that change what comes next (priority, what must not change, scope), each with options. Next: `/clear`, then `/tm-ui-design <screen>` with this audit as its input, or the fixes, one ticket each.

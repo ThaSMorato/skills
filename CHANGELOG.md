@@ -15,6 +15,8 @@ stack, one PR per wave (#82 to #85), released together (#86).
   `.github/workflows/test.yml` runs it on every pull request and on `main`. The script uses the
   `dot` reporter: a green run is a few lines, a red one prints each failure.
   `scripts/repo-guardrail.test.mjs` fails when the hook or the job stops running the script.
+- **From the review (#82):** the job's token is read-only (`permissions: contents: read`), and the
+  guardrail test accepts any `node --test` run over `scripts/*.test.mjs` instead of one exact string.
 
 ### Wave B: the retro stage, against its own rules
 
@@ -87,6 +89,28 @@ stack, one PR per wave (#82 to #85), released together (#86).
   (a mechanical rule becomes a check, a judgement rule moves to the stack guide or the review
   standard), with the session as the evidence of what each line triggered.
 
+- **From the review (#84):**
+  - *A Bash label could carry an argument.* After a runner (`git`, `npm`, `docker`...) the extract
+    kept any lowercase word that looked like a subcommand, so `git checkout acme-client-payroll`,
+    `docker login hunter2pass` and `npx secretpkgname` came through whole, into segments a
+    meta-retro quotes. What may follow a runner is now a closed list of known subcommands, and a
+    package script is kept only when every part of its name is on it (`test:unit`, not
+    `deploy:prod-acme`).
+  - *A program behind a blank line, a variable, a wrapper or a shell keyword was lost* (`sudo npm
+    test` read as `sudo`, a command after a newline as `opaque`), which weakened the error, then
+    retry signal. The label now comes from the first line that names a program, and still stops at
+    the first heredoc, substitution or open quote.
+  - *The owner's global file was quoted into a project report.* `/tm-session-analyze` step 3c
+    cites a line of `~/.claude/CLAUDE.md`, `CLAUDE.local.md` or `~/.codex/AGENTS.md` by file and
+    line number, never quoted or paraphrased. It reads the files the session's harness loaded
+    (`.claude/CLAUDE.md`, `@path` imports, Codex's `AGENTS.md` chain), and an instruction for a
+    task the session never did is listed as not exercised instead of failed as a no-op.
+  - A `grep` that found nothing exits non-zero and is marked `failed`: the analyst is told that a
+    query's exit status is an answer, not a failure.
+  - The near-miss eval for `writing-for-agents` is now a README section written for people. The
+    anatomy's "no stray bullets, no empty sections" item became a test over every skill, command
+    and agent; the tests of the skill check its headings and rules instead of loose substrings.
+
 ### Wave D: re-sending the context less
 
 The retro of 0.7.0 in use measured 11.4B input tokens in Claude Code and 6.1B in Codex against 72M of
@@ -129,6 +153,37 @@ output: nearly all of the cost is a context of 200k tokens and more, sent again 
   documentation only runs `review-spec`, `review-standards` and `review-docs`.
 - **Every fan-out names its agent.** `/tm-flow-report` dispatched "the Agent tool once per project"
   and left the type to the model. It names an exploration agent now.
+
+- **From the review (#85):**
+  - *The standards lens stopped reading the non-negotiables.* Once `/tm-review` passed it the stack
+    guides, it opened the router only when none matched, and the router's Non-negotiables belong to
+    no guide. It reads that section on every review. Its ADR pre-filter searched by feature and
+    path, which an ADR never carries: it now takes every ADR whose `scope` is `repo-wide` or the
+    layer of the change, then the ones that list the feature.
+  - *`/clear` dropped what only the chat held.* A preference or a decision no artifact records is
+    written down first, or the closing line names `/tm-handoff` before `/clear`. Six closing lines
+    that named the next command without `/clear` (one recommended `/compact`) now name it.
+  - *After `/clear`, `/tm-session-analyze` read the session it was started in.* With no id it takes
+    the most recent session that did any work and passes over one that only ran the analyzer, in
+    both harnesses. The command says a flow ended on `/clear` is one session per stage.
+  - *Only two lenses have a surface.* "A lens runs when the diff touches its surface" read as a
+    rule for all nine; every lens but `review-ui` and `review-data` runs on every diff. The data
+    surface is decided from the hunks, since a file's name hides a `fetch` in a component, and
+    "documentation only" is defined: prose a person reads, never a prompt, a template, a config or
+    a contract a lens judges against.
+  - *Moving the contract out of an old PRD read as a regression.* The writer reports the move, the
+    validator accepts a section that stands whole in `prd.contract.json`, an old PRD is compared
+    with the section it still holds, and `/tm-docs-migrate` moves it.
+  - *The checker's Source read reached nobody.* It is kept in the acceptance record (`source_read`
+    and a section), and `retro-measure.mjs` sums it.
+  - *`doc-size.mjs` closed a code block on any fence.* A block closes on a fence of the character
+    that opened it, at least as long, indented or not, so a heading inside a nested block is not a
+    section. A test with accented text now tells bytes from characters, and `--root` with no
+    directory says so.
+  - In Codex, a wait that returns before the command ends is followed by another long one. Local
+    rollouts show waits honoured up to 60 seconds and none asked for beyond that, so "minutes" in
+    one wait is unproven.
+  - The tests of this wave check that every `asking` §N citation lands in the file that holds §N.
 
 ## 0.7.0
 
@@ -228,6 +283,24 @@ Built as a stack, one PR per wave (#60 to #79), released together.
   Assumed, `> [!NOTE]` Decided); the marker line itself is unchanged, so the validators still find it.
 - **`/tm-docs-migrate`** adds the callout lines and moves Status and Level into the frontmatter.
   `scripts/adr-links.test.mjs` holds the wave.
+
+- **From the review (#83):**
+  - *A legacy ticket in progress counted as finished.* A progress file from before the frontmatter
+    was read by the first `**Status:**` line anywhere in it, and every SI has one: a ticket whose own
+    line said `In progress` took its first finished SI's `done`. The status is now read above the
+    first SI only, in any case, with or without backticks.
+  - *A ticket's cost could never be measured.* The retro script gave a Cost by stage row to the
+    ticket its Stage cell named, and the extractor never wrote one: it kept the command's name and
+    merged every ticket a stage ran on. A row is now a stage on a ticket (`tm-implement 02-export`),
+    the ticket kept only in the shape a ticket slug has, so free text typed after a command stays
+    out. The test builds its meta-retro from the extractor's own table.
+  - *Plan revisions were off by one* (`revision` is 1 when first written), and *versions were sorted
+    as text* (`0.10.0` before `0.7.1`).
+  - `/tm-flow-report` §3 reads the script table by table instead of keeping its own list of
+    measurements, and a test fails when the script prints a section the report does not name.
+  - `templates/evolutions.md` no longer offers `defect` as a kind. Three tests that compared a
+    constant with itself, or searched the script's source for a line, became tests of what the
+    script prints.
 
 ### Wave C1a: the plan and its validation
 

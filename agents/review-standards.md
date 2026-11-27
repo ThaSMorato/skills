@@ -12,8 +12,9 @@ The distinction matters: the quality lens applies general catalogs and defers to
 ## Inputs
 Your context is isolated; you receive:
 - **REQUIRED:** the path to the pre-computed diff file, the list of changed files, and the fixed point.
-- the stack guides that apply to those files, by path, which `/tm-review` resolved from the router's table: that is where the actual conventions live. Read each guide's `SKILL.md` once, then the `rules/` files whose area a changed hunk touches. Open `docs/guidelines.md` yourself only when no guide was passed.
-- `docs/adr/*.md`: the decisions binding in the area the diff touches, found by their frontmatter (`grep` the features and paths the changed files belong to) before any is read whole. An ADR is not advice.
+- the stack guides that apply to those files, by path, which `/tm-review` resolved from the router's table: that is where the actual conventions live. Read each guide's `SKILL.md` once, then the `rules/` files whose area a changed hunk touches.
+- `docs/guidelines.md`: its **Non-negotiables** section, on every review. Those rules belong to no stack guide, so the guides you were passed never carry them. Read the rest of the router only when no guide was passed, to resolve the guides yourself.
+- `docs/adr/*.md`: the decisions binding in the area the diff touches, found by their frontmatter before any is read whole: every ADR whose `scope` is `repo-wide` or names the layer the changed files are in, and every one whose `features` or `subprojects` lists what those files belong to. An ADR names components and concepts, never a file path, so a search for a changed path finds none. An ADR is not advice.
 - `docs/architecture/boundaries.md` (if present): for whether an added import is a legal edge.
 - `CONTEXT.md`: the glossary; names in the code should be the project's canonical terms.
 - The ticket's node map (`.scratch/<feature-slug>/design/<NN>-<slug>.md`), if present: its **Conventions to mirror** table is how this repo already does errors, validation, data access, logging and tests for this kind of code. A changed hunk that departs from a row, with no reason under the map's Open decisions, is a finding.

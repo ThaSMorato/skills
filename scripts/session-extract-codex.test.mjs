@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import { createCodexSegmenter, resolveCodexTranscript } from './session-extract-codex.mjs'
-import { extractSession } from './session-extract.mjs'
+import { extractSession, ranOnlyTheAnalyzer } from './session-extract.mjs'
 
 // A Codex rollout is one JSON object per line: `{ timestamp, type, payload }`. What the owner typed is
 // an `item_completed` event with a `UserMessage` item; the context Codex injects (AGENTS.md, the
@@ -126,11 +126,11 @@ describe('createCodexSegmenter', () => {
 
 function aCodexHome(sessions) {
   const home = mkdtempSync(join(tmpdir(), 'tm-codex-sessions-'))
-  sessions.forEach(({ dir = 'sessions/2026/10/20', id, cwd, source = 'cli', mtime = 1 }) => {
+  sessions.forEach(({ dir = 'sessions/2026/10/20', id, cwd, source = 'cli', mtime = 1, says = `hello from ${id}` }) => {
     mkdirSync(join(home, dir), { recursive: true })
     const path = join(home, dir, `rollout-2026-10-20T10-00-00-${id}.jsonl`)
     const meta = { timestamp: at(0), type: 'session_meta', payload: { id, cwd, source } }
-    writeFileSync(path, `${JSON.stringify(meta)}\n${JSON.stringify(said('owner', `hello from ${id}`))}\n`)
+    writeFileSync(path, `${JSON.stringify(meta)}\n${JSON.stringify(said('owner', says))}\n`)
     utimesSync(path, mtime, mtime)
   })
   return home
@@ -145,6 +145,25 @@ describe('resolveCodexTranscript', () => {
     ])
 
     assert.match(await resolveCodexTranscript({ codexHome, cwd: '/work/app' }), /-new\.jsonl$/)
+  })
+
+  test('with no id, a session that only ran the analyzer is passed over: after /new it is the one asking', async () => {
+    const codexHome = aCodexHome([
+      { id: 'worked', cwd: '/work/app', mtime: 1, says: '$thasmorato-skills:tm-implement 02-export' },
+      { id: 'asking', cwd: '/work/app', mtime: 2, says: '$thasmorato-skills:tm-session-analyze' },
+    ])
+
+    const sut = await resolveCodexTranscript({ codexHome, cwd: '/work/app', passOver: (rollout) => ranOnlyTheAnalyzer(rollout, createCodexSegmenter) })
+
+    assert.match(sut, /-worked\.jsonl$/)
+  })
+
+  test('a session named by id is read even when it only ran the analyzer', async () => {
+    const codexHome = aCodexHome([{ id: 'asking', cwd: '/work/app', says: '$thasmorato-skills:tm-session-analyze' }])
+
+    const sut = await resolveCodexTranscript({ codexHome, cwd: '/work/app', sessionId: 'asking', passOver: () => true })
+
+    assert.match(sut, /-asking\.jsonl$/)
   })
 
   test('skips the sessions of subagents', async () => {

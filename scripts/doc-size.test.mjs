@@ -12,6 +12,9 @@ import { FILE_BUDGET_BYTES, SECTION_BUDGET_BYTES, checkSizes } from './doc-size.
 // an HLD 878 KB, past what one read returns, and the writers told to read them whole failed or paid
 // for all of it on every amendment. This check is the size budget a validation can fail on.
 
+// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
+const PINNED = true
+
 const script = join(dirname(fileURLToPath(import.meta.url)), 'doc-size.mjs')
 const prose = (bytes) => `${'word '.repeat(Math.ceil(bytes / 5))}\n`
 
@@ -58,6 +61,42 @@ describe('checkSizes', () => {
     put('docs/features/ledger/fdd.md', `# FDD\n\n## Contracts\n\`\`\`markdown\n## Not a section\n\`\`\`\n${prose(SECTION_BUDGET_BYTES + 500)}`)
 
     assert.deepEqual(checkSizes({ root }).over[0].sections.map(({ heading }) => heading), ['Contracts'])
+  })
+
+  const headingsOf = (text) => {
+    put('docs/product/prd.md', text)
+    return checkSizes({ root }).over.flatMap(({ sections }) => sections.map(({ heading }) => heading))
+  }
+  const big = prose(SECTION_BUDGET_BYTES + 500)
+
+  for (const [name, block] of [
+    ['a tilde block holding a backtick fence', `~~~md\n\`\`\`json\n## Inside the block\n${big}\`\`\`\n~~~`],
+    ['a four-backtick block holding a three-backtick fence', `\`\`\`\`md\n\`\`\`\n## Inside the block\n${big}\`\`\`\n\`\`\`\``],
+    ['a fence indented under a list item', `- a step:\n   \`\`\`md\n## Inside the block\n${big}   \`\`\`\n`],
+  ]) {
+    test(`a code block closes only on a fence like the one that opened it: ${name}`, () => {
+      assert.deepEqual(headingsOf(`# PRD\n\n## Examples\n\n${block}\n\n## After\nshort\n`), ['Examples'])
+    })
+  }
+
+  test('the budget is in bytes: a section of accented text is over it with fewer characters than the budget', () => {
+    const accented = `${'ação '.repeat(4300)}\n`
+
+    assert.deepEqual(
+      { characters: accented.length < SECTION_BUDGET_BYTES, over: headingsOf(`# PRD\n\n## Visão\n${accented}`) },
+      { characters: true, over: ['Visão'] },
+    )
+  })
+
+  test('run with --root and no directory after it, it says so and exits 2', () => {
+    const sut = spawnSync('node', [script, '--root'], { encoding: 'utf8' })
+
+    assert.deepEqual({ status: sut.status, message: sut.stderr.trim() }, { status: 2, message: '--root needs a directory after it' })
+  })
+
+  // The bug as it was, kept for the owner to read beside the fix: delete when read.
+  test('pin: any fence line flips the code block, so a heading inside a nested block is named as the section', { skip: PINNED }, () => {
+    assert.deepEqual(headingsOf(`# PRD\n\n## Examples\n\n~~~md\n\`\`\`json\n## Inside the block\n${big}\`\`\`\n~~~\n`), ['Inside the block'])
   })
 
   test('with no file named, it reads the living documents and leaves the records and the effort files alone', () => {

@@ -51,6 +51,9 @@ describe('projectDirCandidates', () => {
   })
 })
 
+// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
+const PINNED = true
+
 describe('resolveTranscript', () => {
   let projectsRoot
 
@@ -77,6 +80,42 @@ describe('resolveTranscript', () => {
     const result = resolveTranscript({ projectsRoot, cwd: '/Users/me/app' })
 
     assert.equal(result, newer)
+  })
+
+  const writeTurns = (dir, id, mtimeSeconds, entries) => {
+    const path = writeSession(dir, id, mtimeSeconds)
+    writeFileSync(path, entries.map((entry) => JSON.stringify(entry)).join('\n'))
+    utimesSync(path, mtimeSeconds, mtimeSeconds)
+    return path
+  }
+  const invocation = (name, args = '') => makeEntry({ message: { content: `<command-name>/${name}</command-name><command-args>${args}</command-args>` } })
+
+  test('with no id, a session that only ran the analyzer is passed over: after /clear it is the one asking', () => {
+    const worked = writeTurns('-Users-me-app', 'worked', 1_000, [invocation('tm-implement', '02-export'), makeAssistant([{ type: 'text', text: 'done' }])])
+    writeTurns('-Users-me-app', 'asking', 2_000, [invocation('thasmorato-skills:tm-session-analyze')])
+
+    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), worked)
+  })
+
+  test('with no id, a session that ran the analyzer after its own work is still the one read', () => {
+    writeTurns('-Users-me-app', 'older', 1_000, [invocation('tm-plan', '02-export')])
+    const sameSession = writeTurns('-Users-me-app', 'same', 2_000, [invocation('tm-implement', '02-export'), invocation('tm-session-analyze')])
+
+    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), sameSession)
+  })
+
+  test('when the analyzer is all any session ran, it says there is no working session to read', () => {
+    writeTurns('-Users-me-app', 'asking', 2_000, [invocation('tm-session-analyze')])
+
+    assert.throws(() => resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), /No working session.*only ran \/tm-session-analyze/s)
+  })
+
+  // The bug as it was, kept for the owner to read beside the fix: delete when read.
+  test('pin: with no id, the analyzer reads the session it was just started in', { skip: PINNED }, () => {
+    writeTurns('-Users-me-app', 'worked', 1_000, [invocation('tm-implement', '02-export')])
+    const asking = writeTurns('-Users-me-app', 'asking', 2_000, [invocation('tm-session-analyze')])
+
+    assert.equal(resolveTranscript({ projectsRoot, cwd: '/Users/me/app' }), asking)
   })
 
   test('picks the named session when an id is given', () => {
@@ -460,6 +499,62 @@ describe('createSegmenter: what a tool call ran and cost', () => {
     })
   }
 
+  for (const [command, label] of [
+    ['git checkout acme-client-payroll', 'Bash(git checkout)'],
+    ['git push origin feature/acme-payroll', 'Bash(git push)'],
+    ['git clone mytoken', 'Bash(git clone)'],
+    ['docker login hunter2pass', 'Bash(docker login)'],
+    ['cargo login abc123', 'Bash(cargo login)'],
+    ['npm install acme-internal-sdk', 'Bash(npm install)'],
+    ['poetry add privatelib', 'Bash(poetry add)'],
+    ['npx secretpkgname', 'Bash(npx)'],
+    ['make secret-target', 'Bash(make)'],
+    ['npm run deploy:prod-acme', 'Bash(npm run)'],
+    ['gh pr view 83 --json state', 'Bash(gh pr view)'],
+    ['docker compose up -d', 'Bash(docker compose up)'],
+    ['uv run pytest tests/billing', 'Bash(uv run pytest)'],
+    ['make test', 'Bash(make test)'],
+  ]) {
+    test(`after a runner only a known subcommand is kept, never the argument that follows it: ${command}`, () => {
+      assert.equal(labelOf(command), label)
+    })
+  }
+
+  for (const [command, label] of [
+    ['\nnpm test', 'Bash(npm test)'],
+    ['NODE_ENV=test\nnpm test', 'Bash(npm test)'],
+    ['# run the unit tests\nnpm test', 'Bash(npm test)'],
+    ['sudo npm test', 'Bash(npm test)'],
+    ['time npm test', 'Bash(npm test)'],
+    ['env CI=1 npm test', 'Bash(npm test)'],
+    ['sudo -u deployer npm test', 'Bash(sudo)'],
+    ['if true; then npm test; fi', 'Bash(true && npm test)'],
+    ['for f in *.md; do wc -l "$f"; done', 'Bash(wc)'],
+  ]) {
+    test(`the program is found behind a blank line, a variable, a wrapper or a shell keyword: ${JSON.stringify(command)}`, () => {
+      assert.equal(labelOf(command), label)
+    })
+  }
+
+  for (const command of ['TOKEN=$(cat <<EOF\nsecretword now\nEOF\n)', '"\nsecretword now\n"', "X='\nsecretword now'"]) {
+    test(`a line that only opens content names nothing, and the content below it is never read as a command: ${JSON.stringify(command)}`, () => {
+      assert.equal(labelOf(command), 'Bash(opaque)')
+    })
+  }
+
+  // The bugs as they were, kept for the owner to read beside the fix: delete when read.
+  for (const [command, label] of [
+    ['git checkout acme-client-payroll', 'Bash(git checkout acme-client-payroll)'],
+    ['docker login hunter2pass', 'Bash(docker login hunter2pass)'],
+    ['npx secretpkgname', 'Bash(npx secretpkgname)'],
+    ['\nnpm test', 'Bash(opaque)'],
+    ['sudo npm test', 'Bash(sudo)'],
+  ]) {
+    test(`pin: an argument after a runner is kept, and a program behind a blank line or a wrapper is lost: ${JSON.stringify(command)}`, { skip: PINNED }, () => {
+      assert.equal(labelOf(command), label)
+    })
+  }
+
   test('a call records whether it failed and how many characters came back, never the content', () => {
     const entries = [
       makeAssistant([bash('npm test', 't-1'), { type: 'tool_use', id: 't-2', name: 'Read', input: { file_path: '/secret/path' } }]),
@@ -516,7 +611,7 @@ describe('costByStage', () => {
     ])
 
     assert.deepEqual(
-      [stage(cost, 'tm-plan'), stage(cost, 'tm-plan-validate')].map(({ minutes, tool_calls, invocations }) => ({ minutes, tool_calls, invocations })),
+      [stage(cost, 'tm-plan 02-export'), stage(cost, 'tm-plan-validate 02-export')].map(({ minutes, tool_calls, invocations }) => ({ minutes, tool_calls, invocations })),
       [{ minutes: 12, tool_calls: 3, invocations: 1 }, { minutes: 3, tool_calls: 1, invocations: 1 }],
     )
   })
@@ -524,7 +619,27 @@ describe('costByStage', () => {
   test('a pause longer than 30 minutes counts as idle, not as the stage working', () => {
     const cost = costOf([owner('invoked', '/tm-implement 02-export', 0), assistant(5), assistant(55)])
 
-    assert.deepEqual({ minutes: stage(cost, 'tm-implement').minutes, idle: stage(cost, 'tm-implement').idle_minutes }, { minutes: 5, idle: 50 })
+    assert.deepEqual({ minutes: stage(cost, 'tm-implement 02-export').minutes, idle: stage(cost, 'tm-implement 02-export').idle_minutes }, { minutes: 5, idle: 50 })
+  })
+
+  const twoTickets = () => costOf([owner('invoked', '/tm-implement 01-read-model', 0), assistant(4, ['Read']), owner('invoked', '/thasmorato-skills:tm-implement ledger/02-export continuous', 5), assistant(7, ['Read', 'Edit'])])
+
+  test('a stage run on two tickets is two rows, each named with the ticket its invocation gave', () => {
+    assert.deepEqual(
+      twoTickets().map(({ stage: name, tool_calls, invocations }) => ({ name, tool_calls, invocations })),
+      [{ name: 'tm-implement 01-read-model', tool_calls: 1, invocations: 1 }, { name: 'tm-implement ledger/02-export', tool_calls: 2, invocations: 1 }],
+    )
+  })
+
+  test('an argument that is not a ticket stays out of the row: free text, a fixed point, a mode', () => {
+    const cost = costOf([owner('invoked', '/tm-interview the acme-payroll export for client 7', 0), assistant(1), owner('invoked', '/tm-review main', 2), assistant(3)])
+
+    assert.deepEqual(cost.map((row) => row.stage), ['tm-interview', 'tm-review'])
+  })
+
+  // The bug as it was, kept for the owner to read beside the fix: delete when read.
+  test('pin: a stage run on two tickets is one row, with no ticket in it', { skip: PINNED }, () => {
+    assert.deepEqual(twoTickets().map(({ stage: name, invocations }) => ({ name, invocations })), [{ name: 'tm-implement', invocations: 2 }])
   })
 
   test('the same stage invoked again adds to its row', () => {
@@ -581,7 +696,7 @@ describe('costByStage', () => {
       assistant(2, ['Bash(npm test)', 'Edit'], [{ failed: false, chars: 900 }, null]),
     ])
 
-    assert.deepEqual({ failed: stage(cost, 'tm-implement').failed_calls, chars: stage(cost, 'tm-implement').result_chars }, { failed: 1, chars: 51900 })
+    assert.deepEqual({ failed: stage(cost, 'tm-implement 02-export').failed_calls, chars: stage(cost, 'tm-implement 02-export').result_chars }, { failed: 1, chars: 51900 })
   })
 })
 
