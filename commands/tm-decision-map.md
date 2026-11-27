@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/decision-map/SKILL.md` and follow it for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 Preflight: the argument names the effort, the folder under `.scratch/`. With none, list the efforts that have a `decision-map.md` and ask which one, or the slug of a new one. A `decision-map.md` that exists runs **resume**; none runs **create**. A map with `status: closed` is not reopened: say so, and point at its next step.
 

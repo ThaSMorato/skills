@@ -11,9 +11,9 @@ The distinction matters: the quality lens applies general catalogs and defers to
 
 ## Inputs
 Your context is isolated; you receive:
-- **REQUIRED:** the path to the pre-computed diff file, and the fixed point.
-- `docs/guidelines.md`: the router. Load **every stack guide** its routing table names for the changed file patterns; that is where the actual conventions live.
-- `docs/adr/*.md`: the decisions binding in the area the diff touches. An ADR is not advice.
+- **REQUIRED:** the path to the pre-computed diff file, the list of changed files, and the fixed point.
+- the stack guides that apply to those files, by path, which `/tm-review` resolved from the router's table: that is where the actual conventions live. Read each guide's `SKILL.md` once, then the `rules/` files whose area a changed hunk touches. Open `docs/guidelines.md` yourself only when no guide was passed.
+- `docs/adr/*.md`: the decisions binding in the area the diff touches, found by their frontmatter (`grep` the features and paths the changed files belong to) before any is read whole. An ADR is not advice.
 - `docs/architecture/boundaries.md` (if present): for whether an added import is a legal edge.
 - `CONTEXT.md`: the glossary; names in the code should be the project's canonical terms.
 - The ticket's node map (`.scratch/<feature-slug>/design/<NN>-<slug>.md`), if present: its **Conventions to mirror** table is how this repo already does errors, validation, data access, logging and tests for this kind of code. A changed hunk that departs from a row, with no reason under the map's Open decisions, is a finding.

@@ -87,6 +87,49 @@ stack, one PR per wave.
   (a mechanical rule becomes a check, a judgement rule moves to the stack guide or the review
   standard), with the session as the evidence of what each line triggered.
 
+### Wave D: re-sending the context less
+
+The retro of 0.7.0 in use measured 11.4B input tokens in Claude Code and 6.1B in Codex against 72M of
+output: nearly all of the cost is a context of 200k tokens and more, sent again on every call.
+
+- **Codex waits once.** In Codex, `tm-implement` waited on tests with `write_stdin` and a
+  `yield_time_ms` of one second, again and again, and sent a progress message every few calls: about
+  30% of Codex's input. Every generated Codex skill now opens by saying a command or an agent is
+  waited on once, with a `yield_time_ms` of minutes or one `wait_agent`, and that progress is sent when
+  a step finishes. `/tm-implement` carries the rule for both harnesses: one wait per command, progress
+  once per SI.
+- **A living document is read in part.** The writers were told to read a living document whole before
+  amending it; a PRD had reached 1.33 MB and an HLD 878 KB, and 45 reads failed on size. `living.md`
+  now says: read the outline, then the sections the effort touches, and search for an id or a term
+  before adding it. `scripts/doc-size.mjs` reports a living document over 100 KB or a section over
+  25 KB, `/tm-doc-validate` fails it as the new `DS` category, and the writer runs it after amending.
+- **The PRD's JSON contract is a file beside it,** `prd.contract.json`. It was 40% of the largest PRD,
+  read by every stage that opened the document and needed only by `/tm-doc-validate`. `prd-writer`
+  moves an inline `## JSON contract` section out on its next amendment. The scope keeps its own
+  inline: it dies with the effort.
+- **A stage hands off into a fresh context.** A whole ticket ran in one session, at 204k tokens of
+  context per turn. The stages already hand off through files, so the closing line of a stage is now
+  `/clear`, then the next command (`/new` in Codex); `/compact` remains for a stage continuing
+  itself, the next SI of `/tm-implement`. The rule is in the core of the `asking` skill and in the
+  command anatomy, and `/tm-flow` and `/tm-implement` say it.
+- **`asking` is a short core.** It was 16 KB, loaded by every command. Sections 1 to 3 stay (resolve
+  the id, offer a choice, ask only decisions); the markers and assumption classes (`markers.md`), the
+  gate (`gates.md`) and the handoff (`handoff.md`) are read on the branch that needs them, under the
+  section numbers other files cite. The 37 commands that restated the skill beside the call that
+  loads it now only load it.
+- **The acceptance checker is sent to the screen.** At 13M tokens a run it was the most expensive
+  subagent, and most of its shell calls were `sed` and `grep`, which suggests it read the source to
+  find the screen. `/tm-acceptance` passes each item's route and control; the checker finds controls
+  from the browser's snapshot, and returns a **Source read** line naming any source file it opened
+  and why, so the next retro can settle it.
+- **The review resolves the standard once.** `/tm-review` writes the list of changed files beside the
+  diff and resolves the stack guides from the router's table once; `review-standards` reads the
+  guides it is handed and the rules a changed hunk touches, where it read the router and every guide
+  itself. `review-data` runs only when the diff touches data access, and a diff that changes
+  documentation only runs `review-spec`, `review-standards` and `review-docs`.
+- **Every fan-out names its agent.** `/tm-flow-report` dispatched "the Agent tool once per project"
+  and left the type to the model. It names an exploration agent now.
+
 ## 0.7.0
 
 Built as a stack, one PR per wave (#60 to #79), released together.

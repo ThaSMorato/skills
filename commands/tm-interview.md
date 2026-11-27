@@ -8,7 +8,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/interview/SKILL.md` and follow it (the elicit
 
 Elicit requirements for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 ## Before the first question
 - Read `docs/analysis/system-profile.md` if it exists. Its **Inherited constraints** section is the input a greenfield interview never needs and a brownfield one cannot do without: the immovable, as opposed to the desired. Confirm each with the user rather than assuming it still binds.

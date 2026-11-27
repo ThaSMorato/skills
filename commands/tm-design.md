@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/ticket-design/SKILL.md` and follow it to build the node map for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 ## Preflight
 - Resolve the ticket under `.scratch/<feature-slug>/issues/`. If there is none and the user pointed at no other work, stop and tell them to run `/tm-tickets <feature>` first.

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/teach/SKILL.md` and follow it for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 Preflight: the current directory is the teaching workspace. If it is a code repository or holds unrelated files, say so and suggest a dedicated directory before writing anything; a workspace holds one mission. On a returning session, read `MISSION.md`, the learning records and `NOTES.md` before saying anything.
 

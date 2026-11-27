@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Call the Agent tool with `reconciler` to reconcile the structure of this repository.
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 Preflight: `docs/architecture/components.md` must exist. Without a component map there is nothing to reconcile against. Say so and point at `/tm-components` (or `/tm-analyze` in brownfield) instead of delegating.
 

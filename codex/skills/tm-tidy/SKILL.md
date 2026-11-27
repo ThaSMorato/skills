@@ -6,6 +6,11 @@ description: "Make working code simple, Beck's four rules of Simple Design in or
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
+>
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` a `yield_time_ms`
+> long enough for it to finish (minutes for a test suite, never one second), and call `wait_agent` once for an agent.
+> Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
+> finishes, not while it runs.
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
@@ -17,7 +22,7 @@ description: "Make working code simple, Beck's four rules of Simple Design in or
 
 Read `references/skills/tidy/index.md` and follow it for: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask.
 
 Preflight, by mode:
 - **Ticket** (`<slug> <fixed point>`): the ticket has a review file under `.scratch/<feature-slug>/reviews/`. Tidying before the review mixes two questions, *is it right?* and *is it simple?*, and the answer to the first can change the code the second would tidy. If there is no review, point at `$thasmorato-skills:tm-review` and stop.

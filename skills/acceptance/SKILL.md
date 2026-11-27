@@ -39,7 +39,7 @@ A check needs a way to see the software run. Find it before concluding there is 
 **Done when** the browser tool, the server and the data source are named, or each missing one is named with what was searched.
 
 ## 3. Check each item
-The checks run in a context that did not write the code: call the Agent tool with `acceptance-checker`, passing the numbered items (with their `Depends on:`), the means from step 2 and the evidence folder `.scratch/<feature-slug>/acceptance/<NN>-<slug>/`. It returns one verdict per item, with its evidence and its Check; this stage writes the record from what it returns.
+The checks run in a context that did not write the code: call the Agent tool with `acceptance-checker`, passing the numbered items (with their `Depends on:`), the means from step 2 and the evidence folder `.scratch/<feature-slug>/acceptance/<NN>-<slug>/`. With each item goes where it is checked, taken from the ticket, the node map and the UI spec you already read: the route (the screen's path, the endpoint, the command) and the control the user acts on, by its visible name. An item that arrives without them sends the checker into the source to find the screen, which costs it most of its run and shows it how the thing was built. It returns one verdict per item, with its evidence and its Check; this stage writes the record from what it returns.
 
 Each item gets one verdict, the strongest its means allow:
 - **browser**: performed with an interactive browser tool on the real controls (navigating, clicking, typing as a user would). A script that only opens a URL and takes a picture is not a browser check. Save a screenshot to `<item>.png` in the evidence folder and say what it shows.

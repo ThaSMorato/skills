@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Call the Agent tool with `boundary-architect` to write `docs/architecture/boundaries.md`.
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 This is the second of the two architecture beats. `/tm-components` said **what the parts are**, before the FDDs, so every feature spec had a shared vocabulary. This one says **who may depend on whom**, after the FDDs, because only the feature specs reveal the axes of change that a boundary is supposed to separate.
 

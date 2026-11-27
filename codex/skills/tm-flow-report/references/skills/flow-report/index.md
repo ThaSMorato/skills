@@ -17,7 +17,7 @@ Only `flow` findings are read (`references/skills/retro/levels.md`): a `repo-ski
 
 The measurements come from each project's artifacts, summed by a script: `node "references/scripts/retro-measure.mjs" --root <project>` prints, over every finished ticket of the project, the totals per plugin version, per author and per gear, the reviews by author and reviewer, each lens's precision, the sums per artifact and **Instructions, per harness**. Agents read only the prose findings.
 
-With more than three projects, call the `spawn_agent` tool once per project, all at once (at most 6 running together; wait for every one), each told to return exactly the items above with their file and section; the synthesis stays here.
+With more than three projects, call the `spawn_agent` tool with `agent_type = "explorer"` once per project, all at once (at most 6 running together; wait for every one), each told to return exactly the items above with their file and section; the synthesis stays here.
 
 **Done when** every project is accounted for: its reports read, or named as having none.
 

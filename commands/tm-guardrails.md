@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/guardrails/SKILL.md` and follow it for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 Preflight: this is a git repository with at least one check command (lint, type check or test) that can be found. With none, say so: there is nothing to wire in, and the stack guide (`/tm-generate-stack-guide`) or the owner has to name the commands first.
 

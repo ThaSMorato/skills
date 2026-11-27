@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Review the diff between `HEAD` and the fixed point: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 ## 1. Preflight
 If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-base like `main`). Then confirm it resolves (`git rev-parse`) and the diff is non-empty: a bad ref or an empty diff fails here, not inside six agents.
@@ -18,8 +18,10 @@ If no fixed point was given, ask for one (a commit SHA, branch, tag, or merge-ba
 ## 2. Compute the diff once
 Write `git diff <fixed-point>...HEAD` (three-dot, vs the merge-base) to a scratch file, and collect the commit list; in worktree mode, write the manifest's diff from the preflight instead, and say there are no commits yet. Every reviewer receives **the path to that file**, not the instruction to compute it: nine agents each running the same diff is nine times the cost for one result, and the same work redone by every lens.
 
+Beside it, write the list of changed files (`git diff --name-only <fixed-point>...HEAD`; in worktree mode, the manifest) and resolve the standard once: read the routing table of `docs/guidelines.md` and keep the stack guides whose file patterns match a changed file. Every lens receives the file list; `review-standards` receives the guides by path. A lens that resolves them itself reads the router and every guide again on each review.
+
 ## 3. Fan out
-Call the Agent tool once per lens below, all **in a single message** so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the fixed point, and the artifacts its own definition names.
+Call the Agent tool once per lens below, all **in a single message** so they run in parallel. Each is narrow on purpose: a narrow lens can be held to *"every rule, against every changed hunk"*, which is a bar no agent doing five jobs can meet. Give each one the diff path, the list of changed files, the fixed point, and the artifacts its own definition names.
 
 | Agent | Lens |
 |---|---|
@@ -29,7 +31,7 @@ Call the Agent tool once per lens below, all **in a single message** so they run
 | `review-spec` | plan / ticket / FDD: all of it, and only it |
 | `review-standards` | the repo's own guidelines, stack guides, ADRs, glossary |
 | `review-architecture` | boundary contract, cycles, detail leaking into policy |
-| `review-data` | what each line costs against real data: N+1, queries in loops, indexes, unbounded reads, transactions, caches |
+| `review-data` | **only when the diff touches code that reads or writes a database, a cache, a queue or a remote service, or a migration**: what each line costs against real data: N+1, queries in loops, indexes, unbounded reads, transactions, caches |
 | `review-docs` | documentation the diff made false: README steps, env vars, flags, described behavior |
 | `review-ui` | **only when the diff touches UI code**: keyboard, focus, accessible names, contrast, loading/empty/error states, layout shift, slow interactions |
 
@@ -37,7 +39,7 @@ Call the Agent tool once per lens below, all **in a single message** so they run
 
 If `/tm-trim` ran, `.scratch/<feature-slug>/trim/<NN>-<slug>.md` has an **Unrequested behavior** section: hand it to `review-spec` as leads (behavior in the diff that no AC asked for, which trimming could not cut because cutting it changes behavior). Leads, not findings: the lens confirms each against the plan and the ticket like anything else.
 
-When `docs/architecture/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. Call the Agent tool with `review-ui` only when the diff touches UI code (components, templates, styles, client-side views); otherwise record it in `lenses_skipped` with the reason. Every skip is said out loud.
+When `docs/architecture/boundaries.md` doesn't exist, `review-architecture` has no contract of edges to judge against: tell it so, and it runs only its **contract-compatibility** check (a published API, event or interface changed incompatibly), which needs no boundary file. **A lens runs when the diff touches its surface**, decided from the list of changed files. Call the Agent tool with `review-ui` only when the diff touches UI code (components, templates, styles, client-side views), and with `review-data` only when it touches data access as the table says; when a file's name does not settle it, the lens runs. A diff that changes documentation only runs `review-spec`, `review-standards` and `review-docs`, and no other. Record each lens left out in `lenses_skipped` with the reason. Every skip is said out loud.
 
 **Pass `docs/declined.md` to every lens** when it exists: proposals the owner already turned down, with the scope and the reason. A lens does not raise a finding that matches a `declined` entry (same kind, a scope the entry covers) unless the entry's **Revisit when** has happened; if it believes that has happened, it raises the finding and cites the entry.
 

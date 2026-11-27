@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Call the Agent tool with `hld-writer` to write or amend the High-Level Design, `docs/architecture/hld.md` (living: an existing one is amended, never rewritten), from the PRD ($ARGUMENTS, or `docs/product/prd.md` by default).
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 If the PRD doesn't exist, tell the user to run `/tm-prd` first instead of delegating.
 

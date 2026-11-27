@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Call the Agent tool with `adr-analyzer` in its one-decision mode (its `## One decision (triage)` section), passing the decision in the owner's words: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 A decision announced in a conversation ("let's use Redis for the sessions") is the one the sweep of `/tm-adr-identify` never sees: it lives in no design document yet. Planned on directly, it lands in code without a record, or contradicts an ADR nobody reread. This command puts it through the same triage first.
 

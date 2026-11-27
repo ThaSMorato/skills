@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 You are the **coordinator**. Scope: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 ## Always scan first, before running anything
 The first thing this command does, every time, is **read the disk and say where the project stands**. Not "start at stage one": scan, report, then propose. This is the most common way the command is used ("where am I, what's next, what's waiting on me") and running a stage before answering that is how work gets redone.
@@ -78,7 +78,7 @@ The worktree column is kept whenever the repository has more than one worktree, 
 
 **An open decision map.** For each `decision-map.md` with `status: open`, run `node "${CLAUDE_PLUGIN_ROOT}/scripts/decision-map.mjs" frontier --effort <effort>` and report its frontier: the open decisions nothing open still blocks, each with its type and the stage that resolves it, and what is still open elsewhere. While the map is open, the effort's next stage is the one its `Next step` names, or `/tm-decision-map <effort>` to record what came back.
 
-Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop. The command is the last line, written out with its arguments and "you run it"; it is never one of the options of a question, because an answer to a question is not the owner starting a stage. When the owner's last turn is a command typed as plain text that did not load, say in one line to send it again with the `/` first.
+Announce, in this order: **where the project stands**, **what is waiting for your approval** (artifacts whose `Status` is `draft` or `in review`, and any `dirty` validation), and **the next stage**, as the command for the user to type, and stop. The command is the last line, written out with its arguments and "you run it", after `/clear` (*"you run: `/clear`, then `/tm-plan 02-export`"*): the stages hand off through files, so the next one starts in a fresh context and loses nothing. It is never one of the options of a question, because an answer to a question is not the owner starting a stage. When the owner's last turn is a command typed as plain text that did not load, say in one line to send it again with the `/` first.
 
 **This command never runs a stage.** Every command and every stage skill is closed to model invocation, so only the owner starts a stage, and each stage ends at its own postflight. A coordinator that ran the next stage itself is how a plan got validated in a loop until it passed, with nobody reading it in between.
 

@@ -6,6 +6,11 @@ description: "Write a Feature Design Doc for one feature, from the HLD (docs/arc
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
+>
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` a `yield_time_ms`
+> long enough for it to finish (minutes for a test suite, never one second), and call `wait_agent` once for an agent.
+> Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
+> finishes, not while it runs.
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
@@ -19,7 +24,7 @@ Call the `spawn_agent` tool with `agent_type = "tm-fdd-writer"` to write or amen
 
 The FDD is living: an existing one is amended, never rewritten, and it carries no acceptance criteria. The effort is the slug `$thasmorato-skills:tm-interview` gave this work: take it from the argument, or use the only `.scratch/*/decomposition.md` that lists this feature; with more than one and no argument, ask which. Pass the agent both.
 
-> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask.
 
 If no feature was given, ask which feature to spec. If `docs/architecture/hld.md` doesn't exist, tell the user to run `$thasmorato-skills:tm-hld` first instead of delegating.
 

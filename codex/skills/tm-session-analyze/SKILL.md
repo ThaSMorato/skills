@@ -6,6 +6,11 @@ description: "Read a whole working session (every compaction segment) and report
 > **Codex.** Paths that start with `references/` are inside this skill's folder (the folder of this `SKILL.md`);
 > in a shell command, write them as absolute paths. A stage named `$thasmorato-skills:tm-<name>` is another entry
 > of this plugin: tell the owner to run it, never run it yourself.
+>
+> A command or an agent that takes time is waited on **once**: give `exec_command` or `write_stdin` a `yield_time_ms`
+> long enough for it to finish (minutes for a test suite, never one second), and call `wait_agent` once for an agent.
+> Every poll re-sends this whole conversation and learns nothing. Send a progress `send_message` when a step
+> finishes, not while it runs.
 
 > **Codex setup.** This stage spawns plugin subagents. Before anything else, read
 > `~/.codex/thasmorato-skills.json` (or `$CODEX_HOME/thasmorato-skills.json`). If it is missing or its `version`
@@ -17,7 +22,7 @@ description: "Read a whole working session (every compaction segment) and report
 
 Analyze the working session: the text after the skill name
 
-> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Read the `asking` skill (`references/skills/asking/index.md`) before you report or ask.
 
 `$thasmorato-skills:tm-retro` reads what the work left on disk. This reads what only the conversation holds: the owner correcting a proposal, rejecting a question, asking for the same thing twice. `/compact` shrinks the context window but deletes nothing from the transcript, so the whole session, every segment, is still there to read.
 

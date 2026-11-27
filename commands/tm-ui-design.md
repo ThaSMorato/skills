@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/ui-design/SKILL.md` and follow it for: $ARGUMENTS
 
-> Call the Skill tool with `thasmorato-skills:asking` before you report or ask: resolve every id to what it means, offer a structured choice where the answer is a closed set, and ask only what is genuinely a decision.
+> Call the Skill tool with `thasmorato-skills:asking` before you report or ask.
 
 Preflight: what the screen is for is written somewhere (a PRD, an FDD, a ticket, or the owner's request); with none, run the brief from the request and say so. For a redesign, an audit should exist (`.scratch/ui-audit/<screen>/audit.md`); without one, offer `/tm-ui-audit <screen>` first, and go on without it only on the owner's word.
 
