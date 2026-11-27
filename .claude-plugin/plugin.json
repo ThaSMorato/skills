@@ -56,6 +56,7 @@
     "./skills/writing-fragments",
     "./skills/writing-beats",
     "./skills/writing-shape",
+    "./skills/writing-for-agents",
     "./skills/guardrails",
     "./skills/tidy",
     "./skills/code-smells",

@@ -102,7 +102,7 @@ Every command carries the `tm-` prefix (since 0.7.0), so no Claude Code built-in
 
 | Folder | Role |
 |---|---|
-| `skills/` | Skills (model-invoked / interactive): run in the main context. Doc/design (`interview`, `domain-model`, `ticket-design`), the dev loop (`ticket-plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui`) |
+| `skills/` | Skills (model-invoked / interactive): run in the main context. Doc/design (`interview`, `domain-model`, `ticket-design`), the dev loop (`ticket-plan`, `plan-validate`, `tdd`, `implement`), verification (`doc-validate`, `tickets-validate`), the learning loop (`retro`), generators (`generate-test-guide`, `generate-stack-guide`), and self-contained references (`testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui`, `writing-for-agents`) |
 | `commands/` | User entrypoints (`/tm-flow`, `/tm-interview`, `/tm-prd`…) |
 | `agents/` | Heavy generation and review subagents (isolated context, parallelizable) |
 | `templates/` | Canonical skeleton per artifact (generation scaffold + handoff anchor + gate checklist) |

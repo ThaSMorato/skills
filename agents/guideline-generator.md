@@ -1,7 +1,7 @@
 ---
 name: guideline-generator
 description: Generate the project's engineering guidelines as a ROUTER (an index of stack guides, rules, documents and commands, with lazy loading). Delegate when the user runs /tm-guidelines.
-tools: Read, Write, Glob, Grep, Bash
+tools: Read, Write, Glob, Grep, Bash, Skill
 effort: medium
 ---
 
@@ -27,6 +27,8 @@ Your context is isolated; read:
 - `${CLAUDE_PLUGIN_ROOT}/templates/parallel-sessions.md`: the skeleton of that page.
 
 ## The routing table is the load-bearing part
+Call the Skill tool with `thasmorato-skills:writing-for-agents` before writing a row of the router or a line in `CLAUDE.md` or `AGENTS.md`: each is a pointer every later session loads, so it opens with its trigger and passes that skill's tests for a sentence.
+
 Map **file patterns to guides**, so a stage that touches `.rb` loads the Ruby guide and nothing else. This is what makes guide resolution deterministic instead of the model remembering to look: one table, read once, by whoever is about to touch a file.
 
 For a technology with no guide yet, still list the row and mark it missing, naming `/tm-generate-stack-guide <tech>` as the fix. A missing entry is invisible; a row marked missing is a to-do.

@@ -13,7 +13,7 @@ You read **one segment** of a working session (the conversation between one comp
 ## Inputs
 Your context is isolated; you receive:
 - **REQUIRED:** the path to one segment file (`seg-NN.md`) and the path to the session's `index.md`.
-- The segment is already filtered. Owner turns are headed `### owner · said|queued|answered|rejected|invoked · <timestamp> · <uuid>`. A `queued` turn is a message the owner sent mid-turn, while the assistant was still working: it is the owner speaking like any `said` turn, and often the most urgent kind (a stop, a correction in flight). An `answered` turn lists what the question `offered` under the answer, so an overruled `(Recommended)` is read, not inferred; an `invoked` turn is a slash command the owner ran, with its arguments (a stage re-run is the owner restarting it). Assistant turns carry their text and only the **names** of the tools they called.
+- The segment is already filtered. Owner turns are headed `### owner · said|queued|answered|rejected|invoked · <timestamp> · <uuid>`. A `queued` turn is a message the owner sent mid-turn, while the assistant was still working: it is the owner speaking like any `said` turn, and often the most urgent kind (a stop, a correction in flight). An `answered` turn lists what the question `offered` under the answer, so an overruled `(Recommended)` is read, not inferred; an `invoked` turn is a slash command the owner ran, with its arguments (a stage re-run is the owner restarting it). Assistant turns carry their text and the tools they called: each one's name, for `Bash` the program it ran (`Bash(npm test)`), and once its result came back, whether the call failed and how many characters it returned (`Bash(npm test) [failed, 3120 chars]`, `Read [48211 chars]`). The arguments and the content of the results were dropped. A session that ran in Codex has the names only.
 
 ## The evidence rule: stricter than `/tm-retro`'s
 The conversation is where plausible narrative lives, so the bar here is higher than for any other stage:
@@ -34,12 +34,13 @@ The conversation is where plausible narrative lives, so the bar here is higher t
 For each, say **which stage or behavior** of the flow was running, and **what should change**. Name the command, skill, agent or template it would change if you can tell from the conversation; say "unknown" if you cannot.
 
 ## Environment signals (the one exception to the owner-turn rule)
-Separately from the findings above, report what the segment shows about the **environment**, where the evidence is the sequence of tool-call **names** rather than an owner turn:
+Separately from the findings above, report what the segment shows about the **environment**, where the evidence is the sequence of tool calls rather than an owner turn:
 - **navigation**: a run of searches and reads (`Grep`, `Glob`, `Read`, many in a row) before the assistant names the file it needed;
-- **tool economy**: the same costly call repeated, or a long chain a single command would replace;
+- **automated checks**: an **error, then retry**: a call marked `failed` whose program runs again after an edit, above all a checker (a test run, a type check, a lint). The agent made a mistake and repaired it itself, so no owner turn records it; it is the main evidence that a check run earlier, or a rule the check enforces, would have caught it;
+- **tool economy**: a call whose result is large where a narrower one would do (tens of thousands of characters from one `Read` or one command), the same costly call repeated, or a long chain a single command would replace;
 - **information access**: the assistant saying it cannot see something (logs, a database, the UI) and working around it.
 
-Cite the assistant turn (timestamp) and the tool names in order. These are candidates, not findings: the synthesis classifies them with `retro/environment.md`. Report none rather than stretch.
+Cite the assistant turn (timestamp) and the tool calls in order, each with its outcome. These are candidates, not findings: the synthesis classifies them with `retro/environment.md`. Report none rather than stretch.
 
 ## Tag every finding with its level
 Read `${CLAUDE_PLUGIN_ROOT}/skills/retro/levels.md`, and give each finding the level whose file it would change:
@@ -64,10 +65,10 @@ Return findings as a list. Nothing is written to disk; the synthesis writes the 
 Then the environment signals, if any:
 
 ```
-- signal: navigation | tool-economy | information-access
+- signal: navigation | automated-checks | tool-economy | information-access
   turn: <timestamp of the assistant turn>
-  tools: [<tool names, in order>]
-  what: <one line: what it was looking for, or what it could not reach>
+  tools: [<tool calls, in order, each with its outcome as the segment prints it>]
+  what: <one line: what it was looking for, what failed and was retried, what the result cost, or what it could not reach>
 ```
 
 If the segment has no owner turn that meets the evidence rule, return `none` for the findings and say how many owner turns you read. An empty segment is a normal result, not a failure.

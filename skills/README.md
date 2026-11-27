@@ -13,7 +13,7 @@
 | Learning | `teach` |
 | Session | `wait-what`, `handoff` |
 | Writing | `writing-fragments` (explore), `writing-beats`, `writing-shape` (exploit) |
-| References | `testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui`, `visuals` |
+| References | `testing`, `code-smells`, `clean-code`, `architecture`, `security`, `data-access`, `ui`, `visuals`, `writing-for-agents` |
 
 The reference skills are **routers**: a short index plus `rules/` or sibling files, read only when a row matches. That shape is the point: a stage that needs one rule shouldn't pay for the catalog.
 

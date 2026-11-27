@@ -36,6 +36,8 @@ Present a summary (stack, artifacts by type with counts, external systems, exist
 5. **Coverage philosophy**: pragmatic (critical paths + boundaries) vs thorough (high coverage targets).
 
 ## Phase 4: Generate
+Call the Skill tool with `thasmorato-skills:writing-for-agents` first: the guide is a document every later stage loads, so its description is a pointer that opens with its trigger, and each rule passes that skill's tests for a sentence.
+
 Write a multi-file skill at `.claude/skills/testing-guide-<project>/` (name derived from the folder, so a monorepo can hold several):
 
 ```

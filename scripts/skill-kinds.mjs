@@ -3,7 +3,7 @@
 // other skill is a stage's body: closed to the model, reached only by the owner typing its command.
 export const KNOWLEDGE_SKILLS = [
   'architecture', 'asking', 'clean-code', 'code-smells', 'data-access', 'domain-model', 'security', 'tdd', 'testing', 'ui',
-  'visuals',
+  'visuals', 'writing-for-agents',
 ]
 
 // A command reads its stage skill as a plain file, where `${CLAUDE_PLUGIN_ROOT}` is not substituted.

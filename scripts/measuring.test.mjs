@@ -17,12 +17,13 @@ test('the meta-retro records the cost by stage, from the extract', () => {
 
   assert.deepEqual(
     {
-      frontmatter: /^cost: \{minutes: <n>, idle_minutes: <n>, tool_calls: <n>, invocations: <n>, other_answers: <n>, clarifications: <n>, overrules: <n>\}$/m.test(metaRetro),
+      frontmatter: /^cost: \{minutes: <n>, idle_minutes: <n>, tool_calls: <n>, failed_calls: <n>, result_chars: <n>, invocations: <n>, other_answers: <n>, clarifications: <n>, overrules: <n>\}$/m.test(metaRetro),
+      columns: /^\| Stage \| Minutes \| Idle \| Tool calls \| Failed calls \| Result chars \| Invocations \|/m.test(metaRetro),
       section: /^## Cost by stage \(required\)$/m.test(metaRetro),
       stage: /Cost by stage[^\n]*index\.md/.test(read('commands/tm-session-analyze.md')),
       wasted: /wasted calls[^\n]*tool-economy/.test(read('commands/tm-session-analyze.md')),
     },
-    { frontmatter: true, section: true, stage: true, wasted: true },
+    { frontmatter: true, columns: true, section: true, stage: true, wasted: true },
   )
 })
 

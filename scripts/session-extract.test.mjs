@@ -304,7 +304,7 @@ describe('createSegmenter: assistant turns', () => {
     const [segment] = segmentsOf([makeAssistant(content, { uuid: 'a-3' })])
 
     assert.deepEqual(segment.turns, [
-      { role: 'assistant', kind: 'said', uuid: 'a-3', timestamp: '2026-09-18T10:00:00.000Z', text: 'I will read the plan.', tools: ['Read', 'Grep'] },
+      { role: 'assistant', kind: 'said', uuid: 'a-3', timestamp: '2026-09-18T10:00:00.000Z', text: 'I will read the plan.', tools: ['Read', 'Grep'], results: [null, null] },
     ])
   })
 
@@ -433,9 +433,74 @@ describe('createSegmenter: messages the owner sent mid-turn', () => {
   })
 })
 
+// The extract kept only tool names, so a mistake the agent made and repaired itself (a red test, a
+// failed type check) left no trace, and a 50k-character read looked like a cheap one. Each call now
+// carries the program a Bash call ran, whether it failed and how much came back; never the content.
+describe('createSegmenter: what a tool call ran and cost', () => {
+  const bash = (command, id = 't-1') => ({ type: 'tool_use', id, name: 'Bash', input: { command } })
+  const resultOf = (id, content, extra = {}) => makeEntry({ uuid: `r-${id}`, message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: id, content, ...extra }] } })
+  const labelOf = (command) => segmentsOf([makeAssistant([bash(command)])])[0].turns[0].tools[0]
+
+  for (const [command, label] of [
+    ['npm test', 'Bash(npm test)'],
+    ['API_KEY=sk-live-123 npm run test:unit -- --grep "billing secret"', 'Bash(npm run test:unit)'],
+    ['cd /repo/private && npx tsc --noEmit | tail -5', 'Bash(npx tsc)'],
+    ['/usr/local/bin/pytest tests/billing -k invoice', 'Bash(pytest)'],
+    ['grep -rn hunter2 src', 'Bash(grep)'],
+    ['git add -A && git commit -m "fix the leak of token abc"', 'Bash(git add && git commit)'],
+    ["cat > .env <<'EOF'\nPASSWORD hunter2\nEOF", 'Bash(cat)'],
+    ['"$(cat run.sh)" --now', 'Bash(opaque)'],
+    ['TOKEN=sk-live-123; OUT=/tmp/private/secretdir; npm test', 'Bash(npm test)'],
+    ['git commit -m "fix; password hunter2" && npm test', 'Bash(git commit && npm test)'],
+    ['echo $(cat a; secretword b)', 'Bash(echo)'],
+    ["sed -i '' 's|a; live && PR|b|' file", 'Bash(sed)'],
+  ]) {
+    test(`a Bash call is named with its program, never its arguments: ${label}`, () => {
+      assert.equal(labelOf(command), label)
+    })
+  }
+
+  test('a call records whether it failed and how many characters came back, never the content', () => {
+    const entries = [
+      makeAssistant([bash('npm test', 't-1'), { type: 'tool_use', id: 't-2', name: 'Read', input: { file_path: '/secret/path' } }]),
+      resultOf('t-1', 'FAIL src/a.test.ts', { is_error: true }),
+      resultOf('t-2', [{ type: 'text', text: 'line one' }, { type: 'text', text: 'line two' }]),
+    ]
+
+    const [segment] = segmentsOf(entries)
+
+    assert.deepEqual(segment.turns, [
+      { role: 'assistant', kind: 'said', uuid: 'a-1', timestamp: '2026-09-18T10:00:00.000Z', text: '', tools: ['Bash(npm test)', 'Read'], results: [{ failed: true, chars: 18 }, { failed: false, chars: 16 }] },
+    ])
+  })
+
+  test('a call the owner rejected is the owner speaking, not a call that failed', () => {
+    const entries = [
+      makeAssistant([{ type: 'tool_use', id: 't-9', name: 'Edit', input: {} }]),
+      makeEntry({
+        uuid: 'u-9',
+        toolDenialKind: 'user_reject',
+        message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't-9', is_error: true, content: 'The user rejected it. the user said: not that file' }] },
+      }),
+    ]
+
+    const [segment] = segmentsOf(entries)
+
+    assert.deepEqual({ results: segment.turns[0].results, owner: segment.turns[1].kind }, { results: [null], owner: 'rejected' })
+  })
+
+  test('the segment shows each call with its outcome, so an error then a retry can be read', () => {
+    const turn = { role: 'assistant', kind: 'said', uuid: 'a-1', timestamp: '2026-06-12T13:06:00.000Z', text: 'running', tools: ['Bash(npm test)', 'Edit', 'Bash(npm test)', 'Read'], results: [{ failed: true, chars: 3120 }, { failed: false, chars: 40 }, { failed: false, chars: 900 }, null] }
+
+    const result = renderSegment({ compaction: null, turns: [turn] }, { sessionId: 's', index: 1, total: 1 })
+
+    assert.match(result, /_tools: Bash\(npm test\) \[failed, 3120 chars\], Edit \[40 chars\], Bash\(npm test\) \[900 chars\], Read_/)
+  })
+})
+
 const at = (minute) => `2026-09-18T10:${String(minute).padStart(2, '0')}:00.000Z`
 const owner = (kind, text, minute, extra = {}) => ({ role: 'owner', kind, uuid: `o-${minute}`, timestamp: at(minute), text, ...extra })
-const assistant = (minute, tools = []) => ({ role: 'assistant', kind: 'said', uuid: `a-${minute}`, timestamp: at(minute), text: 'ok', tools })
+const assistant = (minute, tools = [], results) => ({ role: 'assistant', kind: 'said', uuid: `a-${minute}`, timestamp: at(minute), text: 'ok', tools, ...(results ? { results } : {}) })
 const answered = (answer, offered, minute) => owner('answered', '', minute, { answers: [{ question: 'Gear?', answer, offered, recommended: offered.find((label) => label.endsWith('(Recommended)')) ?? null }] })
 const costOf = (turns, options) => costByStage([{ compaction: null, turns }], options)
 const stage = (cost, name) => cost.find((row) => row.stage === name)
@@ -504,8 +569,19 @@ describe('costByStage', () => {
 
   test('in Codex, what a rollout does not record is not measured rather than zero', () => {
     const cost = costOf([owner('invoked', 'tm-plan 02', 0), assistant(1, ['exec(exec_command)'])], { harness: 'codex' })
+    const { other_answers, overrules, failed_calls, result_chars } = stage(cost, 'tm-plan')
 
-    assert.deepEqual({ other: stage(cost, 'tm-plan').other_answers, overrules: stage(cost, 'tm-plan').overrules }, { other: null, overrules: null })
+    assert.deepEqual({ other_answers, overrules, failed_calls, result_chars }, { other_answers: null, overrules: null, failed_calls: null, result_chars: null })
+  })
+
+  test('each stage adds up the calls that failed and the characters its results brought back', () => {
+    const cost = costOf([
+      owner('invoked', '/tm-implement 02-export', 0),
+      assistant(1, ['Bash(npm test)', 'Read'], [{ failed: true, chars: 3000 }, { failed: false, chars: 48000 }]),
+      assistant(2, ['Bash(npm test)', 'Edit'], [{ failed: false, chars: 900 }, null]),
+    ])
+
+    assert.deepEqual({ failed: stage(cost, 'tm-implement').failed_calls, chars: stage(cost, 'tm-implement').result_chars }, { failed: 1, chars: 51900 })
   })
 })
 
@@ -522,8 +598,12 @@ describe('extractSession: cost', () => {
     const result = await extractSession({ transcript, outDir: join(dir, 'out') })
 
     assert.deepEqual(
-      { cost: result.cost.map(({ stage: name, minutes, tool_calls }) => ({ name, minutes, tool_calls })), table: /^## Cost by stage$/m.test(readFileSync(join(dir, 'out', 'index.md'), 'utf8')) },
-      { cost: [{ name: 'tm-plan', minutes: 6, tool_calls: 1 }], table: true },
+      {
+        cost: result.cost.map(({ stage: name, minutes, tool_calls }) => ({ name, minutes, tool_calls })),
+        table: /^## Cost by stage$/m.test(readFileSync(join(dir, 'out', 'index.md'), 'utf8')),
+        columns: /^\| Stage \| Minutes \| Idle minutes \| Tool calls \| Failed calls \| Result chars \| Invocations \|/m.test(readFileSync(join(dir, 'out', 'index.md'), 'utf8')),
+      },
+      { cost: [{ name: 'tm-plan', minutes: 6, tool_calls: 1 }], table: true, columns: true },
     )
   })
 })
