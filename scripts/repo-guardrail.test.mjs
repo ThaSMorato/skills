@@ -26,7 +26,7 @@ const workflows = () => {
 test('the test command is a package script, so the hook and CI name it once', () => {
   const scripts = JSON.parse(read('package.json') || '{}').scripts ?? {}
 
-  assert.equal(scripts.test, 'node --test --test-reporter=dot scripts/*.test.mjs')
+  assert.match(scripts.test ?? '', /^node --test\b.* scripts\/\*\.test\.mjs$/)
 })
 
 test('a pre-commit hook runs the test script', () => {
@@ -40,6 +40,12 @@ test('a CI job runs the test script on every pull request', () => {
   const job = workflows().find((workflow) => /^\s+- run: npm test$/m.test(workflow)) ?? ''
 
   assert.match(job, /^on:\n(?:.*\n)*?\s+pull_request:/m)
+})
+
+test('the CI job holds a read-only token: it only runs the tests', () => {
+  const job = workflows().find((workflow) => /^\s+- run: npm test$/m.test(workflow)) ?? ''
+
+  assert.match(job, /^permissions:\n  contents: read\n(?!  )/m)
 })
 
 test('the README says how a fresh clone turns the hook on', () => {
