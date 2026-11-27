@@ -525,6 +525,12 @@ describe('createSegmenter: what a tool call ran and cost', () => {
     })
   }
 
+  for (const command of ['TOKEN=$(cat <<EOF\nsecretword now\nEOF\n)', '"\nsecretword now\n"', "X='\nsecretword now'"]) {
+    test(`a line that only opens content names nothing, and the content below it is never read as a command: ${JSON.stringify(command)}`, () => {
+      assert.equal(labelOf(command), 'Bash(opaque)')
+    })
+  }
+
   test('a call records whether it failed and how many characters came back, never the content', () => {
     const entries = [
       makeAssistant([bash('npm test', 't-1'), { type: 'tool_use', id: 't-2', name: 'Read', input: { file_path: '/secret/path' } }]),
