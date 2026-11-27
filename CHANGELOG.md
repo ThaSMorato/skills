@@ -15,6 +15,8 @@ stack, one PR per wave.
   `.github/workflows/test.yml` runs it on every pull request and on `main`. The script uses the
   `dot` reporter: a green run is a few lines, a red one prints each failure.
   `scripts/repo-guardrail.test.mjs` fails when the hook or the job stops running the script.
+- **From the review (#82):** the job's token is read-only (`permissions: contents: read`), and the
+  guardrail test accepts any `node --test` run over `scripts/*.test.mjs` instead of one exact string.
 
 ### Wave B: the retro stage, against its own rules
 
@@ -185,6 +187,24 @@ Built as a stack, one PR per wave (#60 to #79), released together.
   Assumed, `> [!NOTE]` Decided); the marker line itself is unchanged, so the validators still find it.
 - **`/tm-docs-migrate`** adds the callout lines and moves Status and Level into the frontmatter.
   `scripts/adr-links.test.mjs` holds the wave.
+
+- **From the review (#83):**
+  - *A legacy ticket in progress counted as finished.* A progress file from before the frontmatter
+    was read by the first `**Status:**` line anywhere in it, and every SI has one: a ticket whose own
+    line said `In progress` took its first finished SI's `done`. The status is now read above the
+    first SI only, in any case, with or without backticks.
+  - *A ticket's cost could never be measured.* The retro script gave a Cost by stage row to the
+    ticket its Stage cell named, and the extractor never wrote one: it kept the command's name and
+    merged every ticket a stage ran on. A row is now a stage on a ticket (`tm-implement 02-export`),
+    the ticket kept only in the shape a ticket slug has, so free text typed after a command stays
+    out. The test builds its meta-retro from the extractor's own table.
+  - *Plan revisions were off by one* (`revision` is 1 when first written), and *versions were sorted
+    as text* (`0.10.0` before `0.7.1`).
+  - `/tm-flow-report` §3 reads the script table by table instead of keeping its own list of
+    measurements, and a test fails when the script prints a section the report does not name.
+  - `templates/evolutions.md` no longer offers `defect` as a kind. Three tests that compared a
+    constant with itself, or searched the script's source for a line, became tests of what the
+    script prints.
 
 ### Wave C1a: the plan and its validation
 

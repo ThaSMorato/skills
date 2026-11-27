@@ -58,7 +58,8 @@ cost: {minutes: <n>, idle_minutes: <n>, tool_calls: <n>, failed_calls: <n>, resu
 |---|---|---|---|---|---|
 
 ## Cost by stage (required)
-> From the extract's `index.md`, copied, not estimated: per stage (the owner's invocation to the next),
+> From the extract's `index.md`, copied, not estimated, the Stage cells unchanged (`tm-implement 02-export`:
+> the ticket in the cell is how `$thasmorato-skills:tm-retro` finds its cost): per stage and ticket (the owner's invocation to the next),
 > active minutes (pauses over 30 minutes are idle), tool calls, the calls that failed, the characters the
 > results brought back, invocations (a stage re-run is the owner restarting it), answers outside the
 > options, questions rejected to clarify, overruled recommendations. Wasted calls come from the segment

@@ -11,6 +11,9 @@ import { flowState, resolveTicket } from './flow-state.mjs'
 // Where each ticket stands is in the frontmatter its stages wrote. Read mechanically, the matrix is
 // the same for /tm-flow, /tm-retro and /tm-flow-report; read by a model out of prose, it drifts.
 
+// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
+const PINNED = true
+
 const sha256 = (text) => createHash('sha256').update(text).digest('hex')
 
 describe('flowState and resolveTicket', () => {
@@ -142,6 +145,39 @@ describe('flowState and resolveTicket', () => {
   test('a progress file from before the frontmatter is finished when its body says so', () => {
     ticket('ledger', '01-read-model')
     put('.scratch/ledger/plans/01-read-model/progress.md', '# Progress\n\n**Status:** completed\n')
+
+    assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'awaiting-retro')
+  })
+
+  const legacyProgress = (statusLine) => `# Progress\n\n${statusLine}\n\n### SI-1: the read model\n- **Status:** done\n\n### SI-2: the export\n- **Status:** pending\n`
+
+  for (const statusLine of ['**Status:** In progress', '**Status:** `in_progress`', '- **Status:** escalated at SI-2']) {
+    test(`a legacy progress file is as far as its own status line says, whatever its SIs say: ${statusLine}`, () => {
+      ticket('ledger', '01-read-model')
+      put('.scratch/ledger/plans/01-read-model/progress.md', legacyProgress(statusLine))
+
+      assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'in progress')
+    })
+  }
+
+  test('a legacy progress file with no status line of its own is not finished by its first done SI', () => {
+    ticket('ledger', '01-read-model')
+    put('.scratch/ledger/plans/01-read-model/progress.md', '# Progress\n\n### SI-1: the read model\n- **Status:** done\n')
+
+    assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'in progress')
+  })
+
+  test('a legacy status written with a capital or in backticks still finishes the ticket', () => {
+    ticket('ledger', '01-read-model')
+    put('.scratch/ledger/plans/01-read-model/progress.md', legacyProgress('**Status:** `Completed`'))
+
+    assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'awaiting-retro')
+  })
+
+  // The bug as it was, kept for the owner to read beside the fix: delete when read.
+  test('pin: a legacy ticket in progress is read as finished by its first done SI', { skip: PINNED }, () => {
+    ticket('ledger', '01-read-model')
+    put('.scratch/ledger/plans/01-read-model/progress.md', legacyProgress('**Status:** In progress'))
 
     assert.equal(featureOf(flowState({ cwd: repo }), 'ledger').state, 'awaiting-retro')
   })

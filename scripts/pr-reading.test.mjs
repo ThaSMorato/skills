@@ -4,7 +4,6 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { MEASURED_FIELDS } from './retro-measure.mjs'
 
 // Reviewing a pull request starts with understanding its shape: which files changed, how they connect
 // and where to start, and how much attention it deserves. /tm-pr-map gives that for any pull request,
@@ -84,10 +83,6 @@ test('the PR body says why before what, edits an open pull request, and names a 
     },
     { why: true, edit: true, foundWhileWriting: true },
   )
-})
-
-test('the retro sets the attention a pull request got beside whether CI went red', () => {
-  assert.deepEqual(MEASURED_FIELDS.pr_record, ['review_attention', 'ci_red_after_open'])
 })
 
 test('data-access catalogs the foreign key with no referential action', () => {

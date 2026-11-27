@@ -38,8 +38,13 @@ test('the workflow names the split by author, the sentinel check and the cost, w
 
 test('a defect is a repo-code finding, counted once', () => {
   assert.deepEqual(
-    { counted: /defect: <n>/.test(read('templates/retro.md')), level: /defect[^\n]*`repo-code` finding/.test(read('skills/retro/SKILL.md')), threeKinds: /process, product, or defect/.test(read('skills/retro/SKILL.md')) },
-    { counted: false, level: true, threeKinds: false },
+    {
+      counted: /defect: <n>/.test(read('templates/retro.md')),
+      level: /defect[^\n]*`repo-code` finding/.test(read('skills/retro/SKILL.md')),
+      threeKinds: /process, product, or defect/.test(read('skills/retro/SKILL.md')),
+      aKindOfProductFinding: /^- \*\*Kind:\*\*.*defect/m.test(read('templates/evolutions.md')),
+    },
+    { counted: false, level: true, threeKinds: false, aKindOfProductFinding: false },
   )
 })
 
