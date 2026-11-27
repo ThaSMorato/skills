@@ -7,10 +7,14 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { MEASURED_FIELDS, measure, renderMeasurements } from './retro-measure.mjs'
+import { costByStage, renderCostTable } from './session-extract.mjs'
 
 // The retro's numbers were summed by the model from raw JSON: about fifty fields, grouped four ways.
 // A number added up in prose looks exactly like a measured one. The script sums them, from one list
 // of fields, and prints the Measurements section; the model pastes it.
+
+// Pins assert a bug as it was before its fix. They fail now, so they are skipped, and stay until the owner has read them.
+const PINNED = true
 
 const pluginRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const frontmatter = (fields) => `---\n${Object.entries(fields).map(([key, value]) => `${key}: ${value}`).join('\n')}\n---\n`
@@ -175,20 +179,94 @@ describe('measure', () => {
     assert.deepEqual(measure({ cwd: repo, scope: [] }).ticket_sets, [{ feature: 'ledger', tickets: 4, seams: 3, dispersion: 2.5, fired: { SZ: 1 } }])
   })
 
+  test('a ticket sets the attention its pull request got beside whether CI went red after it opened, and a dash when no record was kept', () => {
+    finished('ledger', '01-read-model')
+    artifact('.scratch/ledger/prs/01-read-model.record.md', { kind: 'pr', review_attention: 'light', ci_red_after_open: true })
+    finished('ledger', '02-export')
+
+    assert.deepEqual(
+      measure({ cwd: repo, scope: [] }).tickets.map((row) => [row.review_attention, row.ci_red_after_open]),
+      [['light', 'true'], ['-', '-']],
+    )
+  })
+
+  test('a ticket shows the effort its work ran at, and unknown when the progress file predates the field', () => {
+    finished('ledger', '01-read-model', { effort: 'xhigh' })
+    ticket('ledger', '02-export')
+    plan('ledger', '02-export')
+    artifact('.scratch/ledger/plans/02-export/progress.md', { kind: 'progress', status: 'completed', sis_done: 3 })
+
+    assert.deepEqual(measure({ cwd: repo, scope: [] }).tickets.map((row) => row.effort), ['xhigh', 'unknown'])
+  })
+
+  test('a plan counts the times it was revised, so one never revised counts none', () => {
+    ticket('ledger', '01-read-model')
+    plan('ledger', '01-read-model', { revision: 1 })
+    progress('ledger', '01-read-model')
+    ticket('ledger', '02-export')
+    plan('ledger', '02-export', { revision: 3 })
+    progress('ledger', '02-export')
+
+    const sut = measure({ cwd: repo, scope: [] })
+
+    assert.deepEqual({ perTicket: sut.tickets.map((row) => row.plan_revisions), total: sut.by_plugin_version[0].plan_revisions }, { perTicket: [0, 2], total: 2 })
+  })
+
+  test('the versions are in release order, 0.10.0 after 0.9.0', () => {
+    for (const [slug, version] of [['01-a', '0.9.0'], ['02-b', '0.10.0'], ['03-c', '0.7.1']]) finished('ledger', slug, { plugin_version: version })
+
+    assert.deepEqual(measure({ cwd: repo, scope: [] }).by_plugin_version.map((group) => group.plugin_version), ['0.7.1', '0.9.0', '0.10.0'])
+  })
+
+  // The bugs as they were, kept for the owner to read beside the fix: delete when read.
+  test('pin: a plan never revised counts one revision', { skip: PINNED }, () => {
+    finished('ledger', '01-read-model')
+
+    assert.equal(rowOf(measure({ cwd: repo, scope: [] }), 'ledger/01-read-model').plan_revisions, 1)
+  })
+
+  test('pin: the versions are sorted as text, 0.10.0 before 0.7.1', { skip: PINNED }, () => {
+    for (const [slug, version] of [['01-a', '0.9.0'], ['02-b', '0.10.0'], ['03-c', '0.7.1']]) finished('ledger', slug, { plugin_version: version })
+
+    assert.deepEqual(measure({ cwd: repo, scope: [] }).by_plugin_version.map((group) => group.plugin_version), ['0.10.0', '0.7.1', '0.9.0'])
+  })
+
+  // The meta-retro's table is the extractor's own: /tm-session-analyze copies it from the index.
+  const minute = (n) => `2026-11-20T10:${String(n).padStart(2, '0')}:00.000Z`
+  const invoked = (text, at) => ({ role: 'owner', kind: 'invoked', uuid: `o-${at}`, timestamp: minute(at), text })
+  const worked = (at, tools) => ({ role: 'assistant', kind: 'said', uuid: `a-${at}`, timestamp: minute(at), text: 'ok', tools })
+  const metaRetro = (name, turns) =>
+    put(`docs/meta-retro/${name}.md`, `${frontmatter({ kind: 'meta-retro' })}\n${renderCostTable(costByStage([{ compaction: null, turns }])).replace('## Cost by stage', '## Cost by stage (required)')}\n## What the conversation couldn't tell me\n`)
+  const sessionOnTicketOne = () =>
+    metaRetro('2026-11-20-a1b2', [worked(0, ['Read']), invoked('/tm-plan 01-read-model', 1), worked(13, ['Read', 'Write']), invoked('/thasmorato-skills:tm-implement ledger/01-read-model', 13), worked(43, ['Edit', 'Bash', 'Bash'])])
+
   test('a ticket costs what the Cost by stage rows that name it add up to, and one no session covers is not measured', () => {
     finished('ledger', '01-read-model')
     finished('ledger', '02-export')
-    put(
-      'docs/meta-retro/2026-11-20-a1b2.md',
-      `${frontmatter({ kind: 'meta-retro' })}\n## Cost by stage (required)\n\n| Stage | Minutes | Idle | Tool calls | Invocations |\n|---|---|---|---|---|\n| \`/tm-plan 01-read-model\` | 12 | 0 | 40 | 1 |\n| \`/tm-implement ledger/01-read-model\` | 30 | 5 | 210 | 2 |\n| (before the first stage) | 3 | 0 | 9 | 0 |\n\n## What the conversation couldn't tell me\n`,
-    )
+    sessionOnTicketOne()
 
     const sut = measure({ cwd: repo, scope: [] })
 
     assert.deepEqual(
       sut.tickets.map((row) => [row.ticket, row.minutes, row.tool_calls]),
-      [['ledger/01-read-model', 42, 250], ['ledger/02-export', 'not measured', 'not measured']],
+      [['ledger/01-read-model', 42, 5], ['ledger/02-export', 'not measured', 'not measured']],
     )
+  })
+
+  test('a second session on the same ticket adds to its cost', () => {
+    finished('ledger', '01-read-model')
+    sessionOnTicketOne()
+    metaRetro('2026-11-21-c3d4', [invoked('/tm-review 01-read-model main', 0), worked(8, ['Read'])])
+
+    assert.deepEqual([rowOf(measure({ cwd: repo, scope: [] }), 'ledger/01-read-model')].map((row) => [row.minutes, row.tool_calls]), [[50, 6]])
+  })
+
+  // The bug as it was, kept for the owner to read beside the fix: delete when read.
+  test('pin: a ticket a session worked on is not measured, because no row of the extractor names it', { skip: PINNED }, () => {
+    finished('ledger', '01-read-model')
+    sessionOnTicketOne()
+
+    assert.deepEqual([rowOf(measure({ cwd: repo, scope: [] }), 'ledger/01-read-model')].map((row) => [row.minutes, row.tool_calls]), [['not measured', 'not measured']])
   })
 
   test('an artifact that predates a measured field is named, and its cell says not measured', () => {
@@ -301,11 +379,18 @@ describe('the one list of measured fields', () => {
 
   test('the skill, the template and the flow report name the script, and none keeps a field list of its own', () => {
     const readers = ['skills/retro/SKILL.md', 'templates/retro.md', 'skills/flow-report/SKILL.md']
-    const listed = (text) => Object.values(MEASURED_FIELDS).flat().filter((field) => text.includes(`\`${field}\``))
+    const listed = (text) => [...new Set(Object.values(MEASURED_FIELDS).flat())].filter((field) => text.includes(`\`${field}\``))
 
     assert.deepEqual(
-      { citing: readers.filter((path) => !read(path).includes('scripts/retro-measure.mjs')), listing: readers.filter((path) => listed(read(path)).length > 6) },
+      { citing: readers.filter((path) => !read(path).includes('scripts/retro-measure.mjs')), listing: readers.filter((path) => listed(read(path)).length > 2) },
       { citing: [], listing: [] },
     )
+  })
+
+  test('the flow report reads the script by its sections, every one it prints, so a new field arrives without an edit', () => {
+    const printed = renderMeasurements(measure({ cwd: pluginRoot, scope: [] })).match(/^### .+$/gm).map((heading) => heading.slice(4))
+    const report = read('skills/flow-report/SKILL.md')
+
+    assert.deepEqual(printed.filter((heading) => !report.includes(`**${heading}**`)), [])
   })
 })

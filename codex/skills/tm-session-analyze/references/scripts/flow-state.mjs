@@ -20,7 +20,8 @@ import { readWorktrees } from './worktrees.mjs'
 
 const STATUS_LINE = /^- \*\*Status:\*\*\s*([^\n|]+?)\s*$/m
 const TITLE = /^# \d{2}: (.+)$/m
-const BODY_STATUS = /^(?:- )?\*\*Status:\*\*\s*([a-z_]+)/m
+const BODY_STATUS = /^(?:- )?\*\*Status:\*\*\s*`?([A-Za-z][A-Za-z_ ]*?)`?\s*$/m
+const FIRST_SI = /^#{2,3} SI-/m
 // `done` is the second value versions before 0.7.0 wrote. This list is the one definition of finished.
 const FINISHED = ['completed', 'done']
 
@@ -138,12 +139,18 @@ function frontmatterOf(path) {
   return existsSync(path) ? readFrontmatter(readFileSync(path, 'utf8')) ?? {} : null
 }
 
-// A progress file from before the frontmatter says where it stands in its body.
+// A progress file from before the frontmatter says where it stands in its body, above its first SI:
+// every SI below has a status line of its own, and the first finished one is not the ticket's.
 function progressOf(path) {
   const fields = frontmatterOf(path)
   if (!fields || fields.status) return fields
-  const status = readFileSync(path, 'utf8').match(BODY_STATUS)?.[1]
+  const status = bodyStatusOf(readFileSync(path, 'utf8'))
   return status ? { ...fields, status } : fields
+}
+
+function bodyStatusOf(text) {
+  const header = text.split(FIRST_SI)[0]
+  return header.match(BODY_STATUS)?.[1].trim().toLowerCase().replace(/ +/g, '_')
 }
 
 function frontmattersIn(dir) {
